@@ -22,10 +22,10 @@ jobs:
         node-version: 16
 
     - name: Install dependencies
-      run: cd hh99-finalproject && yarn install --frozen-lockfile
+      run: cd client && yarn install --frozen-lockfile
 
     - name: Build
-      run: cd hh99-finalproject && yarn build
+      run: cd client && yarn build
 
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@master

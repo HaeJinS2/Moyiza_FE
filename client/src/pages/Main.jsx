@@ -1,8 +1,11 @@
 import React from 'react'
+import CreateClub from './CreateClub'
 
 function Main() {
   return (
-    <div>Main</div>
+    <div>
+      <CreateClub />
+    </div>
   )
 }
 

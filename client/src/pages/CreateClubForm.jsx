@@ -106,7 +106,9 @@ function CreateClubForm() {
         const data = categoryInput;
 
         if (club.category) {
-            putAPI(url, data)
+            putAPI(url, {
+                category:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, category: data });
@@ -115,7 +117,9 @@ function CreateClubForm() {
                     console.error(error);
                 });
         } else {
-            postAPI(url, data)
+            postAPI(url, {
+                category:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, category: data });
@@ -132,7 +136,9 @@ function CreateClubForm() {
         const data = tagInput;
 
         if (club.tag) {
-            putAPI(url, data)
+            putAPI(url, {
+                tag:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, tag: data });
@@ -141,7 +147,9 @@ function CreateClubForm() {
                     console.error(error);
                 });
         } else {
-            postAPI(url, data)
+            postAPI(url, {
+                tag:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, tag: data });
@@ -156,7 +164,9 @@ function CreateClubForm() {
         const data = titleInput;
 
         if (club.title) {
-            putAPI(url, data)
+            putAPI(url, {
+                title:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, title: data });
@@ -165,7 +175,9 @@ function CreateClubForm() {
                     console.error(error);
                 });
         } else {
-            postAPI(url, data)
+            postAPI(url, {
+                title:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, title: data });
@@ -181,7 +193,9 @@ function CreateClubForm() {
         const data = contentInput;
 
         if (club.content) {
-            putAPI(url, data)
+            putAPI(url, {
+                content:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, content: data });
@@ -190,7 +204,9 @@ function CreateClubForm() {
                     console.error(error);
                 });
         } else {
-            postAPI(url, data)
+            postAPI(url, {
+                content:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, content: data });
@@ -206,7 +222,9 @@ function CreateClubForm() {
         const data = restrictionInput;
 
         if (club.restriction) {
-            putAPI(url, data)
+            putAPI(url, {
+                restriction:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, restriction: data });
@@ -215,7 +233,9 @@ function CreateClubForm() {
                     console.error(error);
                 });
         } else {
-            postAPI(url, data)
+            postAPI(url, {
+                restriction:data,
+            })
                 .then(response => {
                     console.log(response);
                     setClub({ ...club, restriction: data });

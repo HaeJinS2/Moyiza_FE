@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRecoilState } from 'recoil';
 import { clubState, tempIdState } from '../states/clubState';
-import {postAPI} from "../axios";
+import { postAPI } from "../axios";
 import { useNavigate } from "react-router-dom";
 
 
@@ -9,7 +9,7 @@ function CreateClub() {
     const navigate = useNavigate();
     const [club, setClub] = useRecoilState(clubState);
     const [tempId, setTempId] = useRecoilState(tempIdState);
-
+    console.log(tempId)
     const handleCreateClubButton = () => {
         postAPI("/create", {}
         ).then((response) => {

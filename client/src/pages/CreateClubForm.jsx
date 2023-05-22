@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilValue, useRecoilState } from 'recoil';
+import React, { useState } from "react";
+import { useRecoilState } from 'recoil';
 import { clubState, tempIdState } from '../states/clubState';
 import { postAPI, putAPI } from "../axios";
-import { useNavigate } from "react-router-dom";
 
 
 const Step1 = ({ nextStep, handleCategoryChange, categoryInput }) => {

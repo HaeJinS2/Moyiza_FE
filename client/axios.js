@@ -48,8 +48,15 @@ axios.interceptors.response.use(
 
                 // 원래의 요청에 재요청
                 return axios(originalRequest);
+
+                // 토큰 갱신 요청 자체가 실패했거나 리프레시 토큰이 만료된 경우를 처리
             } else {
-                // Refresh token is also expired or error, logout the user, etc...
+                alert("로그인을 다시 해주세요!")
+                Cookies.remove("Authorization");
+                Cookies.remove("RefreshToken");
+
+                // 차후 로그아웃 상태를 전역으로 관리하여  window.location을 사용한 리디렉션 개선 필요
+                window.location = "/login";
             }
         }
         return Promise.reject(error);

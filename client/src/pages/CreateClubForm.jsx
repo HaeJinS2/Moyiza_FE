@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useRecoilState } from 'recoil';
-import { clubState, tempIdState } from '../states/clubState';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { clubState, optionState } from '../states/clubState';
 import { postAPI, putAPI } from "../axios";
 
 
@@ -59,7 +59,8 @@ const Step6 = ({ handleSubmit }) => {
 
 function CreateClubForm() {
     const [club, setClub] = useRecoilState(clubState);
-    const [tempId, setTempId] = useRecoilState(tempIdState);
+    // const [tempId, setTempId] = useRecoilState(tempIdState);
+    const option = useRecoilValue(optionState);
 
     const [categoryInput, setCategoryInput] = useState(club.category || '');
     const [tagInput, setTagInput] = useState(club.tag || '');
@@ -67,6 +68,7 @@ function CreateClubForm() {
     const [contentInput, setContentInput] = useState(club.content || '');
     const [restrictionInput, setRestrictionInput] = useState(club.restriction || '');
 
+    console.log(option)
     const [step, setStep] = useState(1);
     const nextStep = () => {
         if (step === 1) {
@@ -102,7 +104,7 @@ function CreateClubForm() {
     };
 
     const handleCategory = () => {
-        const url = `/club/create/${tempId}/category`;
+        const url = `/club/create/${club.createclub_id}/category`;
         const data = categoryInput;
 
         if (club.category) {
@@ -132,7 +134,7 @@ function CreateClubForm() {
 
 
     const handleTag = () => {
-        const url = `/club/create/${tempId}/tag`;
+        const url = `/club/create/${club.createclub_id}/tag`;
         const data = tagInput;
 
         if (club.tag) {
@@ -160,7 +162,7 @@ function CreateClubForm() {
         }
     };
     const handleTitle = () => {
-        const url = `/club/create/${tempId}/title`;
+        const url = `/club/create/${club.createclub_id}/title`;
         const data = titleInput;
 
         if (club.title) {
@@ -189,7 +191,7 @@ function CreateClubForm() {
     };
 
     const handleContent = () => {
-        const url = `/club/create/${tempId}/content`;
+        const url = `/club/create/${club.createclub_id}/content`;
         const data = contentInput;
 
         if (club.content) {
@@ -218,7 +220,7 @@ function CreateClubForm() {
     };
 
     const handleRestriction = () => {
-        const url = `/club/create/${tempId}/restriction`;
+        const url = `/club/create/${club.createclub_id}/restriction`;
         const data = restrictionInput;
 
         if (club.restriction) {
@@ -247,10 +249,9 @@ function CreateClubForm() {
     };
 
     const handleSubmit = () => {
-        postAPI(`/club/create/${tempId}/confirm`, {}).then((response) => {
+        postAPI(`/club/create/${club.createclub_id}/confirm`, {}).then((response) => {
             console.log(response)
             setClub({});
-            setTempId('');
         }).catch((error) => {
             console.log(error)
         })

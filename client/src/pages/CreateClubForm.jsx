@@ -42,10 +42,11 @@ const Step4 = ({ nextStep, handleContentChange, contentInput }) => {
     )
 }
 
-const Step5 = ({ nextStep, handleRestrictionChange, restrictionInput }) => {
+const Step5 = ({ nextStep, handleRestrictionChange, handleRestrictionChange2, restrictionInput, restrictionInput2 }) => {
     return (
         <>
             <input type="text" value={restrictionInput} onChange={handleRestrictionChange} />
+            <input type="text" value={restrictionInput2} onChange={handleRestrictionChange2} />
             <button onClick={nextStep}>다음</button>
         </>
     )
@@ -72,9 +73,10 @@ function CreateClubForm() {
 
     const [titleInput, setTitleInput] = useState(club.title || '');
     const [contentInput, setContentInput] = useState(club.content || '');
-    const [restrictionInput, setRestrictionInput] = useState(club.restriction || '');
+    const [restrictionInput, setRestrictionInput] = useState(club.restriction == null ? '' : club.restriction[0]);
+    const [restrictionInput2, setRestrictionInput2] = useState(club.restriction == null ? '' : club.restriction[1]);
 
-    console.log(option)
+    console.log(club)
 
     const [step, setStep] = useState(1);
 
@@ -93,7 +95,7 @@ function CreateClubForm() {
         } else if (step === 5) {
             handleRestriction();
         }
-        setStep(step + 1);
+        // setStep(step + 1);
     };
     const prevStep = () => setStep(step - 1);
 
@@ -122,6 +124,9 @@ function CreateClubForm() {
     const handleRestrictionChange = (event) => {
         setRestrictionInput(event.target.value);
     };
+    const handleRestrictionChange2 = (event) => {
+        setRestrictionInput2(event.target.value);
+    };
 
     const handleCategory = () => {
         const url = `/club/create/${club.createclub_id}/category`;
@@ -131,9 +136,11 @@ function CreateClubForm() {
             .then(response => {
                 console.log(response);
                 setClub({ ...club, category: data });
+                setStep(step + 1);
             })
             .catch(error => {
                 console.error(error);
+                alert("틀림")
             });
     };
 
@@ -148,9 +155,11 @@ function CreateClubForm() {
             .then(response => {
                 console.log(response);
                 setClub({ ...club, tag: tagsArray });
+                setStep(step + 1);
             })
             .catch(error => {
                 console.error(error);
+                alert("틀림")
             });
 
     };
@@ -164,9 +173,11 @@ function CreateClubForm() {
             .then(response => {
                 console.log(response);
                 setClub({ ...club, title: data });
+                setStep(step + 1);
             })
             .catch(error => {
                 console.error(error);
+                alert("틀림")
             });
 
     };
@@ -181,26 +192,32 @@ function CreateClubForm() {
             .then(response => {
                 console.log(response);
                 setClub({ ...club, content: data });
+                setStep(step + 1);
             })
             .catch(error => {
                 console.error(error);
+                alert("틀림")
             });
 
     };
 
     const handleRestriction = () => {
-        const url = `/club/create/${club.createclub_id}/restriction`;
-        const data = restrictionInput;
+        const url = `/club/create/${club.createclub_id}/policy`;
+        // const data = restrictionInput;
+        const restrictionArray = {genderPolicy:restrictionInput, agePolicy: Number(restrictionInput2)};
 
-        putAPI(url, {
-            restriction: data,
-        })
+        putAPI(url, 
+             restrictionArray
+        )
             .then(response => {
                 console.log(response);
-                setClub({ ...club, restriction: data });
+                setClub({ ...club, restriction: restrictionArray });
+                setStep(step + 1);
             })
             .catch(error => {
                 console.error(error);
+                // setStep(step + 1);
+                alert("틀림")
             });
 
     };
@@ -224,7 +241,7 @@ function CreateClubForm() {
         case 4:
             return <Step4 nextStep={nextStep} contentInput={contentInput} handleContentChange={handleContentChange} />;
         case 5:
-            return <Step5 nextStep={nextStep} restrictionInput={restrictionInput} handleRestrictionChange={handleRestrictionChange} />;
+            return <Step5 nextStep={nextStep} restrictionInput={restrictionInput} restrictionInput2={restrictionInput2} handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
         case 6:
             return <Step6 handleSubmit={handleSubmit} />;
         default:

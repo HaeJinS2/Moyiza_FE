@@ -12,8 +12,12 @@ function CreateClub() {
     const [option, setOption] = useRecoilState(optionState);
 
     const handleCreateClubButton = () => {
-        postAPI("/club/create", {}).then((response) => {
-            if (response.status === 201) { // 임시저장된 데이터가 있는 경우
+        postAPI(`/club/create`, {}).then((response) => {
+            if (response.status === 100) { // 임시저장된 데이터가 있는 경우
+                setClub({
+                    ...club,
+                    createclub_id: response.data.createclub_id,
+                })
                 getAPI(`/club/create`).then((getResponse) => {
                     if (window.confirm('불러오시겠습니까?')) {
                         // setTempId(response.data.createclub_id)
@@ -36,7 +40,7 @@ function CreateClub() {
                 }).catch((error) => {
                     console.error(error);
                 });
-            } else if (response.status === 200) { // 임시저장된 데이터가 없는 경우
+            } else if (response.status === 201) { // 임시저장된 데이터가 없는 경우
                 // setTempId(response.data.createclub_id); // tempId 발급 받음
                 setClub({
                     ...club,

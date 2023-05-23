@@ -47,7 +47,7 @@ function Main() {
               className="relative md:mt-[60px] -mt-[12px]"
             >
               <div className=" w-full h-[300px] justify-start items-start rounded-top-[140px] z-[0]  ">
-                <img src={`${process.env.PUBLIC_URL}/images/cat.jpeg`} />
+                <img src={`${process.env.PUBLIC_URL}/images/cat.jpeg`} alt="tmp-alt" />
               </div>
             </motion.div>
           </div>

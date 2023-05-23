@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
@@ -9,11 +9,15 @@ import CreateClub from "./CreateClub";
 
 function Club() {
   const navigate = useNavigate()
+  const divRef = useRef(null);
+  useEffect(() => {
+    divRef.current.scrollIntoView({ behavior: "smooth" });
+  },[])
   return (
     <>
       <Container>
         <Navbar />
-        <section className="h-screen"></section>
+        <section  ref={divRef} className="h-screen"></section>
         <section className="h-screen">
           <BodyContainer>
             <header className="flex justify-center">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles";
 import { slideIn, staggerContainer } from "../utils/motion";
@@ -6,12 +6,16 @@ import Navbar from "../component/Navbar";
 import Container from "../component/Container";
 
 function Main() {
+  const divRef = useRef(null);
+  useEffect(() => {
+    divRef.current.scrollIntoView({ behavior: "smooth" });
+  },[])
+  
   return (
     <>
-      <Container>
-        <Navbar />
-        <div className=" h-screen"></div>
-        <section className={`${styles.paddings}`}>
+      <Container >
+        <Navbar  />
+        <section ref={divRef} className={`${styles.paddings}`}>
           <motion.div
             variants={staggerContainer}
             initial="hidden"

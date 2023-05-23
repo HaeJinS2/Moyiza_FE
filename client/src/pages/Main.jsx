@@ -1,5 +1,4 @@
 import React from "react";
-import CreateClub from "./CreateClub";
 import { motion } from "framer-motion";
 import styles from "../styles";
 import { slideIn, staggerContainer } from "../utils/motion";
@@ -52,12 +51,13 @@ function Main() {
           </motion.div>
         </section>
         <section className={`${styles.yPaddings} sm:pl-16 pl-6 h-screen`}>
-          <div className="flex gap-10">
-            <div className="bg-rose-400 text-white rounded-xl px-4 py-1">클럽</div>
-            <div className="bg-rose-400 text-white rounded-xl px-4 py-1">원데이</div>
-          </div>
-          <div>
-            <CreateClub />
+          <div className="flex gap-10 mt-20">
+            <div className="bg-rose-400 text-white rounded-xl px-4 py-1">
+              클럽
+            </div>
+            <div className="bg-rose-400 text-white rounded-xl px-4 py-1">
+              원데이
+            </div>
           </div>
         </section>
       </Container>

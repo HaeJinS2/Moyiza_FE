@@ -76,7 +76,7 @@ function CreateClubForm() {
     const [restrictionInput, setRestrictionInput] = useState(club.restriction == null ? '' : club.restriction[0]);
     const [restrictionInput2, setRestrictionInput2] = useState(club.restriction == null ? '' : club.restriction[1]);
 
-    console.log(club)
+    console.log(option)
 
     const [step, setStep] = useState(1);
 

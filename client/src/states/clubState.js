@@ -18,9 +18,10 @@ export const clubState = atom({
     default: {
         tempId: null,
         category: null,
-        tag: null,
-        title: null,
-        content: null,
+        tag: '',
+        title: '',
+        content: '',
+        policy: null,
         restriction: null,
     }, 
 });

@@ -107,29 +107,14 @@ function CreateClubForm() {
         const url = `/club/create/${club.createclub_id}/category`;
         const data = categoryInput;
 
-        if (club.category) {
-            putAPI(url, {
-                category:data,
+        putAPI(url, { category: data })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, category: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, category: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                category:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, category: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
     };
 
 
@@ -137,115 +122,67 @@ function CreateClubForm() {
         const url = `/club/create/${club.createclub_id}/tag`;
         const data = tagInput;
 
-        if (club.tag) {
-            putAPI(url, {
-                tag:data,
+        putAPI(url, {
+            tag: data,
+        })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, tag: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, tag: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                tag:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, tag: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
+
     };
     const handleTitle = () => {
         const url = `/club/create/${club.createclub_id}/title`;
         const data = titleInput;
 
-        if (club.title) {
-            putAPI(url, {
-                title:data,
+        putAPI(url, {
+            title: data,
+        })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, title: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, title: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                title:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, title: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
+
     };
 
     const handleContent = () => {
         const url = `/club/create/${club.createclub_id}/content`;
         const data = contentInput;
 
-        if (club.content) {
-            putAPI(url, {
-                content:data,
+        putAPI(url, {
+            content: data,
+        })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, content: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, content: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                content:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, content: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
+
     };
 
     const handleRestriction = () => {
         const url = `/club/create/${club.createclub_id}/restriction`;
         const data = restrictionInput;
 
-        if (club.restriction) {
-            putAPI(url, {
-                restriction:data,
+        putAPI(url, {
+            restriction: data,
+        })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, restriction: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, restriction: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                restriction:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, restriction: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
+
     };
 
     const handleSubmit = () => {

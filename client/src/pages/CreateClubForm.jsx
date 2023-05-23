@@ -13,10 +13,12 @@ const Step1 = ({ nextStep, handleCategoryChange, categoryInput }) => {
     )
 }
 
-const Step2 = ({ nextStep, handleTagChange, tagInput }) => {
+const Step2 = ({ nextStep, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
     return (
         <>
-            <input type="text" value={tagInput} onChange={handleTagChange} />
+            <input type="text" value={tagInput1} onChange={handleTagChange1} placeholder="Tag 1" />
+            <input type="text" value={tagInput2} onChange={handleTagChange2} placeholder="Tag 2" />
+            <input type="text" value={tagInput3} onChange={handleTagChange3} placeholder="Tag 3" />
             <button onClick={nextStep}>다음</button>
         </>
     )
@@ -63,13 +65,22 @@ function CreateClubForm() {
     const option = useRecoilValue(optionState);
 
     const [categoryInput, setCategoryInput] = useState(club.category || '');
-    const [tagInput, setTagInput] = useState(club.tag || '');
+
+    const [tagInput1, setTagInput1] = useState(club?.tag == null ? "" : club?.tag[0]);
+    const [tagInput2, setTagInput2] = useState(club?.tag == null ? "" : club?.tag[1]);
+    const [tagInput3, setTagInput3] = useState(club?.tag == null ? "" : club?.tag[2]);
+
     const [titleInput, setTitleInput] = useState(club.title || '');
     const [contentInput, setContentInput] = useState(club.content || '');
     const [restrictionInput, setRestrictionInput] = useState(club.restriction || '');
 
     console.log(option)
+
     const [step, setStep] = useState(1);
+
+
+
+
     const nextStep = () => {
         if (step === 1) {
             handleCategory();
@@ -87,11 +98,20 @@ function CreateClubForm() {
     const prevStep = () => setStep(step - 1);
 
 
+
     const handleCategoryChange = (event) => {
         setCategoryInput(event.target.value);
     };
-    const handleTagChange = (event) => {
-        setTagInput(event.target.value);
+    const handleTagChange1 = (event) => {
+        setTagInput1(event.target.value);
+    };
+
+    const handleTagChange2 = (event) => {
+        setTagInput2(event.target.value);
+    };
+
+    const handleTagChange3 = (event) => {
+        setTagInput3(event.target.value);
     };
     const handleTitleChange = (event) => {
         setTitleInput(event.target.value);
@@ -107,145 +127,82 @@ function CreateClubForm() {
         const url = `/club/create/${club.createclub_id}/category`;
         const data = categoryInput;
 
-        if (club.category) {
-            putAPI(url, {
-                category:data,
+        putAPI(url, { category: data })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, category: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, category: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                category:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, category: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
     };
 
 
     const handleTag = () => {
         const url = `/club/create/${club.createclub_id}/tag`;
-        const data = tagInput;
+        const tagsArray = [tagInput1, tagInput2, tagInput3];
 
-        if (club.tag) {
-            putAPI(url, {
-                tag:data,
+        putAPI(url, {
+            tag: tagsArray,
+        })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, tag: tagsArray });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, tag: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                tag:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, tag: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
+
     };
     const handleTitle = () => {
         const url = `/club/create/${club.createclub_id}/title`;
         const data = titleInput;
 
-        if (club.title) {
-            putAPI(url, {
-                title:data,
+        putAPI(url, {
+            title: data,
+        })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, title: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, title: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                title:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, title: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
+
     };
 
     const handleContent = () => {
         const url = `/club/create/${club.createclub_id}/content`;
         const data = contentInput;
 
-        if (club.content) {
-            putAPI(url, {
-                content:data,
+        putAPI(url, {
+            content: data,
+        })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, content: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, content: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                content:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, content: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
+
     };
 
     const handleRestriction = () => {
         const url = `/club/create/${club.createclub_id}/restriction`;
         const data = restrictionInput;
 
-        if (club.restriction) {
-            putAPI(url, {
-                restriction:data,
+        putAPI(url, {
+            restriction: data,
+        })
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, restriction: data });
             })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, restriction: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            postAPI(url, {
-                restriction:data,
-            })
-                .then(response => {
-                    console.log(response);
-                    setClub({ ...club, restriction: data });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+            .catch(error => {
+                console.error(error);
+            });
+
     };
 
     const handleSubmit = () => {
@@ -261,7 +218,7 @@ function CreateClubForm() {
         case 1:
             return <Step1 nextStep={nextStep} categoryInput={categoryInput} handleCategoryChange={handleCategoryChange} />;
         case 2:
-            return <Step2 nextStep={nextStep} prevStep={prevStep} tagInput={tagInput} handleTagChange={handleTagChange} />;
+            return <Step2 nextStep={nextStep} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />;
         case 3:
             return <Step3 nextStep={nextStep} prevStep={prevStep} titleInput={titleInput} handleTitleChange={handleTitleChange} />;
         case 4:

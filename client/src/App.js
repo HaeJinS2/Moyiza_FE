@@ -1,13 +1,18 @@
-import './App.css';
+import "./App.css";
 import Router from "./shared/Router";
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot } from "recoil";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <div>
-      <RecoilRoot>
-        <Router />
-      </RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <RecoilRoot>
+          <Router />
+        </RecoilRoot>
+      </QueryClientProvider>
     </div>
   );
 }

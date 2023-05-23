@@ -13,12 +13,12 @@ function CreateClub() {
 
     const handleCreateClubButton = () => {
         postAPI(`/club/create`, {}).then((response) => {
+            setClub({
+                ...club,
+                createclub_id: response.data.createclub_id,
+            })
             if (response.status === 100) { // 임시저장된 데이터가 있는 경우
-                setClub({
-                    ...club,
-                    createclub_id: response.data.createclub_id,
-                })
-                getAPI(`/club/create`).then((getResponse) => {
+                getAPI(`/club/create/${club.createclub_id}`).then((getResponse) => {
                     if (window.confirm('불러오시겠습니까?')) {
                         // setTempId(response.data.createclub_id)
                         setClub({

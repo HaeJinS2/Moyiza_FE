@@ -10,10 +10,10 @@ axios.defaults.withCredentials = true;
 axios.interceptors.request.use(
     (config) => {
         // 쿠키의 토큰 명 수정 필요
-        const accessToken = Cookies.get("Authorization");
+        const accessToken = Cookies.get("ACCESS_TOKEN");
 
         if (accessToken) {
-            config.headers["Authorization"] = "Bearer " + accessToken.trim();
+            config.headers["ACCESS_TOKEN"] = "Bearer " + accessToken.trim();
         }
         config.headers["Content-Type"] = "application/json";
 
@@ -43,8 +43,8 @@ axios.interceptors.response.use(
             const refreshTokenResponse = await refreshToken();
             if (refreshTokenResponse && refreshTokenResponse.status === 200) {
                 const newAccessToken = refreshTokenResponse.data.access_token;
-                Cookies.set("Authorization", newAccessToken);
-                axios.defaults.headers["Authorization"] = "Bearer " + newAccessToken.trim();
+                Cookies.set("ACCESS_TOKEN", newAccessToken);
+                axios.defaults.headers["ACCESS_TOKEN"] = "Bearer " + newAccessToken.trim();
 
                 // 원래의 요청에 재요청
                 return axios(originalRequest);
@@ -52,7 +52,7 @@ axios.interceptors.response.use(
                 // 토큰 갱신 요청 자체가 실패했거나 리프레시 토큰이 만료된 경우를 처리
             } else {
                 alert("로그인을 다시 해주세요!")
-                Cookies.remove("Authorization");
+                Cookies.remove("ACCESS_TOKEN");
                 Cookies.remove("RefreshToken");
 
                 // 차후 로그아웃 상태를 전역으로 관리하여  window.location을 사용한 리디렉션 개선 필요

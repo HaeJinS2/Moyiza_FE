@@ -4,6 +4,7 @@ import styles from "../styles";
 import { slideIn, staggerContainer } from "../utils/motion";
 import Navbar from "../component/Navbar";
 import Container from "../component/Container";
+import CreateClub from "./CreateClub";
 
 function Main() {
   const divRef = useRef(null);
@@ -15,6 +16,7 @@ function Main() {
     <>
       <Container >
         <Navbar  />
+
         <section ref={divRef} className={`${styles.paddings}`}>
           <motion.div
             variants={staggerContainer}
@@ -53,6 +55,7 @@ function Main() {
               </motion.div>
             </div>
           </motion.div>
+          <CreateClub />
         </section>
         <section className={`${styles.yPaddings} sm:pl-16 pl-6 h-screen`}>
           <div className="flex gap-10 mt-20">

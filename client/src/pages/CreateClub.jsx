@@ -37,7 +37,9 @@ function CreateClub() {
                         setClub(getResponse.data.createClub)
                         setOption({
                             ...option,
-                            optionList: getResponse.data.optionList.categoryList,
+                            optionLists: getResponse.data.optionList,
+                            categoryLists: getResponse.data.optionList.categoryList,
+                            genderPolicyLists: getResponse.data.optionList.genderPolicyList,
                         })
                         setNavigateNow(true);
                         navigate(`/create-club-form`);
@@ -56,7 +58,7 @@ function CreateClub() {
                 })
                 setOption({
                     ...option,
-                    optionList: response.data.optionList,
+                    optionLists: response.data.optionList,
                 })
                 navigate(`/create-club-form`);
             }

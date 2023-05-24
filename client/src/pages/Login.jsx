@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import { postAPI } from '../axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import Cookies from 'js-cookie';
 
 
 function Login() {
+
     //회원가입 페이지 이동
     const navigate = useNavigate();
 
@@ -27,7 +30,17 @@ function Login() {
             ...userloginInput, password: e.target.value
         })
     }
-
+    // 제출
+    const loginMutation = useMutation(postAPI, {
+        onSuccess: (data) => {
+            console.log(data);
+            Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN)
+            Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN)
+        },
+        onError: (error) => {
+            console.log(error)
+        }
+    })
     //버튼 클릭시 리렌더링 방지
     const submitHandler = (e) => {
         e.preventDefault()
@@ -40,8 +53,8 @@ function Login() {
             ...userloginInput
         }
         )
+        loginMutation.mutate(url,data);
     }
-
 
     //유효성 검사-------------------------------------
     // 이메일 유효성 검사
@@ -62,11 +75,11 @@ function Login() {
     const isAllValid =
         isEmailValid &&
         isPwValid;
-        
+
     const activeBtn = isAllValid ? 'undefined' : 'disabled';
 
 
-    console.log(userloginInput);
+    // console.log(userloginInput);
 
     return (
         <LoginContainer>

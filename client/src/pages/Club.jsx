@@ -1,18 +1,29 @@
-import React, { useEffect, useRef } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {motion} from 'framer-motion'
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
 import ReviewCard from "../component/ReviewCard";
 import CreateClub from "./CreateClub";
+const tabs = ["전체","문화・예술","운동・액티비티","푸드・드링크","취미","여행・동행","성장・자기계발","동네・또래","연애・소개팅"]
 
 function Club() {
+  const [activeTab, setActiveTab] = useState(tabs[0]);
   const navigate = useNavigate()
   const divRef = useRef(null);
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   },[])
+
+const getClub = async() => {
+  const response = await axios.get("http://43.200.169.48/club")
+  console.log(response)
+}
+
+getClub()
   return (
     <>
       <Container>
@@ -30,15 +41,27 @@ function Club() {
                 >필터</button>
               </div>
               <div className="flex justify-around">
-                <div>전체</div>
-                <div>문화・예술</div>
-                <div>운동・액티비티</div>
-                <div>푸드・드링크</div>
-                <div>취미</div>
-                <div>여행・동행</div>
-                <div>성장・자기계발</div>
-                <div>동네・또래</div>
-                <div>연애・소개팅</div>
+              {tabs.map((tab, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveTab(tab)}
+                className={`${
+                  activeTab === tab ? "" : "hover:opacity-50"
+                } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 outline-rose-400 focus-visible:outline`}
+              >
+                {activeTab === tab && (
+                  <motion.div
+                    layoutId="active-pill"
+                    transition={{ type: 'spring', duration:0.5}}
+                    className="bg-rose-400 absolute inset-0"
+                    style={{
+                      borderRadius: 9999
+                    }}
+                  />
+                )}
+                <span className="relative z-10">{tab}</span>
+              </button>
+            ))}
               </div>
               <div className="flex flex-1 justify-around">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8">

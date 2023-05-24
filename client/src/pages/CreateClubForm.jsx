@@ -2,14 +2,24 @@ import React, { useState } from "react";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { clubState, optionState } from '../states/clubState';
 import { postAPI, putAPI } from "../axios";
+import Container from "../component/Container";
+import Slider from 'react-input-slider';
 
 
 const Step1 = ({ nextStep, handleCategoryChange, categoryInput }) => {
     return (
-        <>
-            <input type="text" value={categoryInput} onChange={handleCategoryChange} />
-            <button onClick={nextStep}>다음</button>
-        </>
+        <Container>
+            <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
+                <div className="">
+                    <div>
+                        <input type="text" value={categoryInput} onChange={handleCategoryChange} />
+                    </div>
+                    <div className="flex flex-1 items-center justify-center">
+                        <button onClick={nextStep}>다음</button>
+                    </div>
+                </div>
+            </section>
+        </Container>
     )
 }
 
@@ -42,17 +52,37 @@ const Step4 = ({ nextStep, handleContentChange, contentInput }) => {
     )
 }
 
-const Step5 = ({ nextStep, handleRestrictionChange, handleRestrictionChange2, restrictionInput, restrictionInput2 }) => {
+const Step5 = ({ nextStep, handleAgePolicyChange,agePolicy, handleRestrictionChange, handleRestrictionChange2, restrictionInput, restrictionInput2 }) => {
     return (
         <>
             <input type="text" value={restrictionInput} onChange={handleRestrictionChange} />
-            <input type="text" value={restrictionInput2} onChange={handleRestrictionChange2} />
+            {/* <input type="text" value={restrictionInput2} onChange={handleRestrictionChange2} /> */}
+
+                <div>{'몇살부터?: ' + agePolicy.x}</div>
+                {agePolicy && (
+                <Slider
+                    axis="x"
+                    xstep={5}
+                    xmin={20}
+                    xmax={50}
+                    x={agePolicy.x}
+                    onChange={({ x }) => handleAgePolicyChange({ x: parseFloat(x.toFixed(2)) })}
+                />
+                )}
+                
             <button onClick={nextStep}>다음</button>
         </>
     )
 }
-
-const Step6 = ({ handleSubmit }) => {
+const Step6 = ({ nextStep, handleMaxGroupSizeChange, maxGroupSize }) => {
+    return (
+        <>
+            <input type="text" value={maxGroupSize} onChange={handleMaxGroupSizeChange} />
+            <button onClick={nextStep}>다음</button>
+        </>
+    )
+}
+const Step7 = ({ handleSubmit }) => {
     return (
         <>
             <button onClick={handleSubmit}>제출</button>
@@ -65,19 +95,22 @@ function CreateClubForm() {
     // const [tempId, setTempId] = useRecoilState(tempIdState);
     const option = useRecoilValue(optionState);
 
-    const [categoryInput, setCategoryInput] = useState(club.category || '');
+    const [categoryInput, setCategoryInput] = useState(club.clubCategory || '');
 
-    const [tagInput1, setTagInput1] = useState(club?.tag == null ? "" : club?.tag[0]);
-    const [tagInput2, setTagInput2] = useState(club?.tag == null ? "" : club?.tag[1]);
-    const [tagInput3, setTagInput3] = useState(club?.tag == null ? "" : club?.tag[2]);
+    const [tagInput1, setTagInput1] = useState(club?.clubTag == null ? "" : club?.clubTag[0]);
+    const [tagInput2, setTagInput2] = useState(club?.clubTag == null ? "" : club?.clubTag[1]);
+    const [tagInput3, setTagInput3] = useState(club?.clubTag == null ? "" : club?.clubTag[2]);
 
-    const [titleInput, setTitleInput] = useState(club.title || '');
-    const [contentInput, setContentInput] = useState(club.content || '');
-    const [restrictionInput, setRestrictionInput] = useState(club.restriction == null ? '' : club.restriction[0]);
-    const [restrictionInput2, setRestrictionInput2] = useState(club.restriction == null ? '' : club.restriction[1]);
+    const [titleInput, setTitleInput] = useState(club.clubTitle || '');
+    const [contentInput, setContentInput] = useState(club.clubContent || '');
+    const [restrictionInput, setRestrictionInput] = useState(club.genderPolicy == null ? '' : club.genderPolicy);
+    const [restrictionInput2, setRestrictionInput2] = useState(club.agePolicy == null ? '' : club.agePolicy);
+    const [agePolicy, setAgePolicy] = useState( club.agePolicy == null ? {x: 20} : {x:club.agePolicy} );
+    console.log(agePolicy)
+    const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
 
     console.log(option)
-
+    console.log(club)
     const [step, setStep] = useState(1);
 
 
@@ -94,6 +127,8 @@ function CreateClubForm() {
             handleContent();
         } else if (step === 5) {
             handleRestriction();
+        } else if (step === 6) {
+            handleMaxGroupSize();
         }
         // setStep(step + 1);
     };
@@ -127,6 +162,14 @@ function CreateClubForm() {
     const handleRestrictionChange2 = (event) => {
         setRestrictionInput2(event.target.value);
     };
+    const handleAgePolicyChange = (value) => {
+        setAgePolicy({ x: parseFloat(value.x.toFixed(2)) });
+    };
+
+
+    const handleMaxGroupSizeChange = (event) => {
+        setMaxGroupSize(event.target.value)
+    }
 
     const handleCategory = () => {
         const url = `/club/create/${club.createclub_id}/category`;
@@ -135,7 +178,7 @@ function CreateClubForm() {
         putAPI(url, { category: data })
             .then(response => {
                 console.log(response);
-                setClub({ ...club, category: data });
+                setClub({ ...club, clubCategory: data });
                 setStep(step + 1);
             })
             .catch(error => {
@@ -154,7 +197,7 @@ function CreateClubForm() {
         })
             .then(response => {
                 console.log(response);
-                setClub({ ...club, tag: tagsArray });
+                setClub({ ...club, tagString: tagsArray });
                 setStep(step + 1);
             })
             .catch(error => {
@@ -172,7 +215,7 @@ function CreateClubForm() {
         })
             .then(response => {
                 console.log(response);
-                setClub({ ...club, title: data });
+                setClub({ ...club, clubTitle: data });
                 setStep(step + 1);
             })
             .catch(error => {
@@ -204,14 +247,14 @@ function CreateClubForm() {
     const handleRestriction = () => {
         const url = `/club/create/${club.createclub_id}/policy`;
         // const data = restrictionInput;
-        const restrictionArray = {genderPolicy:restrictionInput, agePolicy: Number(restrictionInput2)};
+        const restrictionObj = { genderPolicy: restrictionInput, agePolicy: Number(agePolicy.x) };
 
-        putAPI(url, 
-             restrictionArray
+        putAPI(url,
+            restrictionObj
         )
             .then(response => {
                 console.log(response);
-                setClub({ ...club, restriction: restrictionArray });
+                setClub({ ...club, policy: restrictionObj });
                 setStep(step + 1);
             })
             .catch(error => {
@@ -221,7 +264,26 @@ function CreateClubForm() {
             });
 
     };
+    const handleMaxGroupSize = () => {
+        const url = `/club/create/${club.createclub_id}/maxgroupsize`;
+        // const data = restrictionInput;
+        const data = { maxGroupSize: Number(maxGroupSize) }
 
+        putAPI(url,
+            data
+        )
+            .then(response => {
+                console.log(response);
+                setClub({ ...club, maxGroupSize: data });
+                setStep(step + 1);
+            })
+            .catch(error => {
+                console.error(error);
+                // setStep(step + 1);
+                alert("틀림")
+            });
+
+    };
     const handleSubmit = () => {
         postAPI(`/club/create/${club.createclub_id}/confirm`, {}).then((response) => {
             console.log(response)
@@ -241,9 +303,11 @@ function CreateClubForm() {
         case 4:
             return <Step4 nextStep={nextStep} contentInput={contentInput} handleContentChange={handleContentChange} />;
         case 5:
-            return <Step5 nextStep={nextStep} restrictionInput={restrictionInput} restrictionInput2={restrictionInput2} handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
+            return <Step5 nextStep={nextStep} agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange} restrictionInput={restrictionInput} restrictionInput2={restrictionInput2} handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
         case 6:
-            return <Step6 handleSubmit={handleSubmit} />;
+            return <Step6 nextStep={nextStep} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />;
+        case 7:
+            return <Step7 handleSubmit={handleSubmit} />;
         default:
             return <div>Invalid step</div>;
     }

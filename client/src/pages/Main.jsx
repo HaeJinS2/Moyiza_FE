@@ -74,7 +74,7 @@ function Main() {
                   <motion.div
                     layoutId="active-pill"
                     transition={{ type: 'spring', duration:0.5}}
-                    className="bg-rose-400 absolute inset-0"
+                    className="bg-gatherBlue absolute inset-0"
                     style={{
                       borderRadius: 9999
                     }}

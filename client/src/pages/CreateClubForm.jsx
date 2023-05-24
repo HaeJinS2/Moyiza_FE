@@ -63,8 +63,8 @@ const Step3 = ({ nextStep, handleTitleChange, titleInput }) => {
                     클럽이름
                     <div>
                         <input type="text" value={titleInput} onChange={handleTitleChange} />
-                        </div>
-                <div>
+                    </div>
+                    <div>
                         <button onClick={nextStep}>다음</button>
                     </div>
                 </section>
@@ -134,7 +134,18 @@ const Step6 = ({ nextStep, handleMaxGroupSizeChange, maxGroupSize }) => {
                 인원제한
                 <div>
                     <input type="text" value={maxGroupSize} onChange={handleMaxGroupSizeChange} />
-                    </div>
+                    <div>{'몇명까지?: ' + maxGroupSize.x}</div>
+                    {maxGroupSize && (
+                        <Slider
+                            axis="x"
+                            xstep={1}
+                            xmin={20}
+                            xmax={100}
+                            x={maxGroupSize.x}
+                            onChange={({ x }) => handleMaxGroupSizeChange({ x: parseFloat(x.toFixed(2)) })}
+                        />
+                    )}
+                </div>
                 <div>
                     <button onClick={nextStep}>다음</button>
                 </div>
@@ -174,8 +185,10 @@ function CreateClubForm() {
     const [restrictionInput, setRestrictionInput] = useState(club.genderPolicy == null ? '' : club.genderPolicy);
     const [restrictionInput2, setRestrictionInput2] = useState(club.agePolicy == null ? '' : club.agePolicy);
     const [agePolicy, setAgePolicy] = useState(club.agePolicy == null ? { x: 20 } : { x: club.agePolicy });
-    console.log(agePolicy)
-    const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
+    const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize == null ? { x: 1 } : { x: club.maxGroupSize });
+
+    console.log(selectedGenderPolicy)
+    // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
     console.log("option", option.optionLists)
     console.log(option.genderPolicyLists)
@@ -233,10 +246,8 @@ function CreateClubForm() {
     const handleAgePolicyChange = (value) => {
         setAgePolicy({ x: parseFloat(value.x.toFixed(2)) });
     };
-
-
-    const handleMaxGroupSizeChange = (event) => {
-        setMaxGroupSize(event.target.value)
+    const handleMaxGroupSizeChange = (value) => {
+        setMaxGroupSize({ x: parseFloat(value.x.toFixed(2)) })
     }
 
     const handleCategory = () => {
@@ -319,7 +330,7 @@ function CreateClubForm() {
     const handleRestriction = () => {
         const url = `/club/create/${club.createclub_id}/policy`;
         // const data = restrictionInput;
-        const restrictionObj = { genderPolicy: restrictionInput, agePolicy: Number(agePolicy.x) };
+        const restrictionObj = { genderPolicy: selectedGenderPolicy, agePolicy: Number(agePolicy.x) };
 
         putAPI(url,
             restrictionObj
@@ -339,7 +350,7 @@ function CreateClubForm() {
     const handleMaxGroupSize = () => {
         const url = `/club/create/${club.createclub_id}/maxgroupsize`;
         // const data = restrictionInput;
-        const data = { maxGroupSize: Number(maxGroupSize) }
+        const data = { maxGroupSize: Number(maxGroupSize.x) }
 
         putAPI(url,
             data
@@ -376,10 +387,10 @@ function CreateClubForm() {
         case 4:
             return <Step4 nextStep={nextStep} contentInput={contentInput} handleContentChange={handleContentChange} />;
         case 5:
-            return <Step5 nextStep={nextStep} selectedGenderPolicy={selectedGenderPolicy} 
-            setSelectedGenderPolicy={setSelectedGenderPolicy} 
-            option={option}
-            agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange} restrictionInput={restrictionInput} restrictionInput2={restrictionInput2} handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
+            return <Step5 nextStep={nextStep} selectedGenderPolicy={selectedGenderPolicy}
+                setSelectedGenderPolicy={setSelectedGenderPolicy}
+                option={option}
+                agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange} restrictionInput={restrictionInput} restrictionInput2={restrictionInput2} handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
         case 6:
             return <Step6 nextStep={nextStep} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />;
         case 7:

@@ -3,18 +3,21 @@ import { useRecoilState } from 'recoil';
 import { clubState, optionState } from '../states/clubState';
 import { getAPI, postAPI } from "../axios";
 import { useNavigate } from "react-router-dom";
+import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
 
 function CreateClub() {
     const navigate = useNavigate();
     const [club, setClub] = useRecoilState(clubState);
     // const [tempId, setTempId] = useRecoilState(tempIdState);
     const [option, setOption] = useRecoilState(optionState);
-    const [navigateNow, setNavigateNow] = useState(false); 
+    const [navigateNow, setNavigateNow] = useState(false);
+    const [modalIsOpen, setIsOpen] = useState(false);
 
     const handleCreateClubButton = () => {
         postAPI(`/club/create`, {}).then((response) => {
-            console.log("test" , response)
+            console.log("test", response)
             setClub({
                 ...club,
                 createclub_id: response.data.createclub_id,
@@ -22,31 +25,7 @@ function CreateClub() {
             if (response.status === 202) { // 임시저장된 데이터가 있는 경우
                 console.log(club.createclub_id)
                 getAPI(`/club/create/${response.data.createclub_id}`).then((getResponse) => {
-                    if (window.confirm('불러오시겠습니까?')) {
-                        // console.log(getResponse.data.createclub.createclub_id)
-                        // setTempId(response.data.createclub_id)
-                        // setClub({
-                        //     ...club,
-                        //     createclub_id: getResponse.data.createClubResponse.id,
-                        //     category: getResponse.data.createClubResponse.category,
-                        //     tag: getResponse.data.createClubResponse.tagString,
-                        //     title: getResponse.data.createClubResponse.title,
-                        //     content: getResponse.data.createClubResponse.content,
-                        //     restriction: getResponse.data.createClubResponse.genderPolicy, 
-                        // });
-                        setClub(getResponse.data.createClub)
-                        setOption({
-                            ...option,
-                            optionLists: getResponse.data.optionList,
-                            categoryLists: getResponse.data.optionList.categoryList,
-                            genderPolicyLists: getResponse.data.optionList.genderPolicyList,
-                        })
-                        setNavigateNow(true);
-                        navigate(`/create-club-form`);
-                    } else {
-                        setNavigateNow(true);
-                        navigate(`/create-club-form`);
-                    }
+                    setIsOpen(true);
                 }).catch((error) => {
                     console.error(error);
                 });
@@ -59,6 +38,8 @@ function CreateClub() {
                 setOption({
                     ...option,
                     optionLists: response.data.optionList,
+                    categoryLists: response.data.optionList.categoryList,
+                    genderPolicyLists: response.data.optionList.genderPolicyList,
                 })
                 navigate(`/create-club-form`);
             }
@@ -66,19 +47,88 @@ function CreateClub() {
             console.error(error);
         });
     };
-    
+
+    const closeModal = () => {
+        setIsOpen(false);
+    }
+
+    const handleConfirm = () => {
+
+        getAPI(`/club/create/${club.createclub_id}`).then((getResponse) => {
+            setClub(getResponse.data.createClub)
+            setOption({
+                ...option,
+                optionLists: getResponse.data.optionList,
+                categoryLists: getResponse.data.optionList.categoryList,
+                genderPolicyLists: getResponse.data.optionList.genderPolicyList,
+            })
+            setNavigateNow(true);
+            navigate(`/create-club-form`);
+        }).catch((error) => {
+            console.error(error);
+        });
+        closeModal();
+    }
+
+    const handleCancel = () => {
+        getAPI(`/club/create/${club.createclub_id}`).then((getResponse) => {
+            setOption({
+                ...option,
+                optionLists: getResponse.data.optionList,
+                categoryLists: getResponse.data.optionList.categoryList,
+                genderPolicyLists: getResponse.data.optionList.genderPolicyList,
+            })
+            setNavigateNow(true);
+            navigate(`/create-club-form`);
+        }).catch((error) => {
+            console.error(error);
+        });
+        closeModal();
+    }
+
     useEffect(() => {
         // navigate(`/create-club-form`);
-        setNavigateNow(false); 
+        setNavigateNow(false);
     }, [navigateNow]);
-
 
     return (
         <div>
             <button onClick={handleCreateClubButton}>클럽 만들기 버튼</button>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Create Club Modal"
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                        zIndex: 1000,
+                    },
+                    content: {
+                        color: '#7099F8',
+                        width: '50%',
+                        height: '50%',
+                        margin: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '20px',
+                        borderRadius: '10px',
+                    }
+                }}
+            >
+                <div className="flex flex-col items-center gap-y-5">
+                    <div>
+                        <h2>불러오시겠습니까?</h2>
+                    </div>
+                    <div className="flex gap-10">
+                        <button onClick={handleConfirm}>Yes</button>
+                        <button onClick={handleCancel}>No</button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 }
-
 
 export default CreateClub

@@ -34,7 +34,7 @@ function Navbar() {
             </motion.h1>
             <div className="flex gap-2 items-end">
               <div className="cursor-pointer">검색</div>
-              <div className="cursor-pointer">로그인</div>
+              <div onClick={() => navigate("/logins")} className="cursor-pointer">로그인</div>
               <div className="cursor-pointer">프로필</div>
             </div>
           </motion.div>

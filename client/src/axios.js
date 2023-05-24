@@ -106,3 +106,8 @@ export function patchAPI(url, data) {
     console.log("PATCH Start, url : ", url, " user : ", data);
     return axios.patch(API_BASE_URL + url, data);
 }
+
+export function filePutAPI(url, data, config) {
+    console.log("boardPostAPI Start, url : ", url, " user : ", data);
+    return axios.put(API_BASE_URL + url, data, config);
+  }

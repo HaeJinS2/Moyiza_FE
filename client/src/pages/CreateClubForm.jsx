@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from 'recoil';
 import { clubState, optionState } from '../states/clubState';
-import { postAPI, putAPI } from "../axios";
+import { postAPI, putAPI, filePutAPI } from "../axios";
 import Container from "../component/Container";
 import Slider from 'react-input-slider';
 import { useNavigate } from "react-router-dom";
@@ -58,7 +58,7 @@ const Step2 = ({ nextStep, prevStep, handleTagChange1, handleTagChange2, handleT
 }
 
 // 클럽 이름
-const Step3 = ({ nextStep, prevStep, handleTitleChange, titleInput }) => { 
+const Step3 = ({ nextStep, prevStep, handleTitleChange, titleInput }) => {
 
     return (
         <>
@@ -79,11 +79,18 @@ const Step3 = ({ nextStep, prevStep, handleTitleChange, titleInput }) => {
 }
 
 // 클럽사진 + 클럽내용
-const Step4 = ({ nextStep, prevStep, handleContentChange, contentInput }) => {
+const Step4 = ({ nextStep, prevStep, handleFileChange, handleContentChange, contentInput }) => {
 
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
+                사진
+                <input
+                    type="file"
+                    id="fileInput"
+                    onChange={handleFileChange}
+                />
+                <br />
                 클럽내용
                 <div>
                     <input type="text" value={contentInput} onChange={handleContentChange} />
@@ -196,6 +203,9 @@ function CreateClubForm() {
     const [agePolicy, setAgePolicy] = useState(club.agePolicy == null ? { x: 20 } : { x: club.agePolicy });
     const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize == null ? { x: 1 } : { x: club.maxGroupSize });
 
+    const [selectedFile, setSelectedFile] = useState(club.thumbnailUrl || '');
+    const [selectedFileName, setSelectedFileName] = useState("");
+
     console.log(selectedGenderPolicy)
     // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
@@ -207,25 +217,43 @@ function CreateClubForm() {
     useEffect(() => {
         if (selectedCategory) {
             setStep(2)
+        } else {
+            setStep(1)
+            return
         }
         if (tagInput1 && tagInput2 && tagInput3) {
             setStep(3)
+        } else {
+            setStep(2)
+            return
         }
         if (titleInput) {
             setStep(4)
+        } else {
+            setStep(3)
+            return
         }
-        if (contentInput) {
+        if (contentInput && selectedFile) {
             setStep(5)
+        } else {
+            setStep(4)
+            return
         }
         if (agePolicy && selectedGenderPolicy) {
             setStep(6)
+        } else {
+            setStep(5)
+            return
         }
         if (maxGroupSize) {
             setStep(7)
+        } else {
+            setStep(6)
+            return
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
+    console.log(selectedFile)
     const nextStep = () => {
         if (step === 1) {
             handleCategory();
@@ -406,6 +434,42 @@ function CreateClubForm() {
         })
     };
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFileName(file.name);
+        setSelectedFile(file);
+
+        event.preventDefault();
+        const formData = new FormData();
+
+        if (file) {
+            formData.append("image", file);
+        }
+
+
+        filePutAPI(`/club/create/${club.createclub_id}/images`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            transformRequest: [
+                function () {
+                    return formData;
+                },
+            ],
+        }).then((response) => {
+            console.log("response :: ", response);
+            if (response.status === 200) {
+                console.log("200");
+                // navigate("../Community");
+                // 글 등록 시 새로고침
+                // window.location.reload();
+            }
+        });
+
+
+        // setSelectedFile(null);
+    };
+
     switch (step) {
         case 1:
             return <Step1 nextStep={nextStep} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryInput={categoryInput} handleCategoryChange={handleCategoryChange} />;
@@ -414,13 +478,15 @@ function CreateClubForm() {
         case 3:
             return <Step3 nextStep={nextStep} prevStep={prevStep} titleInput={titleInput} handleTitleChange={handleTitleChange} />;
         case 4:
-            return <Step4 nextStep={nextStep} prevStep={prevStep} contentInput={contentInput} handleContentChange={handleContentChange} />;
+            return <Step4 nextStep={nextStep} prevStep={prevStep} selectedFile={selectedFile} selectedFileName={selectedFileName} handleFileChange={handleFileChange} contentInput={contentInput} handleContentChange={handleContentChange} />;
         case 5:
             return <Step5 nextStep={nextStep} prevStep={prevStep}
                 selectedGenderPolicy={selectedGenderPolicy}
                 setSelectedGenderPolicy={setSelectedGenderPolicy}
                 option={option}
-                agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange} restrictionInput={restrictionInput} restrictionInput2={restrictionInput2} handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
+                agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange}
+                restrictionInput={restrictionInput} restrictionInput2={restrictionInput2}
+                handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
         case 6:
             return <Step6 nextStep={nextStep} prevStep={prevStep} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />;
         case 7:

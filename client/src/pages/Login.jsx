@@ -45,9 +45,9 @@ function Login() {
     const submitHandler = (e) => {
         e.preventDefault()
         const url = `/user/login`;
-        // const data = {
-        //     ...userloginInput
-        // };
+        const data = {
+            ...userloginInput
+        };
         postAPI(
             url, {
             ...userloginInput

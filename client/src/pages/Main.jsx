@@ -84,12 +84,6 @@ function Main() {
               </button>
             ))}
           </div>
-          <div className="mt-4 flex justify-start">
-            <motion.div
-              layoutId="red-dot"
-              className="h-5 w-5 rounded-full bg-red-500"
-            />
-          </div>
         </section>
       </Container>
     </>

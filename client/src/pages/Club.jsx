@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import {motion} from 'framer-motion'
+
 import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 
@@ -24,7 +26,6 @@ const tabs = [
 
 function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const navigate = useNavigate();
   const divRef = useRef(null);
 
   useEffect(() => {
@@ -115,12 +116,11 @@ function Club() {
               </div>
             </div>
             <div className="flex justify-center">
-              <div
-                onClick={() => navigate("/create-club-form")}
-                className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg"
-              >
-                <CreateClub />
-              </div>
+            <div 
+            // onClick={() => navigate('/create-club-form')}
+            className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg">
+              <CreateClub />
+            </div>
             </div>
           </BodyContainer>
         </section>

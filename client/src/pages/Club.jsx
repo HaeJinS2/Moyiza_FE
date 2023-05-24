@@ -24,7 +24,6 @@ const tabs = [
 function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const divRef = useRef(null);
-
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
@@ -43,6 +42,7 @@ function Club() {
   } else if (isError) {
     <div>정보를 가져오는도중 오류가 났습니다.</div>;
   }
+  console.log(club?.data);
   return (
     <>
       <Container>
@@ -92,6 +92,7 @@ function Club() {
                         content={item.clubContent}
                         category={item.clubCategory}
                         thumbnail={item.thumbnailUrl}
+                        id={item.createclub_id}
                       />
                     );
                   })}

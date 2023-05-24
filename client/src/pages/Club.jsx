@@ -23,11 +23,11 @@ const tabs = [
 
 function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const divRef = useRef(null);
+  // const divRef = useRef(null);
 
-  useEffect(() => {
-    divRef.current.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  // useEffect(() => {
+  //   divRef.current.scrollIntoView({ behavior: "smooth" });
+  // }, []);
 
   //리액트 쿼리 관련 코드
   const {
@@ -48,8 +48,8 @@ function Club() {
       <>
         <Container>
           <Navbar />
-          <section ref={divRef} className="h-screen"></section>
-          <section className="h-auto">
+          {/* <section ref={divRef} className="h-screen"></section> */}
+          <section className="h-auto mt-20">
             <BodyContainer>
               <header className="flex justify-center">
                 <div> 타이틀 </div>

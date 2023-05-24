@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{html,js,jsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        gatherBlue: "#7099F8",
+      },
+    },
   },
   plugins: [],
-}
+};

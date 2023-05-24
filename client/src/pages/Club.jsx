@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {motion} from 'framer-motion'
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
@@ -12,7 +11,6 @@ const tabs = ["전체","문화・예술","운동・액티비티","푸드・드�
 
 function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const navigate = useNavigate()
   const divRef = useRef(null);
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -95,7 +93,7 @@ getClub()
             </div>
             <div className="flex justify-center">
             <div 
-            onClick={() => navigate('/create-club-form')}
+            // onClick={() => navigate('/create-club-form')}
             className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg">
               <CreateClub />
             </div>

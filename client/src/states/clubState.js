@@ -4,7 +4,10 @@ import { atom } from 'recoil';
 export const optionState = atom({
     key: 'optionState',
     default: {
-        optionList: null,
+        optionLists: null,
+        categoryLists: null,
+        tagLists: null,
+        genderPolicyLists: null,
     }
 })
 

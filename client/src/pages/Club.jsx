@@ -1,7 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-
-import {motion} from 'framer-motion'
-
 import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 // import { YEAR } from './YEAR';
 // import { MONTH } from './MONTH';
@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router-dom';
 // import './SignUp.scss';
 
 function SignUp() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   //회원가입 완료 시, 로그인 페이지로 보내기 위한 네비게이트
-  const goLogin = () => {
-    navigate('/logins');
-  }
+  // const goLogin = () => {
+  //   navigate('/logins');
+  // }
   const [imageUrl, setImageUrl] = useState(null);
   const [userInput, setUserInput] = useState({
     email: '',

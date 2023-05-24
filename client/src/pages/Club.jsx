@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 
@@ -85,8 +85,16 @@ function Club() {
                 </div>
                 <div className="flex flex-1 justify-around">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-                    {club.data.map((item,i) => {
-                      return <ClubCard key={i} title={item.clubTitle} content={item.clubContent} category={item.clubCategory} thumbnail={item.thumbnailUrl} />;
+                    {club.data.map((item, i) => {
+                      return (
+                        <ClubCard
+                          key={i}
+                          title={item.clubTitle}
+                          content={item.clubContent}
+                          category={item.clubCategory}
+                          thumbnail={item.thumbnailUrl}
+                        />
+                      );
                     })}
                   </div>
                 </div>

@@ -1,11 +1,6 @@
 import React, { useState, useRef } from 'react';
 // import { useNavigate } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
-// import { YEAR } from './YEAR';
-// import { MONTH } from './MONTH';
-// import { DAY } from './DAY';
-// import { LIMIT_TIME } from './LIMIT_TIME';
-// import './SignUp.scss';
+
 
 function SignUp() {
   // const navigate = useNavigate();

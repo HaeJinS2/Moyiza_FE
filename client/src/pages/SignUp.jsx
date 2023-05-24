@@ -85,7 +85,7 @@ function SignUp() {
   // 통신
   const checkSignUp = e => {
     e.preventDefault();
-    fetch('https://8075-211-106-114-186.jp.ngrok.io/users/signup', {
+    fetch('https://43.200.169.48/users/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',

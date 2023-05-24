@@ -8,8 +8,8 @@ function Navbar() {
 
   return (
     <>
-      <div className="flex justify-center items-center">
-        <div className="fixed justify-around z-20 ">
+      <div className="flex justify-center items-center ">
+        <div className="fixed justify-around z-20 bg-white w-full ">
           <motion.div
             variants={staggerContainer}
             initial="hidden"

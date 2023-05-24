@@ -31,30 +31,30 @@ function Login() {
         })
     }
     // 제출
-    const loginMutation = useMutation(postAPI, {
-        onSuccess: (data) => {
-            console.log(data);
-            Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN)
-            Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN)
-        },
-        onError: (error) => {
-            console.log(error)
-        }
-    })
+    // const loginMutation = useMutation(postAPI, {
+    //     onSuccess: (data) => {
+    //         console.log(data);
+    //         Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN)
+    //         Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN)
+    //     },
+    //     onError: (error) => {
+    //         console.log(error)
+    //     }
+    // })
     //버튼 클릭시 리렌더링 방지
-    const submitHandler = (e) => {
-        e.preventDefault()
-        const url = `/user/login`;
-        const data = {
-            ...userloginInput
-        };
-        postAPI(
-            url, {
-            ...userloginInput
-        }
-        )
-        loginMutation.mutate(url,data);
-    }
+    // const submitHandler = (e) => {
+    //     e.preventDefault()
+    //     const url = `/user/login`;
+    //     const data = {
+    //         ...userloginInput
+    //     };
+    //     postAPI(
+    //         url, {
+    //         ...userloginInput
+    //     }
+    //     )
+    //     loginMutation.mutate(url,data);
+    // }
 
     //유효성 검사-------------------------------------
     // 이메일 유효성 검사

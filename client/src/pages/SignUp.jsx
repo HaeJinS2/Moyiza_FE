@@ -1,11 +1,6 @@
 import React, { useState, useRef } from 'react';
 // import { useNavigate } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
-// import { YEAR } from './YEAR';
-// import { MONTH } from './MONTH';
-// import { DAY } from './DAY';
-// import { LIMIT_TIME } from './LIMIT_TIME';
-// import './SignUp.scss';
+
 
 function SignUp() {
   // const navigate = useNavigate();
@@ -90,7 +85,7 @@ function SignUp() {
   // 통신
   const checkSignUp = e => {
     e.preventDefault();
-    fetch('https://8075-211-106-114-186.jp.ngrok.io/users/signup', {
+    fetch('https://43.200.169.48/users/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',

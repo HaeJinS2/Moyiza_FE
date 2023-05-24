@@ -87,45 +87,10 @@ function Club() {
                   <div className="grid grid-cols-2 gap-x-4 gap-y-8">
                     {club.data.map((item, i) => {
                       console.log(item)
-                      return <ClubCard key={i} category={item.clubCategory} title={item.clubTitle} content={item.clubContent} thumbnail={item.thumbnailUrl} />;
+                      return <ClubCard key={i} category={item.clubCategory} title={item.clubTitle} content={item.clubContent} thumbnail={item.thumbnail} />;
                     })}
                   </div>
                 </div>
-              </div>
-              <div className="flex justify-center mt-10">
-                <button className="bg-rose-400 text-white px-2 py-1">
-                  더보기
-                </button>
-              </div>
-            </body>
-          </BodyContainer>
-        </section>
-        <section className="h-screen">
-          <BodyContainer>
-            <div>
-              <p>후기</p>
-            </div>
-            <div className="flex flex-1 justify-around">
-              <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-              </div>
-            </div>
-            <div className="flex justify-center">
-            <div 
-            // onClick={() => navigate('/create-club-form')}
-            className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg">
-              <CreateClub />
-            </div>
-            </div>
-          </BodyContainer>
-        </section>
-      </Container>
-    </>
-  );
-}
                 <div className="flex justify-center mt-10">
                   <button className="bg-rose-400 text-white px-2 py-1">
                     더보기

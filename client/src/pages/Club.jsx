@@ -85,9 +85,8 @@ function Club() {
                 </div>
                 <div className="flex flex-1 justify-around">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-                    {club.data.map((item, i) => {
-                      console.log(item)
-                      return <ClubCard key={i} category={item.clubCategory} title={item.clubTitle} content={item.clubContent} thumbnail={item.thumbnail} />;
+                    {club.data.map((item,i) => {
+                      return <ClubCard key={i} title={item.clubTitle} content={item.clubContent} category={item.clubCategory} thumbnail={item.thumbnailUrl} />;
                     })}
                   </div>
                 </div>
@@ -113,7 +112,10 @@ function Club() {
                 </div>
               </div>
               <div className="flex justify-center">
-                <div className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg">
+                <div
+                  // onClick={() => navigate('/create-club-form')}
+                  className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg"
+                >
                   <CreateClub />
                 </div>
               </div>

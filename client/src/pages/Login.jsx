@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { postAPI } from '../axios';
+// import { postAPI } from '../axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
-import Cookies from 'js-cookie';
+// import { useMutation } from 'react-query';
+// import Cookies from 'js-cookie';
 
 
 function Login() {
@@ -89,7 +89,7 @@ function Login() {
                 </Desc>
                 <button className="bg-white text-rose-400 rounded-xl px-4 py-1 shadow hover:shadow-lg" onClick={goSignUp}>Create Profile</button>
             </div>
-            <form onSubmit={submitHandler} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <form  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div>email</div>
                 <input value={userloginInput.email} onChange={emailChangeHandler} className="shadow-md w-64 h-10 rounded-lg mb-4" />
                 {!isEmailValid && (

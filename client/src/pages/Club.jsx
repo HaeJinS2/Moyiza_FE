@@ -1,34 +1,55 @@
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {motion} from 'framer-motion'
+import { motion } from "framer-motion";
+import { useQuery } from "react-query";
+
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
 import ReviewCard from "../component/ReviewCard";
 import CreateClub from "./CreateClub";
-const tabs = ["전체","문화・예술","운동・액티비티","푸드・드링크","취미","여행・동행","성장・자기계발","동네・또래","연애・소개팅"]
+import { getClub } from "../api/club";
+const tabs = [
+  "전체",
+  "문화・예술",
+  "운동・액티비티",
+  "푸드・드링크",
+  "취미",
+  "여행・동행",
+  "성장・자기계발",
+  "동네・또래",
+  "연애・소개팅",
+];
 
 function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const divRef = useRef(null);
+
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
-  },[])
+  }, []);
 
-const getClub = async() => {
-  const response = await axios.get("http://43.200.169.48/club")
-  console.log(response)
-}
+  //리액트 쿼리 관련 코드
+  const { isLoading, isError, data } = useQuery("getClub", getClub, {
+    refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
+  });
+  console.log(data);
 
-getClub()
+  if (isLoading) {
+    <div>로딩중 입니다</div>;
+  }
+
+  if (isError) {
+    <div>정보를 가져오는도중 오류가 났습니다.</div>;
+  }
+
   return (
     <>
       <Container>
         <Navbar />
-        <section  ref={divRef} className="h-screen"></section>
+        <section ref={divRef} className="h-screen"></section>
         <section className="h-screen">
           <BodyContainer>
             <header className="flex justify-center">
@@ -36,32 +57,32 @@ getClub()
             </header>
             <body className="flex flex-col">
               <div className="flex justify-end">
-                <button
-                className="bg-rose-400 text-white rounded-lg px-2 py-1"
-                >필터</button>
+                <button className="bg-rose-400 text-white rounded-lg px-2 py-1">
+                  필터
+                </button>
               </div>
               <div className="flex justify-around">
-              {tabs.map((tab, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveTab(tab)}
-                className={`${
-                  activeTab === tab ? "" : "hover:opacity-50"
-                } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 outline-rose-400 focus-visible:outline`}
-              >
-                {activeTab === tab && (
-                  <motion.div
-                    layoutId="active-pill"
-                    transition={{ type: 'spring', duration:0.5}}
-                    className="bg-rose-400 absolute inset-0"
-                    style={{
-                      borderRadius: 9999
-                    }}
-                  />
-                )}
-                <span className="relative z-10">{tab}</span>
-              </button>
-            ))}
+                {tabs.map((tab, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveTab(tab)}
+                    className={`${
+                      activeTab === tab ? "" : "hover:opacity-50"
+                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 outline-rose-400 focus-visible:outline`}
+                  >
+                    {activeTab === tab && (
+                      <motion.div
+                        layoutId="active-pill"
+                        transition={{ type: "spring", duration: 0.5 }}
+                        className="bg-gatherBlue absolute inset-0"
+                        style={{
+                          borderRadius: 9999,
+                        }}
+                      />
+                    )}
+                    <span className="relative z-10">{tab}</span>
+                  </button>
+                ))}
               </div>
               <div className="flex flex-1 justify-around">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8">
@@ -94,11 +115,12 @@ getClub()
               </div>
             </div>
             <div className="flex justify-center">
-            <div 
-            onClick={() => navigate('/create-club-form')}
-            className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg">
-              <CreateClub />
-            </div>
+              <div
+                onClick={() => navigate("/create-club-form")}
+                className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg"
+              >
+                <CreateClub />
+              </div>
             </div>
           </BodyContainer>
         </section>

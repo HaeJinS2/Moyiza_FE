@@ -25,18 +25,21 @@ function CreateClub() {
                     if (window.confirm('불러오시겠습니까?')) {
                         // console.log(getResponse.data.createclub.createclub_id)
                         // setTempId(response.data.createclub_id)
-                        setClub({
-                            ...club,
-                            createclub_id: getResponse.data.createClubResponse.id,
-                            category: getResponse.data.createClubResponse.category,
-                            tag: getResponse.data.createClubResponse.tagString,
-                            title: getResponse.data.createClubResponse.title,
-                            content: getResponse.data.createClubResponse.content,
-                            restriction: getResponse.data.createClubResponse.genderPolicy, 
-                        });
+                        // setClub({
+                        //     ...club,
+                        //     createclub_id: getResponse.data.createClubResponse.id,
+                        //     category: getResponse.data.createClubResponse.category,
+                        //     tag: getResponse.data.createClubResponse.tagString,
+                        //     title: getResponse.data.createClubResponse.title,
+                        //     content: getResponse.data.createClubResponse.content,
+                        //     restriction: getResponse.data.createClubResponse.genderPolicy, 
+                        // });
+                        setClub(getResponse.data.createClub)
                         setOption({
                             ...option,
-                            optionList: getResponse.data.optionList.categoryList,
+                            optionLists: getResponse.data.optionList,
+                            categoryLists: getResponse.data.optionList.categoryList,
+                            genderPolicyLists: getResponse.data.optionList.genderPolicyList,
                         })
                         setNavigateNow(true);
                         navigate(`/create-club-form`);
@@ -55,7 +58,7 @@ function CreateClub() {
                 })
                 setOption({
                     ...option,
-                    optionList: response.data.optionList,
+                    optionLists: response.data.optionList,
                 })
                 navigate(`/create-club-form`);
             }

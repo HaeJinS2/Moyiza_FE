@@ -4,7 +4,10 @@ import { atom } from 'recoil';
 export const optionState = atom({
     key: 'optionState',
     default: {
-        optionList: null,
+        optionLists: null,
+        categoryLists: null,
+        tagLists: null,
+        genderPolicyLists: null,
     }
 })
 
@@ -16,12 +19,12 @@ export const tempIdState = atom({
 export const clubState = atom({
     key: 'clubState', 
     default: {
-        tempId: null,
-        category: null,
-        tag: '',
-        title: '',
-        content: '',
-        policy: null,
-        restriction: null,
+        // tempId: null,
+        // category: null,
+        // tag: '',
+        // title: '',
+        // content: '',
+        // policy: null,
+        // restriction: null,
     }, 
 });

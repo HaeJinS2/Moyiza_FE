@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles";
 import { slideIn, staggerContainer } from "../utils/motion";
@@ -6,16 +6,19 @@ import Navbar from "../component/Navbar";
 import Container from "../component/Container";
 import CreateClub from "./CreateClub";
 
+let tabs = ["클럽", "원데이"];
+
 function Main() {
   const divRef = useRef(null);
+  const [activeTab, setActiveTab] = useState(tabs[0]);
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
-  },[])
-  
+  }, []);
+
   return (
     <>
-      <Container >
-        <Navbar  />
+      <Container>
+        <Navbar />
 
         <section ref={divRef} className={`${styles.paddings}`}>
           <motion.div
@@ -59,12 +62,33 @@ function Main() {
         </section>
         <section className={`${styles.yPaddings} sm:pl-16 pl-6 h-screen`}>
           <div className="flex gap-10 mt-20">
-            <div className="bg-rose-400 text-white rounded-xl px-4 py-1">
-              클럽
-            </div>
-            <div className="bg-rose-400 text-white rounded-xl px-4 py-1">
-              원데이
-            </div>
+            {tabs.map((tab, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveTab(tab)}
+                className={`${
+                  activeTab === tab ? "" : "hover:opacity-50"
+                } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 outline-rose-400 focus-visible:outline`}
+              >
+                {activeTab === tab && (
+                  <motion.div
+                    layoutId="active-pill"
+                    transition={{ type: 'spring', duration:0.5}}
+                    className="bg-rose-400 absolute inset-0"
+                    style={{
+                      borderRadius: 9999
+                    }}
+                  />
+                )}
+                <span className="relative z-10">{tab}</span>
+              </button>
+            ))}
+          </div>
+          <div className="mt-4 flex justify-start">
+            <motion.div
+              layoutId="red-dot"
+              className="h-5 w-5 rounded-full bg-red-500"
+            />
           </div>
         </section>
       </Container>

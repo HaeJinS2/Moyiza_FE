@@ -30,25 +30,25 @@ function Club() {
   }, []);
 
   //리액트 쿼리 관련 코드
-  const { isLoading, isError, data } = useQuery("getClub", getClub, {
+  const {
+    isLoading,
+    isError,
+    data: club,
+  } = useQuery("getClub", getClub, {
     refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
   });
-  console.log(data);
 
   if (isLoading) {
     <div>로딩중 입니다</div>;
-  }
-
-  if (isError) {
+  } else if (isError) {
     <div>정보를 가져오는도중 오류가 났습니다.</div>;
   }
-
   return (
     <>
       <Container>
         <Navbar />
         <section ref={divRef} className="h-screen"></section>
-        <section className="h-screen">
+        <section className="h-auto mt-20">
           <BodyContainer>
             <header className="flex justify-center">
               <div> 타이틀 </div>
@@ -84,11 +84,17 @@ function Club() {
               </div>
               <div className="flex flex-1 justify-around">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-                  <ClubCard />
-                  <ClubCard />
-                  <ClubCard />
-                  <ClubCard />
-                  <ClubCard />
+                  {club?.data.map((item, i) => {
+                    return (
+                      <ClubCard
+                        key={i}
+                        title={item.clubTitle}
+                        content={item.clubContent}
+                        category={item.clubCategory}
+                        thumbnail={item.thumbnailUrl}
+                      />
+                    );
+                  })}
                 </div>
               </div>
               <div className="flex justify-center mt-10">
@@ -99,7 +105,7 @@ function Club() {
             </body>
           </BodyContainer>
         </section>
-        <section className="h-screen">
+        <section className="h-auto">
           <BodyContainer>
             <div>
               <p>후기</p>
@@ -113,11 +119,12 @@ function Club() {
               </div>
             </div>
             <div className="flex justify-center">
-            <div 
-            // onClick={() => navigate('/create-club-form')}
-            className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg">
-              <CreateClub />
-            </div>
+              <div
+                // onClick={() => navigate('/create-club-form')}
+                className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg"
+              >
+                <CreateClub />
+              </div>
             </div>
           </BodyContainer>
         </section>

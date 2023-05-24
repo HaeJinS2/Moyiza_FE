@@ -1,18 +1,20 @@
 import React from "react";
 
-function ClubCard() {
+function ClubCard({ category, title, content, thumbnail }) {
   return (
     <div className="flex w-[588px] h-[261px] bg-slate-400">
       <div className="flex justify-around items-center">
-        <div className="w-[240.5px] h-[218.5px] bg-blue-400"></div>
+        <div className="w-[240.5px] h-[218.5px] bg-blue-400">
+          <img src={thumbnail} alt="clubThumbnail" />
+        </div>
       </div>
       <div className="w-full px-2 py-5">
         <div className="flex justify-between">
-          <div>태그</div>
+          <div>{category}</div>
           <div>인원</div>
         </div>
-        <div>클럽 이름</div>
-        <div>클럽 설명</div>
+        <div>{title}</div>
+        <div>{content}</div>
       </div>
     </div>
   );

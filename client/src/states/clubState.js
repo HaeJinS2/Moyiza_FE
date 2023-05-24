@@ -16,12 +16,12 @@ export const tempIdState = atom({
 export const clubState = atom({
     key: 'clubState', 
     default: {
-        tempId: null,
-        category: null,
-        tag: '',
-        title: '',
-        content: '',
-        policy: null,
-        restriction: null,
+        // tempId: null,
+        // category: null,
+        // tag: '',
+        // title: '',
+        // content: '',
+        // policy: null,
+        // restriction: null,
     }, 
 });

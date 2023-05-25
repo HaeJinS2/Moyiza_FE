@@ -65,8 +65,8 @@ function Club() {
                     key={i}
                     onClick={() => setActiveTab(tab)}
                     className={`${
-                      activeTab === tab ? "" : "hover:opacity-50"
-                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 outline-rose-400 focus-visible:outline`}
+                      activeTab === tab ? "text-white" : "hover:opacity-50"
+                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                   >
                     {activeTab === tab && (
                       <motion.div
@@ -78,7 +78,7 @@ function Club() {
                         }}
                       />
                     )}
-                    <span className="relative text-base z-10">{tab}</span>
+                    <span className="relative text-base z-10 mix-blend">{tab}</span>
                   </button>
                 ))}
               </div>

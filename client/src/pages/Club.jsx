@@ -42,7 +42,7 @@ function Club() {
   } else if (isError) {
     <div>정보를 가져오는도중 오류가 났습니다.</div>;
   }
-  console.log(club?.data);
+  console.log(club?.data.content);
   return (
     <>
       <Container>
@@ -84,7 +84,7 @@ function Club() {
               </div>
               <div className="flex flex-col justify-between">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-                  {club?.data.map((item, i) => {
+                  {club?.data?.content.map((item, i) => {
                     return (
                       <ClubCard
                         key={i}
@@ -92,7 +92,7 @@ function Club() {
                         content={item.clubContent}
                         category={item.clubCategory}
                         thumbnail={item.thumbnailUrl}
-                        id={item.createclub_id}
+                        id={item.club_id}
                         maxGroupSize={item.maxGroupSize}
                       />
                     );

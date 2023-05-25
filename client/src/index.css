@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ReactModal__Content {
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 200ms ease-in-out;
+}
+
+.ReactModal__Content--after-open {
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+.ReactModal__Content--before-close {
+    opacity: 0;
+    transform: translateY(100%);
+}

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from 'recoil';
 import { clubState, optionState } from '../states/clubState';
-import { postAPI, putAPI } from "../axios";
+import { postAPI, putAPI, filePutAPI } from "../axios";
 import Container from "../component/Container";
 import Slider from 'react-input-slider';
 import { useNavigate } from "react-router-dom";
@@ -10,17 +10,18 @@ import { useNavigate } from "react-router-dom";
 
 // 카테고리(대분류)
 const Step1 = ({ nextStep, handleCategoryChange, categoryInput, option, setSelectedCategory, selectedCategory }) => {
+
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                <input type="text" value={categoryInput} onChange={handleCategoryChange} />
+                {/* <input type="text" value={categoryInput} onChange={handleCategoryChange} /> */}
                 <div>
                     <div className="flex gap-10">
                         {option.categoryLists.map((category, index) => (
                             <button
                                 key={index}
                                 onClick={() => setSelectedCategory(category)}
-                                style={{ backgroundColor: selectedCategory === category ? 'blue' : 'white' }}
+                                style={{ backgroundColor: selectedCategory === category ? '#7099F8' : 'white' }}
                             >
                                 {category}
                             </button>
@@ -36,7 +37,8 @@ const Step1 = ({ nextStep, handleCategoryChange, categoryInput, option, setSelec
 }
 
 // 태그(소분류)
-const Step2 = ({ nextStep, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
+const Step2 = ({ nextStep, prevStep, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
+
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
@@ -46,6 +48,7 @@ const Step2 = ({ nextStep, handleTagChange1, handleTagChange2, handleTagChange3,
                     <input type="text" value={tagInput3} onChange={handleTagChange3} placeholder="Tag 3" />
                 </div>
                 <div>
+                    <button onClick={prevStep}>이전</button>
                     <button onClick={nextStep}>다음</button>
                 </div>
             </section>
@@ -55,7 +58,8 @@ const Step2 = ({ nextStep, handleTagChange1, handleTagChange2, handleTagChange3,
 }
 
 // 클럽 이름
-const Step3 = ({ nextStep, handleTitleChange, titleInput }) => {
+const Step3 = ({ nextStep, prevStep, handleTitleChange, titleInput }) => {
+
     return (
         <>
             <Container>
@@ -65,6 +69,7 @@ const Step3 = ({ nextStep, handleTitleChange, titleInput }) => {
                         <input type="text" value={titleInput} onChange={handleTitleChange} />
                     </div>
                     <div>
+                        <button onClick={prevStep}>이전</button>
                         <button onClick={nextStep}>다음</button>
                     </div>
                 </section>
@@ -74,13 +79,22 @@ const Step3 = ({ nextStep, handleTitleChange, titleInput }) => {
 }
 
 // 클럽사진 + 클럽내용
-const Step4 = ({ nextStep, handleContentChange, contentInput }) => {
+const Step4 = ({ nextStep, prevStep, handleFileChange, handleContentChange, contentInput }) => {
+
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
+                사진
+                <input
+                    type="file"
+                    id="fileInput"
+                    onChange={handleFileChange}
+                />
+                <br />
                 클럽내용
                 <div>
                     <input type="text" value={contentInput} onChange={handleContentChange} />
+                    <button onClick={prevStep}>이전</button>
                     <button onClick={nextStep}>다음</button>
                 </div>
             </section>
@@ -89,19 +103,19 @@ const Step4 = ({ nextStep, handleContentChange, contentInput }) => {
 }
 
 // 성별제한 + 연령제한
-const Step5 = ({ nextStep, selectedGenderPolicy, setSelectedGenderPolicy, option, handleAgePolicyChange, agePolicy, handleRestrictionChange, handleRestrictionChange2, restrictionInput, restrictionInput2 }) => {
+const Step5 = ({ nextStep, prevStep, selectedGenderPolicy, setSelectedGenderPolicy, option, handleAgePolicyChange, agePolicy, handleRestrictionChange, handleRestrictionChange2, restrictionInput, restrictionInput2 }) => {
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
                 <div>
-                    <input type="text" value={restrictionInput} onChange={handleRestrictionChange} />
+                    {/* <input type="text" value={restrictionInput} onChange={handleRestrictionChange} /> */}
                     {/* <input type="text" value={restrictionInput2} onChange={handleRestrictionChange2} /> */}
                     <div className="flex gap-10">
                         {option.genderPolicyLists.map((category, index) => (
                             <button
                                 key={index}
                                 onClick={() => setSelectedGenderPolicy(category)}
-                                style={{ backgroundColor: selectedGenderPolicy === category ? 'blue' : 'white' }}
+                                style={{ backgroundColor: selectedGenderPolicy === category ? '#7099F8' : 'white' }}
                             >
                                 {category}
                             </button>
@@ -118,7 +132,7 @@ const Step5 = ({ nextStep, selectedGenderPolicy, setSelectedGenderPolicy, option
                             onChange={({ x }) => handleAgePolicyChange({ x: parseFloat(x.toFixed(2)) })}
                         />
                     )}
-
+                    <button onClick={prevStep}>이전</button>
                     <button onClick={nextStep}>다음</button>
                 </div>
             </section>
@@ -127,13 +141,13 @@ const Step5 = ({ nextStep, selectedGenderPolicy, setSelectedGenderPolicy, option
 }
 
 // 인원제한
-const Step6 = ({ nextStep, handleMaxGroupSizeChange, maxGroupSize }) => {
+const Step6 = ({ nextStep, prevStep, handleMaxGroupSizeChange, maxGroupSize }) => {
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
                 인원제한
                 <div>
-                    <input type="text" value={maxGroupSize} onChange={handleMaxGroupSizeChange} />
+                    {/* <input type="text" value={maxGroupSize} onChange={handleMaxGroupSizeChange} /> */}
                     <div>{'몇명까지?: ' + maxGroupSize.x}</div>
                     {maxGroupSize && (
                         <Slider
@@ -147,6 +161,7 @@ const Step6 = ({ nextStep, handleMaxGroupSizeChange, maxGroupSize }) => {
                     )}
                 </div>
                 <div>
+                    <button onClick={prevStep}>이전</button>
                     <button onClick={nextStep}>다음</button>
                 </div>
             </section>
@@ -155,11 +170,12 @@ const Step6 = ({ nextStep, handleMaxGroupSizeChange, maxGroupSize }) => {
 }
 
 // 완료
-const Step7 = ({ handleSubmit }) => {
+const Step7 = ({ prevStep, handleSubmit }) => {
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
                 <div>
+                    <button onClick={prevStep}>이전</button>
                     <button onClick={handleSubmit}>제출</button>
                 </div>
             </section>
@@ -187,6 +203,9 @@ function CreateClubForm() {
     const [agePolicy, setAgePolicy] = useState(club.agePolicy == null ? { x: 20 } : { x: club.agePolicy });
     const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize == null ? { x: 1 } : { x: club.maxGroupSize });
 
+    const [selectedFile, setSelectedFile] = useState(club.thumbnailUrl || '');
+    const [selectedFileName, setSelectedFileName] = useState("");
+
     console.log(selectedGenderPolicy)
     // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
@@ -195,8 +214,46 @@ function CreateClubForm() {
     const [step, setStep] = useState(1);
 
 
-
-
+    useEffect(() => {
+        if (selectedCategory) {
+            setStep(2)
+        } else {
+            setStep(1)
+            return
+        }
+        if (tagInput1 && tagInput2 && tagInput3) {
+            setStep(3)
+        } else {
+            setStep(2)
+            return
+        }
+        if (titleInput) {
+            setStep(4)
+        } else {
+            setStep(3)
+            return
+        }
+        if (contentInput && selectedFile) {
+            setStep(5)
+        } else {
+            setStep(4)
+            return
+        }
+        if (agePolicy && selectedGenderPolicy) {
+            setStep(6)
+        } else {
+            setStep(5)
+            return
+        }
+        if (maxGroupSize) {
+            setStep(7)
+        } else {
+            setStep(6)
+            return
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    console.log(selectedFile)
     const nextStep = () => {
         if (step === 1) {
             handleCategory();
@@ -377,24 +434,63 @@ function CreateClubForm() {
         })
     };
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFileName(file.name);
+        setSelectedFile(file);
+
+        event.preventDefault();
+        const formData = new FormData();
+
+        if (file) {
+            formData.append("image", file);
+        }
+
+
+        filePutAPI(`/club/create/${club.createclub_id}/images`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            transformRequest: [
+                function () {
+                    return formData;
+                },
+            ],
+        }).then((response) => {
+            console.log("response :: ", response);
+            if (response.status === 200) {
+                console.log("200");
+                // navigate("../Community");
+                // 글 등록 시 새로고침
+                // window.location.reload();
+            }
+        });
+
+
+        // setSelectedFile(null);
+    };
+
     switch (step) {
         case 1:
             return <Step1 nextStep={nextStep} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryInput={categoryInput} handleCategoryChange={handleCategoryChange} />;
         case 2:
-            return <Step2 nextStep={nextStep} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />;
+            return <Step2 nextStep={nextStep} prevStep={prevStep} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />;
         case 3:
             return <Step3 nextStep={nextStep} prevStep={prevStep} titleInput={titleInput} handleTitleChange={handleTitleChange} />;
         case 4:
-            return <Step4 nextStep={nextStep} contentInput={contentInput} handleContentChange={handleContentChange} />;
+            return <Step4 nextStep={nextStep} prevStep={prevStep} selectedFile={selectedFile} selectedFileName={selectedFileName} handleFileChange={handleFileChange} contentInput={contentInput} handleContentChange={handleContentChange} />;
         case 5:
-            return <Step5 nextStep={nextStep} selectedGenderPolicy={selectedGenderPolicy}
+            return <Step5 nextStep={nextStep} prevStep={prevStep}
+                selectedGenderPolicy={selectedGenderPolicy}
                 setSelectedGenderPolicy={setSelectedGenderPolicy}
                 option={option}
-                agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange} restrictionInput={restrictionInput} restrictionInput2={restrictionInput2} handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
+                agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange}
+                restrictionInput={restrictionInput} restrictionInput2={restrictionInput2}
+                handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
         case 6:
-            return <Step6 nextStep={nextStep} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />;
+            return <Step6 nextStep={nextStep} prevStep={prevStep} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />;
         case 7:
-            return <Step7 handleSubmit={handleSubmit} />;
+            return <Step7 prevStep={prevStep} handleSubmit={handleSubmit} />;
         default:
             return <div>Invalid step</div>;
     }

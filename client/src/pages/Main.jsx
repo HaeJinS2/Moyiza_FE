@@ -21,8 +21,8 @@ function Main() {
     <>
       <Container>
         <Navbar />
-
-        <section ref={divRef} className={`${styles.paddings}`}>
+        <section ref={divRef} className="h-screen"></section>
+        <section  className={`${styles.paddings}`}>
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -47,14 +47,13 @@ function Main() {
               </motion.div>
               <motion.div
                 variants={slideIn("right", "tween", 0.2, 1)}
-                className="relative md:mt-[60px] -mt-[12px]"
+                className="relative md:mt-[60px] -mt-[12px] items-center"
               >
-                <div className=" w-full h-[498px] justify-start items-start rounded-top-[140px] z-[0]  ">
+                <div className=" w-full h-[498px] justify-center items-center rounded-top-[140px] z-[0]  ">
                   <img
                     src={`${process.env.PUBLIC_URL}/images/cat.jpeg`}
                     alt="tmp-alt"
                     width="590.5px"
-                    height="498px"
                   />
                 </div>
               </motion.div>
@@ -65,29 +64,33 @@ function Main() {
           >클럽생성페이지로이동하는버튼</button>
           <CreateClub />
         </section>
-        <section className={`${styles.yPaddings} sm:pl-16 pl-6 h-screen`}>
-          <div className="flex gap-10 mt-20">
-            {tabs.map((tab, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveTab(tab)}
-                className={`${
-                  activeTab === tab ? "" : "hover:opacity-50"
-                } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 outline-rose-400 focus-visible:outline`}
-              >
-                {activeTab === tab && (
-                  <motion.div
-                    layoutId="active-pill"
-                    transition={{ type: 'spring', duration:0.5}}
-                    className="bg-gatherBlue absolute inset-0"
-                    style={{
-                      borderRadius: 9999
-                    }}
-                  />
-                )}
-                <span className="relative z-10">{tab}</span>
-              </button>
-            ))}
+        <section
+          className={`${styles.yPaddings} flex flex-col sm:pl-16 pl-6 h-screen`}
+        >
+          <div>
+            <div className="flex  gap-10 mt-20">
+              {tabs.map((tab, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveTab(tab)}
+                  className={`${
+                    activeTab === tab ? "" : "hover:opacity-50"
+                  } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 outline-rose-400 focus-visible:outline`}
+                >
+                  {activeTab === tab && (
+                    <motion.div
+                      layoutId="active-pill"
+                      transition={{ type: "spring", duration: 0.5 }}
+                      className="bg-gatherBlue absolute inset-0"
+                      style={{
+                        borderRadius: 9999,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </section>
       </Container>

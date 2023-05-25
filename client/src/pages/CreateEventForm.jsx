@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { postAPI } from "../axios";
 import DatePicker from 'react-datepicker';
+import styled, { createGlobalStyle } from "styled-components";
+
 
 // import { useNavigate } from "react-router-dom";
 
 function CreateEvent() {
     // const navigate = useNavigate();
     const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(''); 
     const [location, setLocation] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [dateString, setDateString] = useState('');
@@ -39,12 +41,49 @@ function CreateEvent() {
                 title <input value={title} onChange={(e) => setTitle(e.target.value)} />
                 content <input value={content} onChange={(e) => setContent(e.target.value)} />
                 location <input value={location} onChange={(e) => setLocation(e.target.value)} />
-                startDate <DatePicker selected={startDate} onChange={handleDateChange} />
+                <GlobalStyle />
+                startDate <StyledDatePicker 
+                dateFormat="yyyy-MM-dd"
+                showIcon selected={startDate} onChange={handleDateChange} />
                 eventGroupsize <input value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
                 <button onClick={handleCreateButton}>클럽생성하기버튼</button>
             </div>
         </div>
     )
 }
+
+
+
+const StyledDatePicker = styled(DatePicker).attrs({
+    calendarClassName: 'my-calendar'
+})``;
+
+const GlobalStyle = createGlobalStyle`
+.my-calendar {
+    background-color: lightblue;
+}
+.react-datepicker {
+    font-size: 1rem;
+}
+.react-datepicker__current-month {
+    font-size: 1rem;
+}
+.react-datepicker__day {
+    width: 2rem;
+    line-height: 2rem;
+}
+.react-datepicker__day-names {
+    width: 2rem;
+    line-height: 2rem;
+}
+.react-datepicker__header {
+    background-color: blue;
+    color: white;
+}
+.react-datepicker__day--selected {
+    background-color: red;
+}
+`;
+
 
 export default CreateEvent

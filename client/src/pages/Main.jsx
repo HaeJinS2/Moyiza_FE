@@ -6,11 +6,14 @@ import Container from "../component/Container";
 import CreateClub from "./CreateClub";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
+import { useNavigate } from "react-router-dom";
 
 let tabs = ["클럽", "원데이"];
 
 function Main() {
   const divRef = useRef(null);
+  const naviate = useNavigate();
+
   const [activeTab, setActiveTab] = useState(tabs[0]);
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -60,6 +63,9 @@ function Main() {
               </div>
             </motion.div>
             <CreateClub />
+            <button
+          onClick={()=>naviate(`/create-event-form`)}
+          >클럽생성페이지로이동하는버튼</button>
           </section>
           <section>
             <div>

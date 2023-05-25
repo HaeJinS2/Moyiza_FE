@@ -48,25 +48,25 @@ function Club() {
       <Container>
         <Navbar />
         <section ref={divRef} className="h-screen"></section>
-        <section className="h-auto mt-20">
+        <section className="h-auto mt-20 mb-10">
           <BodyContainer>
             <header className="flex justify-center">
-              <div> 타이틀 </div>
+              <div className="text-5xl"> 타이틀 </div>
             </header>
             <body className="flex flex-col">
-              <div className="flex justify-end">
+              <div className="flex justify-end py-4">
                 <button className="bg-rose-400 text-white rounded-lg px-2 py-1">
                   필터
                 </button>
               </div>
-              <div className="flex justify-around">
+              <div className="flex justify-around  my-2">
                 {tabs.map((tab, i) => (
                   <button
                     key={i}
                     onClick={() => setActiveTab(tab)}
                     className={`${
-                      activeTab === tab ? "" : "hover:opacity-50"
-                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 outline-rose-400 focus-visible:outline`}
+                      activeTab === tab ? "text-white" : "hover:opacity-50"
+                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                   >
                     {activeTab === tab && (
                       <motion.div
@@ -78,11 +78,11 @@ function Club() {
                         }}
                       />
                     )}
-                    <span className="relative z-10">{tab}</span>
+                    <span className="relative text-base z-10 mix-blend">{tab}</span>
                   </button>
                 ))}
               </div>
-              <div className="flex flex-1 justify-around">
+              <div className="flex flex-col justify-between">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8">
                   {club?.data.map((item, i) => {
                     return (
@@ -93,20 +93,21 @@ function Club() {
                         category={item.clubCategory}
                         thumbnail={item.thumbnailUrl}
                         id={item.createclub_id}
+                        maxGroupSize={item.maxGroupSize}
                       />
                     );
                   })}
                 </div>
               </div>
               <div className="flex justify-center mt-10">
-                <button className="bg-rose-400 text-white px-2 py-1">
+                <button className="bg-rose-400 text-white px-3 py-2 rounded-full">
                   더보기
                 </button>
               </div>
             </body>
           </BodyContainer>
         </section>
-        <section className="h-auto">
+        <section className="h-auto mb-10">
           <BodyContainer>
             <div>
               <p>후기</p>

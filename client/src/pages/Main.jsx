@@ -8,11 +8,15 @@ import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import DetailEvent from "./DetailEvent";
 
 let tabs = ["클럽", "원데이"];
 
 function Main() {
   const divRef = useRef(null);
+  const naviate = useNavigate();
+
   const [activeTab, setActiveTab] = useState(tabs[0]);
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -110,7 +114,11 @@ function Main() {
                 </motion.div>
               </div>
             </motion.div>
+            <DetailEvent />
             <CreateClub />
+            <button
+          onClick={()=>naviate(`/create-event-form`)}
+          >클럽생성페이지로이동하는버튼</button>
           </section>
           <section>
             <div>

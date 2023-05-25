@@ -5,11 +5,11 @@ import { postAPI, putAPI, filePutAPI } from "../axios";
 import Container from "../component/Container";
 import Slider from 'react-input-slider';
 import { useNavigate } from "react-router-dom";
-
+import { LinearProgress } from '@mui/material'
 
 
 // 카테고리(대분류)
-const Step1 = ({ nextStep, handleCategoryChange, categoryInput, option, setSelectedCategory, selectedCategory }) => {
+const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option, setSelectedCategory, selectedCategory }) => {
 
     return (
         <Container>
@@ -37,7 +37,7 @@ const Step1 = ({ nextStep, handleCategoryChange, categoryInput, option, setSelec
 }
 
 // 태그(소분류)
-const Step2 = ({ nextStep, prevStep, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
+const Step2 = ({ nextStep, prevStep, progress, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
 
     return (
         <Container>
@@ -58,7 +58,7 @@ const Step2 = ({ nextStep, prevStep, handleTagChange1, handleTagChange2, handleT
 }
 
 // 클럽 이름
-const Step3 = ({ nextStep, prevStep, handleTitleChange, titleInput }) => {
+const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleInput }) => {
 
     return (
         <>
@@ -79,7 +79,7 @@ const Step3 = ({ nextStep, prevStep, handleTitleChange, titleInput }) => {
 }
 
 // 클럽사진 + 클럽내용
-const Step4 = ({ nextStep, prevStep, handleFileChange, handleContentChange, contentInput }) => {
+const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange, handleContentChange, contentInput }) => {
 
     return (
         <Container>
@@ -90,6 +90,9 @@ const Step4 = ({ nextStep, prevStep, handleFileChange, handleContentChange, cont
                     id="fileInput"
                     onChange={handleFileChange}
                 />
+                {preview && (
+                    <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
+                )}
                 <br />
                 클럽내용
                 <div>
@@ -103,7 +106,7 @@ const Step4 = ({ nextStep, prevStep, handleFileChange, handleContentChange, cont
 }
 
 // 성별제한 + 연령제한
-const Step5 = ({ nextStep, prevStep, selectedGenderPolicy, setSelectedGenderPolicy, option, handleAgePolicyChange, agePolicy, handleRestrictionChange, handleRestrictionChange2, restrictionInput, restrictionInput2 }) => {
+const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setSelectedGenderPolicy, option, handleAgePolicyChange, agePolicy, handleRestrictionChange, handleRestrictionChange2, restrictionInput, restrictionInput2 }) => {
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
@@ -141,7 +144,7 @@ const Step5 = ({ nextStep, prevStep, selectedGenderPolicy, setSelectedGenderPoli
 }
 
 // 인원제한
-const Step6 = ({ nextStep, prevStep, handleMaxGroupSizeChange, maxGroupSize }) => {
+const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, maxGroupSize }) => {
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
@@ -170,7 +173,7 @@ const Step6 = ({ nextStep, prevStep, handleMaxGroupSizeChange, maxGroupSize }) =
 }
 
 // 완료
-const Step7 = ({ prevStep, handleSubmit }) => {
+const Step7 = ({ prevStep, progress, handleSubmit }) => {
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
@@ -187,6 +190,8 @@ function CreateClubForm() {
     const [club, setClub] = useRecoilState(clubState);
     // const [tempId, setTempId] = useRecoilState(tempIdState);
     const [option, setOption] = useRecoilState(optionState);
+
+    const [progress] = useState(0);
 
     const [categoryInput] = useState(club.clubCategory || '');
     const [selectedCategory, setSelectedCategory] = useState(club.clubCategory || '');
@@ -205,14 +210,14 @@ function CreateClubForm() {
 
     const [selectedFile, setSelectedFile] = useState(club.thumbnailUrl || '');
     const [selectedFileName, setSelectedFileName] = useState("");
-
+    const [preview, setPreview] = useState(null);
     console.log(selectedGenderPolicy)
     // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
     console.log("option", option.optionLists)
     console.log(option.genderPolicyLists)
     const [step, setStep] = useState(1);
-
+    console.log(progress);
 
     useEffect(() => {
         if (selectedCategory) {
@@ -270,7 +275,9 @@ function CreateClubForm() {
         }
         // setStep(step + 1);
     };
-    const prevStep = () => setStep(step - 1);
+    const prevStep = () => {
+        setStep(step - 1)
+    }
 
 
 
@@ -416,6 +423,7 @@ function CreateClubForm() {
                 console.log(response);
                 setClub({ ...club, maxGroupSize: data });
                 setStep(step + 1);
+
             })
             .catch(error => {
                 console.error(error);
@@ -439,13 +447,21 @@ function CreateClubForm() {
         setSelectedFileName(file.name);
         setSelectedFile(file);
 
+        let reader = new FileReader();
+
+        reader.onloadend = () => {
+            setPreview(reader.result);
+        }
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+
         event.preventDefault();
         const formData = new FormData();
 
         if (file) {
             formData.append("image", file);
         }
-
 
         filePutAPI(`/club/create/${club.createclub_id}/images`, formData, {
             headers: {
@@ -470,31 +486,67 @@ function CreateClubForm() {
         // setSelectedFile(null);
     };
 
-    switch (step) {
-        case 1:
-            return <Step1 nextStep={nextStep} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryInput={categoryInput} handleCategoryChange={handleCategoryChange} />;
-        case 2:
-            return <Step2 nextStep={nextStep} prevStep={prevStep} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />;
-        case 3:
-            return <Step3 nextStep={nextStep} prevStep={prevStep} titleInput={titleInput} handleTitleChange={handleTitleChange} />;
-        case 4:
-            return <Step4 nextStep={nextStep} prevStep={prevStep} selectedFile={selectedFile} selectedFileName={selectedFileName} handleFileChange={handleFileChange} contentInput={contentInput} handleContentChange={handleContentChange} />;
-        case 5:
-            return <Step5 nextStep={nextStep} prevStep={prevStep}
-                selectedGenderPolicy={selectedGenderPolicy}
-                setSelectedGenderPolicy={setSelectedGenderPolicy}
-                option={option}
-                agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange}
-                restrictionInput={restrictionInput} restrictionInput2={restrictionInput2}
-                handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
-        case 6:
-            return <Step6 nextStep={nextStep} prevStep={prevStep} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />;
-        case 7:
-            return <Step7 prevStep={prevStep} handleSubmit={handleSubmit} />;
-        default:
-            return <div>Invalid step</div>;
-    }
-
+    // switch (step) {
+    //     case 1:
+    //         return <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryInput={categoryInput} handleCategoryChange={handleCategoryChange} />;
+    //     case 2:
+    //         return <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />;
+    //     case 3:
+    //         return <Step3 nextStep={nextStep} prevStep={prevStep} progress={progress} titleInput={titleInput} handleTitleChange={handleTitleChange} />;
+    //     case 4:
+    //         return <Step4 nextStep={nextStep} prevStep={prevStep} progress={progress} preview={preview} selectedFile={selectedFile} selectedFileName={selectedFileName} handleFileChange={handleFileChange} contentInput={contentInput} handleContentChange={handleContentChange} />;
+    //     case 5:
+    //         return <Step5 nextStep={nextStep} prevStep={prevStep} progress={progress}
+    //             selectedGenderPolicy={selectedGenderPolicy}
+    //             setSelectedGenderPolicy={setSelectedGenderPolicy}
+    //             option={option}
+    //             agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange}
+    //             restrictionInput={restrictionInput} restrictionInput2={restrictionInput2}
+    //             handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />;
+    //     case 6:
+    //         return <Step6 nextStep={nextStep} prevStep={prevStep} progress={progress} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />;
+    //     case 7:
+    //         return <Step7 prevStep={prevStep} progress={progress} handleSubmit={handleSubmit} />;
+    //     default:
+    //         return <div>Invalid step</div>;
+    // }
+    return (
+        <>
+            {
+                step === 1 && <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryInput={categoryInput} handleCategoryChange={handleCategoryChange} />
+            }
+            {
+                step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />
+            }
+            {
+                step === 3 && <Step3 nextStep={nextStep} prevStep={prevStep} progress={progress} titleInput={titleInput} handleTitleChange={handleTitleChange} />
+            }
+            {
+                step === 4 && <Step4 nextStep={nextStep} prevStep={prevStep} progress={progress} preview={preview} selectedFile={selectedFile} selectedFileName={selectedFileName} handleFileChange={handleFileChange} contentInput={contentInput} handleContentChange={handleContentChange} />
+            }
+            {
+                step === 5 && <Step5 nextStep={nextStep} prevStep={prevStep} progress={progress}
+                    selectedGenderPolicy={selectedGenderPolicy}
+                    setSelectedGenderPolicy={setSelectedGenderPolicy}
+                    option={option}
+                    agePolicy={agePolicy} handleAgePolicyChange={handleAgePolicyChange}
+                    restrictionInput={restrictionInput} restrictionInput2={restrictionInput2}
+                    handleRestrictionChange={handleRestrictionChange} handleRestrictionChange2={handleRestrictionChange2} />
+            }
+            {
+                step === 6 && <Step6 nextStep={nextStep} prevStep={prevStep} progress={progress} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />
+            }
+            {
+                step === 7 && <Step7 prevStep={prevStep} progress={progress} handleSubmit={handleSubmit} />
+            }
+            <div className="fixed inset-x-0 bottom-0">
+                <div className="w-100vh h-[30px]">
+                    <LinearProgress sx={{ height: '30px' }} color="inherit" variant="determinate"
+                        value={step/7 * 100}/>
+                </div>
+            </div>
+        </>
+    )
 }
 
 export default CreateClubForm

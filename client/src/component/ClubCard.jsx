@@ -18,11 +18,11 @@ function ClubCard({ category, title, content, thumbnail, id, maxGroupSize }) {
         </div>
       </div>
       <div className="flex flex-col gap-4 w-full px-4 py-6">
-          <div className="flex justify-between text-sm">
-            <div>{category}</div>
+          <div className="flex justify-between text-xs text-slate-400">
+            <div># {category}</div>
             <div> 1 / {maxGroupSize}</div>
           </div>
-          <div className="text-md">{title}</div>
+          <div className="text-md font-bold">{title}</div>
           <div className="text-sm">{content}</div>
       </div>
     </div>

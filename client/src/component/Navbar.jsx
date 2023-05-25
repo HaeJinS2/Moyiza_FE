@@ -15,9 +15,9 @@ function Navbar() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: false, amount: 0.25 }}
-            className={`w-full flex flex-row justify-center gap-32`}
+            className={`w-full flex flex-row justify-center gap-20`}
           >
-            <div className="flex gap-2 items-end ">
+            <div className="flex gap-10 items-end text-lg ">
               <div className="cursor-pointer">로고</div>
               <div onClick={() => navigate("/club")} className="cursor-pointer">
                 클럽
@@ -32,7 +32,7 @@ function Navbar() {
             >
               Moyiza
             </motion.h1>
-            <div className="flex gap-2 items-end">
+            <div className="flex gap-10 items-end text-lg">
               <div className="cursor-pointer">검색</div>
               <div onClick={() => navigate("/logins")} className="cursor-pointer">로그인</div>
               <div className="cursor-pointer">프로필</div>

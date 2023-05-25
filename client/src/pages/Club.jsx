@@ -54,7 +54,7 @@ function Club() {
               <div className="text-5xl"> 타이틀 </div>
             </header>
             <body className="flex flex-col">
-              <div className="flex justify-end">
+              <div className="flex justify-end py-4">
                 <button className="bg-rose-400 text-white rounded-lg px-2 py-1">
                   필터
                 </button>

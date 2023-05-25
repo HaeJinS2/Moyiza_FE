@@ -7,6 +7,7 @@ import CreateClub from "./CreateClub";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import { useNavigate } from "react-router-dom";
+import DetailEvent from "./DetailEvent";
 
 let tabs = ["클럽", "원데이"];
 
@@ -62,6 +63,7 @@ function Main() {
                 </motion.div>
               </div>
             </motion.div>
+            <DetailEvent />
             <CreateClub />
             <button
           onClick={()=>naviate(`/create-event-form`)}

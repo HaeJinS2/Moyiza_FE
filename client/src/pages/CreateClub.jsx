@@ -24,11 +24,9 @@ function CreateClub() {
             })
             if (response.status === 202) { // 임시저장된 데이터가 있는 경우
                 console.log(club.createclub_id)
-                getAPI(`/club/create/${response.data.createclub_id}`).then((getResponse) => {
+
                     setIsOpen(true);
-                }).catch((error) => {
-                    console.error(error);
-                });
+  
             } else if (response.status === 201) { // 임시저장된 데이터가 없는 경우
                 // setTempId(response.data.createclub_id); // tempId 발급 받음
                 setClub({
@@ -55,6 +53,7 @@ function CreateClub() {
     const handleConfirm = () => {
 
         getAPI(`/club/create/${club.createclub_id}`).then((getResponse) => {
+            console.log(getResponse)
             setClub(getResponse.data.createClub)
             setOption({
                 ...option,
@@ -72,6 +71,7 @@ function CreateClub() {
 
     const handleCancel = () => {
         getAPI(`/club/create/${club.createclub_id}`).then((getResponse) => {
+            console.log(getResponse)
             setOption({
                 ...option,
                 optionLists: getResponse.data.optionList,

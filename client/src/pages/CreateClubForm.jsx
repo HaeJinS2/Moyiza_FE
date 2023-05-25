@@ -193,31 +193,30 @@ function CreateClubForm() {
 
     const [progress] = useState(0);
 
-    const [categoryInput] = useState(club.clubCategory || '');
-    const [selectedCategory, setSelectedCategory] = useState(club.clubCategory || '');
-    const [selectedGenderPolicy, setSelectedGenderPolicy] = useState(club.genderPolicy || '');
+    // const [categoryInput] = useState(club.clubCategory || '');
+    const [selectedCategory, setSelectedCategory] = useState(club?.clubCategory || '');
+    const [selectedGenderPolicy, setSelectedGenderPolicy] = useState(club?.genderPolicy || '');
 
     const [tagInput1, setTagInput1] = useState(club?.clubTag == null ? "" : club?.clubTag[0]);
     const [tagInput2, setTagInput2] = useState(club?.clubTag == null ? "" : club?.clubTag[1]);
     const [tagInput3, setTagInput3] = useState(club?.clubTag == null ? "" : club?.clubTag[2]);
 
-    const [titleInput, setTitleInput] = useState(club.clubTitle || '');
-    const [contentInput, setContentInput] = useState(club.clubContent || '');
-    const [restrictionInput, setRestrictionInput] = useState(club.genderPolicy == null ? '' : club.genderPolicy);
-    const [restrictionInput2, setRestrictionInput2] = useState(club.agePolicy == null ? '' : club.agePolicy);
-    const [agePolicy, setAgePolicy] = useState(club.agePolicy == null ? { x: 20 } : { x: club.agePolicy });
-    const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize == null ? { x: 1 } : { x: club.maxGroupSize });
+    const [titleInput, setTitleInput] = useState(club?.clubTitle || '');
+    const [contentInput, setContentInput] = useState(club?.clubContent || '');
+    const [restrictionInput, setRestrictionInput] = useState(club?.genderPolicy == null ? '' : club.genderPolicy);
+    const [restrictionInput2, setRestrictionInput2] = useState(club?.agePolicy == null ? '' : club.agePolicy);
+    const [agePolicy, setAgePolicy] = useState(club?.agePolicy == null ? { x: 20 } : { x: club.agePolicy });
+    const [maxGroupSize, setMaxGroupSize] = useState(club?.maxGroupSize == null ? { x: 1 } : { x: club.maxGroupSize });
 
-    const [selectedFile, setSelectedFile] = useState(club.thumbnailUrl || '');
+    const [selectedFile, setSelectedFile] = useState(club?.thumbnailUrl || '');
     const [selectedFileName, setSelectedFileName] = useState("");
     const [preview, setPreview] = useState(null);
     console.log(selectedGenderPolicy)
     // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
-    console.log("option", option.optionLists)
-    console.log(option.genderPolicyLists)
+    console.log("option", option)
+    console.log(club)
     const [step, setStep] = useState(1);
-    console.log(progress);
 
     useEffect(() => {
         if (selectedCategory) {
@@ -513,7 +512,7 @@ function CreateClubForm() {
     return (
         <>
             {
-                step === 1 && <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryInput={categoryInput} handleCategoryChange={handleCategoryChange} />
+                step === 1 && <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} handleCategoryChange={handleCategoryChange} />
             }
             {
                 step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />

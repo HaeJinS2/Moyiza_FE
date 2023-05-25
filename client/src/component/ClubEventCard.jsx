@@ -1,11 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 function ClubEventCard({ category, title, content, thumbnail, id, maxGroupSize }) {
-  const navigate = useNavigate();
   return (
     <div
-      onClick={() => navigate(`/detail/${id}`)}
       className="cursor-pointer flex w-full h-[261px] px-2 shadow-md justify-center"
     >
       <div className="flex justify-around items-center">

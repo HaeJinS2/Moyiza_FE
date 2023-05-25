@@ -79,7 +79,7 @@ const Step3 = ({ nextStep, prevStep, handleTitleChange, titleInput }) => {
 }
 
 // 클럽사진 + 클럽내용
-const Step4 = ({ nextStep, prevStep, handleFileChange, handleContentChange, contentInput }) => {
+const Step4 = ({ nextStep, prevStep, preview, handleFileChange, handleContentChange, contentInput }) => {
 
     return (
         <Container>
@@ -90,6 +90,9 @@ const Step4 = ({ nextStep, prevStep, handleFileChange, handleContentChange, cont
                     id="fileInput"
                     onChange={handleFileChange}
                 />
+                {preview && (
+                <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
+                )}
                 <br />
                 클럽내용
                 <div>
@@ -205,7 +208,7 @@ function CreateClubForm() {
 
     const [selectedFile, setSelectedFile] = useState(club.thumbnailUrl || '');
     const [selectedFileName, setSelectedFileName] = useState("");
-
+    const [preview, setPreview] = useState(null);
     console.log(selectedGenderPolicy)
     // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
@@ -439,13 +442,21 @@ function CreateClubForm() {
         setSelectedFileName(file.name);
         setSelectedFile(file);
 
+        let reader = new FileReader();
+
+        reader.onloadend = () => {
+            setPreview(reader.result);
+        }
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+
         event.preventDefault();
         const formData = new FormData();
 
         if (file) {
             formData.append("image", file);
         }
-
 
         filePutAPI(`/club/create/${club.createclub_id}/images`, formData, {
             headers: {
@@ -478,7 +489,7 @@ function CreateClubForm() {
         case 3:
             return <Step3 nextStep={nextStep} prevStep={prevStep} titleInput={titleInput} handleTitleChange={handleTitleChange} />;
         case 4:
-            return <Step4 nextStep={nextStep} prevStep={prevStep} selectedFile={selectedFile} selectedFileName={selectedFileName} handleFileChange={handleFileChange} contentInput={contentInput} handleContentChange={handleContentChange} />;
+            return <Step4 nextStep={nextStep} prevStep={prevStep} preview={preview} selectedFile={selectedFile} selectedFileName={selectedFileName} handleFileChange={handleFileChange} contentInput={contentInput} handleContentChange={handleContentChange} />;
         case 5:
             return <Step5 nextStep={nextStep} prevStep={prevStep}
                 selectedGenderPolicy={selectedGenderPolicy}

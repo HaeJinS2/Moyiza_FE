@@ -20,7 +20,7 @@ function CreateEvent() {
 
     const handleCreateButton = () => {
 
-        postAPI(`/club/26/event`, {
+        postAPI(`/club/39/event`, {
             eventTitle: title, eventContent: content, eventLocation: location, eventStartTime: dateString, eventGroupsize: Number(eventGroupsize),
         }).then((response) => {
             console.log(response)

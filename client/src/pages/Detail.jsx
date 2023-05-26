@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAPI, postAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import ClubEventCard from "../component/ClubEventCard";
 // import ClubReviewCard from "../component/ClubReviewCard";
 import Navbar from "../component/Navbar";
 
+
 function Detail() {
   const { id } = useParams();
   const [clubMemberNicknameArr, setClubMemberNicknameArr] = useState([]);
-
+  const navigate = useNavigate();
   // 클럽 상세조회
   const {
     isLoading,
@@ -56,7 +57,7 @@ function Detail() {
   console.log(clubMemberNicknameArr);
   return (
     <>
-      {}
+      { }
       <div ref={divRef} />
       <Navbar />
       <BodyContainer>
@@ -95,6 +96,9 @@ function Detail() {
           <div className="flex justify-end">
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
               <button onClick={handleJoinClub}>클럽 가입하기</button>
+              </div>
+              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-80">
+              <button onClick={() => navigate(`/create-event-form/${id}`)}>이벤트 생성하기</button>
             </div>
           </div>
         </body>

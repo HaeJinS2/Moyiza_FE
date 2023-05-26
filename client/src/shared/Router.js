@@ -17,7 +17,7 @@ const Router = () => {
         <Route path="/create-club-form" element={<CreateClubForm />} />
         <Route path="/club" element={<Club />} />
         <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/create-event-form" element={<CreateEventForm />}/>
+        <Route path="/create-event-form/:id" element={<CreateEventForm />}/>
       </Routes>
     </BrowserRouter>
   );

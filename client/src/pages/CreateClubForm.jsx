@@ -59,9 +59,9 @@ const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagChange, 
                         ))}
                     </div>
                 </div>
-                <div>
-                    <button onClick={prevStep}>이전</button>
-                    <button onClick={nextStep}>다음</button>
+                <div className="flex items-center justify-center gap-x-4">
+                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
+                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
                 </div>
             </section>
         </Container>

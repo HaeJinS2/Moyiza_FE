@@ -3,19 +3,16 @@ import { motion } from "framer-motion";
 import { slideIn, staggerContainer } from "../utils/motion";
 import Navbar from "../component/Navbar";
 import Container from "../component/Container";
-import CreateClub from "./CreateClub";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 import DetailEvent from "./DetailEvent";
 
 let tabs = ["클럽", "원데이"];
 
 function Main() {
   const divRef = useRef(null);
-  const naviate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
   useEffect(() => {

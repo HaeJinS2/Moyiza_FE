@@ -48,7 +48,7 @@ const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagChange, 
                     <input type="text" value={tagInput3} onChange={handleTagChange3} placeholder="Tag 3" />
 
                     <div className="grid grid-cols-4 gap-4 w-[1200px] h-32 mb-4">
-                        {option.tagLists.map((tag, index) => (
+                        {option?.tagLists?.map((tag, index) => (
                             <button
                                 key={index}
                                 onClick={() => handleTagClick(tag)}

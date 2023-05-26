@@ -115,10 +115,6 @@ function Main() {
               </div>
             </motion.div>
             <DetailEvent />
-            <CreateClub />
-            <button
-          onClick={()=>naviate(`/create-event-form`)}
-          >이벤트생성페이지로이동하는버튼</button>
           </section>
           <section>
             <div>
@@ -127,9 +123,8 @@ function Main() {
                   <button
                     key={i}
                     onClick={() => setActiveTab(tab)}
-                    className={`${
-                      activeTab === tab ? "text-white" : "hover:opacity-50"
-                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                    className={`${activeTab === tab ? "text-white" : "hover:opacity-50"
+                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                   >
                     {activeTab === tab && (
                       <motion.div

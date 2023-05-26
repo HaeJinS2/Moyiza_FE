@@ -16,19 +16,19 @@ const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
                 {/* <input type="text" value={categoryInput} onChange={handleCategoryChange} /> */}
                 <div>
-                    <div className="flex gap-10">
+                    <div className="grid grid-cols-4 gap-4 w-[1200px] h-32 mb-4">
                         {option.categoryLists.map((category, index) => (
                             <button
                                 key={index}
                                 onClick={() => setSelectedCategory(category)}
-                                style={{ backgroundColor: selectedCategory === category ? '#7099F8' : 'white' }}
+                                className={`${selectedCategory === category ? 'bg-[#b54e5d] text-white w-full h-32' : 'bg-[#FB7185] text-white w-full h-32'}`}
                             >
                                 {category}
                             </button>
                         ))}
                     </div>
                     <div className="flex flex-1 items-center justify-center">
-                        <button onClick={nextStep}>다음</button>
+                        <button className=" w-[1200px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
                     </div>
                 </div>
             </section>
@@ -37,7 +37,7 @@ const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option
 }
 
 // 태그(소분류)
-const Step2 = ({ nextStep, prevStep, progress, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
+const Step2 = ({ nextStep, prevStep, progress, handleTagChange, selectedTag, option, setSelectedTag, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
 
     return (
         <Container>
@@ -46,6 +46,18 @@ const Step2 = ({ nextStep, prevStep, progress, handleTagChange1, handleTagChange
                     <input type="text" value={tagInput1} onChange={handleTagChange1} placeholder="Tag 1" />
                     <input type="text" value={tagInput2} onChange={handleTagChange2} placeholder="Tag 2" />
                     <input type="text" value={tagInput3} onChange={handleTagChange3} placeholder="Tag 3" />
+
+                    <div className="grid grid-cols-4 gap-4 w-[1200px] h-32 mb-4">
+                        {option.tagLists.map((tag, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setSelectedTag(tag)}
+                                className={`${setSelectedTag === tag ? 'bg-[#b54e5d] text-white w-full h-32' : 'bg-[#FB7185] text-white w-full h-32'}`}
+                            >
+                                {tag}
+                            </button>
+                        ))}
+                    </div>
                 </div>
                 <div>
                     <button onClick={prevStep}>이전</button>
@@ -195,6 +207,7 @@ function CreateClubForm() {
 
     // const [categoryInput] = useState(club.clubCategory || '');
     const [selectedCategory, setSelectedCategory] = useState(club?.clubCategory || '');
+    const [selectedTag, setSelectedTag] = useState(club?.clubTag || '');
     const [selectedGenderPolicy, setSelectedGenderPolicy] = useState(club?.genderPolicy || '');
 
     const [tagInput1, setTagInput1] = useState(club?.clubTag == null ? "" : club?.clubTag[0]);
@@ -282,6 +295,9 @@ function CreateClubForm() {
 
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
+    };
+    const handleTagChange = (event) => {
+        setSelectedTag(event.target.value);
     };
     const handleTagChange1 = (event) => {
         setTagInput1(event.target.value);
@@ -515,7 +531,7 @@ function CreateClubForm() {
                 step === 1 && <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} handleCategoryChange={handleCategoryChange} />
             }
             {
-                step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />
+                step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} option={option} selectedTag={selectedTag} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange={handleTagChange} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />
             }
             {
                 step === 3 && <Step3 nextStep={nextStep} prevStep={prevStep} progress={progress} titleInput={titleInput} handleTitleChange={handleTitleChange} />
@@ -541,7 +557,7 @@ function CreateClubForm() {
             <div className="fixed inset-x-0 bottom-0">
                 <div className="w-100vh h-[30px]">
                     <LinearProgress sx={{ height: '30px' }} color="inherit" variant="determinate"
-                        value={step/7 * 100}/>
+                        value={step / 7 * 100} />
                 </div>
             </div>
         </>

@@ -97,21 +97,25 @@ const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange, handle
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                사진
+                <div className="flex justify-start w-full pl-16 items-center gap-x-4">
+                {preview && (
+                    <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
+                )}
                 <input
                     type="file"
                     id="fileInput"
                     onChange={handleFileChange}
                 />
-                {preview && (
-                    <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
-                )}
-                <br />
-                클럽내용
-                <div>
-                    <input type="text" value={contentInput} onChange={handleContentChange} />
-                    <button onClick={prevStep}>이전</button>
-                    <button onClick={nextStep}>다음</button>
+
+                </div>
+                <div className="border w-full mb-4 mt-4"></div>
+                <input 
+                className='shadow-md w-[1200px] h-32 rounded-lg mb-4 border-2 px-2' 
+                placeholder="클럽내용을 입력하세요"
+                type="text" value={contentInput} onChange={handleContentChange} />
+                <div className="flex items-center justify-center gap-x-4">
+                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
+                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
                 </div>
             </section>
         </Container>

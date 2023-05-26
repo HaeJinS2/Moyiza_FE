@@ -72,7 +72,7 @@ function CreateEvent() {
                             />
                         </div>
                         eventGroupsize <input className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
-                        <button onClick={handleCreateButton}>클럽생성하기버튼</button>
+                        <button onClick={handleCreateButton}>이벤트생성하기버튼</button>
                     </div>
                 </motion.div>
             </div>

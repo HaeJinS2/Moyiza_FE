@@ -37,7 +37,7 @@ const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option
 }
 
 // 태그(소분류)
-const Step2 = ({ nextStep, prevStep, progress, handleTagChange, selectedTag, option, setSelectedTag, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
+const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagChange, selectedTag, option, setSelectedTag, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
 
     return (
         <Container>
@@ -51,8 +51,8 @@ const Step2 = ({ nextStep, prevStep, progress, handleTagChange, selectedTag, opt
                         {option.tagLists.map((tag, index) => (
                             <button
                                 key={index}
-                                onClick={() => setSelectedTag(tag)}
-                                className={`${setSelectedTag === tag ? 'bg-[#b54e5d] text-white w-full h-32' : 'bg-[#FB7185] text-white w-full h-32'}`}
+                                onClick={() => handleTagClick(tag)}
+                                className={`${selectedTag.includes(tag) ? 'bg-[#b54e5d] text-white w-full h-32' : 'bg-[#FB7185] text-white w-full h-32'}`}
                             >
                                 {tag}
                             </button>
@@ -292,6 +292,17 @@ function CreateClubForm() {
     }
 
 
+    const handleTagClick = (tag) => {
+        if (!selectedTag.includes(tag)) {
+            if (selectedTag.length >= 3) {
+                setSelectedTag((prevTags) => [...prevTags.slice(1), tag]);
+            } else {
+                setSelectedTag((prevTags) => [...prevTags, tag]);
+            }
+        } else {
+            setSelectedTag(selectedTag.filter((selectedTag) => selectedTag !== tag));
+        }
+    };
 
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
@@ -352,7 +363,7 @@ function CreateClubForm() {
 
     const handleTag = () => {
         const url = `/club/create/${club.createclub_id}/tag`;
-        const tagsArray = [tagInput1, tagInput2, tagInput3];
+        const tagsArray = selectedTag;
 
         putAPI(url, {
             tag: tagsArray,
@@ -531,7 +542,7 @@ function CreateClubForm() {
                 step === 1 && <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} handleCategoryChange={handleCategoryChange} />
             }
             {
-                step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} option={option} selectedTag={selectedTag} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange={handleTagChange} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />
+                step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} handleTagClick={handleTagClick} option={option} selectedTag={selectedTag} setSelectedTag={setSelectedTag} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange={handleTagChange} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />
             }
             {
                 step === 3 && <Step3 nextStep={nextStep} prevStep={prevStep} progress={progress} titleInput={titleInput} handleTitleChange={handleTitleChange} />

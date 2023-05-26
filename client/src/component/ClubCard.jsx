@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function ClubCard({ category, title, content, thumbnail, id, maxGroupSize }) {
+function ClubCard({ tag, title, content, thumbnail, id, maxGroupSize }) {
   const navigate = useNavigate();
   return (
     <div
@@ -19,7 +19,7 @@ function ClubCard({ category, title, content, thumbnail, id, maxGroupSize }) {
       </div>
       <div className="flex flex-col gap-4 w-full px-4 py-6">
           <div className="flex justify-between text-xs text-slate-400">
-            <div># {category}</div>
+            <div># {tag}</div>
             <div> 1 / {maxGroupSize}</div>
           </div>
           <div className="text-md font-bold">{title}</div>

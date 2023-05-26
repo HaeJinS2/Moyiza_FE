@@ -179,24 +179,33 @@ const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, maxGrou
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                인원제한
-                <div>
-                    {/* <input type="text" value={maxGroupSize} onChange={handleMaxGroupSizeChange} /> */}
-                    <div>{'몇명까지?: ' + maxGroupSize.x}</div>
-                    {maxGroupSize && (
-                        <Slider
-                            axis="x"
-                            xstep={1}
-                            xmin={20}
-                            xmax={100}
-                            x={maxGroupSize.x}
-                            onChange={({ x }) => handleMaxGroupSizeChange({ x: parseFloat(x.toFixed(2)) })}
-                        />
-                    )}
-                </div>
-                <div>
-                    <button onClick={prevStep}>이전</button>
-                    <button onClick={nextStep}>다음</button>
+                <div className="flex flex-col gap-y-10">
+                    <div>                    {/* <input type="text" value={maxGroupSize} onChange={handleMaxGroupSizeChange} /> */}
+                        <div>{'몇명까지?: ' + maxGroupSize.x}</div>
+                        {maxGroupSize && (
+                            <Slider
+                                styles={{
+                                    track: {
+                                        width: 1200,
+                                    },
+                                    active: {
+                                        backgroundColor: '#FB7185'
+                                    },
+                                }}
+                                axis="x"
+                                xstep={1}
+                                xmin={20}
+                                xmax={100}
+                                x={maxGroupSize.x}
+                                onChange={({ x }) => handleMaxGroupSizeChange({ x: parseFloat(x.toFixed(2)) })}
+                            />
+                        )}
+                    </div>
+
+                    <div className="flex items-center justify-center gap-4">
+                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
+                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
+                    </div>
                 </div>
             </section>
         </Container>

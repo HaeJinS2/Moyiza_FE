@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useQuery } from "react-query";
 
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
-import ReviewCard from "../component/ReviewCard";
+// import ReviewCard from "../component/ReviewCard";
 import CreateClub from "./CreateClub";
-import { getClub } from "../api/club";
+import { getAPI } from "../axios";
 const tabs = [
   "전체",
   "문화・예술",
@@ -23,32 +22,43 @@ const tabs = [
 
 function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [page, setPage] = useState(0);
+  const [club, setClub] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [search, setSearch] = useState("");
   const divRef = useRef(null);
+
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  //리액트 쿼리 관련 코드
-  const {
-    isLoading,
-    isError,
-    data: club,
-  } = useQuery("getClub", getClub, {
-    refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
-  });
+  //클럽 목록을 받아오는 코드
+  useEffect(() => {
+    getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
+      setClub([...club, ...res.data.content]);
+    });
+    getAPI("/club").then((res) => setTotalPages(res.data.totalPages));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
-  if (isLoading) {
-    <div>로딩중 입니다</div>;
-  } else if (isError) {
-    <div>정보를 가져오는도중 오류가 났습니다.</div>;
+  //카테고리에 따라 검색하는 코드
+  const handleClubCategory = (e) => {
+    console.log(e.target.innerHTML);
+    getAPI(`/club/search?q=${search}&category=여행`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const handleSearchInput = (e) => {
+    setSearch(e.target.change)
   }
-  console.log(club?.data.content);
+
+  console.log(club);
   return (
     <>
       <Container>
         <Navbar />
-        <section ref={divRef} className="h-screen"></section>
-        <section className="h-auto mt-20 mb-10">
+        <section ref={divRef} className="h-auto mt-20 mb-10">
           <BodyContainer>
             <header className="flex justify-center">
               <div className="text-5xl"> 타이틀 </div>
@@ -59,11 +69,17 @@ function Club() {
                   필터
                 </button>
               </div>
+              <div>
+                <input id='searchbar' type='text' value={search} onChange={handleSearchInput} />
+              </div>
               <div className="flex justify-around  my-2">
                 {tabs.map((tab, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveTab(tab)}
+                    onClick={(e) => {
+                      setActiveTab(tab);
+                      handleClubCategory(e);
+                    }}
                     className={`${
                       activeTab === tab ? "text-white" : "hover:opacity-50"
                     } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
@@ -78,19 +94,21 @@ function Club() {
                         }}
                       />
                     )}
-                    <span className="relative text-base z-10 mix-blend">{tab}</span>
+                    <span className="relative text-base z-10 mix-blend">
+                      {tab}
+                    </span>
                   </button>
                 ))}
               </div>
               <div className="flex flex-col justify-between">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-                  {club?.data?.content.map((item, i) => {
+                  {club?.map((item, i) => {
                     return (
                       <ClubCard
                         key={i}
                         title={item.clubTitle}
                         content={item.clubContent}
-                        category={item.clubCategory}
+                        tag={item.tagString}
                         thumbnail={item.thumbnailUrl}
                         id={item.club_id}
                         maxGroupSize={item.maxGroupSize}
@@ -99,17 +117,22 @@ function Club() {
                   })}
                 </div>
               </div>
-              <div className="flex justify-center mt-10">
-                <button className="bg-rose-400 text-white px-3 py-2 rounded-full">
-                  더보기
-                </button>
-              </div>
+              {totalPages > page + 1 && (
+                <div className="flex justify-center mt-10">
+                  <button
+                    onClick={() => setPage(page + 1)}
+                    className="bg-rose-400 text-white px-3 py-2 rounded-full"
+                  >
+                    더보기
+                  </button>
+                </div>
+              )}
             </body>
           </BodyContainer>
         </section>
         <section className="h-auto mb-10">
           <BodyContainer>
-            <div>
+            {/* <div>
               <p>후기</p>
             </div>
             <div className="flex flex-1 justify-around">
@@ -119,12 +142,9 @@ function Club() {
                 <ReviewCard />
                 <ReviewCard />
               </div>
-            </div>
-            <div className="flex justify-center">
-              <div
-                // onClick={() => navigate('/create-club-form')}
-                className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg"
-              >
+            </div> */}
+            <div className="flex justify-end">
+              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg">
                 <CreateClub />
               </div>
             </div>

@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-// import { postAPI } from '../axios';
+import { postAPI } from '../axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-// import { useMutation } from 'react-query';
-// import Cookies from 'js-cookie';
+import { useMutation } from 'react-query';
+import Cookies from 'js-cookie';
 
 
 function Login() {
-
     //회원가입 페이지 이동
     const navigate = useNavigate();
 
@@ -31,30 +30,31 @@ function Login() {
         })
     }
     // 제출
-    // const loginMutation = useMutation(postAPI, {
-    //     onSuccess: (data) => {
-    //         console.log(data);
-    //         Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN)
-    //         Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN)
-    //     },
-    //     onError: (error) => {
-    //         console.log(error)
-    //     }
-    // })
+    const loginMutation = useMutation(postAPI, {
+        onSuccess: (data) => {
+            alert("로그인 성공!");
+            console.log('data',data);
+            Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN)
+            Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN)
+        },
+        onError: (error) => {
+            // alert("로그인 실패!");
+        }
+    })
     //버튼 클릭시 리렌더링 방지
-    // const submitHandler = (e) => {
-    //     e.preventDefault()
-    //     const url = `/user/login`;
-    //     const data = {
-    //         ...userloginInput
-    //     };
-    //     postAPI(
-    //         url, {
-    //         ...userloginInput
-    //     }
-    //     )
-    //     loginMutation.mutate(url,data);
-    // }
+    const submitHandler = (e) => {
+        e.preventDefault()
+        const url = `/user/login`;
+        const data = {
+            ...userloginInput
+        };
+        postAPI(
+            url, {
+            ...userloginInput
+        }
+        )
+        loginMutation.mutate(url,data);
+    }
 
     //유효성 검사-------------------------------------
     // 이메일 유효성 검사
@@ -79,7 +79,7 @@ function Login() {
     const activeBtn = isAllValid ? 'undefined' : 'disabled';
 
 
-    // console.log(userloginInput);
+    console.log(userloginInput);
 
     return (
         <LoginContainer>
@@ -89,7 +89,7 @@ function Login() {
                 </Desc>
                 <button className="bg-white text-rose-400 rounded-xl px-4 py-1 shadow hover:shadow-lg" onClick={goSignUp}>Create Profile</button>
             </div>
-            <form  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <form onSubmit={submitHandler} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div>email</div>
                 <input value={userloginInput.email} onChange={emailChangeHandler} className="shadow-md w-64 h-10 rounded-lg mb-4" />
                 {!isEmailValid && (

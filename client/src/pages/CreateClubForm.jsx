@@ -13,11 +13,11 @@ const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option
 
     return (
         <Container>
-            <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
+            <section className="h-[100vh] flex flex-col items-center justify-center">
                 {/* <input type="text" value={categoryInput} onChange={handleCategoryChange} /> */}
-                <div>
-                    <div className="grid grid-cols-4 gap-4 w-[1200px] h-32 mb-4">
-                        {option.categoryLists.map((category, index) => (
+                <div className="flex flex-col items-center">
+                    <div className="grid grid-cols-4 gap-4 w-[1200px] h-auto mb-4">
+                        {Object.keys(option?.categoryLists || {}).map((category, index) => (
                             <button
                                 key={index}
                                 onClick={() => setSelectedCategory(category)}
@@ -27,7 +27,7 @@ const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option
                             </button>
                         ))}
                     </div>
-                    <div className="flex flex-1 items-center justify-center">
+                    <div className="flex  items-center justify-center">
                         <button className=" w-[1200px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
                     </div>
                 </div>
@@ -37,7 +37,7 @@ const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option
 }
 
 // 태그(소분류)
-const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagChange, selectedTag, option, setSelectedTag, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
+const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagChange, selectedTags, setSelectedTags, selectedTag, option, setSelectedTag, handleTagChange1, handleTagChange2, handleTagChange3, tagInput1, tagInput2, tagInput3 }) => {
 
     return (
         <Container>
@@ -48,7 +48,7 @@ const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagChange, 
                     <input type="text" value={tagInput3} onChange={handleTagChange3} placeholder="Tag 3" />
 
                     <div className="grid grid-cols-4 gap-4 w-[1200px] h-32 mb-4">
-                        {option.tagLists.map((tag, index) => (
+                        {selectedTags?.map((tag, index) => (
                             <button
                                 key={index}
                                 onClick={() => handleTagClick(tag)}
@@ -235,7 +235,14 @@ function CreateClubForm() {
 
     // const [categoryInput] = useState(club.clubCategory || '');
     const [selectedCategory, setSelectedCategory] = useState(club?.clubCategory || '');
-    const [selectedTag, setSelectedTag] = useState(club?.clubTag || '');
+    // const [selectedTag, setSelectedTag] = useState(club?.clubTag || '');
+
+    // 내가 선택한 태그
+    const [selectedTag, setSelectedTag] = useState(club?.clubTag || []);
+
+    // 카테고리 선택에 따른 태그
+    const [selectedTags, setSelectedTags] = useState(club?.clubTag || []);
+
     const [selectedGenderPolicy, setSelectedGenderPolicy] = useState(club?.genderPolicy || '');
 
     const [tagInput1, setTagInput1] = useState(club?.clubTag == null ? "" : club?.clubTag[0]);
@@ -256,9 +263,9 @@ function CreateClubForm() {
     // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
     console.log("option", option)
-    console.log(club)
+    console.log(option?.categoryLists)
     const [step, setStep] = useState(1);
-
+    console.log("selectedTag", selectedTag)
     useEffect(() => {
         if (selectedCategory) {
             setStep(2)
@@ -298,6 +305,18 @@ function CreateClubForm() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
+    useEffect(() => {
+        if (club.clubCategory in option.categoryLists) {
+            setSelectedTags(option.categoryLists[club.clubCategory]);
+        } else {
+            setSelectedTags([]);
+        }
+    }, [club.clubCategory, option.categoryLists]);
+
+
+
     console.log(selectedFile)
     const nextStep = () => {
         if (step === 1) {
@@ -570,7 +589,7 @@ function CreateClubForm() {
                 step === 1 && <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} handleCategoryChange={handleCategoryChange} />
             }
             {
-                step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} handleTagClick={handleTagClick} option={option} selectedTag={selectedTag} setSelectedTag={setSelectedTag} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange={handleTagChange} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />
+                step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} progress={progress} handleTagClick={handleTagClick} option={option} selectedTags={selectedTags} setSelectedTags={setSelectedTags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} tagInput1={tagInput1} tagInput2={tagInput2} tagInput3={tagInput3} handleTagChange={handleTagChange} handleTagChange1={handleTagChange1} handleTagChange2={handleTagChange2} handleTagChange3={handleTagChange3} />
             }
             {
                 step === 3 && <Step3 nextStep={nextStep} prevStep={prevStep} progress={progress} titleInput={titleInput} handleTitleChange={handleTitleChange} />

@@ -7,6 +7,7 @@ import Navbar from "../component/Navbar";
 import { fadeIn } from '../variants'
 // import { useNavigate } from "react-router-dom";
 import { FiCalendar } from 'react-icons/fi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function CreateEvent() {
     // const navigate = useNavigate();
@@ -16,14 +17,17 @@ function CreateEvent() {
     const [startDate, setStartDate] = useState(new Date());
     const [dateString, setDateString] = useState('');
     const [eventGroupsize, setEventGroupSize] = useState('');
-
+    const navigate = useNavigate();
+    
+    const { id } = useParams();
 
     const handleCreateButton = () => {
 
-        postAPI(`/club/39/event`, {
-            eventTitle: title, eventContent: content, eventLocation: location, eventStartTime: dateString, eventGroupsize: Number(eventGroupsize),
+        postAPI(`/club/${id}/event`, {
+            eventTitle: title, eventContent: content, eventLocation: location, eventStartTime: dateString, eventGroupSize: Number(eventGroupsize),
         }).then((response) => {
             console.log(response)
+            navigate(-1)
         }).catch((error) => {
             console.error(error)
         })
@@ -72,7 +76,7 @@ function CreateEvent() {
                             />
                         </div>
                         eventGroupsize <input className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
-                        <button onClick={handleCreateButton}>클럽생성하기버튼</button>
+                        <button onClick={handleCreateButton}>이벤트생성하기버튼</button>
                     </div>
                 </motion.div>
             </div>

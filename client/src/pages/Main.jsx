@@ -3,19 +3,16 @@ import { motion } from "framer-motion";
 import { slideIn, staggerContainer } from "../utils/motion";
 import Navbar from "../component/Navbar";
 import Container from "../component/Container";
-import CreateClub from "./CreateClub";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 import DetailEvent from "./DetailEvent";
 
 let tabs = ["클럽", "원데이"];
 
 function Main() {
   const divRef = useRef(null);
-  const naviate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
   useEffect(() => {
@@ -75,9 +72,8 @@ function Main() {
     <>
       <Container>
         <Navbar />
-        <section ref={divRef} className="h-screen"></section>
         <BodyContainer>
-          <section>
+          <section ref={divRef}>
             <motion.div
               variants={staggerContainer}
               initial="hidden"
@@ -115,10 +111,6 @@ function Main() {
               </div>
             </motion.div>
             <DetailEvent />
-            <CreateClub />
-            <button
-          onClick={()=>naviate(`/create-event-form`)}
-          >클럽생성페이지로이동하는버튼</button>
           </section>
           <section>
             <div>
@@ -127,9 +119,8 @@ function Main() {
                   <button
                     key={i}
                     onClick={() => setActiveTab(tab)}
-                    className={`${
-                      activeTab === tab ? "text-white" : "hover:opacity-50"
-                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                    className={`${activeTab === tab ? "text-white" : "hover:opacity-50"
+                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                   >
                     {activeTab === tab && (
                       <motion.div

@@ -41,6 +41,14 @@ function Detail() {
     );
   };
 
+
+  // const getClubEventLists = () => {
+  //   getAPI(`/club/${id}/eventlist`).then((res) => {
+  //    console.log(res)
+  //   });
+  // };
+
+
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
   useEffect(() => {
@@ -53,6 +61,8 @@ function Detail() {
     <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
   }
 
+
+  // getClubEventLists()
   console.log(clubDetail);
   console.log(clubMemberNicknameArr);
   return (
@@ -80,9 +90,13 @@ function Detail() {
           <div className="grid grid-cols-2 gap-x-4 gap-y-8">
             <ClubEventCard />
             <ClubEventCard />
+            <ClubEventCard />
+            <ClubEventCard />
           </div>
           <p className="text-xl">종료된 클럽 이벤트</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-8">
+            <ClubEventCard />
+            <ClubEventCard />
             <ClubEventCard />
             <ClubEventCard />
           </div>

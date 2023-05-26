@@ -76,13 +76,14 @@ const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleInput }) 
         <>
             <Container>
                 <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                    클럽이름
                     <div>
-                        <input type="text" value={titleInput} onChange={handleTitleChange} />
+                        <input className='shadow-md w-[1200px] h-32 rounded-lg mb-4 border-2 px-2' 
+                        placeholder="클럽이름을 입력하세요"
+                        type="text" value={titleInput} onChange={handleTitleChange} />
                     </div>
-                    <div>
-                        <button onClick={prevStep}>이전</button>
-                        <button onClick={nextStep}>다음</button>
+                    <div className="flex items-center justify-center gap-x-4">
+                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
+                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
                     </div>
                 </section>
             </Container>

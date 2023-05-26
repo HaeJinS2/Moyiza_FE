@@ -30,7 +30,7 @@ function Club() {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  //리액트 쿼리 관련 코드
+  //클럽 목록을 받아오는 코드
   useEffect(() => {
     getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
       setClub([...club, ...res.data.content]);
@@ -123,7 +123,7 @@ function Club() {
             <div className="flex justify-end">
               <div
                 // onClick={() => navigate('/create-club-form')}
-                className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg"
+                className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg"
               >
                 <CreateClub />
               </div>

@@ -72,9 +72,8 @@ function Main() {
     <>
       <Container>
         <Navbar />
-        <section ref={divRef} className="h-screen"></section>
         <BodyContainer>
-          <section>
+          <section ref={divRef}>
             <motion.div
               variants={staggerContainer}
               initial="hidden"

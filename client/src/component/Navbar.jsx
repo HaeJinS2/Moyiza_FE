@@ -27,7 +27,9 @@ function Navbar() {
                 >
                   클럽
                 </div>
-                <div className="cursor-pointer">원데이</div>
+                <div 
+                onClick={() => alert("아직 준비중인 기능입니다!")}
+                className="cursor-pointer">원데이</div>
               </div>
               <motion.h1
                 onClick={() => navigate("/")}

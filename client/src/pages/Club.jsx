@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useQuery } from "react-query";
 
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
@@ -23,36 +22,28 @@ const tabs = [
 
 function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [page, setPage] = useState(0);
+  const [club, setClub] = useState([]);
   const divRef = useRef(null);
+
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   //리액트 쿼리 관련 코드
-  const {
-    isLoading,
-    isError,
-    data: club,
-  } = useQuery(
-    "getClub",
-    () => getAPI(`/club`).then((res) => res.data.content),
-    {
-      refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
-    }
-  );
+  useEffect(() => {
+    getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
+      setClub([...club, ...res.data.content]);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
-  if (isLoading) {
-    <div>로딩중 입니다</div>;
-  } else if (isError) {
-    <div>정보를 가져오는도중 오류가 났습니다.</div>;
-  }
   console.log(club);
   return (
     <>
       <Container>
         <Navbar />
-        <section ref={divRef} className="h-screen"></section>
-        <section className="h-auto mt-20 mb-10">
+        <section ref={divRef} className="h-auto mt-20 mb-10">
           <BodyContainer>
             <header className="flex justify-center">
               <div className="text-5xl"> 타이틀 </div>
@@ -106,7 +97,10 @@ function Club() {
                 </div>
               </div>
               <div className="flex justify-center mt-10">
-                <button className="bg-rose-400 text-white px-3 py-2 rounded-full">
+                <button
+                  onClick={() => setPage(page + 1)}
+                  className="bg-rose-400 text-white px-3 py-2 rounded-full"
+                >
                   더보기
                 </button>
               </div>

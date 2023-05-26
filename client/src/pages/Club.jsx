@@ -6,9 +6,9 @@ import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
-import ReviewCard from "../component/ReviewCard";
+// import ReviewCard from "../component/ReviewCard";
 import CreateClub from "./CreateClub";
-import { getClub } from "../api/club";
+import { getAPI } from "../axios";
 const tabs = [
   "전체",
   "문화・예술",
@@ -33,16 +33,20 @@ function Club() {
     isLoading,
     isError,
     data: club,
-  } = useQuery("getClub", getClub, {
-    refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
-  });
+  } = useQuery(
+    "getClub",
+    () => getAPI(`/club`).then((res) => res.data.content),
+    {
+      refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
+    }
+  );
 
   if (isLoading) {
     <div>로딩중 입니다</div>;
   } else if (isError) {
     <div>정보를 가져오는도중 오류가 났습니다.</div>;
   }
-  console.log(club?.data.content);
+  console.log(club);
   return (
     <>
       <Container>
@@ -78,19 +82,21 @@ function Club() {
                         }}
                       />
                     )}
-                    <span className="relative text-base z-10 mix-blend">{tab}</span>
+                    <span className="relative text-base z-10 mix-blend">
+                      {tab}
+                    </span>
                   </button>
                 ))}
               </div>
               <div className="flex flex-col justify-between">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-                  {club?.data?.content.map((item, i) => {
+                  {club?.map((item, i) => {
                     return (
                       <ClubCard
                         key={i}
                         title={item.clubTitle}
                         content={item.clubContent}
-                        category={item.clubCategory}
+                        tag={item.tagString}
                         thumbnail={item.thumbnailUrl}
                         id={item.club_id}
                         maxGroupSize={item.maxGroupSize}
@@ -109,7 +115,7 @@ function Club() {
         </section>
         <section className="h-auto mb-10">
           <BodyContainer>
-            <div>
+            {/* <div>
               <p>후기</p>
             </div>
             <div className="flex flex-1 justify-around">
@@ -119,11 +125,11 @@ function Club() {
                 <ReviewCard />
                 <ReviewCard />
               </div>
-            </div>
-            <div className="flex justify-center">
+            </div> */}
+            <div className="flex justify-end">
               <div
                 // onClick={() => navigate('/create-club-form')}
-                className="flex justify-center items-center mt-10 bg-rose-400 text-white w-[500px] py-2 rounded-lg"
+                className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg"
               >
                 <CreateClub />
               </div>

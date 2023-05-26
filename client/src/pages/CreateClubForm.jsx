@@ -77,9 +77,9 @@ const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleInput }) 
             <Container>
                 <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
                     <div>
-                        <input className='shadow-md w-[1200px] h-32 rounded-lg mb-4 border-2 px-2' 
-                        placeholder="클럽이름을 입력하세요"
-                        type="text" value={titleInput} onChange={handleTitleChange} />
+                        <input className='shadow-md w-[1200px] h-32 rounded-lg mb-4 border-2 px-2'
+                            placeholder="클럽이름을 입력하세요"
+                            type="text" value={titleInput} onChange={handleTitleChange} />
                     </div>
                     <div className="flex items-center justify-center gap-x-4">
                         <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
@@ -98,21 +98,21 @@ const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange, handle
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
                 <div className="flex justify-start w-full pl-16 items-center gap-x-4">
-                {preview && (
-                    <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
-                )}
-                <input
-                    type="file"
-                    id="fileInput"
-                    onChange={handleFileChange}
-                />
+                    {preview && (
+                        <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
+                    )}
+                    <input
+                        type="file"
+                        id="fileInput"
+                        onChange={handleFileChange}
+                    />
 
                 </div>
                 <div className="border w-full mb-4 mt-4"></div>
-                <input 
-                className='shadow-md w-[1200px] h-32 rounded-lg mb-4 border-2 px-2' 
-                placeholder="클럽내용을 입력하세요"
-                type="text" value={contentInput} onChange={handleContentChange} />
+                <input
+                    className='shadow-md w-[1200px] h-32 rounded-lg mb-4 border-2 px-2'
+                    placeholder="클럽내용을 입력하세요"
+                    type="text" value={contentInput} onChange={handleContentChange} />
                 <div className="flex items-center justify-center gap-x-4">
                     <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
                     <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
@@ -127,33 +127,47 @@ const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setSelected
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                <div>
+                <div className="flex flex-col gap-y-10">
                     {/* <input type="text" value={restrictionInput} onChange={handleRestrictionChange} /> */}
                     {/* <input type="text" value={restrictionInput2} onChange={handleRestrictionChange2} /> */}
-                    <div className="flex gap-10">
+                    <div className="grid grid-cols-4 gap-4 w-[1200px] h-32 mb-4">
                         {option.genderPolicyLists.map((category, index) => (
                             <button
                                 key={index}
                                 onClick={() => setSelectedGenderPolicy(category)}
-                                style={{ backgroundColor: selectedGenderPolicy === category ? '#7099F8' : 'white' }}
+                                className={`${selectedGenderPolicy === category ? 'bg-[#b54e5d] text-white w-full h-32' : 'bg-[#FB7185] text-white w-full h-32'}`}
                             >
                                 {category}
                             </button>
                         ))}
                     </div>
-                    <div>{'몇살부터?: ' + agePolicy.x}</div>
-                    {agePolicy && (
-                        <Slider
-                            axis="x"
-                            xstep={5}
-                            xmin={20}
-                            xmax={50}
-                            x={agePolicy.x}
-                            onChange={({ x }) => handleAgePolicyChange({ x: parseFloat(x.toFixed(2)) })}
-                        />
-                    )}
-                    <button onClick={prevStep}>이전</button>
-                    <button onClick={nextStep}>다음</button>
+                    <div>
+                        <div>{'몇살부터?: ' + agePolicy.x}</div>
+                        <div className="w-[1200px]">
+                            {agePolicy && (
+                                <Slider
+                                    styles={{
+                                        track: {
+                                            width: 1200,
+                                        },
+                                        active: {
+                                            backgroundColor: '#FB7185'
+                                        },
+                                    }}
+                                    axis="x"
+                                    xstep={5}
+                                    xmin={20}
+                                    xmax={50}
+                                    x={agePolicy.x}
+                                    onChange={({ x }) => handleAgePolicyChange({ x: parseFloat(x.toFixed(2)) })}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-center gap-4">
+                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
+                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
+                    </div>
                 </div>
             </section>
         </Container>

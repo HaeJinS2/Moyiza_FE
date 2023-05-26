@@ -24,6 +24,7 @@ function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [page, setPage] = useState(0);
   const [club, setClub] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
   const divRef = useRef(null);
 
   useEffect(() => {
@@ -35,9 +36,12 @@ function Club() {
     getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
       setClub([...club, ...res.data.content]);
     });
+    getAPI("/club").then((res) => setTotalPages(res.data.totalPages));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
+  const handleTag = () => {};
+  console.log(totalPages, page);
   console.log(club);
   return (
     <>
@@ -73,7 +77,10 @@ function Club() {
                         }}
                       />
                     )}
-                    <span className="relative text-base z-10 mix-blend">
+                    <span
+                      onClick={handleTag}
+                      className="relative text-base z-10 mix-blend"
+                    >
                       {tab}
                     </span>
                   </button>
@@ -96,14 +103,16 @@ function Club() {
                   })}
                 </div>
               </div>
-              <div className="flex justify-center mt-10">
-                <button
-                  onClick={() => setPage(page + 1)}
-                  className="bg-rose-400 text-white px-3 py-2 rounded-full"
-                >
-                  더보기
-                </button>
-              </div>
+              {totalPages > page + 1 && (
+                <div className="flex justify-center mt-10">
+                  <button
+                    onClick={() => setPage(page + 1)}
+                    className="bg-rose-400 text-white px-3 py-2 rounded-full"
+                  >
+                    더보기
+                  </button>
+                </div>
+              )}
             </body>
           </BodyContainer>
         </section>
@@ -121,10 +130,7 @@ function Club() {
               </div>
             </div> */}
             <div className="flex justify-end">
-              <div
-                // onClick={() => navigate('/create-club-form')}
-                className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg"
-              >
+              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg">
                 <CreateClub />
               </div>
             </div>

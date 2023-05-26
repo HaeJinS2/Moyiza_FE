@@ -14,9 +14,13 @@ axios.interceptors.request.use(
 
         if (accessToken) {
             config.headers["ACCESS_TOKEN"] = "Bearer " + accessToken.trim();
+        } 
+        if (config.url.includes(`/user/signup`)){
+            config.headers["Content-Type"] = "multipart/form-data";
+        } else {
+            config.headers["Content-Type"] = "application/json";
         }
-        config.headers["Content-Type"] = "application/json";
-
+        
         console.log("config : ", config);
 
         return config;

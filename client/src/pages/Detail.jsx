@@ -7,7 +7,6 @@ import ClubEventCard from "../component/ClubEventCard";
 // import ClubReviewCard from "../component/ClubReviewCard";
 import Navbar from "../component/Navbar";
 
-
 function Detail() {
   const { id } = useParams();
   const [clubMemberNicknameArr, setClubMemberNicknameArr] = useState([]);
@@ -41,13 +40,11 @@ function Detail() {
     );
   };
 
-
   // const getClubEventLists = () => {
   //   getAPI(`/club/${id}/eventlist`).then((res) => {
   //    console.log(res)
   //   });
   // };
-
 
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
@@ -61,13 +58,11 @@ function Detail() {
     <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
   }
 
-
   // getClubEventLists()
   console.log(clubDetail);
   console.log(clubMemberNicknameArr);
   return (
     <>
-      { }
       <div ref={divRef} />
       <Navbar />
       <BodyContainer>
@@ -110,9 +105,11 @@ function Detail() {
           <div className="flex justify-end">
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
               <button onClick={handleJoinClub}>클럽 가입하기</button>
-              </div>
-              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-80">
-              <button onClick={() => navigate(`/create-event-form/${id}`)}>이벤트 생성하기</button>
+            </div>
+            <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-2/4">
+              <button onClick={() => navigate(`/create-event-form/${id}`)}>
+                이벤트 생성
+              </button>
             </div>
           </div>
         </body>

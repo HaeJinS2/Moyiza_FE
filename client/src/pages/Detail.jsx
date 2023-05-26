@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAPI, postAPI } from "../axios";
+import { deleteAPI, getAPI, postAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import ClubEventCard from "../component/ClubEventCard";
 // import ClubReviewCard from "../component/ClubReviewCard";
@@ -35,11 +35,37 @@ function Detail() {
 
   // 클럽 가입하기 버튼
   const handleJoinClub = () => {
-    postAPI(`/club/${id}/join`, {}).then((res) =>
-      console.log(res.data.message)
-    );
+    postAPI(`/club/${id}/join`, {})
+      .then((res) => {
+        console.log(res.data.message);
+        alert("가입이 승인됐습니다!");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
+  const handleGoodbyeClub = () => {
+    postAPI(`/club/${id}/goodbye`, {}).then((res) => {
+      console.log(res.data.message);
+      alert("클럽 탈퇴 완료");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    ;
+  };
+
+  const handleDeleteClub = () => {
+    deleteAPI(`/club/${id}/delete`).then((res) => {
+      console.log(res.data.message);
+      alert("클럽 삭제 완료");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    ;
+  };
   // const getClubEventLists = () => {
   //   getAPI(`/club/${id}/eventlist`).then((res) => {
   //    console.log(res)
@@ -68,8 +94,11 @@ function Detail() {
       <BodyContainer>
         <header className="flex flex-col mt-32 justify-center items-center relative gap-10 mb-10">
           <div className="self-end">
-            <button className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80">
-              클럽수정
+            <button
+              onClick={handleDeleteClub}
+              className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80"
+            >
+              클럽삭제
             </button>
           </div>
           <img
@@ -105,6 +134,9 @@ function Detail() {
           <div className="flex justify-end">
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
               <button onClick={handleJoinClub}>클럽 가입하기</button>
+            </div>
+            <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-3/4">
+              <button onClick={handleGoodbyeClub}>클럽 탈퇴하기</button>
             </div>
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-2/4">
               <button onClick={() => navigate(`/create-event-form/${id}`)}>

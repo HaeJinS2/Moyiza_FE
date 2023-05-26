@@ -24,6 +24,8 @@ function Club() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [page, setPage] = useState(0);
   const [club, setClub] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [search, setSearch] = useState("");
   const divRef = useRef(null);
 
   useEffect(() => {
@@ -35,8 +37,17 @@ function Club() {
     getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
       setClub([...club, ...res.data.content]);
     });
+    getAPI("/club").then((res) => setTotalPages(res.data.totalPages));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
+  //카테고리에 따라 검색하는 코드
+  const handleClubCategory = (e) => {
+    console.log(e.target.innerHTML);
+    getAPI(`/club/search?q=${search}&category=여행`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   console.log(club);
   return (
@@ -58,7 +69,10 @@ function Club() {
                 {tabs.map((tab, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveTab(tab)}
+                    onClick={(e) => {
+                      setActiveTab(tab);
+                      handleClubCategory(e);
+                    }}
                     className={`${
                       activeTab === tab ? "text-white" : "hover:opacity-50"
                     } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
@@ -96,14 +110,16 @@ function Club() {
                   })}
                 </div>
               </div>
-              <div className="flex justify-center mt-10">
-                <button
-                  onClick={() => setPage(page + 1)}
-                  className="bg-rose-400 text-white px-3 py-2 rounded-full"
-                >
-                  더보기
-                </button>
-              </div>
+              {totalPages > page + 1 && (
+                <div className="flex justify-center mt-10">
+                  <button
+                    onClick={() => setPage(page + 1)}
+                    className="bg-rose-400 text-white px-3 py-2 rounded-full"
+                  >
+                    더보기
+                  </button>
+                </div>
+              )}
             </body>
           </BodyContainer>
         </section>
@@ -121,10 +137,7 @@ function Club() {
               </div>
             </div> */}
             <div className="flex justify-end">
-              <div
-                // onClick={() => navigate('/create-club-form')}
-                className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg"
-              >
+              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg">
                 <CreateClub />
               </div>
             </div>

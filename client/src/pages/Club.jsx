@@ -25,6 +25,7 @@ function Club() {
   const [page, setPage] = useState(0);
   const [club, setClub] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
+  const [search, setSearch] = useState("");
   const divRef = useRef(null);
 
   useEffect(() => {
@@ -40,8 +41,14 @@ function Club() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const handleTag = () => {};
-  console.log(totalPages, page);
+  //카테고리에 따라 검색하는 코드
+  const handleClubCategory = (e) => {
+    console.log(e.target.innerHTML);
+    getAPI(`/club/search?q=${search}&category=여행`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   console.log(club);
   return (
     <>
@@ -62,7 +69,10 @@ function Club() {
                 {tabs.map((tab, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveTab(tab)}
+                    onClick={(e) => {
+                      setActiveTab(tab);
+                      handleClubCategory(e);
+                    }}
                     className={`${
                       activeTab === tab ? "text-white" : "hover:opacity-50"
                     } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
@@ -77,10 +87,7 @@ function Club() {
                         }}
                       />
                     )}
-                    <span
-                      onClick={handleTag}
-                      className="relative text-base z-10 mix-blend"
-                    >
+                    <span className="relative text-base z-10 mix-blend">
                       {tab}
                     </span>
                   </button>

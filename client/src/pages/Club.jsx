@@ -49,6 +49,10 @@ function Club() {
       .catch((err) => console.log(err));
   };
 
+  const handleSearchInput = (e) => {
+    setSearch(e.target.change)
+  }
+
   console.log(club);
   return (
     <>
@@ -64,6 +68,9 @@ function Club() {
                 <button className="bg-rose-400 text-white rounded-lg px-2 py-1">
                   필터
                 </button>
+              </div>
+              <div>
+                <input id='searchbar' type='text' value={search} onChange={handleSearchInput} />
               </div>
               <div className="flex justify-around  my-2">
                 {tabs.map((tab, i) => (

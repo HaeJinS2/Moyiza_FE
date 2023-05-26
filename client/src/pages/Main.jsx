@@ -118,7 +118,7 @@ function Main() {
             <CreateClub />
             <button
           onClick={()=>naviate(`/create-event-form`)}
-          >클럽생성페이지로이동하는버튼</button>
+          >이벤트생성페이지로이동하는버튼</button>
           </section>
           <section>
             <div>

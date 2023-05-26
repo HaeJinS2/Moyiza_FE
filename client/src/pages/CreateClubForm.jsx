@@ -97,7 +97,7 @@ const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange, handle
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                <div className="flex justify-start w-full pl-16 items-center gap-x-4">
+                <div className="flex justify-start w-[1200px] pl-4 items-center gap-x-4">
                     {preview && (
                         <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
                     )}
@@ -217,9 +217,9 @@ const Step7 = ({ prevStep, progress, handleSubmit }) => {
     return (
         <Container>
             <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                <div>
-                    <button onClick={prevStep}>이전</button>
-                    <button onClick={handleSubmit}>제출</button>
+                <div className="flex items-center justify-center gap-4">
+                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
+                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={handleSubmit}>제출</button>
                 </div>
             </section>
         </Container>

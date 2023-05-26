@@ -36,7 +36,7 @@ function CreateClub() {
                 setOption({
                     ...option,
                     optionLists: response.data.optionList,
-                    categoryLists: response.data.optionList.categoryList,
+                    categoryLists: response.data.optionList.categoryAndTagList,
                     genderPolicyLists: response.data.optionList.genderPolicyList,
                 })
                 navigate(`/create-club-form`);
@@ -58,7 +58,7 @@ function CreateClub() {
             setOption({
                 ...option,
                 optionLists: getResponse.data.optionList,
-                categoryLists: getResponse.data.optionList.categoryList,
+                categoryLists: getResponse.data.optionList.categoryAndTagList,
                 genderPolicyLists: getResponse.data.optionList.genderPolicyList,
             })
             setNavigateNow(true);
@@ -75,7 +75,7 @@ function CreateClub() {
             setOption({
                 ...option,
                 optionLists: getResponse.data.optionList,
-                categoryLists: getResponse.data.optionList.categoryList,
+                categoryLists: getResponse.data.optionList.categoryAndTagList,
                 genderPolicyLists: getResponse.data.optionList.genderPolicyList,
             })
             setNavigateNow(true);

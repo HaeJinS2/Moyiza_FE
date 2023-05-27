@@ -2,45 +2,45 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal';
 // import { getAPI, postAPI } from "../axios";
 import '../index.css'
-import { getHeaderAPI } from '../axios';
+// import { getHeaderAPI } from '../axios';
 
 
 Modal.setAppElement('#root');
 
 function DetailEvent() {
     const [modalIsOpen, setIsOpen] = useState(false);
-    const [inputValue, setInputValue] = useState("");
+    // const [inputValue, setInputValue] = useState("");
     const [map, setMap] = useState(null);
-    const [userLat, setUserLat] = useState(null);
-    const [userLng, setUserLng] = useState(null);
-    const [userAddress, setUserAddress] = useState("");
+    // const [userLat, setUserLat] = useState(null);
+    // const [userLng, setUserLng] = useState(null);
+    // const [userAddress, setUserAddress] = useState("");
     const [marker, setMarker] = useState(null);
 
     console.log(marker)
 
-    useEffect(() => {
-        console.log(userLat, userLng, userAddress)
-    }, [userLat, userLng, userAddress])
+    // useEffect(() => {
+    //     console.log(userLat, userLng)
+    // }, [userLat, userLng])
 
-    useEffect(() => {
-        if (map && inputValue) {
-            let url = `https://dapi.kakao.com/v2/local/search/address.json?query=${inputValue}`;
-            getHeaderAPI(url, {
-                headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
-            })
-                .then((response) => {
-                    let address = response.data.documents[0];
-                    let lat = address.y;
-                    let lng = address.x;
+    // useEffect(() => {
+    //     if (map && inputValue) {
+    //         let url = `https://dapi.kakao.com/v2/local/search/address.json?query=${inputValue}`;
+    //         getHeaderAPI(url, {
+    //             headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
+    //         })
+    //             .then((response) => {
+    //                 let address = response.data.documents[0];
+    //                 let lat = address.y;
+    //                 let lng = address.x;
 
-                    let moveLatLon = new window.kakao.maps.LatLng(lat, lng);
-                    map.setCenter(moveLatLon);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }, [inputValue, map]);
+    //                 let moveLatLon = new window.kakao.maps.LatLng(lat, lng);
+    //                 map.setCenter(moveLatLon);
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //             });
+    //     }
+    // }, [inputValue, map]);
 
     useEffect(() => {
         const initializeMap = () => {
@@ -64,15 +64,17 @@ function DetailEvent() {
 
     useEffect(() => {
         if (map) {
-            const handleMapClick = (mouseEvent) => {
-                let latlng = mouseEvent.latLng;
-                let lat = latlng.getLat();
-                let lng = latlng.getLng();
+            // const handleMapClick = (mouseEvent) => {
+                // let latlng = mouseEvent.latLng;
+                let lat = 37.5665
+                let lng = 126.9780
+                // let lat = latlng.getLat();
+                // let lng = latlng.getLng();
 
                 // 이전 마커가 있다면 제거
-                if (marker) {
-                    marker.setMap(null);
-                }
+                // if (marker) {
+                //     marker.setMap(null);
+                // }
 
                 // 클릭한 위치에 마커 생성
                 let newMarker = new window.kakao.maps.Marker({
@@ -86,36 +88,36 @@ function DetailEvent() {
                 setMarker(newMarker);
 
                 // 위도 경도 상태 업데이트
-                setUserLat(lat);
-                setUserLng(lng);
+                // setUserLat(lat);
+                // setUserLng(lng);
 
-                let url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lng}&y=${lat}&input_coord=WGS84`;
-                getHeaderAPI(url, {
-                    headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
-                })
-                    .then((response) => {
-                        let address = response.data.documents[0].address;
-                        setUserAddress(address.address_name);
-                        console.log(response.data.documents[0])
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-            };
+                // let url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lng}&y=${lat}&input_coord=WGS84`;
+                // getHeaderAPI(url, {
+                //     headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
+                // })
+                //     .then((response) => {
+                //         let address = response.data.documents[0].address;
+                //         setUserAddress(address.address_name);
+                //         console.log(response.data.documents[0])
+                //     })
+                //     .catch((error) => {
+                //         console.log(error);
+                //     });
+            // };
 
-            window.kakao.maps.event.addListener(map, "click", handleMapClick);
+            // window.kakao.maps.event.addListener(map, "click", handleMapClick());
 
-            return () => {
-                window.kakao.maps.event.removeListener(map, "click", handleMapClick);
-            };
+            // return () => {
+            //     window.kakao.maps.event.removeListener(map, "click", handleMapClick);
+            // };
         }
-    }, [map, marker]);
+    }, [map]);
 
 
 
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
+    // const handleInputChange = (e) => {
+    //     setInputValue(e.target.value);
+    // };
 
     const handleDetailClubButton = () => {
         setIsOpen(true)
@@ -141,7 +143,7 @@ function DetailEvent() {
                     content: {
                         color: '#000000',
                         width: '550px',
-                        height: '910px',
+                        height: '870px',
                         margin: 'auto',
                         display: 'flex',
                         flexDirection: 'column',
@@ -173,9 +175,9 @@ function DetailEvent() {
                         <span>장소</span>
                     </div>
                     <div className='flex flex-col gap-y-4'>
-                        <input className='w-[500px] h-[50px] shadow-md'
+                        {/* <input className='w-[500px] h-[50px] shadow-md'
                             placeholder='장소를 검색하세요 (예: xx동)'
-                            type="text" onChange={handleInputChange} />
+                            type="text" onChange={handleInputChange} /> */}
                         <div id="map" style={{ width: "500px", height: "400px" }}></div>
                     </div>
                     <div className='flex flex-col gap-[30px] items-center '>

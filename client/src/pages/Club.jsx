@@ -112,6 +112,7 @@ function Club() {
                         thumbnail={item.thumbnailUrl}
                         id={item.club_id}
                         maxGroupSize={item.maxGroupSize}
+                        nowMemberCount={item.nowMemberCount}
                       />
                     );
                   })}

@@ -10,6 +10,7 @@ import Navbar from "../component/Navbar";
 function Detail() {
   const { id } = useParams();
   const [clubMemberNicknameArr, setClubMemberNicknameArr] = useState([]);
+  const [eventlists, setEventLists] = useState([]);
   const navigate = useNavigate();
   // 클럽 상세조회
   const {
@@ -23,6 +24,12 @@ function Detail() {
   //클럽 멤버 가져오는 코드
   useEffect(() => {
     getClubMembers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  //이벤트 리스트 가져오는 코드
+  useEffect(() => {
+    getClubEventLists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -46,31 +53,32 @@ function Detail() {
   };
 
   const handleGoodbyeClub = () => {
-    postAPI(`/club/${id}/goodbye`, {}).then((res) => {
-      console.log(res.data.message);
-      alert("클럽 탈퇴 완료");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-    ;
+    postAPI(`/club/${id}/goodbye`, {})
+      .then((res) => {
+        console.log(res.data.message);
+        alert("클럽 탈퇴 완료");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleDeleteClub = () => {
-    deleteAPI(`/club/${id}/delete`).then((res) => {
-      console.log(res.data.message);
-      alert("클럽 삭제 완료");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-    ;
+    deleteAPI(`/club/${id}/delete`)
+      .then((res) => {
+        console.log(res.data.message);
+        alert("클럽 삭제 완료");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  // const getClubEventLists = () => {
-  //   getAPI(`/club/${id}/eventlist`).then((res) => {
-  //    console.log(res)
-  //   });
-  // };
+  const getClubEventLists = () => {
+    getAPI(`/club/${id}/eventlist`).then((res) => {
+      console.log(res);
+      setEventLists(res.data);
+    });
+  };
 
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
@@ -84,9 +92,9 @@ function Detail() {
     <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
   }
 
-  // getClubEventLists()
   console.log(clubDetail);
   console.log(clubMemberNicknameArr);
+  console.log(eventlists);
   return (
     <>
       <div ref={divRef} />

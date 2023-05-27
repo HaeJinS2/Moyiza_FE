@@ -8,6 +8,7 @@ import Navbar from "../component/Navbar";
 // import ReviewCard from "../component/ReviewCard";
 import CreateClub from "./CreateClub";
 import { getAPI } from "../axios";
+import SearchBar from "../component/SearchBar";
 const tabs = [
   "전체",
   "문화・예술",
@@ -64,14 +65,12 @@ function Club() {
               <div className="text-5xl"> 타이틀 </div>
             </header>
             <body className="flex flex-col">
-              <div className="flex justify-end py-4">
+              {/* <div className="flex justify-end py-4">
                 <button className="bg-rose-400 text-white rounded-lg px-2 py-1">
                   필터
                 </button>
-              </div>
-              <div>
-                <input id='searchbar' type='text' value={search} onChange={handleSearchInput} />
-              </div>
+              </div> */}
+<SearchBar/>
               <div className="flex justify-around  my-2">
                 {tabs.map((tab, i) => (
                   <button

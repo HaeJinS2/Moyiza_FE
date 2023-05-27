@@ -67,9 +67,10 @@ function Club() {
       {isLoading ? (
         <Loading />
       ) : (
+        <div ref={divRef} >
         <Container>
           <Navbar />
-          <section ref={divRef} className="h-auto mt-16 mb-10">
+          <section className="h-auto mt-24 mb-10">
             <BodyContainer>
               <body className="flex flex-col">
                 {/* <div className="flex justify-end py-4">
@@ -81,7 +82,7 @@ function Club() {
                   handleSearchInput={handleSearchInput}
                   search={search}
                 />
-                <div className="flex justify-around  my-2">
+                <div className="flex justify-around  my-4">
                   {tabs.map((tab, i) => (
                     <button
                       key={i}
@@ -161,6 +162,7 @@ function Club() {
             </BodyContainer>
           </section>
         </Container>
+        </div>
       )}
     </>
   );

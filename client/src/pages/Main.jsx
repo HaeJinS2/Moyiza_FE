@@ -53,7 +53,7 @@ function Main() {
               viewport={{ once: false, amount: 0.25 }}
               className={`mx-auto flex flex-col`}
             >
-              <div className="flex items-center justify-center gap-16 mt-32">
+              <div className="flex gap-4 mt-28">
                 <motion.div
                   variants={slideIn("left", "tween", 0.2, 1)}
                   className="relative w-auto"

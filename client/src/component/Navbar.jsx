@@ -9,8 +9,8 @@ function Navbar() {
 
   return (
     <>
-      <div className="flex justify-center items-center py-4">
-        <div className="fixed z-20 bg-white w-full ">
+      <div className="flex justify-center items-center">
+        <div className="fixed z-20 bg-white w-full py-8">
           <BodyContainer>
             <motion.div
               variants={staggerContainer}

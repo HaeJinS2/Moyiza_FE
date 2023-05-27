@@ -3,9 +3,9 @@ import Cookies from "js-cookie";
 
 const API_BASE_URL = `${process.env.REACT_APP_SERVER_URL}`;
 
-axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+// axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 // axios.defaults.headers.ContentType = "application/json";
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(
     (config) => {
@@ -13,11 +13,15 @@ axios.interceptors.request.use(
         const accessToken = Cookies.get("ACCESS_TOKEN");
 
         if (accessToken) {
-            config.headers["ACCESS_TOKEN"] = "Bearer " + accessToken.trim();
+            if (!config.url.includes(`https://dapi.kakao.com/`)){
+                config.headers["ACCESS_TOKEN"] = "Bearer " + accessToken.trim();
+            } 
         } 
+
         if (config.url.includes(`/user/signup`)){
             config.headers["Content-Type"] = "multipart/form-data";
-        } else {
+        } 
+        else {
             config.headers["Content-Type"] = "application/json";
         }
         
@@ -100,6 +104,12 @@ export function getAPI(url) {
     console.log("GET Start, url : ", url);
     return axios.get(API_BASE_URL + url);
 }
+
+export function getHeaderAPI(url, config) {
+    console.log("GET Start, url : ", url, config);
+    return axios.get(url, config);
+}
+
 
 export function deleteAPI(url) {
     console.log("DELETE Start, url : ", url);

@@ -1,16 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import { deleteAPI, getAPI, postAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import ClubEventCard from "../component/ClubEventCard";
 // import ClubReviewCard from "../component/ClubReviewCard";
 import Navbar from "../component/Navbar";
+import { latestClubState } from "../states/clubState";
 
 function Detail() {
   const { id } = useParams();
   const [clubMemberNicknameArr, setClubMemberNicknameArr] = useState([]);
   const [eventlists, setEventLists] = useState([]);
+  const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const navigate = useNavigate();
   // 클럽 상세조회
   const {
@@ -32,6 +35,22 @@ function Detail() {
     getClubEventLists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 최근 본 게시글 id 저장하는 코드
+  useEffect(() => {
+    if (localStorage.getItem("latestClub") === null) {
+      localStorage.setItem("latestClub", JSON.stringify([id]));
+      setLatestClub([id]);
+    } else {
+      let arr = JSON.parse(localStorage.getItem("latestClub"));
+      arr.push(id);
+      let newLatestClub = new Set(arr);
+      localStorage.setItem("latestClub", JSON.stringify([...newLatestClub]));
+      setLatestClub([...newLatestClub]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  console.log(latestClub);
 
   const getClubMembers = () => {
     getAPI(`/club/${id}/members`).then((res) => {

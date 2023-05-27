@@ -19,7 +19,7 @@ function ClubCard({ tag, title, content, thumbnail, id, maxGroupSize,nowMemberCo
       </div>
       <div className="flex flex-col gap-4 w-full px-4 py-6">
           <div className="flex justify-between text-xs text-slate-400">
-            <div># {tag}</div>
+            <div> {tag.map(tag => ` #${tag}`)}</div>
             <div> {nowMemberCount} / {maxGroupSize}</div>
           </div>
           <div className="text-md font-bold">{title}</div>

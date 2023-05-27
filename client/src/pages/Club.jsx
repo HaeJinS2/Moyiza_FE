@@ -108,7 +108,7 @@ function Club() {
                         key={i}
                         title={item.clubTitle}
                         content={item.clubContent}
-                        tag={item.tagString}
+                        tag={item.clubTag}
                         thumbnail={item.thumbnailUrl}
                         id={item.club_id}
                         maxGroupSize={item.maxGroupSize}

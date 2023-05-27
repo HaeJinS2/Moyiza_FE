@@ -68,13 +68,12 @@ function SignUp() {
   const birth = `${year}-${month}-${day}`;
   // 닉네임 중복 검사
   const nicknameValidationPost= async ({ nickname }) => {
-    const response = await axios.post("http://43.200.169.48/user/check/nickname", { nickname });
+    const response = await axios.post("http://3.34.182.174/user/check/nickname", { nickname });
     return response.data;
   };
 
   const validationMutation = useMutation(nicknameValidationPost, {
     onSuccess: (data) => {
-      console.log('data',data);
       if (data.isDuplicatedNick === false) {
         alert('사용가능한 아이디입니다.');
       }
@@ -132,7 +131,7 @@ function SignUp() {
     // console.log('formData',formData);
 
     try {
-      const response = await axios.post("http://43.200.169.48/user/signup", formData);
+      const response = await axios.post("http://3.34.182.174/user/signup", formData);
       console.log(response.data);
       alert('회원가입 성공!');
       goLogin();

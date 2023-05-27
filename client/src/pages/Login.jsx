@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { postAPI } from '../axios';
+// import { postAPI } from '../axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 
 function Login() {
@@ -13,6 +14,10 @@ function Login() {
     const goSignUp = () => {
         navigate('/signup')
     }
+    const goMain = () => {
+        navigate('/')
+    }
+
     //----------------------------------------------------
     const [userloginInput, SetUserloginInput] = useState({
         email: '',
@@ -29,33 +34,43 @@ function Login() {
             ...userloginInput, password: e.target.value
         })
     }
-    // 제출
-    const loginMutation = useMutation(postAPI, {
-        onSuccess: (data) => {
-            alert("로그인 성공!");
-            console.log('data',data);
-            Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN)
-            Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN)
-        },
-        onError: (error) => {
-            // alert("로그인 실패!");
-        }
-    })
     //버튼 클릭시 리렌더링 방지
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault()
-        const url = `/user/login`;
+        const url = `http://3.34.182.174/user/login`;
         const data = {
             ...userloginInput
         };
-        postAPI(
-            url, {
-            ...userloginInput
-        }
-        )
-        loginMutation.mutate(url,data);
-    }
+        try {
+            const response = await axios.post(url, data);
+            loginMutation.mutate(response.data);
+            console.log(response.data);
+            alert('로그인 성공');
+            goMain();
 
+        } catch (error) {
+            alert('로그인 실패');
+            SetUserloginInput({email:'',password:''});
+        }
+    };
+
+    const postAPI = async (url, data) => {
+        const response = await axios.post(url, data);
+        return response.data;
+    };
+    // 제출
+    const loginMutation = useMutation(postAPI, {
+        onSuccess: (data) => {
+            // alert("로그인 성공!");
+            console.log('data', data);
+            Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN)
+            Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN)
+
+        },
+        onError: (error) => {
+            alert("로그인 실패!");
+        }
+    })
     //유효성 검사-------------------------------------
     // 이메일 유효성 검사
     const isEmail = email => {

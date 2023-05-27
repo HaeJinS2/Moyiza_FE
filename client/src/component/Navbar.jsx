@@ -39,7 +39,7 @@ function Navbar() {
                 Moyiza
               </motion.h1>
               <div className="flex gap-10 items-end text-lg">
-                <div className="cursor-pointer">검색</div>
+                <div className="cursor-pointer">채팅</div>
                 <div className="cursor-pointer">회원가입</div>
                 <div
                   onClick={() => navigate("/logins")}

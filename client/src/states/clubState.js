@@ -34,3 +34,8 @@ export const latestClubState = atom({
     key: 'latestClubState',
     default: null,
 });
+
+export const isLoadingState = atom({
+    key: 'isLoadingState',
+    default: false,
+});

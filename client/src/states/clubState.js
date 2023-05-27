@@ -28,3 +28,9 @@ export const clubState = atom({
         // restriction: null,
     }, 
 });
+
+
+export const latestClubState = atom({
+    key: 'latestClubState',
+    default: null,
+});

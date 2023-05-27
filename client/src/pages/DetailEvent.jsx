@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal';
-import axios from "axios";
 // import { getAPI, postAPI } from "../axios";
 import '../index.css'
 import { getHeaderAPI } from '../axios';
@@ -18,7 +17,7 @@ function DetailEvent() {
     const [marker, setMarker] = useState(null);
 
     console.log(marker)
-    const markerRef = useRef(null);
+
     useEffect(() => {
         console.log(userLat, userLng, userAddress)
     }, [userLat, userLng, userAddress])
@@ -27,7 +26,7 @@ function DetailEvent() {
         if (map && inputValue) {
             let url = `https://dapi.kakao.com/v2/local/search/address.json?query=${inputValue}`;
             getHeaderAPI(url, {
-                headers: { Authorization: "KakaoAK " +  `${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
+                headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
             })
                 .then((response) => {
                     let address = response.data.documents[0];
@@ -92,11 +91,12 @@ function DetailEvent() {
 
                 let url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lng}&y=${lat}&input_coord=WGS84`;
                 getHeaderAPI(url, {
-                    headers: { Authorization: "KakaoAK " + `${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
+                    headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
                 })
                     .then((response) => {
                         let address = response.data.documents[0].address;
                         setUserAddress(address.address_name);
+                        console.log(response.data.documents[0])
                     })
                     .catch((error) => {
                         console.log(error);

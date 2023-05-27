@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 
-const SearchBar = () => {
+const SearchBar = ({handleSearchInput, search}) => {
   const [onSearch, setOnSearch] = useState(false);
   const inputRef = useRef(null);
 
@@ -23,7 +23,10 @@ const SearchBar = () => {
       {onSearch ? (
         <>
           <div className="w-full flex justify-between pr-2 pl-6">
-            <input ref={inputRef} placeholder="검색" className="w-full" />
+            <input 
+            onChange={handleSearchInput}
+            value={search}
+            ref={inputRef} placeholder="검색" className="w-full" />
             <div className="p-2 bg-rose-400 rounded-full text-white">
               <BiSearch size={18} />
             </div>

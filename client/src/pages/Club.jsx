@@ -51,15 +51,15 @@ function Club() {
   };
 
   const handleSearchInput = (e) => {
-    setSearch(e.target.change)
-  }
+    setSearch(e.target.change);
+  };
 
   console.log(club);
   return (
     <>
       <Container>
         <Navbar />
-        <section ref={divRef} className="h-auto mt-20 mb-10">
+        <section ref={divRef} className="h-auto mt-16 mb-10">
           <BodyContainer>
             <body className="flex flex-col">
               {/* <div className="flex justify-end py-4">
@@ -67,7 +67,7 @@ function Club() {
                   필터
                 </button>
               </div> */}
-<SearchBar/>
+              <SearchBar handleSearchInput={handleSearchInput} search={search} />
               <div className="flex justify-around  my-2">
                 {tabs.map((tab, i) => (
                   <button

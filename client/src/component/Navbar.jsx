@@ -9,7 +9,7 @@ function Navbar() {
 
   return (
     <>
-      <div className="flex justify-center items-center ">
+      <div className="flex justify-center items-center py-4">
         <div className="fixed z-20 bg-white w-full ">
           <BodyContainer>
             <motion.div
@@ -20,16 +20,20 @@ function Navbar() {
               className={`w-full flex flex-row justify-between gap-20 px-10`}
             >
               <div className="flex gap-10 items-end text-lg ">
-                <div className="cursor-pointer">로고</div>
+                <img
+                  className="cursor-pointer"
+                  src={`${process.env.PUBLIC_URL}/images/logo.svg`}
+                  width="70px"
+                  alt="moyizaLogo"
+                />
                 <div
                   onClick={() => navigate("/club")}
                   className="cursor-pointer"
-                >
-                  클럽
-                </div>
-                <div 
-                onClick={() => alert("아직 준비중인 기능입니다!")}
-                className="cursor-pointer">원데이</div>
+                ></div>
+                <div
+                  onClick={() => alert("아직 준비중인 기능입니다!")}
+                  className="cursor-pointer"
+                ></div>
               </div>
               <motion.h1
                 onClick={() => navigate("/")}

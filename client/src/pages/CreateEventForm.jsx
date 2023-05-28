@@ -28,6 +28,7 @@ function CreateEvent() {
     const [marker, setMarker] = useState(null);
     const navigate = useNavigate();
 
+    console.log(startDate, dateString)
     const { id } = useParams();
 
 
@@ -192,10 +193,11 @@ function CreateEvent() {
                                 customInput={<CustomInput />}
                             />
                         </div>
-                        eventGroupsize <input className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
-                        location_tmp
-                        <div className='flex flex-col gap-y-4'>
-                            <input className='w-[500px] h-[50px] shadow-md'
+                        <input 
+                        placeholder='eventGroupSize'
+                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
+                        <div className='flex flex-col gap-y-4  items-center justify-center '>
+                            <input className='w-80 h-[50px] shadow-md'
                                 placeholder='장소를 검색하세요 (예: xx동)'
                                 type="text" onChange={handleInputChange} />
                             <div id="map" style={{ width: "500px", height: "400px" }}></div>
@@ -203,6 +205,7 @@ function CreateEvent() {
                         <button onClick={handleCreateButton}>이벤트생성하기버튼</button>
                     </div>
                 </motion.div>
+            </div>
             </div>
         </>
     )

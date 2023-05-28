@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { motion } from "framer-motion";
 import { slideIn, staggerContainer } from "../utils/motion";
+import Fade from "react-reveal/Fade";
+
+import DetailEvent from "./DetailEvent";
+import { useNavigate } from "react-router-dom";
+
 import Navbar from "../component/Navbar";
 import Container from "../component/Container";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
-import axios from "axios";
-import Cookies from "js-cookie";
-import DetailEvent from "./DetailEvent";
-import { useNavigate } from "react-router-dom";
 
 let tabs = ["클럽", "원데이"];
 
@@ -16,6 +19,8 @@ function Main() {
   const divRef = useRef(null);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(tabs[0]);
+
+  //페이지 렌더링 시 화면 최상단으로 이동하는 코드
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
@@ -122,12 +127,14 @@ function Main() {
 
             <div className="flex flex-col justify-between">
               <div className="grid grid-cols-2 gap-x-4 gap-y-8 mt-8">
-                <MainCard description="서비스 소개" />
-                <MainCard image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/e865b146-e884-4846-9e26-fe80fabea7f2_Velkoz_0.png" />
-                <MainCard image="https://res.cloudinary.com/dsav9fenu/image/upload/v1684890347/KakaoTalk_Photo_2023-05-24-10-04-52_ubgcug.png" />
-                <MainCard description="서비스 소개" />
-                <MainCard description="서비스 소개" />
-                <MainCard image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/4a2abf1a-dfdd-4cc7-9e3e-0283745ae30a_services.png" />
+                <Fade bottom>
+                  <MainCard description="서비스 소개" />
+                  <MainCard image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/e865b146-e884-4846-9e26-fe80fabea7f2_Velkoz_0.png" />
+                  <MainCard image="https://res.cloudinary.com/dsav9fenu/image/upload/v1684890347/KakaoTalk_Photo_2023-05-24-10-04-52_ubgcug.png" />
+                  <MainCard description="서비스 소개" />
+                  <MainCard description="서비스 소개" />
+                  <MainCard image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/4a2abf1a-dfdd-4cc7-9e3e-0283745ae30a_services.png" />
+                </Fade>
               </div>
             </div>
           </section>

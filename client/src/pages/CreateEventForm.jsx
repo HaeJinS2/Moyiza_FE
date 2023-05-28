@@ -4,18 +4,21 @@ import { postAPI, getHeaderAPI } from "../axios";
 import DatePicker from 'react-datepicker';
 import styled, { createGlobalStyle } from "styled-components";
 import Navbar from "../component/Navbar";
-import { fadeIn } from '../variants'
 // import { useNavigate } from "react-router-dom";
 import { FiCalendar } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { textVariant } from "../utils/motion";
 
 function CreateEvent() {
     // const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [location, setLocation] = useState('');
-    const [startDate, setStartDate] = useState(new Date());
-    const [dateString, setDateString] = useState('');
+    
+    const initialDate = new Date();
+    const [startDate, setStartDate] = useState(initialDate);
+    const [dateString, setDateString] = useState(initialDate.toISOString().split('T')[0]);
+
     const [eventGroupsize, setEventGroupSize] = useState('');
     const [inputValue, setInputValue] = useState("");
     const [map, setMap] = useState(null);
@@ -25,6 +28,7 @@ function CreateEvent() {
     const [marker, setMarker] = useState(null);
     const navigate = useNavigate();
 
+    console.log(startDate, dateString)
     const { id } = useParams();
 
 
@@ -159,17 +163,24 @@ function CreateEvent() {
     return (
         <>
             <Navbar />
-            <div className='mt-20 flex flex-1 flex-col items-center justify-center  h-auto '>
+            <div className='pt-12'>
+            <div className='flex flex-1 flex-col items-center justify-center  h-[100vh] '>
                 <motion.div
-                    variants={fadeIn('up', 0.3)}
+                    variants={textVariant(0.5)}
                     initial="hidden"
                     whileInView={"show"}
                     viewport={{ once: false, amount: 0.3 }}
                     className='flex flex-1 flex-col items-center justify-center  gap-y-[15px]'>
                     <div className='flex flex-1 flex-col items-center justify-center  gap-y-[15px] '>
-                        title <input className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={title} onChange={(e) => setTitle(e.target.value)} />
-                        content <input className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={content} onChange={(e) => setContent(e.target.value)} />
-                        location <input className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={location} onChange={(e) => setLocation(e.target.value)} />
+                        <input 
+                        placeholder='title'
+                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={title} onChange={(e) => setTitle(e.target.value)} />
+                        <input 
+                        placeholder='content'
+                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={content} onChange={(e) => setContent(e.target.value)} />
+                        <input 
+                        placeholder='location'
+                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={location} onChange={(e) => setLocation(e.target.value)} />
                         <GlobalStyle />
                         startDate
                         <div className='flex'>
@@ -182,10 +193,11 @@ function CreateEvent() {
                                 customInput={<CustomInput />}
                             />
                         </div>
-                        eventGroupsize <input className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
-                        location_tmp
-                        <div className='flex flex-col gap-y-4'>
-                            <input className='w-[500px] h-[50px] shadow-md'
+                        <input 
+                        placeholder='eventGroupSize'
+                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
+                        <div className='flex flex-col gap-y-4  items-center justify-center '>
+                            <input className='w-80 h-[50px] shadow-md'
                                 placeholder='장소를 검색하세요 (예: xx동)'
                                 type="text" onChange={handleInputChange} />
                             <div id="map" style={{ width: "500px", height: "400px" }}></div>
@@ -193,6 +205,7 @@ function CreateEvent() {
                         <button onClick={handleCreateButton}>이벤트생성하기버튼</button>
                     </div>
                 </motion.div>
+            </div>
             </div>
         </>
     )

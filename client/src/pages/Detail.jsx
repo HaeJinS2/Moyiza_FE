@@ -141,23 +141,12 @@ function Detail() {
           <div className="grid grid-cols-2 gap-x-4 gap-y-8">
             <ClubEventCard />
             <ClubEventCard />
-            <ClubEventCard />
-            <ClubEventCard />
           </div>
           <p className="text-xl">종료된 클럽 이벤트</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-8">
             <ClubEventCard />
             <ClubEventCard />
-            <ClubEventCard />
-            <ClubEventCard />
           </div>
-          {/* <p className="text-xl">클럽 후기</p>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-            <ClubReviewCard />
-            <ClubReviewCard />
-            <ClubReviewCard />
-            <ClubReviewCard />
-          </div> */}
           <div className="flex justify-end">
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
               <button onClick={handleJoinClub}>클럽 가입하기</button>

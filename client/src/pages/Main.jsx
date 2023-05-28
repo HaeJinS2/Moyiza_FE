@@ -85,9 +85,9 @@ function Main() {
                     <div>대한민국 1등 모임 앱, Moyiza</div>
                     <div className="flex justify-between gap-20">
                       <button
-                        onClick={() => alert("아직 준비중인 기능입니다.")}
+                        onClick={() => navigate('/event')}
                       >
-                        원데이로
+                        이벤트로
                       </button>
                     </div>
                   </div>

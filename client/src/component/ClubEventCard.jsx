@@ -6,10 +6,12 @@ function ClubEventCard({ category, title, content, thumbnail, id, maxGroupSize }
       className="cursor-pointer flex w-full h-[261px] px-2 shadow-md justify-center"
     >
       <div className="flex justify-around items-center">
-        <div className="flex w-[240.5px] h-[261px] items-center justify-center ">
+        <div className="flex flex-col w-full h-[261px] items-center justify-center relative ">
+          <div>금요일</div>
+          <div className="text-5xl absolute top-32">28</div>
           <img
             className="rounded-md bg-cover"
-            src={thumbnail}
+            src={`${process.env.PUBLIC_URL}/images/calender.svg`}
             alt="clubThumbnail"
           />
         </div>

@@ -17,7 +17,7 @@ function Navbar() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: false, amount: 0.25 }}
-              className={`w-full flex flex-row justify-between gap-20 px-10`}
+              className={`w-full flex flex-row justify-between gap-20 `}
             >
               <div className="flex gap-10 items-end text-lg ">
                 <img
@@ -27,9 +27,9 @@ function Navbar() {
                   alt="moyizaLogo"
                 />
                 <div
-                  onClick={() => navigate("/club")}
+                  onClick={() => alert("아직 준비중인 기능입니다!")}
                   className="cursor-pointer"
-                ></div>
+                >채팅</div>
                 <div
                   onClick={() => alert("아직 준비중인 기능입니다!")}
                   className="cursor-pointer"
@@ -43,7 +43,7 @@ function Navbar() {
                 Moyiza
               </motion.h1>
               <div className="flex gap-10 items-end text-lg">
-                <div className="cursor-pointer">채팅</div>
+                <div className="cursor-pointer"></div>
                 <div className="cursor-pointer">회원가입</div>
                 <div
                   onClick={() => navigate("/logins")}

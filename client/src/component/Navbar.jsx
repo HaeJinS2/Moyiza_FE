@@ -32,7 +32,7 @@ function Navbar() {
               viewport={{ once: false, amount: 0.25 }}
               className={`w-full flex flex-row justify-between gap-20 `}
             > */}
-          <div className={`flex justify-center bg-white w-full px-80  transition-all duration-200 ease-in-out 
+          <div className={`flex justify-center bg-white w-[100vw]  transition-all duration-200 ease-in-out 
       ${isScrolled ? ' border-b-[1px] border-gray-300' : ''}`}>
             <div className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? 'h-[65px]' : 'h-[80px]'}`}>
               <div className="w-full flex justify-between items-center ">

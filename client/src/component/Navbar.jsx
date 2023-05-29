@@ -62,7 +62,7 @@ function Navbar() {
                     onClick={() => alert("아직 준비중인 기능입니다!")}
                     className="cursor-pointer"
                   >채팅</div>
-                  <div className="cursor-pointer">회원가입</div>
+                  <div onClick={() => navigate("/signup")} className="cursor-pointer">회원가입</div>
                   <div
                     onClick={() => navigate("/logins")}
                     className="cursor-pointer"

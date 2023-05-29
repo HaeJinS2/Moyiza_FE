@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import Fade from "react-reveal/Fade";
 
 import BodyContainer from "../component/BodyContainer";
@@ -16,13 +16,13 @@ import EmptyState from "../component/EmptyState";
 import ClubEventCard from "../component/ClubEventCard";
 
 function Event() {
-  const [activeTab, setActiveTab] = useState("전체");
+  // const [activeTab, setActiveTab] = useState("전체");
   const [page, setPage] = useState(0);
   const [club, setClub] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
-  const [categories, setCategories] = useState(null);
+  // const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
 
@@ -47,8 +47,8 @@ function Event() {
   useEffect(() => {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`).then((res) => {
-      const newCategorylist = ["전체", ...res.data.categoryList];
-      setCategories(newCategorylist);
+      // const newCategorylist = ["전체", ...res.data.categoryList];
+      // setCategories(newCategorylist);
     });
   }, []);
 
@@ -84,7 +84,7 @@ function Event() {
                   handleSearchInput={handleSearchInput}
                   search={search}
                 />
-                <div className="flex justify-around  my-4">
+                {/* <div className="flex justify-around  my-4">
                   {categories?.map((tab, i) => (
                     <button
                       key={i}
@@ -111,12 +111,12 @@ function Event() {
                       </span>
                     </button>
                   ))}
-                </div>
+                </div> */}
                 <div className="flex flex-col justify-between">
                   <div
                     className={`grid ${
                       filteredClubList.length === 0 ? "" : "grid-cols-2"
-                    }  gap-x-4 gap-y-8`}
+                    }  gap-x-4 gap-y-4`}
                   >
                     {filteredClubList.length === 0 ? (
                       <EmptyState

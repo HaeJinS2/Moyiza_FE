@@ -9,7 +9,6 @@ import DetailEvent from "./DetailEvent";
 import { useNavigate } from "react-router-dom";
 
 import Navbar from "../component/Navbar";
-import Container from "../component/Container";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 

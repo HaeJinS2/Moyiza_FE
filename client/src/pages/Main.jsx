@@ -56,16 +56,16 @@ function Main() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: false, amount: 0.25 }}
-              className={`mx-auto flex flex-col`}
+              className={`mx-auto flex flex-col justify-between`}
             >
-              <div className="flex gap-4 mt-28">
+              <div className="mt-24 grid grid-cols-2">
                 <motion.div
                   variants={slideIn("left", "tween", 0.2, 1)}
                   className="relative w-auto"
                 >
                   <div className="p-4 flex flex-col w-[590px] h-[341px] bg-rose-400 rounded-lg text-white text-xl justify-end items-end">
                     <div>대한민국 1등 모임 앱, Moyiza</div>
-                    <div className="flex justify-between gap-20">
+                    <div className="flex justify-between">
                       <button
                         onClick={() => {
                           navigate("/club");
@@ -83,7 +83,7 @@ function Main() {
                 >
                   <div className="p-4 flex flex-col w-[590px] h-[341px] bg-gatherBlue rounded-lg text-white text-xl justify-end items-end">
                     <div>대한민국 1등 모임 앱, Moyiza</div>
-                    <div className="flex justify-between gap-20">
+                    <div className="flex justify-between">
                       <button
                         onClick={() => navigate('/event')}
                       >
@@ -98,7 +98,7 @@ function Main() {
           </section>
           <section>
             <div>
-              <div className="flex  gap-10 mt-20">
+              <div className="flex gap-10 mt-20">
                 {tabs.map((tab, i) => (
                   <button
                     key={i}
@@ -126,7 +126,7 @@ function Main() {
             </div>
 
             <div className="flex flex-col justify-between">
-              <div className="grid grid-cols-2 gap-x-4 gap-y-8 mt-8">
+              <div className="grid grid-cols-2 mt-8">
                 <Fade bottom>
                   <MainCard description="서비스 소개" />
                   <MainCard image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/e865b146-e884-4846-9e26-fe80fabea7f2_Velkoz_0.png" />

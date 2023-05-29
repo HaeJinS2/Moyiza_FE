@@ -18,7 +18,7 @@ const SearchBar = ({ handleSearchInput, search, page }) => {
   }, []);
 
   return (
-    <div className="border-[1px] w-2/5 self-center py-2 my-4 rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
+    <div className="border-[1px] w-2/6 self-center py-2 my-4 rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
       {onSearch ? (
         <>
           <div className="w-full flex justify-between pr-2 pl-6">

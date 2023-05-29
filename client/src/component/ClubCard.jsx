@@ -17,7 +17,7 @@ function ClubCard({ tag, title, content, thumbnail, id, maxGroupSize,nowMemberCo
           />
         </div>
       </div>
-      <div className="flex flex-col gap-4 w-full px-4 py-6">
+      <div className="flex flex-col gap-4 w-full pl-4 pr-2 py-6">
           <div className="flex justify-between text-xs text-slate-400">
             <div> {tag.map(tag => ` #${tag}`)}</div>
             <div> {nowMemberCount} / {maxGroupSize}</div>

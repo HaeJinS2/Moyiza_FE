@@ -139,8 +139,20 @@ function Detail() {
         <body className="flex flex-col gap-4">
           <p className="text-xl">진행중인 클럽 이벤트</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-            <ClubEventCard />
-            <ClubEventCard />
+            {eventlists.map((item) => {
+              console.log(item)
+              return (
+                <ClubEventCard
+                  key={item?.id}
+                  title={item?.eventTitle}
+                  content={item?.eventContent}
+                  size={item?.eventGroupSize}
+                  attendantsNum={item?.attendantsNum}
+                  startTime={item?.eventStartTime}
+                  location={item?.eventLocation}
+                />
+              );
+            })}
           </div>
           <p className="text-xl">종료된 클럽 이벤트</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-8">

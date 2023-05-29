@@ -7,6 +7,7 @@ import BodyContainer from "../component/BodyContainer";
 import ClubEventCard from "../component/ClubEventCard";
 // import ClubReviewCard from "../component/ClubReviewCard";
 import Navbar from "../component/Navbar";
+import SlideWrapper from "../component/SlideWrapper";
 import { latestClubState } from "../states/clubState";
 
 function Detail() {
@@ -138,22 +139,23 @@ function Detail() {
         </header>
         <body className="flex flex-col gap-4">
           <p className="text-xl">진행중인 클럽 이벤트</p>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-            {eventlists.map((item) => {
-              console.log(item)
-              return (
-                <ClubEventCard
-                  key={item?.id}
-                  title={item?.eventTitle}
-                  content={item?.eventContent}
-                  size={item?.eventGroupSize}
-                  attendantsNum={item?.attendantsNum}
-                  startTime={item?.eventStartTime}
-                  location={item?.eventLocation}
-                />
-              );
-            })}
-          </div>
+          <SlideWrapper>
+          {eventlists.map((item) => {
+            console.log(item);
+            return (
+              <ClubEventCard
+                key={item?.id}
+                title={item?.eventTitle}
+                content={item?.eventContent}
+                size={item?.eventGroupSize}
+                attendantsNum={item?.attendantsNum}
+                startTime={item?.eventStartTime}
+                location={item?.eventLocation}
+              />
+            );
+          })}
+          </SlideWrapper>
+         
           <p className="text-xl">종료된 클럽 이벤트</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-8">
             <ClubEventCard />

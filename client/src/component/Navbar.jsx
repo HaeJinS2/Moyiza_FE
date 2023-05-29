@@ -36,30 +36,31 @@ function Navbar() {
       ${isScrolled ? ' border-b-[1px] border-gray-300' : ''}`}>
             <div className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? 'h-[65px]' : 'h-[80px]'}`}>
               <div className="w-full flex justify-between items-center ">
-                <div className="flex justify-between items-center text-lg gap-x-2 ml-[-5px]">
+                <div className="flex justify-between items-center text-lg gap-x-2 ml-[-10px]">
                   <img
-                    className="cursor-pointer"
+                    className="cursor-pointer ml-[10px]"
                     src={`${process.env.PUBLIC_URL}/images/logo.svg`}
-                    width="50px"
+                    width="100px"
                     alt="moyizaLogo"
                   />
-                  <div
-                    onClick={() => alert("아직 준비중인 기능입니다!")}
-                    className="cursor-pointer"
-                  >채팅</div>
+
                 </div>
                 {/* <motion.h1
                 onClick={() => navigate("/")}
                 variants={textVariant(0.5)}
                 className={`text-5xl font-bold uppercase mt-20 cursor-pointer `}
               > */}
-                <div
+                {/* <div
                   onClick={() => navigate("/")}
                   className="text-5xl flex items-center font-bold uppercase  cursor-pointer">
                   Moyiza
-                </div>
+                </div> */}
                 {/* </motion.h1> */}
-                <div className="flex items-center text-md font-semibold gap-x-2">
+                <div className="flex items-center text-md font-semibold gap-x-8">
+                <div
+                    onClick={() => alert("아직 준비중인 기능입니다!")}
+                    className="cursor-pointer"
+                  >채팅</div>
                   <div className="cursor-pointer">회원가입</div>
                   <div
                     onClick={() => navigate("/logins")}

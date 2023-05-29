@@ -129,7 +129,9 @@ function DetailEvent() {
 
     return (
         <div>
-            <button onClick={handleDetailClubButton}>이벤트 상세보기 버튼</button>
+            <button 
+            className='text-white'
+            onClick={handleDetailClubButton}>이벤트 상세보기 버튼</button>
 
             <Modal
                 isOpen={modalIsOpen}

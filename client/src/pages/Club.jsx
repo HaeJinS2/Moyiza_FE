@@ -116,7 +116,7 @@ function Club() {
                   <div
                     className={`grid ${
                       filteredClubList.length === 0 ? "" : "grid-cols-2"
-                    }  gap-x-4 gap-y-8`}
+                    }  gap-x-4 gap-y-4`}
                   >
                     {filteredClubList.length === 0 ? (
                       <EmptyState showReset handleClubCategory={handleClubCategory} />

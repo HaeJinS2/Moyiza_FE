@@ -4,7 +4,8 @@ import { clubState, optionState } from '../states/clubState';
 import { postAPI, putAPI, filePutAPI } from "../axios";
 import { useNavigate } from "react-router-dom";
 import { LinearProgress } from '@mui/material'
-import {Step1,Step2,Step3,Step4,Step5,Step6,Step7} from '../component/createclubform/Steps.jsx'
+import imageCompression from 'browser-image-compression';
+import { Step1, Step2, Step3, Step4, Step5, Step6, Step7 } from '../component/createclubform/Steps.jsx'
 
 function CreateClubForm() {
     const [club, setClub] = useRecoilState(clubState);
@@ -295,49 +296,65 @@ function CreateClubForm() {
         })
     };
 
-    const handleFileChange = (event) => {
+    const handleFileChange = async (event) => {
         const file = event.target.files[0];
         setSelectedFileName(file.name);
         setSelectedFile(file);
 
-        let reader = new FileReader();
+        const options = {
+            maxSizeMB: 1, 
+            maxWidthOrHeight: 300, 
+            useWebWorker: true
+        };
 
-        reader.onloadend = () => {
-            setPreview(reader.result);
-        }
-        if (file) {
-            reader.readAsDataURL(file);
-        }
+        try {
+            const resizingFile = await imageCompression(file, options);
+            console.log('Compressed file:', resizingFile); 
+            setSelectedFile(resizingFile);
+            let reader = new FileReader();
 
-        event.preventDefault();
-        const formData = new FormData();
-
-        if (file) {
-            formData.append("image", file);
-        }
-
-        filePutAPI(`/club/create/${club.createclub_id}/images`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            transformRequest: [
-                function () {
-                    return formData;
-                },
-            ],
-        }).then((response) => {
-            console.log("response :: ", response);
-            if (response.status === 200) {
-                console.log("200");
-                // navigate("../Community");
-                // 글 등록 시 새로고침
-                // window.location.reload();
+            reader.onloadend = () => {
+                setPreview(reader.result);
             }
-        });
+            if (resizingFile) {
+                reader.readAsDataURL(resizingFile);
+            }
+
+            event.preventDefault();
+            const formData = new FormData();
+
+            if (resizingFile) {
+                formData.append("image", resizingFile);
+
+            }
 
 
+
+            filePutAPI(`/club/create/${club.createclub_id}/images`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                transformRequest: [
+                    function () {
+                        return formData;
+                    },
+                ],
+            }).then((response) => {
+                console.log("response :: ", response);
+                if (response.status === 200) {
+                    console.log("200");
+                    // navigate("../Community");
+                    // 글 등록 시 새로고침
+                    // window.location.reload();
+                }
+            })
+        } catch (error) {
+            console.error('Error:', error);
+        }
         // setSelectedFile(null);
     };
+
+
 
     return (
         <>

@@ -6,18 +6,18 @@ function ClubCard({ tag, title, content, thumbnail, id, maxGroupSize,nowMemberCo
   return (
     <div
       onClick={() => navigate(`/detail/${id}`)}
-      className="cursor-pointer flex w-full h-[261px] px-2 shadow-md justify-center"
+      className="cursor-pointer flex w-full border-[1px] h-[261px] justify-center px-2"
     >
       <div className="flex justify-around items-center">
-        <div className="flex w-[240.5px] h-[261px] items-center justify-center ">
+        <div className="flex w-[240.5px] h-[261px] items-center justify-center">
           <img
-            className="rounded-full bg-cover"
+            className="rounded-full bg-cover w-[240.5px] h-[261px] py-2"
             src={thumbnail}
             alt="clubThumbnail"
           />
         </div>
       </div>
-      <div className="flex flex-col gap-4 w-full px-4 py-6">
+      <div className="flex flex-col gap-4 w-full pl-4 pr-2 py-6">
           <div className="flex justify-between text-xs text-slate-400">
             <div> {tag.map(tag => ` #${tag}`)}</div>
             <div> {nowMemberCount} / {maxGroupSize}</div>

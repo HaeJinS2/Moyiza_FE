@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import Fade from "react-reveal/Fade";
 
 import BodyContainer from "../component/BodyContainer";
-import ClubCard from "../component/ClubCard";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
 // import ReviewCard from "../component/ReviewCard";
@@ -14,15 +13,16 @@ import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
 import { isLoadingState } from "../states/clubState";
 import EmptyState from "../component/EmptyState";
+import ClubEventCard from "../component/ClubEventCard";
 
-function Club() {
-  const [activeTab, setActiveTab] = useState("전체");
+function Event() {
+  // const [activeTab, setActiveTab] = useState("전체");
   const [page, setPage] = useState(0);
   const [club, setClub] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
-  const [categories, setCategories] = useState(null);
+  // const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
 
@@ -35,7 +35,7 @@ function Club() {
     // 클럽 목록을 받아오는 코드
     getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
       setClub([...club, ...res.data.content]);
-      setFilteredClubList([...club, ...res.data.content])
+      setFilteredClubList([...club, ...res.data.content]);
     });
 
     // 클럽 전체 페이지를 가져오는 코드
@@ -47,19 +47,19 @@ function Club() {
   useEffect(() => {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`).then((res) => {
-      const newCategorylist = ["전체", ...res.data.categoryList];
-      setCategories(newCategorylist);
+      // const newCategorylist = ["전체", ...res.data.categoryList];
+      // setCategories(newCategorylist);
     });
   }, []);
 
   //카테고리에 따라 검색하는 코드
   const handleClubCategory = (e) => {
-    if(e.currentTarget.textContent === "전체") {
-      setFilteredClubList(club)
+    if (e.target.innerHTML === "전체") {
+      setFilteredClubList(club);
     } else {
-      getAPI(`/club/search?q=${search}&category=${e.currentTarget.textContent}`)
-      .then((res) => setFilteredClubList(res.data.content))
-      .catch((err) => setFilteredClubList([]));
+      getAPI(`/club/search?q=${search}&category=${e.target.innerHTML}`)
+        .then((res) => setFilteredClubList(res.data.content))
+        .catch((err) => setFilteredClubList([]));
     }
   };
 
@@ -80,11 +80,11 @@ function Club() {
             <BodyContainer>
               <body className="flex flex-col">
                 <SearchBar
-                  page='club'
+                  page="event"
                   handleSearchInput={handleSearchInput}
                   search={search}
                 />
-                <div className="flex justify-around  my-4">
+                {/* <div className="flex justify-around  my-4">
                   {categories?.map((tab, i) => (
                     <button
                       key={i}
@@ -111,7 +111,7 @@ function Club() {
                       </span>
                     </button>
                   ))}
-                </div>
+                </div> */}
                 <div className="flex flex-col justify-between">
                   <div
                     className={`grid ${
@@ -119,21 +119,18 @@ function Club() {
                     }  gap-x-4 gap-y-4`}
                   >
                     {filteredClubList.length === 0 ? (
-                      <EmptyState showReset handleClubCategory={handleClubCategory} />
+                      <EmptyState
+                        showReset
+                        handleClubCategory={handleClubCategory}
+                      />
                     ) : filteredClubList ? (
                       filteredClubList?.map((item, i) => {
                         return (
                           <Fade bottom>
-                            <ClubCard
-                              key={i}
-                              title={item.clubTitle}
-                              content={item.clubContent}
-                              tag={item.clubTag}
-                              thumbnail={item.thumbnailUrl}
-                              id={item.club_id}
-                              maxGroupSize={item.maxGroupSize}
-                              nowMemberCount={item.nowMemberCount}
-                            />
+                            <ClubEventCard />
+                            <ClubEventCard />
+                            <ClubEventCard />
+                            <ClubEventCard />
                           </Fade>
                         );
                       })
@@ -141,16 +138,10 @@ function Club() {
                       club?.map((item, i) => {
                         return (
                           <Fade bottom>
-                            <ClubCard
-                              key={i}
-                              title={item.clubTitle}
-                              content={item.clubContent}
-                              tag={item.clubTag}
-                              thumbnail={item.thumbnailUrl}
-                              id={item.club_id}
-                              maxGroupSize={item.maxGroupSize}
-                              nowMemberCount={item.nowMemberCount}
-                            />
+                            <ClubEventCard />
+                            <ClubEventCard />
+                            <ClubEventCard />
+                            <ClubEventCard />
                           </Fade>
                         );
                       })
@@ -185,4 +176,4 @@ function Club() {
   );
 }
 
-export default Club;
+export default Event;

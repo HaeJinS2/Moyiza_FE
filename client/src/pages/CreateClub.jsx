@@ -24,8 +24,21 @@ function CreateClub() {
             })
             if (response.status === 202) { // 임시저장된 데이터가 있는 경우
                 console.log(club.createclub_id)
-
-                    setIsOpen(true);
+                    getAPI(`/club/create/${response.data.createclub_id}`).then((getResponse) => {
+                        console.log(getResponse)
+                        setClub(getResponse.data.createClub)
+                        setOption({
+                            ...option,
+                            optionLists: getResponse.data.optionList,
+                            categoryLists: getResponse.data.optionList.categoryAndTagList,
+                            genderPolicyLists: getResponse.data.optionList.genderPolicyList,
+                        })
+                        setIsOpen(true);
+                        // setNavigateNow(true);
+                        // navigate(`/create-club-form`);
+                    }).catch((error) => {
+                        console.error(error);
+                    });
   
             } else if (response.status === 201) { // 임시저장된 데이터가 없는 경우
                 // setTempId(response.data.createclub_id); // tempId 발급 받음
@@ -52,37 +65,28 @@ function CreateClub() {
 
     const handleConfirm = () => {
 
-        getAPI(`/club/create/${club.createclub_id}`).then((getResponse) => {
-            console.log(getResponse)
-            setClub(getResponse.data.createClub)
-            setOption({
-                ...option,
-                optionLists: getResponse.data.optionList,
-                categoryLists: getResponse.data.optionList.categoryAndTagList,
-                genderPolicyLists: getResponse.data.optionList.genderPolicyList,
-            })
-            setNavigateNow(true);
-            navigate(`/create-club-form`);
-        }).catch((error) => {
-            console.error(error);
-        });
+        setNavigateNow(true);
+        navigate(`/create-club-form`);
         closeModal();
     }
 
     const handleCancel = () => {
-        getAPI(`/club/create/${club.createclub_id}`).then((getResponse) => {
-            console.log(getResponse)
-            setOption({
-                ...option,
-                optionLists: getResponse.data.optionList,
-                categoryLists: getResponse.data.optionList.categoryAndTagList,
-                genderPolicyLists: getResponse.data.optionList.genderPolicyList,
-            })
-            setNavigateNow(true);
-            navigate(`/create-club-form`);
-        }).catch((error) => {
-            console.error(error);
-        });
+        // getAPI(`/club/create/${club.createclub_id}`).then((getResponse) => {
+        //     console.log(getResponse)
+        //     setOption({
+        //         ...option,
+        //         optionLists: getResponse.data.optionList,
+        //         categoryLists: getResponse.data.optionList.categoryAndTagList,
+        //         genderPolicyLists: getResponse.data.optionList.genderPolicyList,
+        //     })
+        //     setNavigateNow(true);
+        //     navigate(`/create-club-form`);
+        // }).catch((error) => {
+        //     console.error(error);
+        // });
+        setClub({})
+        setNavigateNow(true);
+        navigate(`/create-club-form`);
         closeModal();
     }
 
@@ -90,6 +94,8 @@ function CreateClub() {
         // navigate(`/create-club-form`);
         setNavigateNow(false);
     }, [navigateNow]);
+
+
 
     return (
         <div>
@@ -118,8 +124,17 @@ function CreateClub() {
                 }}
             >
                 <div className="flex flex-col items-center gap-y-5">
-                    <div>
+                    <div className="flex flex-col items-center gap-y-5">
                         <h2>불러오시겠습니까?</h2>
+                        <h3>~임시 저장 목록~</h3>
+                        <span>{club?.clubCategory ? `카테고리: ${club?.clubCategory}` : `카테고리: 저장된 데이터 없음` }</span>
+                        <span>{club?.clubTag ? `태그: ${club?.clubTag}` : `태그: 저장된 데이터 없음` }</span>
+                        <span>{club?.clubTitle ? `클럽명: ${club?.clubTitle}` : `클럽명: 저장된 데이터 없음`}</span>
+                        <span>{club?.clubContent ? `클럽내용: ${club?.clubContent}` : `클럽내용: 저장된 데이터 없음`}</span>
+                        <span>{club?.genderPolicy ? `성별제한: ${club?.genderPolicy}` : `성별제한: 저장된 데이터 없음`}</span>
+                        <span>{club?.agePolicy ? `나이제한: ${club?.agePolicy}` : `나이제한: 저장된 데이터 없음`}</span>
+                        <span>{club?.maxGroupSize ? `최대인원: ${club?.maxGroupSize}` : `최대인원: 저장된 데이터 없음`}</span>
+
                     </div>
                     <div className="flex gap-10">
                         <button onClick={handleConfirm}>Yes</button>

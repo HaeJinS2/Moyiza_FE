@@ -42,6 +42,7 @@ axios.interceptors.response.use(
     },
     // 에러 처리
     async function (error) {
+        console.log(error.response.status)
         const originalRequest = error.config;
 
         if (error.response.status === 401 && !originalRequest._retry) {
@@ -66,6 +67,10 @@ axios.interceptors.response.use(
                 // 차후 로그아웃 상태를 전역으로 관리하여  window.location을 사용한 리디렉션 개선 필요
                 window.location = "/login";
             }
+        }
+
+        if (error.response.status === 404) {
+            window.location = "/404";
         }
         return Promise.reject(error);
     }

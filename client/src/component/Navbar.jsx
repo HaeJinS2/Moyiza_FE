@@ -10,14 +10,14 @@ function Navbar() {
   return (
     <>
       <div className="flex justify-center items-center">
-        <div className="fixed z-20 bg-white w-full py-4 px-80">
+        <div className="fixed z-20 bg-white w-full py-4 ">
           <BodyContainer>
             <motion.div
               variants={staggerContainer}
               initial="hidden"
               whileInView="show"
               viewport={{ once: false, amount: 0.25 }}
-              className={`w-full flex flex-row justify-between gap-20 `}
+              className={`w-full flex flex-row justify-between gap-20 px-10 `}
             >
               <div className="flex gap-10 items-end text-lg ">
                 <img
@@ -28,7 +28,7 @@ function Navbar() {
                 />
                 <div
                   onClick={() => alert("아직 준비중인 기능입니다!")}
-                  className="cursor-pointer"
+                  className="cursor-pointer text-md font-semibold"
                 >채팅</div>
               </div>
               <motion.h1

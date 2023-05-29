@@ -10,7 +10,7 @@ function Navbar() {
   return (
     <>
       <div className="flex justify-center items-center">
-        <div className="fixed z-20 bg-white w-full py-8">
+        <div className="fixed z-20 bg-white w-full py-4 px-80">
           <BodyContainer>
             <motion.div
               variants={staggerContainer}
@@ -23,27 +23,22 @@ function Navbar() {
                 <img
                   className="cursor-pointer"
                   src={`${process.env.PUBLIC_URL}/images/logo.svg`}
-                  width="70px"
+                  width="50px"
                   alt="moyizaLogo"
                 />
                 <div
                   onClick={() => alert("아직 준비중인 기능입니다!")}
                   className="cursor-pointer"
                 >채팅</div>
-                <div
-                  onClick={() => alert("아직 준비중인 기능입니다!")}
-                  className="cursor-pointer"
-                ></div>
               </div>
               <motion.h1
                 onClick={() => navigate("/")}
                 variants={textVariant(0.5)}
-                className={`text-7xl font-bold uppercase mt-20 cursor-pointer`}
+                className={`text-5xl font-bold uppercase mt-20 cursor-pointer`}
               >
                 Moyiza
               </motion.h1>
-              <div className="flex gap-10 items-end text-lg">
-                <div className="cursor-pointer"></div>
+              <div className="flex gap-10 items-end text-md font-semibold">
                 <div className="cursor-pointer">회원가입</div>
                 <div
                   onClick={() => navigate("/logins")}

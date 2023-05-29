@@ -18,7 +18,7 @@ const SearchBar = ({ handleSearchInput, search, page }) => {
   }, []);
 
   return (
-    <div className="border-[1px] w-2/6 self-center py-2 my-4 rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
+    <div className="border-[1px] w-2/6 self-center py-2 mb-4 rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
       {onSearch ? (
         <>
           <div className="w-full flex justify-between pr-2 pl-6">
@@ -60,9 +60,9 @@ const SearchBar = ({ handleSearchInput, search, page }) => {
 
           <div
             onClick={() => setOnSearch(true)}
-            className="text-sm pl-6 pr-2 text-gray-600 flex flex-row  items-center gap-3"
+            className="text-sm text-gray-600 flex flex-row flex-1 justify-center items-center gap-3"
           >
-            <div className="hidden sm:block ">검색</div>
+            <div className="hidden sm:block  ">검색</div>
             <div className="p-2 bg-rose-400 rounded-full text-white">
               <BiSearch size={18} />
             </div>

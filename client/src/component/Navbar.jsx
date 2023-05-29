@@ -39,6 +39,7 @@ function Navbar() {
                 <div className="flex justify-between items-center text-lg gap-x-2 ml-[-10px]">
                   <img
                     className="cursor-pointer ml-[10px]"
+                    onClick={() => navigate("/")}
                     src={`${process.env.PUBLIC_URL}/images/logo.svg`}
                     width="100px"
                     alt="moyizaLogo"

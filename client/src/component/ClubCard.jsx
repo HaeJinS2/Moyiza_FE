@@ -6,7 +6,7 @@ function ClubCard({ tag, title, content, thumbnail, id, maxGroupSize,nowMemberCo
   return (
     <div
       onClick={() => navigate(`/detail/${id}`)}
-      className="cursor-pointer flex w-full h-[261px] shadow-md justify-center px-2"
+      className="cursor-pointer flex w-full border-[1px] h-[261px] justify-center px-2"
     >
       <div className="flex justify-around items-center">
         <div className="flex w-[240.5px] h-[261px] items-center justify-center">

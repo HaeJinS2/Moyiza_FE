@@ -34,7 +34,7 @@ function Navbar() {
             > */}
           <div className={`flex justify-center bg-white w-[100vw]  transition-all duration-200 ease-in-out 
       ${isScrolled ? ' border-b-[1px] border-gray-300' : ''}`}>
-            <div className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? 'h-[65px]' : 'h-[80px]'}`}>
+            <div className={`flex w-[1000px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? 'h-[65px]' : 'h-[80px]'}`}>
               <div className="w-full flex justify-between items-center ">
                 <div className="flex justify-between items-center text-lg gap-x-2 ml-[-10px]">
                   <img

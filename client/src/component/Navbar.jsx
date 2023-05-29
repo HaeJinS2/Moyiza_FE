@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { staggerContainer, textVariant } from "../utils/motion";
 import { useNavigate } from "react-router-dom";
-import BodyContainer from "./BodyContainer";
 
 function Navbar() {
   const navigate = useNavigate();

@@ -54,10 +54,10 @@ function Club() {
 
   //카테고리에 따라 검색하는 코드
   const handleClubCategory = (e) => {
-    if(e.target.innerHTML === "전체") {
+    if(e.currentTarget.textContent === "전체") {
       setFilteredClubList(club)
     } else {
-      getAPI(`/club/search?q=${search}&category=${e.target.innerHTML}`)
+      getAPI(`/club/search?q=${search}&category=${e.currentTarget.textContent}`)
       .then((res) => setFilteredClubList(res.data.content))
       .catch((err) => setFilteredClubList([]));
     }

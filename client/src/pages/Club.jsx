@@ -14,6 +14,7 @@ import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
 import { isLoadingState } from "../states/clubState";
 import EmptyState from "../component/EmptyState";
+import Footer from "../component/Footer";
 
 function Club() {
   const [activeTab, setActiveTab] = useState("전체");
@@ -180,6 +181,7 @@ function Club() {
             </BodyContainer>
           </section>
         </Container>
+        <Footer />
       </div>
     </>
   );

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../component/Navbar";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
+import Footer from "../component/Footer";
 
 let tabs = ["클럽", "원데이"];
 
@@ -133,6 +134,7 @@ function Main() {
             </div>
           </section>
         </BodyContainer>
+        <Footer />
     </>
   );
 }

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { LinearProgress } from '@mui/material'
 import imageCompression from 'browser-image-compression';
 import { Step1, Step2, Step3, Step4, Step5, Step6, Step7 } from '../component/createclubform/Steps.jsx'
+import Navbar from "../component/Navbar";
 
 function CreateClubForm() {
     const [club, setClub] = useRecoilState(clubState);
@@ -168,10 +169,12 @@ function CreateClubForm() {
         setMaxGroupSize({ x: parseFloat(value.x.toFixed(2)) })
     }
 
+    console.log(club)
+    
     const handleCategory = () => {
         const url = `/club/create/${club.createclub_id}/category`;
         const data = selectedCategory;
-
+       
         putAPI(url, { category: data })
             .then(response => {
                 console.log(response);
@@ -358,6 +361,7 @@ function CreateClubForm() {
 
     return (
         <>
+        <Navbar />
             {
                 step === 1 && <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} handleCategoryChange={handleCategoryChange} />
             }

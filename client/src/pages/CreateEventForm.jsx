@@ -13,7 +13,7 @@ function CreateEvent() {
     // const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [location, setLocation] = useState('');
+    // const [location, setLocation] = useState('');
     
     const initialDate = new Date();
     const [startDate, setStartDate] = useState(initialDate);
@@ -22,8 +22,10 @@ function CreateEvent() {
     const [eventGroupsize, setEventGroupSize] = useState('');
     const [inputValue, setInputValue] = useState("");
     const [map, setMap] = useState(null);
+
     const [userLat, setUserLat] = useState(null);
     const [userLng, setUserLng] = useState(null);
+
     const [userAddress, setUserAddress] = useState("");
     const [marker, setMarker] = useState(null);
     const navigate = useNavigate();
@@ -33,7 +35,7 @@ function CreateEvent() {
 
 
     useEffect(() => {
-        console.log(userLat, userLng, userAddress)
+        console.log("userLat",userLat, "userLng",userLng, userAddress)
     }, [userLat, userLng, userAddress])
 
     useEffect(() => {
@@ -135,7 +137,7 @@ function CreateEvent() {
 
     const handleCreateButton = () => {
         postAPI(`/club/${id}/event`, {
-            eventTitle: title, eventContent: content, eventLocation: location, eventStartTime: dateString, eventGroupSize: Number(eventGroupsize),
+            eventTitle: title, eventContent: content, eventLocation: userAddress, eventLatitude: "" + userLat, eventLongitude: "" + userLng, eventStartTime: dateString, eventGroupSize: Number(eventGroupsize),
         }).then((response) => {
             console.log(response)
             navigate(-1)
@@ -163,8 +165,7 @@ function CreateEvent() {
     return (
         <>
             <Navbar />
-            <div className='pt-12'>
-            <div className='flex flex-1 flex-col items-center justify-center  h-[100vh] '>
+            <div className='min-h-screen mt-[80px] flex flex-col items-center justify-center'>
                 <motion.div
                     variants={textVariant(0.5)}
                     initial="hidden"
@@ -178,9 +179,9 @@ function CreateEvent() {
                         <input 
                         placeholder='content'
                         className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={content} onChange={(e) => setContent(e.target.value)} />
-                        <input 
+                        {/* <input 
                         placeholder='location'
-                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={location} onChange={(e) => setLocation(e.target.value)} />
+                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={location} onChange={(e) => setLocation(e.target.value)} /> */}
                         <GlobalStyle />
                         startDate
                         <div className='flex'>
@@ -205,7 +206,6 @@ function CreateEvent() {
                         <button onClick={handleCreateButton}>이벤트생성하기버튼</button>
                     </div>
                 </motion.div>
-            </div>
             </div>
         </>
     )

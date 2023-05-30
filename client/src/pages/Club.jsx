@@ -14,6 +14,7 @@ import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
 import { isLoadingState } from "../states/clubState";
 import EmptyState from "../component/EmptyState";
+import Footer from "../component/Footer";
 
 function Club() {
   const [activeTab, setActiveTab] = useState("전체");
@@ -66,6 +67,7 @@ function Club() {
   const handleSearchInput = (e) => {
     setSearch(e.target.value);
   };
+
 
   if (isLoading) {
     return <Loading />;
@@ -148,6 +150,7 @@ function Club() {
                               tag={item.clubTag}
                               thumbnail={item.thumbnailUrl}
                               id={item.club_id}
+                              eventId={item.id}
                               maxGroupSize={item.maxGroupSize}
                               nowMemberCount={item.nowMemberCount}
                             />
@@ -180,6 +183,7 @@ function Club() {
             </BodyContainer>
           </section>
         </Container>
+        <Footer />
       </div>
     </>
   );

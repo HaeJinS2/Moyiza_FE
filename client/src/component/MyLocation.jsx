@@ -1,43 +1,36 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import useCurrentLocation from '../hooks/useCurrentLocation';
 
-function MyLocation() {
-
-
-    const [userLocation, setUserLocation] = useState({});
-
-    const geolocationOptions = useMemo(() => ({
+export function MyLocation() {
+    const geolocationOptions = {
         enableHighAccuracy: true,
-        timeout: 1000 * 60 * 1, // 1 min
-        maximumAge: 1000 * 3600 * 24, // 24 hour
-    }), []);
+        timeout: 1000 * 60 * 1,
+        maximumAge: 1000 * 3600 * 24,
+    };
 
-    const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
+    const { getLocation, location, error } = useCurrentLocation(geolocationOptions);
+    const [loading, setLoading] = useState(false);
 
-    // useEffect(() => {
-    //     if (currentLocation || currentError) {
-    //         console.log('MyLocation component rendered', currentLocation, currentError);
-    //         setUserLocation(currentLocation)
-    //     }
-    // }, [currentLocation, currentError]);
+    const handleButtonClick = () => {
+        setLoading(true);
+        getLocation();
+    };
 
-    const latLongBtn = () => {
-        if (currentLocation || currentError) {
-            console.log('myLocation', currentLocation, currentError);
-            setUserLocation(currentLocation)
+    useEffect(() => {
+        if (location || error) {
+            setLoading(false);
         }
-    }
+    }, [location, error]);
 
-        console.log(userLocation)
     return (
         <div>
-            <button onClick={latLongBtn}>내위치</button>
+            <button onClick={handleButtonClick}>내위치</button>
             <div>
-                {currentLocation?.latitude}
-                {currentLocation?.longitude}
+                {loading ? "Loading..." :
+                location ? `${location.latitude}, ${location.longitude}` : ''}
             </div>
         </div>
     )
 }
 
-export default MyLocation
+export default MyLocation;

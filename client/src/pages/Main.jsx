@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../component/Navbar";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
+import Footer from "../component/Footer";
+import MyLocation from "../component/MyLocation";
+
 
 let tabs = ["클럽", "원데이"];
 
@@ -61,8 +64,8 @@ function Main() {
                   variants={slideIn("left", "tween", 0.2, 1)}
                   className="relative w-auto "
                 >
-                  <div className="p-4 flex flex-1 flex-col h-[341px] bg-rose-400 rounded-lg text-white text-xl justify-end items-end">
-                    <div>대한민국 1등 모임 앱, Moyiza</div>
+                  <div className="p-4 flex flex-1 flex-col h-[380px] font-bold text-5xl bg-rose-400 rounded-lg text-white justify-center items-center">
+                    {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
                     <div className="flex justify-between">
                       <button
                         onClick={() => {
@@ -70,7 +73,7 @@ function Main() {
                           btn2();
                         }}
                       >
-                        클럽으로
+                        ❤️클럽으로❤️
                       </button>
                     </div>
                   </div>
@@ -79,13 +82,13 @@ function Main() {
                   variants={slideIn("right", "tween", 0.2, 1)}
                   className="relative w-auto flex justify-end items-end"
                 >
-                  <div className="p-4 flex flex-1 flex-col h-[341px] bg-gatherBlue rounded-lg text-white text-xl justify-end items-end">
-                    <div>대한민국 1등 모임 앱, Moyiza</div>
+                  <div className="p-4 flex flex-1 flex-col h-[380px] font-bold text-5xl bg-gatherBlue rounded-lg text-white justify-center items-center">
+                    {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
                     <div className="flex justify-between">
                       <button
                         onClick={() => navigate('/event')}
                       >
-                        이벤트로
+                        ❤️이벤트로❤️
                       </button>
                     </div>
                   </div>
@@ -93,10 +96,11 @@ function Main() {
               </div>
             </motion.div>
             <DetailEvent />
+            <MyLocation />
           </section>
           <section>
             <div>
-              <div className="flex gap-10 mt-20">
+              <div className="flex gap-10 mt-20 mb-12">
                 {tabs.map((tab, i) => (
                   <button
                     key={i}
@@ -122,20 +126,18 @@ function Main() {
               </div>
             </div>
 
-            <div className="flex flex-col justify-between">
-              <div className="grid grid-cols-2 mt-8 gap-2">
+            <div className="flex flex-col justify-between ">
+              <div className="grid grid-cols-1 mt-8 gap-x-2 gap-y-[350px]">
                 <Fade bottom>
-                  <MainCard description="서비스 소개" />
-                  <MainCard image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/e865b146-e884-4846-9e26-fe80fabea7f2_Velkoz_0.png" />
-                  <MainCard image="https://res.cloudinary.com/dsav9fenu/image/upload/v1684890347/KakaoTalk_Photo_2023-05-24-10-04-52_ubgcug.png" />
-                  <MainCard description="서비스 소개" />
-                  <MainCard description="서비스 소개" />
-                  <MainCard image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/4a2abf1a-dfdd-4cc7-9e3e-0283745ae30a_services.png" />
+                  <MainCard description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"/>
+                  <MainCard reverse={true} description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"/>
+                  <MainCard description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"/>
                 </Fade>
               </div>
             </div>
           </section>
         </BodyContainer>
+        <Footer />
     </>
   );
 }

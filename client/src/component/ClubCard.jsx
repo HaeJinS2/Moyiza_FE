@@ -6,12 +6,12 @@ function ClubCard({ tag, title, content, thumbnail, id, maxGroupSize,nowMemberCo
   return (
     <div
       onClick={() => navigate(`/detail/${id}`)}
-      className="cursor-pointer flex w-full border-[1px] h-[261px] justify-center px-2"
+      className="cursor-pointer flex w-full border-[1px] h-[231px] justify-center px-2"
     >
       <div className="flex justify-around items-center">
-        <div className="flex w-[240.5px] h-[261px] items-center justify-center">
+        <div className="flex w-[210px] h-auto ml-[2px] items-center justify-center">
           <img
-            className="rounded-full bg-cover w-[240.5px] h-[261px] py-2"
+            className="rounded-full bg-cover w-[210px] h-[210px] pl-[-5px]"
             src={thumbnail}
             alt="clubThumbnail"
           />

@@ -15,6 +15,8 @@ import Loading from "../component/Loading";
 import { isLoadingState } from "../states/clubState";
 import EmptyState from "../component/EmptyState";
 import RecentClub from "../component/RecentClub";
+import Footer from "../component/Footer";
+
 
 function Club() {
   const [activeTab, setActiveTab] = useState("전체");
@@ -67,6 +69,7 @@ function Club() {
   const handleSearchInput = (e) => {
     setSearch(e.target.value);
   };
+
 
   if (isLoading) {
     return <Loading />;
@@ -160,7 +163,60 @@ function Club() {
                           );
                         })
                       )}
+
                     </div>
+
+                      <span className="relative text-base z-10 mix-blend">
+                        {tab}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                <div className="flex flex-col justify-between">
+                  <div
+                    className={`grid ${
+                      filteredClubList.length === 0 ? "" : "grid-cols-2"
+                    }  gap-x-4 gap-y-4`}
+                  >
+                    {filteredClubList.length === 0 ? (
+                      <EmptyState showReset handleClubCategory={handleClubCategory} />
+                    ) : filteredClubList ? (
+                      filteredClubList?.map((item, i) => {
+                        return (
+                          <Fade bottom>
+                            <ClubCard
+                              key={i}
+                              title={item.clubTitle}
+                              content={item.clubContent}
+                              tag={item.clubTag}
+                              thumbnail={item.thumbnailUrl}
+                              id={item.club_id}
+                              maxGroupSize={item.maxGroupSize}
+                              nowMemberCount={item.nowMemberCount}
+                            />
+                          </Fade>
+                        );
+                      })
+                    ) : (
+                      club?.map((item, i) => {
+                        return (
+                          <Fade bottom>
+                            <ClubCard
+                              key={i}
+                              title={item.clubTitle}
+                              content={item.clubContent}
+                              tag={item.clubTag}
+                              thumbnail={item.thumbnailUrl}
+                              id={item.club_id}
+                              eventId={item.id}
+                              maxGroupSize={item.maxGroupSize}
+                              nowMemberCount={item.nowMemberCount}
+                            />
+                          </Fade>
+                        );
+                      })
+                    )}
+
                   </div>
                   {filteredClubList.length >= 8 && totalPages > page + 1 && (
                     <div className="flex justify-center mt-10">
@@ -183,10 +239,12 @@ function Club() {
                     <CreateClub />
                   </div>
                 </div>
-              </BodyContainer>
-            </section>
-          </div>
-        </div>
+
+              </div>
+            </BodyContainer>
+          </section>
+        </Container>
+        <Footer />
       </div>
     </>
   );

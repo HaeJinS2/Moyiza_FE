@@ -9,6 +9,7 @@ import ClubEventCard from "../component/ClubEventCard";
 import Navbar from "../component/Navbar";
 import SlideWrapper from "../component/SlideWrapper";
 import { latestClubState } from "../states/clubState";
+import { AnimatePresence, motion } from "framer-motion";
 
 function Detail() {
   const { id } = useParams();
@@ -16,6 +17,28 @@ function Detail() {
   const [eventlists, setEventLists] = useState([]);
   const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const navigate = useNavigate();
+  const [progressEventPage, setProgressEventPage] = useState(1);
+
+  const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
+
+  if (progressTuple[1] !== progressEventPage) {
+    setProgressTuple([progressTuple[1], progressEventPage]);
+  }
+
+  let progressPrev = progressTuple[0];
+  let progressDirection = progressEventPage > progressPrev ? 1 : -1;
+
+  const [endedEventPage, setEndedEventPage] = useState(1);
+
+  const [endedTuple, setEndedTuple] = useState([null, endedEventPage]);
+
+  if (endedTuple[1] !== endedEventPage) {
+    setEndedTuple([endedTuple[1], endedEventPage]);
+  }
+
+  let endedPrev = endedTuple[0];
+  let endedDirection = endedEventPage > endedPrev ? 1 : -1;
+
   // 클럽 상세조회
   const {
     isLoading,
@@ -117,14 +140,27 @@ console.log(eventlists)
   const progressEvents = eventlists.filter((item) => {
     const eventStartTime = new Date(item.eventStartTime);
     const today = new Date();
-    return eventStartTime >= today;
+    return eventStartTime <= today;
   });
   const endedEvents = eventlists.filter((item) => {
     const eventStartTime = new Date(item.eventStartTime);
     const today = new Date();
-    return eventStartTime < today;
+    return eventStartTime > today;
   });
-  console.log(clubMemberNicknameArr)
+  console.log(eventlists);
+  console.log(clubMemberNicknameArr);
+
+  const handleJoinEvent = () => {
+    postAPI("/club/19/event/join/13", {}).then((res) => console.log(res));
+  };
+  const handleLeaveEvent = () => {
+    deleteAPI("/club/19/event/join/13").then((res) => console.log(res));
+  };
+
+  const handleDeleteEvent = () => {
+    deleteAPI("/club/19/event/13").then((res) => console.log(res));
+  };
+
   return (
     <>
       <div ref={divRef} />
@@ -149,42 +185,119 @@ console.log(eventlists)
         </header>
         <body className="flex flex-col gap-4">
           <p className="text-xl">진행중인 클럽 이벤트</p>
-          <SlideWrapper>
-            {progressEvents.map((item) => {
-              console.log(item);
-              return (
-                <ClubEventCard
-                  key={item?.id}
-                  title={item?.eventTitle}
-                  content={item?.eventContent}
-                  size={item?.eventGroupSize}
-                  attendantsNum={item?.attendantsNum}
-                  startTime={item?.eventStartTime}
-                  location={item?.eventLocation}
-                />
-              );
-            })}
-          </SlideWrapper>
+
+          <div className="text-black">
+            <div className="flex justify-center items-center">
+              <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
+                <AnimatePresence custom={progressDirection}>
+                  <motion.div
+                    key={progressEventPage}
+                    variants={varients}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    custom={progressDirection}
+                    transition={{ duration: 0.5 }}
+                    className={`h-[200px] absolute flex justify-center items-center w-full `}
+                  >
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-8 w-full">
+                      {progressEvents.length !== 0 &&
+                        [
+                          progressEvents[progressEventPage],
+                          progressEvents[progressEventPage * 2 - 1],
+                        ].map((item) => {
+                          console.log(item);
+                          return (
+                            <ClubEventCard
+                              key={item?.id}
+                              clubId={item?.clubId}
+                              eventId={item?.id}
+                              title={item?.eventTitle}
+                              content={item?.eventContent}
+                              size={item?.eventGroupSize}
+                              attendantsNum={item?.attendantsNum}
+                              startTime={item?.eventStartTime}
+                              location={item?.eventLocation}
+                            />
+                          );
+                        })}
+                      <div className="flex justify-center gap-10"></div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+            <div className="flex justify-center gap-10">
+              <button
+                onClick={() => setProgressEventPage(progressEventPage - 1)}
+              >
+                이전으로
+              </button>
+              <button
+                onClick={() => setProgressEventPage(progressEventPage + 1)}
+              >
+                다음으로
+              </button>
+            </div>
+          </div>
 
           <p className="text-xl">종료된 클럽 이벤트</p>
-          <SlideWrapper>
-            {[endedEvents[0],endedEvents[1]].map((item) => {
-              console.log(item);
-              return (
-                <ClubEventCard
-                  key={item?.id}
-                  clubId={item?.clubId}
-                  eventId={item?.id}
-                  title={item?.eventTitle}
-                  content={item?.eventContent}
-                  size={item?.eventGroupSize}
-                  attendantsNum={item?.attendantsNum}
-                  startTime={item?.eventStartTime}
-                  location={item?.eventLocation}
-                />
-              );
-            })}
-          </SlideWrapper>
+
+          <div className="text-black">
+            <div className="flex justify-center items-center">
+              <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
+                <AnimatePresence custom={endedDirection}>
+                  <motion.div
+                    key={endedEventPage}
+                    variants={varients}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    custom={endedDirection}
+                    transition={{ duration: 0.5 }}
+                    className={`h-[200px] absolute flex justify-center items-center w-full `}
+                  >
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-8 w-full">
+                      {endedEvents.length !== 0 &&
+                        [
+                          endedEvents[endedEventPage],
+                          endedEvents[endedEventPage * 2 - 1],
+                        ].map((item) => {
+                          console.log(item);
+                          return (
+                            <ClubEventCard
+                              key={item?.id}
+                              clubId={item?.clubId}
+                              eventId={item?.id}
+                              title={item?.eventTitle}
+                              content={item?.eventContent}
+                              size={item?.eventGroupSize}
+                              attendantsNum={item?.attendantsNum}
+                              startTime={item?.eventStartTime}
+                              location={item?.eventLocation}
+                            />
+                          );
+                        })}
+                      <div className="flex justify-center gap-10"></div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+            <div className="flex justify-center gap-10">
+              <button
+                onClick={() => setEndedEventPage(endedEventPage - 1)}
+              >
+                이전으로
+              </button>
+              <button
+                onClick={() => setEndedEventPage(endedEventPage + 1)}
+              >
+                다음으로
+              </button>
+            </div>
+          </div>
+
           <div className="flex justify-end">
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
               <button onClick={handleJoinClub}>클럽 가입하기</button>
@@ -197,11 +310,28 @@ console.log(eventlists)
                 이벤트 생성
               </button>
             </div>
+            <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-3/4">
+              <button onClick={handleJoinEvent}>이벤트 참여</button>
+            </div>
+            <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-2/4">
+              <button onClick={handleLeaveEvent}>이벤트 탈퇴</button>
+            </div>
+            <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
+              <button onClick={handleDeleteEvent}>이벤트 삭제</button>
+            </div>
           </div>
         </body>
       </BodyContainer>
     </>
   );
 }
+
+let varients = {
+  enter: (direction) => ({ x: direction * 600 }),
+  center: { x: 0 },
+  exit: (direction) => ({ x: direction * -600 }),
+};
+
+
 
 export default Detail;

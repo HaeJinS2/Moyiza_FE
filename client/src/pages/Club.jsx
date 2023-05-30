@@ -14,7 +14,9 @@ import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
 import { isLoadingState } from "../states/clubState";
 import EmptyState from "../component/EmptyState";
+import RecentClub from "../component/RecentClub";
 import Footer from "../component/Footer";
+
 
 function Club() {
   const [activeTab, setActiveTab] = useState("전체");
@@ -36,7 +38,7 @@ function Club() {
     // 클럽 목록을 받아오는 코드
     getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
       setClub([...club, ...res.data.content]);
-      setFilteredClubList([...club, ...res.data.content])
+      setFilteredClubList([...club, ...res.data.content]);
     });
 
     // 클럽 전체 페이지를 가져오는 코드
@@ -55,12 +57,12 @@ function Club() {
 
   //카테고리에 따라 검색하는 코드
   const handleClubCategory = (e) => {
-    if(e.currentTarget.textContent === "전체") {
-      setFilteredClubList(club)
+    if (e.currentTarget.textContent === "전체") {
+      setFilteredClubList(club);
     } else {
       getAPI(`/club/search?q=${search}&category=${e.currentTarget.textContent}`)
-      .then((res) => setFilteredClubList(res.data.content))
-      .catch((err) => setFilteredClubList([]));
+        .then((res) => setFilteredClubList(res.data.content))
+        .catch((err) => setFilteredClubList([]));
     }
   };
 
@@ -75,39 +77,95 @@ function Club() {
 
   return (
     <>
-      <div ref={divRef}>
-        <Container>
-          <Navbar />
-          <section className="h-auto mt-24 mb-10">
-            <BodyContainer>
-              <body className="flex flex-col">
-                <SearchBar
-                  page='club'
-                  handleSearchInput={handleSearchInput}
-                  search={search}
-                />
-                <div className="flex justify-around  my-4">
-                  {categories?.map((tab, i) => (
-                    <button
-                      key={i}
-                      onClick={(e) => {
-                        setActiveTab(tab);
-                        handleClubCategory(e);
-                      }}
-                      className={`${
-                        activeTab === tab ? "text-white" : "hover:opacity-50"
-                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+      <div ref={divRef} className="flex">
+        <div className="max-w-[1920px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4">
+          <div className="flex flex-col">
+            <Navbar />
+            <section className="h-auto mt-24 mb-10">
+              <BodyContainer>
+                <body className="flex flex-col">
+                  <SearchBar
+                    page="club"
+                    handleSearchInput={handleSearchInput}
+                    search={search}
+                  />
+                  <div className="flex justify-around  my-4">
+                    {categories?.map((tab, i) => (
+                      <button
+                        key={i}
+                        onClick={(e) => {
+                          setActiveTab(tab);
+                          handleClubCategory(e);
+                        }}
+                        className={`${
+                          activeTab === tab ? "text-white" : "hover:opacity-50"
+                        } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                      >
+                        {activeTab === tab && (
+                          <motion.div
+                            layoutId="active-pill"
+                            transition={{ type: "spring", duration: 0.5 }}
+                            className="bg-gatherBlue absolute inset-0"
+                            style={{
+                              borderRadius: 9999,
+                            }}
+                          />
+                        )}
+                        <span className="relative text-base z-10 mix-blend">
+                          {tab}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex flex-col justify-between">
+                    <div
+                      className={`grid ${
+                        filteredClubList.length === 0 ? "" : "grid-cols-2"
+                      }  gap-x-4 gap-y-4`}
                     >
-                      {activeTab === tab && (
-                        <motion.div
-                          layoutId="active-pill"
-                          transition={{ type: "spring", duration: 0.5 }}
-                          className="bg-gatherBlue absolute inset-0"
-                          style={{
-                            borderRadius: 9999,
-                          }}
+                      {filteredClubList.length === 0 ? (
+                        <EmptyState
+                          showReset
+                          handleClubCategory={handleClubCategory}
                         />
+                      ) : filteredClubList ? (
+                        filteredClubList?.map((item, i) => {
+                          return (
+                            <Fade bottom>
+                              <ClubCard
+                                key={i}
+                                title={item.clubTitle}
+                                content={item.clubContent}
+                                tag={item.clubTag}
+                                thumbnail={item.thumbnailUrl}
+                                id={item.club_id}
+                                maxGroupSize={item.maxGroupSize}
+                                nowMemberCount={item.nowMemberCount}
+                              />
+                            </Fade>
+                          );
+                        })
+                      ) : (
+                        club?.map((item, i) => {
+                          return (
+                            <Fade bottom>
+                              <ClubCard
+                                key={i}
+                                title={item.clubTitle}
+                                content={item.clubContent}
+                                tag={item.clubTag}
+                                thumbnail={item.thumbnailUrl}
+                                id={item.club_id}
+                                maxGroupSize={item.maxGroupSize}
+                                nowMemberCount={item.nowMemberCount}
+                              />
+                            </Fade>
+                          );
+                        })
                       )}
+
+                    </div>
+
                       <span className="relative text-base z-10 mix-blend">
                         {tab}
                       </span>
@@ -158,27 +216,30 @@ function Club() {
                         );
                       })
                     )}
+
+                  </div>
+                  {filteredClubList.length >= 8 && totalPages > page + 1 && (
+                    <div className="flex justify-center mt-10">
+                      <button
+                        onClick={() => setPage(page + 1)}
+                        className="bg-rose-400 text-white px-3 py-2 rounded-full"
+                      >
+                        더보기
+                      </button>
+                    </div>
+                  )}
+                </body>
+              </BodyContainer>
+            </section>
+
+            <section className="h-auto mb-10">
+              <BodyContainer>
+                <div className="flex justify-end">
+                  <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg">
+                    <CreateClub />
                   </div>
                 </div>
-                {filteredClubList.length >= 8 && totalPages > page + 1 && (
-                  <div className="flex justify-center mt-10">
-                    <button
-                      onClick={() => setPage(page + 1)}
-                      className="bg-rose-400 text-white px-3 py-2 rounded-full"
-                    >
-                      더보기
-                    </button>
-                  </div>
-                )}
-              </body>
-            </BodyContainer>
-          </section>
-          <section className="h-auto mb-10">
-            <BodyContainer>
-              <div className="flex justify-end">
-                <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg">
-                  <CreateClub />
-                </div>
+
               </div>
             </BodyContainer>
           </section>

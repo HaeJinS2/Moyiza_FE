@@ -1,7 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+// import Cookies from 'js-cookie';
 
 function Navbar() {
+  // const cookie = Cookies.get('ACCESS_TOKEN');
+
+  // const logoutHandler = () => {
+  //   Cookies.remove('ACCESS_TOKEN');
+  //   Cookies.remove('REFRESH_TOKEN');
+  //   goHome();
+  // };
+
+  // const goHome = () => {
+  //   navigate('/');
+  // }
+
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -58,11 +71,22 @@ function Navbar() {
                 </div> */}
                 {/* </motion.h1> */}
                 <div className="flex items-center text-md font-semibold gap-x-8">
-                <div
+                  <div
                     onClick={() => alert("아직 준비중인 기능입니다!")}
                     className="cursor-pointer"
                   >채팅</div>
-                  <div onClick={() => navigate("/signup")} className="cursor-pointer">회원가입</div>
+                  {/* {cookie ? (
+                    <>
+                    <div className="cursor-pointer">프로필</div>
+                    <div onClick={logoutHandler} className="cursor-pointer">로그아웃</div>
+                    </> 
+                    ) : (
+                      <>
+                    <div onClick={() => navigate("/signup")} className="cursor-pointer">회원가입</div>
+                    <div onClick={() => navigate("/logins")} className="cursor-pointer">로그인</div>
+                  </>
+                  )} */}
+                   <div onClick={() => navigate("/signup")} className="cursor-pointer">회원가입</div>
                   <div
                     onClick={() => navigate("/logins")}
                     className="cursor-pointer"

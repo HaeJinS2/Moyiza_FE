@@ -59,6 +59,51 @@ function Login() {
     const postAPI = async (url, data) => {
         const response = await axios.post(url, data);
         return response.data;
+//         const accessToken = Cookies.get('ACCESS_TOKEN');
+//   const refreshToken = Cookies.get('REFRESH_TOKEN');
+
+//   const headers = {
+//     'Content-Type': 'application/json',
+//     'Authorization': `Bearer ${accessToken}`
+//   };
+
+//   try {
+//     const response = await axios.post(url, data, { headers });
+//     return response.data;
+//   } catch (error) {
+//     if (error.response && error.response.status === 401 && refreshToken) {
+//       // 토큰 갱신 로직 수행
+//       const refreshUrl = 'http://3.34.182.174/user/refresh';
+//       const refreshData = {
+//         refreshToken
+//       };
+
+//       try {
+//         const refreshResponse = await axios.post(refreshUrl, refreshData);
+//         const newAccessToken = refreshResponse.data.ACCESS_TOKEN;
+//         const newRefreshToken = refreshResponse.data.REFRESH_TOKEN;
+
+//         // 갱신된 토큰을 쿠키에 저장
+//         Cookies.set('ACCESS_TOKEN', newAccessToken);
+//         Cookies.set('REFRESH_TOKEN', newRefreshToken);
+
+//         // 갱신된 토큰을 헤더에 포함하여 다시 요청
+//         const newHeaders = {
+//           'Content-Type': 'application/json',
+//           'Authorization': `Bearer ${newAccessToken}`
+//         };
+
+//         const retryResponse = await axios.post(url, data, { headers: newHeaders });
+//         return retryResponse.data;
+//       } catch (refreshError) {
+//         // 토큰 갱신 실패 시 로그아웃 처리 등 필요한 작업 수행
+//         // ...
+//       }
+//     }
+
+//     // 그 외의 오류 처리
+//     throw error;
+//   }
     };
 
     const loginMutation = useMutation(postAPI, {

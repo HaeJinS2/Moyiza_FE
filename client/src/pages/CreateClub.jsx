@@ -25,7 +25,7 @@ function CreateClub() {
             if (response.status === 202) { // 임시저장된 데이터가 있는 경우
                 console.log(club.createclub_id)
                     getAPI(`/club/create/${response.data.createclub_id}`).then((getResponse) => {
-                        console.log(getResponse)
+                        console.log(response.data.createclub_id)
                         setClub(getResponse.data.createClub)
                         setOption({
                             ...option,
@@ -84,7 +84,9 @@ function CreateClub() {
         // }).catch((error) => {
         //     console.error(error);
         // });
-        setClub({})
+        let { createclub_id } = club;
+        setClub({ createclub_id });
+        
         setNavigateNow(true);
         navigate(`/create-club-form`);
         closeModal();

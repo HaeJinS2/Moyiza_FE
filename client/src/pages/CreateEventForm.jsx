@@ -13,7 +13,7 @@ function CreateEvent() {
     // const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [location, setLocation] = useState('');
+    // const [location, setLocation] = useState('');
     
     const initialDate = new Date();
     const [startDate, setStartDate] = useState(initialDate);

@@ -8,6 +8,7 @@ import CreateEventForm from "../pages/CreateEventForm";
 import Detail from "../pages/Detail";
 import NotFound from "../pages/NotFound";
 import Event from "../pages/Event";
+import MyInfo from "../pages/MyInfo";
 
 const Router = () => {
   return (
@@ -16,6 +17,7 @@ const Router = () => {
         <Route path="/" element={<Main />} />
         <Route path="/logins" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/user/profile" element={<MyInfo />} />
         <Route path="/create-club-form" element={<CreateClubForm />} />
         <Route path="/club" element={<Club />} />
         <Route path="/event" element={<Event />} />

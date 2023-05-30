@@ -7,7 +7,6 @@ import BodyContainer from "../component/BodyContainer";
 import ClubEventCard from "../component/ClubEventCard";
 // import ClubReviewCard from "../component/ClubReviewCard";
 import Navbar from "../component/Navbar";
-import SlideWrapper from "../component/SlideWrapper";
 import { latestClubState } from "../states/clubState";
 import { AnimatePresence, motion } from "framer-motion";
 

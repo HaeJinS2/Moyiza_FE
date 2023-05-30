@@ -183,8 +183,8 @@ function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
                 <div className='flex justify-center flex-col gap-[30px]'>
                     <div className='flex flex-col gap-3  pl-3'>
                         <h3 className='text-2xl'>{content.eventTitle ? content.eventTitle : "제목없음" }</h3>
-                        <span>{content.eventStartTime ? content.eventStartTime : "일시없음"}</span>
-                        <span>{content.eventContent ? content.eventContent : "내용없음"}</span>
+                        <span>{content.eventStartTime ? content.eventStartTime.split("T")[0] : "일시없음"}</span>
+                        <span>{content.eventLocation ? content.eventLocation : "장소없음"}</span>
                     </div>
                     <div className='flex flex-col gap-y-4'>
                         {/* <input className='w-[500px] h-[50px] shadow-md'
@@ -194,7 +194,7 @@ function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
                     </div>
                     <div className='flex flex-col gap-[30px] items-center '>
                         <div>
-                            <div className='w-[500px] h-[120px] bg-gray-200 rounded-[10px] p-5'>내용</div>
+                            <div className='w-[500px] h-[120px] bg-gray-200 rounded-[10px] p-5'>{content.eventContent ? content.eventContent : "내용없음"}</div>
                         </div>
                         {/* <div>
                             <button className='w-[500px] h-[70px] bg-slate-200 rounded-[10px]'>참가하기!!!</button>

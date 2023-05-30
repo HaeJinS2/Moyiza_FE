@@ -12,6 +12,8 @@ import Navbar from "../component/Navbar";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
+import MyLocation from "../component/MyLocation";
+
 
 let tabs = ["클럽", "원데이"];
 
@@ -94,6 +96,7 @@ function Main() {
               </div>
             </motion.div>
             <DetailEvent />
+            <MyLocation />
           </section>
           <section>
             <div>

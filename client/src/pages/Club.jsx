@@ -68,6 +68,7 @@ function Club() {
     setSearch(e.target.value);
   };
 
+
   if (isLoading) {
     return <Loading />;
   }
@@ -149,6 +150,7 @@ function Club() {
                               tag={item.clubTag}
                               thumbnail={item.thumbnailUrl}
                               id={item.club_id}
+                              eventId={item.id}
                               maxGroupSize={item.maxGroupSize}
                               nowMemberCount={item.nowMemberCount}
                             />

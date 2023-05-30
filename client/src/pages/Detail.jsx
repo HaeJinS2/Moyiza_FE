@@ -100,6 +100,8 @@ function Detail() {
     });
   };
 
+console.log(eventlists)
+
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
   useEffect(() => {
@@ -171,6 +173,8 @@ function Detail() {
               return (
                 <ClubEventCard
                   key={item?.id}
+                  clubId={item?.clubId}
+                  eventId={item?.id}
                   title={item?.eventTitle}
                   content={item?.eventContent}
                   size={item?.eventGroupSize}

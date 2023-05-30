@@ -2,22 +2,32 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal';
 // import { getAPI, postAPI } from "../axios";
 import '../index.css'
+import { getAPI } from '../axios';
 // import { getHeaderAPI } from '../axios';
 
 
 Modal.setAppElement('#root');
 
-function DetailEvent() {
-    const [modalIsOpen, setIsOpen] = useState(false);
+function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
+    // const [modalIsOpen, setIsOpen] = useState(false);
     // const [inputValue, setInputValue] = useState("");
     const [map, setMap] = useState(null);
     // const [userLat, setUserLat] = useState(null);
     // const [userLng, setUserLng] = useState(null);
     // const [userAddress, setUserAddress] = useState("");
     const [marker, setMarker] = useState(null);
-
+    const [content, setContent] = useState({});
     console.log(marker)
 
+    useEffect(() => {
+        getAPI(`/club/${clubId}/event/${eventId}`).then((response) => {
+            setContent(response.data)
+        }).catch((error) => {
+            console.log(error)
+        })
+    }, [clubId, eventId])
+
+    console.log(content)
     // useEffect(() => {
     //     console.log(userLat, userLng)
     // }, [userLat, userLng])
@@ -65,44 +75,44 @@ function DetailEvent() {
     useEffect(() => {
         if (map) {
             // const handleMapClick = (mouseEvent) => {
-                // let latlng = mouseEvent.latLng;
-                let lat = 37.5665
-                let lng = 126.9780
-                // let lat = latlng.getLat();
-                // let lng = latlng.getLng();
+            // let latlng = mouseEvent.latLng;
+            let lat = content.eventLatitude
+            let lng = content.eventLongitude
+            // let lat = latlng.getLat();
+            // let lng = latlng.getLng();
 
-                // 이전 마커가 있다면 제거
-                // if (marker) {
-                //     marker.setMap(null);
-                // }
+            // 이전 마커가 있다면 제거
+            // if (marker) {
+            //     marker.setMap(null);
+            // }
 
-                // 클릭한 위치에 마커 생성
-                let newMarker = new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(lat, lng)
-                });
+            // 클릭한 위치에 마커 생성
+            let newMarker = new window.kakao.maps.Marker({
+                position: new window.kakao.maps.LatLng(lat, lng)
+            });
 
-                // 마커를 지도에 표시
-                newMarker.setMap(map);
+            // 마커를 지도에 표시
+            newMarker.setMap(map);
 
-                // 마커 상태 업데이트
-                setMarker(newMarker);
+            // 마커 상태 업데이트
+            setMarker(newMarker);
 
-                // 위도 경도 상태 업데이트
-                // setUserLat(lat);
-                // setUserLng(lng);
+            // 위도 경도 상태 업데이트
+            // setUserLat(lat);
+            // setUserLng(lng);
 
-                // let url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lng}&y=${lat}&input_coord=WGS84`;
-                // getHeaderAPI(url, {
-                //     headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
-                // })
-                //     .then((response) => {
-                //         let address = response.data.documents[0].address;
-                //         setUserAddress(address.address_name);
-                //         console.log(response.data.documents[0])
-                //     })
-                //     .catch((error) => {
-                //         console.log(error);
-                //     });
+            // let url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lng}&y=${lat}&input_coord=WGS84`;
+            // getHeaderAPI(url, {
+            //     headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
+            // })
+            //     .then((response) => {
+            //         let address = response.data.documents[0].address;
+            //         setUserAddress(address.address_name);
+            //         console.log(response.data.documents[0])
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //     });
             // };
 
             // window.kakao.maps.event.addListener(map, "click", handleMapClick());
@@ -111,7 +121,7 @@ function DetailEvent() {
             //     window.kakao.maps.event.removeListener(map, "click", handleMapClick);
             // };
         }
-    }, [map]);
+    }, [map, content.eventLatitude, content.eventLongitude]);
 
 
 
@@ -119,9 +129,9 @@ function DetailEvent() {
     //     setInputValue(e.target.value);
     // };
 
-    const handleDetailClubButton = () => {
-        setIsOpen(true)
-    }
+    // const handleDetailClubButton = () => {
+    //     setIsOpen(true)
+    // }
 
     const closeModal = () => {
         setIsOpen(false);
@@ -129,9 +139,9 @@ function DetailEvent() {
 
     return (
         <div>
-            <button 
+            {/* <button 
             className='text-white'
-            onClick={handleDetailClubButton}>이벤트 상세보기 버튼</button>
+            onClick={handleDetailClubButton}>이벤트 상세보기 버튼</button> */}
 
             <Modal
                 isOpen={modalIsOpen}
@@ -158,23 +168,23 @@ function DetailEvent() {
 
                 <div className="flex justify-between w-full">
                     <div className='flex justify-end w-full gap-x-2'>
-                    <button className='w-[40px] h-[40px] bg-slate-400 rounded-full text-white'>Join</button>
+                        <button className='w-[40px] h-[40px] bg-slate-400 rounded-full text-white'>Join</button>
 
-                    <button
-                        onClick={closeModal}
-                        className='bg-gray-300 rounded-full w-[40px] h-[40px] text-white'>X</button>
-                        </div>
+                        <button
+                            onClick={closeModal}
+                            className='bg-gray-300 rounded-full w-[40px] h-[40px] text-white'>X</button>
+                    </div>
                 </div>
                 <div className='flex justify-between'>
-                    <span>작성자</span>
+                    <span>{content.eventTitle}</span>
                     <span>2/5</span>
                 </div>
                 <div className="border w-full mb-4"></div>
                 <div className='flex justify-center flex-col gap-[30px]'>
                     <div className='flex flex-col gap-3  pl-3'>
-                        <h3 className='text-2xl'>제목</h3>
-                        <span>일시</span>
-                        <span>장소</span>
+                        <h3 className='text-2xl'>{content.eventTitle ? content.eventTitle : "제목없음" }</h3>
+                        <span>{content.eventStartTime ? content.eventStartTime : "일시없음"}</span>
+                        <span>{content.eventContent ? content.eventContent : "내용없음"}</span>
                     </div>
                     <div className='flex flex-col gap-y-4'>
                         {/* <input className='w-[500px] h-[50px] shadow-md'

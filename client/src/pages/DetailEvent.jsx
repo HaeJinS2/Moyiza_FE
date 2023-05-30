@@ -57,7 +57,7 @@ function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
             if (modalIsOpen && window.kakao && window.kakao.maps) {
                 let mapContainer = document.getElementById("map");
                 let mapOption = {
-                    center: new window.kakao.maps.LatLng(37.5665, 126.9780),
+                    center: new window.kakao.maps.LatLng(content.eventLatitude, content.eventLongitude),
                     level: 3,
                 };
 

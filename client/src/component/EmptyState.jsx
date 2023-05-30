@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import CreateClub from "../pages/CreateClub";
 
 import Heading from "./Heading";
 
@@ -6,9 +6,7 @@ const EmptyState = ({
   title = "등록된 클럽이 없어요!",
   subtitle = "클럽 개설하러가기",
   showReset = false,
-  handleClubCategory
 }) => {
-  const navigate = useNavigate();
   return (
     <>
       <div className="flex flex-col justify-center items-center">
@@ -16,11 +14,7 @@ const EmptyState = ({
           <Heading center title={title} />
           {showReset && (
             <>
-              {/* <button onClick={() => {}}>필터링 리셋하기</button> */}
-
-              <button onClick={() => navigate("/create-club-form")}>
-               클럽 개설하러 가기
-              </button>
+              <CreateClub />
             </>
           )}
         </div>

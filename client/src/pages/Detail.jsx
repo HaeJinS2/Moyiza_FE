@@ -112,9 +112,17 @@ function Detail() {
     <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
   }
 
-  console.log(clubDetail);
-  console.log(clubMemberNicknameArr);
-  console.log(eventlists);
+  const progressEvents = eventlists.filter((item) => {
+    const eventStartTime = new Date(item.eventStartTime);
+    const today = new Date();
+    return eventStartTime >= today;
+  });
+  const endedEvents = eventlists.filter((item) => {
+    const eventStartTime = new Date(item.eventStartTime);
+    const today = new Date();
+    return eventStartTime < today;
+  });
+  console.log(clubMemberNicknameArr)
   return (
     <>
       <div ref={divRef} />
@@ -140,27 +148,39 @@ function Detail() {
         <body className="flex flex-col gap-4">
           <p className="text-xl">진행중인 클럽 이벤트</p>
           <SlideWrapper>
-          {eventlists.map((item) => {
-            console.log(item);
-            return (
-              <ClubEventCard
-                key={item?.id}
-                title={item?.eventTitle}
-                content={item?.eventContent}
-                size={item?.eventGroupSize}
-                attendantsNum={item?.attendantsNum}
-                startTime={item?.eventStartTime}
-                location={item?.eventLocation}
-              />
-            );
-          })}
+            {progressEvents.map((item) => {
+              console.log(item);
+              return (
+                <ClubEventCard
+                  key={item?.id}
+                  title={item?.eventTitle}
+                  content={item?.eventContent}
+                  size={item?.eventGroupSize}
+                  attendantsNum={item?.attendantsNum}
+                  startTime={item?.eventStartTime}
+                  location={item?.eventLocation}
+                />
+              );
+            })}
           </SlideWrapper>
-         
+
           <p className="text-xl">종료된 클럽 이벤트</p>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8">
-            <ClubEventCard />
-            <ClubEventCard />
-          </div>
+          <SlideWrapper>
+            {[endedEvents[0],endedEvents[1]].map((item) => {
+              console.log(item);
+              return (
+                <ClubEventCard
+                  key={item?.id}
+                  title={item?.eventTitle}
+                  content={item?.eventContent}
+                  size={item?.eventGroupSize}
+                  attendantsNum={item?.attendantsNum}
+                  startTime={item?.eventStartTime}
+                  location={item?.eventLocation}
+                />
+              );
+            })}
+          </SlideWrapper>
           <div className="flex justify-end">
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
               <button onClick={handleJoinClub}>클럽 가입하기</button>

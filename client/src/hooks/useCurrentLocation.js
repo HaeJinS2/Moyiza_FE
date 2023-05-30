@@ -10,6 +10,7 @@ export const useCurrentLocation = (options = {}) => {
             setError("Geolocation is not supported.");
             return;
         }
+        // 사용자의 현재 위치를 가져옴. 성공하면 'handleSuccess' 함수를 호출하고, 실패하면 'handleError' 함수를 호출.
         geolocation.getCurrentPosition(handleSuccess, handleError, options);
     };
 

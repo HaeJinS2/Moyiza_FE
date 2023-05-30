@@ -6,7 +6,13 @@ import Container from "../component/Container";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
+import DetailEvent from "../pages/DetailEvent"
 import MyLocation from "../component/MyLocation";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
+import Fade from "react-reveal/Fade";
+
 
 let tabs = ["클럽", "원데이"];
 
@@ -97,9 +103,8 @@ function Main() {
                   <button
                     key={i}
                     onClick={() => setActiveTab(tab)}
-                    className={`${
-                      activeTab === tab ? "text-white" : "hover:opacity-50"
-                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                    className={`${activeTab === tab ? "text-white" : "hover:opacity-50"
+                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                   >
                     {activeTab === tab && (
                       <motion.div
@@ -121,15 +126,16 @@ function Main() {
             <div className="flex flex-col justify-between ">
               <div className="grid grid-cols-1 mt-8 gap-x-2 gap-y-[350px]">
                 <Fade bottom>
-                  <MainCard description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"/>
-                  <MainCard reverse={true} description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"/>
-                  <MainCard description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"/>
+                  <MainCard description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg" />
+                  <MainCard reverse={true} description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg" />
+                  <MainCard description="서비스 소개" image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg" />
                 </Fade>
               </div>
             </div>
           </section>
         </BodyContainer>
         <Footer />
+      </Container>
     </>
   );
 }

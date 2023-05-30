@@ -6,10 +6,13 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { userState } from '../states/userState';
 import { useRecoilState } from 'recoil';
+import {parseJwt, setCookie} from '../utils/jwtUtils';
 
 function Login() {
-    // const [user, setUser] = useRecoilState(userState);
+    const [user, setUser] = useRecoilState(userState);
     const navigate = useNavigate();
+
+    console.log({user})
 
     const goSignUp = () => {
         navigate('/signup');
@@ -46,11 +49,21 @@ function Login() {
         };
         try {
             const response = await axios.post(url, data);
-            loginMutation.mutate(response.data);
-            console.log(response.data);
+
+            const token = response.headers.access_token
+            const jwt = token.replace('Bearer ', '')
+            setCookie('jwt', jwt, 1)
+            const email = parseJwt(jwt).sub
+            setUser(email)
+
+            // await axios.get('http://3.34.182.174/user/mypage',{ email },{ headers:{ ACCESS_TOKEN: jwt}})
+
+            // loginMutation.mutate(response.data);
+            // console.log(response.data);
             alert('로그인 성공');
             goMain();
         } catch (error) {
+            console.log(error);
             alert('로그인 실패');
             setUserloginInput({ email: '', password: '' });
         }
@@ -114,7 +127,9 @@ function Login() {
         },
         onError: (error) => {
             // alert('로그인 실패!');
+            console.log(loginMutation)
         }
+        
     });
 
     const isEmail = (email) => {
@@ -136,7 +151,7 @@ function Login() {
     const activeBtn = isAllValid ? undefined : 'disabled';
 
     // const [userEmail, setUserEmail] = useState('');
-    const [, setUser] = useRecoilState(userState);
+    // const [, setUser] = useRecoilState(userState);
     useEffect(() => {
         const emailCookie = getCookie('email');
         if (emailCookie) {

@@ -13,7 +13,6 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [emailState, setEserEmailState] = useRecoilState(userEmailState);
   const [input, setInput] = useState("");
-  const [input2, setInput2] = useState("");
   const [roomId, setRoomId] = useState("");
   const roomIdTmp = [1, 2, 3, 19, 11, 12, 13, 14, 15, 16];
   const [currentRoom, setCurrentRoom] = useState("");
@@ -30,6 +29,7 @@ const Chat = () => {
         console.log(roomId);
       })
       .catch((error) => console.log(error));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -136,7 +136,6 @@ const Chat = () => {
       });
     }
     setInput("");
-    setInput2("");
   };
   const handleOnKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -155,7 +154,7 @@ const Chat = () => {
           <div className="flex flex-col justify-between w-[700px]">
             <div className="flex flex-col h-[530px] p-2 overflow-y-auto">
               {messages.map((message, index) => {
-                return emailState.userEmail == message.senderNickname ? (
+                return emailState.userEmail === message.senderNickname ? (
                   <div className="flex justify-end">
                     <div key={index} className=" flex-end">
                       <div className="flex justify-end">
@@ -220,7 +219,7 @@ const Chat = () => {
                 {roomIdTmp.map((id) => (
                   <button
                     className={`w-[300px] h-[60px]  px-4 gap-x-4 flex flex-col items-start justify-center border-b-2
-                    ${id == currentRoom ? 'bg-slate-400' : 'bg-slate-300'}`}
+                    ${id === currentRoom ? 'bg-slate-400' : 'bg-slate-300'}`}
                     key={id}
                     onClick={() => connectToRoom(id)}
                   >

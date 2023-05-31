@@ -8,18 +8,17 @@ function Navbar() {
   useEffect(() => {
     console.log("isLoggedIn", isLoggedIn);
     // 로그인 여부를 확인하고 상태값 업데이트
-    const cookie = Cookies.get('jwt');
+    const cookie = Cookies.get('ACCESS_TOKEN');
     setIsLoggedIn(cookie ? true : false);
   }, [isLoggedIn]);
 
   const logoutHandler = () => {
     setIsLoggedIn(false);
-    Cookies.remove('jwt');
-    alert('로그아웃 되었습니다.')
     // console.log(Cookies)
     Cookies.remove('REFRESH_TOKEN');
     Cookies.remove('ACCESS_TOKEN');
     navigate('/');
+    alert('로그아웃 되었습니다.')
   };
 
   // const goHome = () => {

@@ -50,12 +50,16 @@ function Login() {
         try {
             const response = await axios.post(url, data);
 
-            const token = response.headers.access_token
-            const jwt = token.replace('Bearer ', '')
-            setCookie('jwt', jwt, 1)
-            const email = parseJwt(jwt).sub
+            const accessToken = response.headers.access_token;
+            const refreshToken = response.headers.refresh_token;
+
+            const jwt1 = accessToken.replace('Bearer ', '');
+            const jwt2 = refreshToken.replace('Bearer ', '');
+            setCookie('ACCESS_TOKEN', jwt1, 1)
+            setCookie('REFRESH_TOKEN', jwt2, 1);
+            const email = parseJwt(jwt1).sub;
             setUser(email);
-            console.log(email);
+            
             // 사용자를 로컬 스토리지에 저장
             localStorage.setItem('user', email);
 

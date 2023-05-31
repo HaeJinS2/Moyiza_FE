@@ -9,6 +9,7 @@ import ClubEventCard from "../component/ClubEventCard";
 import Navbar from "../component/Navbar";
 import { latestClubState } from "../states/clubState";
 import { AnimatePresence, motion } from "framer-motion";
+// import { userState } from "../states/userState";
 
 function Detail() {
   const { id } = useParams();
@@ -16,8 +17,10 @@ function Detail() {
   const [eventlists, setEventLists] = useState([]);
   const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const navigate = useNavigate();
-  const [progressEventPage, setProgressEventPage] = useState(1);
+  // const [user, serUser] = useRecoilState(userState)
 
+  // console.log(user)
+  const [progressEventPage, setProgressEventPage] = useState(1);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
 
   if (progressTuple[1] !== progressEventPage) {
@@ -326,9 +329,9 @@ console.log(eventlists)
 }
 
 let varients = {
-  enter: (direction) => ({ x: direction * 600 }),
+  enter: (direction) => ({ x: direction * 700 }),
   center: { x: 0 },
-  exit: (direction) => ({ x: direction * -600 }),
+  exit: (direction) => ({ x: direction * -700 }),
 };
 
 

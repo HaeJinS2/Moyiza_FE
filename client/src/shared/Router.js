@@ -8,6 +8,7 @@ import CreateEventForm from "../pages/CreateEventForm";
 import Detail from "../pages/Detail";
 import NotFound from "../pages/NotFound";
 import Event from "../pages/Event";
+import Chat from "../pages/Chat";
 import MyInfo from "../pages/MyInfo";
 
 const Router = () => {
@@ -23,6 +24,8 @@ const Router = () => {
         <Route path="/event" element={<Event />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/create-event-form/:id" element={<CreateEventForm />}/>
+        <Route path="/chat" element={<Chat />} />
+
         <Route path="/404" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

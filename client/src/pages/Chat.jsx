@@ -83,6 +83,7 @@ const Chat = () => {
   // }, []);
 
   const connectToRoom = (roomId) => {
+    const token = Cookies.get("ACCESS_TOKEN");
     // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
     if (clientRef.current) {
       //  클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
@@ -119,6 +120,9 @@ const Chat = () => {
             }
           );
         },
+        beforeConnect: () => {
+          clientRef.current.connectHeaders['ACCESS_TOKEN'] = token;
+        }
       });
       clientRef.current.activate();
     }

@@ -14,7 +14,7 @@ const Chat = () => {
   const [emailState, setEserEmailState] = useRecoilState(userEmailState);
   const [input, setInput] = useState("");
   const [roomId, setRoomId] = useState("");
-  const roomIdTmp = [1, 2, 3, 19, 11, 12, 13, 14, 15, 16];
+  const roomIdTmp = [1, 2, 3, 19, 11, 12, 13, 14, 15, 16, 17];
   const [currentRoom, setCurrentRoom] = useState("");
   const messagesEndRef = useRef(null);
 
@@ -51,6 +51,8 @@ const Chat = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+
   // useEffect(() => {
   //   clientRef.current = new Client({ // clientRef.current에 직접 할당
   //     webSocketFactory: () => new SockJS("http://3.34.182.174/chat/connect"),
@@ -149,7 +151,7 @@ const Chat = () => {
   return (
     <Container>
       <Navbar />
-      <div className="mt-8 flex justify-center items-center h-screen">
+      <div className="mt-8 flex justify-center items-center h-[calc(100vh-31.89px)]">
         <div className="flex justify-between w-[1000px] h-[600px] border-[1px]">
           <div className="flex flex-col justify-between w-[700px]">
             <div className="flex flex-col h-[530px] p-2 overflow-y-auto">
@@ -197,28 +199,25 @@ const Chat = () => {
                 onKeyPress={handleOnKeyPress}
               />
               <button
-                className="bg-[#FF7701] h-[50px] w-[100px] rounded-lg"
+                className={`h-[50px] w-[100px] rounded-lg ${input ? 'bg-[#FF7701] ' : 'bg-[#a5a5a5] text-gray-500'} `}
                 onClick={() =>
                   sendMessage({
                     content: input,
                     senderNickname: emailState.userEmail,
                   })
-                  // handleOnKeyPress({
-                  //     content: input,
-                  //     senderNickname: emailState.userEmail,
-                  //   })
                 }
+                disabled={!input}
               >
                 Send
               </button>
             </div>
           </div>
           <div className="flex w-[300px] h-[600px] border-l overflow-y-auto">
-            <div className="flex flex-col  gap-1">
+            <div className="flex flex-col w-full  gap-1">
               <div className="">
                 {roomIdTmp.map((id) => (
                   <button
-                    className={`w-[300px] h-[60px]  px-4 gap-x-4 flex flex-col items-start justify-center border-b-2
+                    className={`w-full h-[60px]  px-4 gap-x-4 flex flex-col items-start justify-center border-b-2
                     ${id === currentRoom ? 'bg-slate-400' : 'bg-slate-300'}`}
                     key={id}
                     onClick={() => connectToRoom(id)}

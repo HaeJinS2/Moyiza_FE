@@ -22,7 +22,7 @@ const Chat = () => {
       console.log(roomId)
     })
       .catch((error) => console.log(error))
-  }, [])
+  }, [roomId])
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
@@ -37,6 +37,7 @@ const Chat = () => {
         console.error("토큰 오류", error);
       }
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
@@ -56,6 +57,7 @@ const Chat = () => {
           }
         });
       },
+          // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
     clientRef.current.activate(); // clientRef.current 사용

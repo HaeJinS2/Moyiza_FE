@@ -9,7 +9,6 @@ import Navbar from "../component/Navbar";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
-import DetailEvent from "../pages/DetailEvent"
 import MyLocation from "../component/MyLocation";
 
 

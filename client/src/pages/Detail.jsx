@@ -9,7 +9,7 @@ import ClubEventCard from "../component/ClubEventCard";
 import Navbar from "../component/Navbar";
 import { latestClubState } from "../states/clubState";
 import { AnimatePresence, motion } from "framer-motion";
-// import { userState } from "../states/userState";
+import EmptyState from "../component/EmptyState";
 
 function Detail() {
   const { id } = useParams();
@@ -17,9 +17,6 @@ function Detail() {
   const [eventlists, setEventLists] = useState([]);
   const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const navigate = useNavigate();
-  // const [user, serUser] = useRecoilState(userState)
-
-  // console.log(user)
   const [progressEventPage, setProgressEventPage] = useState(1);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
 
@@ -125,7 +122,7 @@ function Detail() {
     });
   };
 
-console.log(eventlists)
+  console.log(eventlists);
 
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
@@ -139,15 +136,28 @@ console.log(eventlists)
     <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
   }
 
-  const progressEvents = eventlists.filter((item) => {
+  const newEventLists = eventlists.map((item) => {
     const eventStartTime = new Date(item.eventStartTime);
-    const today = new Date();
-    return eventStartTime <= today;
+    const eventEndTime = new Date(eventStartTime.setHours(23, 59, 59));
+    return {
+      ...item,
+      eventEndTime, // update the event with the new eventEndTime
+    };
   });
-  const endedEvents = eventlists.filter((item) => {
+
+  const progressEvents = newEventLists.filter((item) => {
+    console.log(item);
     const eventStartTime = new Date(item.eventStartTime);
+    const eventEndTime = new Date(item.eventEndTime);
+    console.log(eventStartTime, eventEndTime);
     const today = new Date();
-    return eventStartTime > today;
+    return eventStartTime <= today && today < eventEndTime;
+  });
+
+  const endedEvents = newEventLists.filter((item) => {
+    const eventEndTime = new Date(item.eventEndTime);
+    const today = new Date();
+    return eventEndTime <= today;
   });
   console.log(eventlists);
   console.log(clubMemberNicknameArr);
@@ -202,44 +212,59 @@ console.log(eventlists)
                     transition={{ duration: 0.5 }}
                     className={`h-[200px] absolute flex justify-center items-center w-full `}
                   >
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-8 w-full">
-                      {progressEvents.length !== 0 &&
+                    <div
+                      className={`${
+                        progressEvents.length === 0 ? "" : "grid grid-cols-2"
+                      } gap-x-4 gap-y-8 w-full`}
+                    >
+                      {progressEvents.length === 0 ? (
+                        <EmptyState page="detail" />
+                      ) : (
                         [
-                          progressEvents[progressEventPage],
-                          progressEvents[progressEventPage * 2 - 1],
-                        ].map((item) => {
-                          console.log(item);
-                          return (
-                            <ClubEventCard
-                              key={item?.id}
-                              clubId={item?.clubId}
-                              eventId={item?.id}
-                              title={item?.eventTitle}
-                              content={item?.eventContent}
-                              size={item?.eventGroupSize}
-                              attendantsNum={item?.attendantsNum}
-                              startTime={item?.eventStartTime}
-                              location={item?.eventLocation}
-                            />
-                          );
-                        })}
-                      <div className="flex justify-center gap-10"></div>
+                          progressEvents[progressEventPage * 2],
+                          progressEvents.length % 2 !== 0 &&
+                          progressEventPage ===
+                            Math.floor(progressEvents.length / 2)
+                            ? null
+                            : progressEvents[progressEventPage * 2 + 1],
+                        ]
+                          .filter((item) => item)
+                          .map((item) => {
+                            return (
+                              <ClubEventCard
+                                key={item?.id}
+                                clubId={item?.clubId}
+                                eventId={item?.id}
+                                title={item?.eventTitle}
+                                content={item?.eventContent}
+                                size={item?.eventGroupSize}
+                                attendantsNum={item?.attendantsNum}
+                                startTime={item?.eventStartTime}
+                                location={item?.eventLocation}
+                              />
+                            );
+                          })
+                      )}
                     </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
             </div>
             <div className="flex justify-center gap-10">
-              <button
-                onClick={() => setProgressEventPage(progressEventPage - 1)}
-              >
-                이전으로
-              </button>
-              <button
-                onClick={() => setProgressEventPage(progressEventPage + 1)}
-              >
-                다음으로
-              </button>
+              {progressEventPage > 0 && (
+                <button
+                  onClick={() => setProgressEventPage(progressEventPage - 1)}
+                >
+                  이전으로
+                </button>
+              )}
+              {progressEventPage < Math.ceil(progressEvents.length / 2) - 1 && (
+                <button
+                  onClick={() => setProgressEventPage(progressEventPage + 1)}
+                >
+                  다음으로
+                </button>
+              )}
             </div>
           </div>
 
@@ -259,27 +284,38 @@ console.log(eventlists)
                     transition={{ duration: 0.5 }}
                     className={`h-[200px] absolute flex justify-center items-center w-full `}
                   >
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-8 w-full">
-                      {endedEvents.length !== 0 &&
+                    <div
+                      className={`${
+                        endedEvents.length === 0 ? "" : "grid grid-cols-2"
+                      } gap-x-4 gap-y-8 w-full`}
+                    >
+                      {endedEvents.length === 0 ? (
+                        <EmptyState page="detail" />
+                      ) : (
                         [
-                          endedEvents[endedEventPage],
-                          endedEvents[endedEventPage * 2 - 1],
-                        ].map((item) => {
-                          console.log(item);
-                          return (
-                            <ClubEventCard
-                              key={item?.id}
-                              clubId={item?.clubId}
-                              eventId={item?.id}
-                              title={item?.eventTitle}
-                              content={item?.eventContent}
-                              size={item?.eventGroupSize}
-                              attendantsNum={item?.attendantsNum}
-                              startTime={item?.eventStartTime}
-                              location={item?.eventLocation}
-                            />
-                          );
-                        })}
+                          endedEvents[endedEventPage * 2],
+                          endedEvents.length % 2 !== 0 &&
+                          endedEventPage === Math.floor(endedEvents.length / 2)
+                            ? null
+                            : endedEvents[endedEventPage * 2 + 1],
+                        ]
+                          .filter((item) => item)
+                          .map((item) => {
+                            return (
+                              <ClubEventCard
+                                key={item?.id}
+                                clubId={item?.clubId}
+                                eventId={item?.id}
+                                title={item?.eventTitle}
+                                content={item?.eventContent}
+                                size={item?.eventGroupSize}
+                                attendantsNum={item?.attendantsNum}
+                                startTime={item?.eventStartTime}
+                                location={item?.eventLocation}
+                              />
+                            );
+                          })
+                      )}
                       <div className="flex justify-center gap-10"></div>
                     </div>
                   </motion.div>
@@ -287,16 +323,16 @@ console.log(eventlists)
               </div>
             </div>
             <div className="flex justify-center gap-10">
-              <button
-                onClick={() => setEndedEventPage(endedEventPage - 1)}
-              >
-                이전으로
-              </button>
-              <button
-                onClick={() => setEndedEventPage(endedEventPage + 1)}
-              >
-                다음으로
-              </button>
+              {endedEventPage > 0 && (
+                <button onClick={() => setEndedEventPage(endedEventPage - 1)}>
+                  이전으로
+                </button>
+              )}
+              {endedEventPage < Math.ceil(endedEvents.length / 2) - 1 && (
+                <button onClick={() => setEndedEventPage(endedEventPage + 1)}>
+                  다음으로
+                </button>
+              )}
             </div>
           </div>
 
@@ -333,7 +369,5 @@ let varients = {
   center: { x: 0 },
   exit: (direction) => ({ x: direction * -700 }),
 };
-
-
 
 export default Detail;

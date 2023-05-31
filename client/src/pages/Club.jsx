@@ -121,7 +121,9 @@ function Club() {
                     }  gap-x-4 gap-y-4`}
                   >
                     {filteredClubList.length === 0 ? (
-                      <EmptyState showReset handleClubCategory={handleClubCategory} />
+                      <EmptyState showReset
+                      page="club"
+                      handleClubCategory={handleClubCategory} />
                     ) : filteredClubList ? (
                       filteredClubList?.map((item, i) => {
                         return (

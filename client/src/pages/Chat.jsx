@@ -15,12 +15,14 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const [input2, setInput2] = useState("");
   const [roomId, setRoomId] = useState("");
-  const roomIdTmp = [1, 2, 3, 19];
+  const roomIdTmp = [1, 2, 3, 19, 11, 12, 13, 14, 15, 16];
   const [currentRoom, setCurrentRoom] = useState("");
+  const messagesEndRef = useRef(null);
 
   const clientRef = useRef(null); // client를 useRef로 설정
   const subscriptionRef = useRef(null);
 
+  console.log(emailState)
   useEffect(() => {
     getAPI(`/user/mypage`)
       .then((res) => {
@@ -28,7 +30,7 @@ const Chat = () => {
         console.log(roomId);
       })
       .catch((error) => console.log(error));
-  }, [roomId]);
+  }, []);
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
@@ -46,6 +48,9 @@ const Chat = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
   // useEffect(() => {
   //   clientRef.current = new Client({ // clientRef.current에 직접 할당
   //     webSocketFactory: () => new SockJS("http://3.34.182.174/chat/connect"),
@@ -133,13 +138,107 @@ const Chat = () => {
     setInput("");
     setInput2("");
   };
-
+  const handleOnKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage({
+        content: input,
+        senderNickname: emailState.userEmail,
+      });
+    }
+  };
   // Render the messages from the server.
   return (
     <Container>
       <Navbar />
-      <div className="mt-28 flex justify-center h-screen">
-        <div className="w-2/5  h-[100vh] ">
+      <div className="mt-8 flex justify-center items-center h-screen">
+        <div className="flex justify-between w-[1000px] h-[600px] border-[1px]">
+          <div className="flex flex-col justify-between w-[700px]">
+            <div className="flex flex-col h-[530px] p-2 overflow-y-auto">
+              {messages.map((message, index) => {
+                return emailState.userEmail == message.senderNickname ? (
+                  <div className="flex justify-end">
+                    <div key={index} className=" flex-end">
+                      <div className="flex justify-end">
+                        보낸사람 : {message.senderNickname}
+                      </div>
+                      <div className="flex gap-x-1 items-center justify-end">
+
+                        <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] text-white bg-[#0084ff]">
+                          {console.log(message)}
+                          내용 : {message.content + " "}
+                        </div>
+                        <div className="rounded-full bg-black w-[40px] h-[40px]"></div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div key={index}>
+                    <div>
+                      <div>
+                        보낸사람 : {message.senderNickname}
+                      </div>
+                    </div>
+                    <div className="flex gap-x-1 items-center">
+                      <div className="rounded-full bg-black w-[40px] h-[40px]"></div>
+                      <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] text-white bg-[#bababd]">
+                        {console.log(message)}
+                        내용 : {message.content + " "}
+                      </div>
+                    </div>
+                  </div>)
+              })}
+              <div ref={messagesEndRef} />
+            </div>
+            <div className="flex items-center h-[60px] px-2 gap-x-2 bg-slate-100 ">
+              <input
+                className="px-2 rounded-lg w-full h-[50px] focus:outline-none focus:ring-0"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="내용을 입력해주세요"
+                onKeyPress={handleOnKeyPress}
+              />
+              <button
+                className="bg-[#FF7701] h-[50px] w-[100px] rounded-lg"
+                onClick={() =>
+                  sendMessage({
+                    content: input,
+                    senderNickname: emailState.userEmail,
+                  })
+                  // handleOnKeyPress({
+                  //     content: input,
+                  //     senderNickname: emailState.userEmail,
+                  //   })
+                }
+              >
+                Send
+              </button>
+            </div>
+          </div>
+          <div className="flex w-[300px] h-[600px] border-l overflow-y-auto">
+            <div className="flex flex-col  gap-1">
+              <div className="">
+                {roomIdTmp.map((id) => (
+                  <button
+                    className={`w-[300px] h-[60px]  px-4 gap-x-4 flex flex-col items-start justify-center border-b-2
+                    ${id == currentRoom ? 'bg-slate-400' : 'bg-slate-300'}`}
+                    key={id}
+                    onClick={() => connectToRoom(id)}
+                  >
+                    <div>
+                      Room {id}
+                    </div>
+                    <div>
+                      미리볼내용
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className="mt-28 flex justify-center h-screen">
+        <div className="w-3/5  h-[100vh] ">
           <ul className="border-2 border-black w-full h-3/5 p-2">
             {messages.map((message, index) => (
               <li className="flex gap-[10px]" key={index}>
@@ -201,7 +300,7 @@ const Chat = () => {
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
     </Container>
   );
 };

@@ -8,6 +8,7 @@ import { userEmailState } from "../states/userStateTmp";
 import { getAPI } from "../axios";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
+import { logEvent } from "../utils/amplitude";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -146,6 +147,8 @@ const Chat = () => {
     setInput("");
   };
   const handleOnKeyPress = (e) => {
+    logEvent('Send Chatting', { name: 'handleOnKeyPress', page: 'Chat' })
+
     if (e.key === 'Enter') {
       sendMessage({
         content: input,

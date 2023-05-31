@@ -60,7 +60,7 @@ function Club() {
     if(e.currentTarget.textContent === "전체") {
       setFilteredClubList(club)
     } else {
-      getAPI(`/club/search?q=${search}&category=${e.currentTarget.textContent}`)
+      getAPI(`/club/search?q=&category=${e.currentTarget.textContent}`)
       .then((res) => setFilteredClubList(res.data.content))
       .catch((err) => setFilteredClubList([]));
     }

@@ -105,8 +105,10 @@ function SignUp() {
     phoneNum &&
     imageFile;
 
-  const activeBtn = isAllValid ? 'undefined' : 'disabled';
-
+  const btn1 = `bg-rose-400 text-white rounded-xl px-4 py-1 shadow hover:shadow-lg`
+  const btn2 = `bg-gray-400 text-white rounded-xl px-4 py-1 shadow hover:shadow-lg`
+  const activeBtn = isAllValid ? undefined : 'disabled';
+  const colorBtn = isAllValid ? btn1 :btn2;
 
 
   const submitHandler = async (e) => {
@@ -138,7 +140,7 @@ function SignUp() {
 
     } catch (error) {
       console.error(error);
-      alert('회원가입 실패!')
+      alert(error.request.response);
     }
   };
 
@@ -311,7 +313,7 @@ function SignUp() {
             * 숫자 사이에 하이픈(-)을 넣어주세요.
           </p>
         )}
-        <button className={`signupBtn ${activeBtn} bg-rose-400 text-white rounded-xl px-4 py-1 shadow hover:shadow-lg`} >
+        <button className={`signupBtn ${activeBtn} ${colorBtn}`} >
           가입하기
         </button>
       </form>

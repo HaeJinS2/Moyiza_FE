@@ -6,18 +6,19 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
   const navigate = useNavigate();
   useEffect(() => {
+    console.log("isLoggedIn", isLoggedIn);
     // 로그인 여부를 확인하고 상태값 업데이트
     const cookie = Cookies.get('jwt');
-    
     setIsLoggedIn(cookie ? true : false);
   }, [isLoggedIn]);
 
   const logoutHandler = () => {
-    Cookies.remove('jwt');
     setIsLoggedIn(false);
+    Cookies.remove('jwt');
     alert('로그아웃 되었습니다.')
     // console.log(Cookies)
-    // Cookies.remove('REFRESH_TOKEN');
+    Cookies.remove('REFRESH_TOKEN');
+    Cookies.remove('ACCESS_TOKEN');
     navigate('/');
   };
 

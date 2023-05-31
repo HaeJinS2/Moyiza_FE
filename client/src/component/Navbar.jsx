@@ -23,7 +23,7 @@ function Navbar() {
   return (
     <>
       <div className="flex justify-center">
-        <div className='fixed z-20'>
+        <div className="fixed z-20">
           {/* <BodyContainer> */}
           {/* <motion.div
               variants={staggerContainer}
@@ -32,9 +32,15 @@ function Navbar() {
               viewport={{ once: false, amount: 0.25 }}
               className={`w-full flex flex-row justify-between gap-20 `}
             > */}
-          <div className={`flex justify-center bg-white w-[100vw]  transition-all duration-200 ease-in-out 
-      ${isScrolled ? ' border-b-[1px] border-gray-300' : ''}`}>
-            <div className={`flex w-[1000px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? 'h-[65px]' : 'h-[80px]'}`}>
+          <div
+            className={`flex justify-center bg-white w-[100vw]  transition-all duration-200 ease-in-out 
+      ${isScrolled ? " border-b-[1px] border-gray-300" : ""}`}
+          >
+            <div
+              className={`flex w-[1000px] justify-between items-center transition-all duration-200 ease-in-out  ${
+                isScrolled ? "h-[65px]" : "h-[80px]"
+              }`}
+            >
               <div className="w-full flex justify-between items-center ">
                 <div className="flex justify-between items-center text-lg gap-x-2 ml-[-10px]">
                   <img
@@ -44,7 +50,6 @@ function Navbar() {
                     width="100px"
                     alt="moyizaLogo"
                   />
-
                 </div>
                 {/* <motion.h1
                 onClick={() => navigate("/")}
@@ -58,11 +63,18 @@ function Navbar() {
                 </div> */}
                 {/* </motion.h1> */}
                 <div className="flex items-center text-md font-semibold gap-x-8">
-                <div
-                    onClick={() => alert("아직 준비중인 기능입니다!")}
+                  <div
+                    onClick={() => navigate("/event")}
                     className="cursor-pointer"
-                  >채팅</div>
-                  <div onClick={() => navigate("/signup")} className="cursor-pointer">회원가입</div>
+                  >
+                    채팅
+                  </div>
+                  <div
+                    onClick={() => navigate("/signup")}
+                    className="cursor-pointer"
+                  >
+                    회원가입
+                  </div>
                   <div
                     onClick={() => navigate("/logins")}
                     className="cursor-pointer"

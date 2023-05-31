@@ -72,9 +72,11 @@ const Chat = () => {
   //   };
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
+
   const connectToRoom = (roomId) => {
+    // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
     if (clientRef.current) {
-      // 기존의 구독이 있으면 취소
+      //  클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
       if (subscriptionRef.current) {
         subscriptionRef.current.unsubscribe();
       }
@@ -105,9 +107,9 @@ const Chat = () => {
       });
       clientRef.current.activate();
     }
-    // 현재 누른 방번호 값 저장
+    // 현재 누른 roomId 값 저장
     setCurrentRoom(roomId);
-    // setMessages([]);
+    setMessages([]);
   };
   const sendMessage = (msg) => {
     console.log(currentRoom)

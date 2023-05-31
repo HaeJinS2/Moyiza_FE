@@ -7,6 +7,8 @@
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.13.2",
+    "@sentry/react": "^7.53.1",
+    "@sentry/tracing": "^7.53.1",
     "@stomp/stompjs": "^7.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",

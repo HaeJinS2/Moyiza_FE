@@ -3,29 +3,33 @@ import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 여부를 관리할 상태값 추가
-
+  const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
+  const navigate = useNavigate();
   useEffect(() => {
     // 로그인 여부를 확인하고 상태값 업데이트
-    const cookie = Cookies.get('ACCESS_TOKEN');
+    const cookie = Cookies.get('jwt');
+    
     setIsLoggedIn(cookie ? true : false);
-  }, []);
+  }, [isLoggedIn]);
 
   const logoutHandler = () => {
-    Cookies.remove('ACCESS_TOKEN');
-    Cookies.remove('REFRESH_TOKEN');
-    goHome();
+    Cookies.remove('jwt');
+    setIsLoggedIn(false);
+    alert('로그아웃 되었습니다.')
+    // console.log(Cookies)
+    // Cookies.remove('REFRESH_TOKEN');
+    navigate('/');
   };
 
-  const goHome = () => {
-    navigate('/');
-  }
+  // const goHome = () => {
+  //   navigate('/');
+  // }
 
   const goMyInfo = () => {
     navigate('/user/profile')
   }
 
-  const navigate = useNavigate();
+  
   const [isScrolled, setIsScrolled] = useState(false);
 
   const checkScroll = () => {
@@ -85,12 +89,14 @@ function Navbar() {
                     onClick={() => alert("아직 준비중인 기능입니다!")}
                     className="cursor-pointer"
                   >채팅</div>
-                  {isLoggedIn ? ( //로그인 상태인 경우
+                  {isLoggedIn ? 
+                  ( //로그인 상태인 경우
                     <>
                     <div onClick={goMyInfo} className="cursor-pointer">프로필</div>
                     <div onClick={logoutHandler} className="cursor-pointer">로그아웃</div>
                     </> 
-                    ) : ( //로그인 상태 아닌 경우
+                    )
+                    : ( //로그인 상태 아닌 경우
                       <>
                     <div onClick={() => navigate("/signup")} className="cursor-pointer">회원가입</div>
                     <div onClick={() => navigate("/logins")} className="cursor-pointer">로그인</div>

@@ -15,6 +15,7 @@ import Loading from "../component/Loading";
 import { isLoadingState } from "../states/clubState";
 import EmptyState from "../component/EmptyState";
 import Footer from "../component/Footer";
+import { logEvent } from "../utils/amplitude";
 
 function Club() {
   const [activeTab, setActiveTab] = useState("전체");
@@ -55,6 +56,7 @@ function Club() {
 
   //카테고리에 따라 검색하는 코드
   const handleClubCategory = (e) => {
+    logEvent('Button Clicked', { name: 'handleClubCategory', page: 'Club' })
     if(e.currentTarget.textContent === "전체") {
       setFilteredClubList(club)
     } else {

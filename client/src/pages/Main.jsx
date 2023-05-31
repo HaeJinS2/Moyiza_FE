@@ -10,6 +10,7 @@ import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
 import MyLocation from "../component/MyLocation";
+import { logEvent } from "../utils/amplitude";
 
 
 
@@ -31,6 +32,7 @@ function Main() {
   };
 
   const btn2 = async () => {
+    logEvent('Button Clicked', { name: 'btn2', page: 'Main' })
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/user/login`,

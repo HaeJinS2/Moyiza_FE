@@ -129,7 +129,7 @@ const Chat = () => {
     console.log(msg);
     console.log(clientRef);
     console.log(emailState.userEmail);
-    if (clientRef.current) {
+    if (input && clientRef.current) {
       clientRef.current.publish({
         destination: `/app/send/clubchat/${currentRoom}`,
         body: JSON.stringify(msg),

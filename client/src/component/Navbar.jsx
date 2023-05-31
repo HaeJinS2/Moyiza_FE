@@ -1,7 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 여부를 관리할 상태값 추가
+
+  useEffect(() => {
+    // 로그인 여부를 확인하고 상태값 업데이트
+    const cookie = Cookies.get('ACCESS_TOKEN');
+    setIsLoggedIn(cookie ? true : false);
+  }, []);
+
+  const logoutHandler = () => {
+    Cookies.remove('ACCESS_TOKEN');
+    Cookies.remove('REFRESH_TOKEN');
+    goHome();
+  };
+
+  const goHome = () => {
+    navigate('/');
+  }
+
+  const goMyInfo = () => {
+    navigate('/user/profile')
+  }
+
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -64,23 +87,28 @@ function Navbar() {
                 {/* </motion.h1> */}
                 <div className="flex items-center text-md font-semibold gap-x-8">
                   <div
-                    onClick={() => navigate("/event")}
+
+                    onClick={() => navigate("/chat")}
                     className="cursor-pointer"
-                  >
-                    채팅
-                  </div>
-                  <div
-                    onClick={() => navigate("/signup")}
-                    className="cursor-pointer"
-                  >
-                    회원가입
-                  </div>
+                  >채팅</div>
+                  {isLoggedIn ? ( //로그인 상태인 경우
+                    <>
+                    <div onClick={goMyInfo} className="cursor-pointer">프로필</div>
+                    <div onClick={logoutHandler} className="cursor-pointer">로그아웃</div>
+                    </> 
+                    ) : ( //로그인 상태 아닌 경우
+                      <>
+                    <div onClick={() => navigate("/signup")} className="cursor-pointer">회원가입</div>
+                    <div onClick={() => navigate("/logins")} className="cursor-pointer">로그인</div>
+                  </>
+                  )}
+                   {/* <div onClick={() => navigate("/signup")} className="cursor-pointer">회원가입</div>
                   <div
                     onClick={() => navigate("/logins")}
                     className="cursor-pointer"
                   >
                     로그인
-                  </div>
+                  </div> */}
                 </div>
                 {/* </motion.div> */}
               </div>

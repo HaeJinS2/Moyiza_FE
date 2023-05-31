@@ -6,13 +6,13 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { userState } from '../states/userState';
 import { useRecoilState } from 'recoil';
-import {parseJwt, setCookie} from '../utils/jwtUtils';
+import { parseJwt, setCookie } from '../utils/jwtUtils';
 
 function Login() {
     const [user, setUser] = useRecoilState(userState);
     const navigate = useNavigate();
 
-    console.log({user})
+    console.log({ user })
 
     const goSignUp = () => {
         navigate('/signup');
@@ -54,7 +54,10 @@ function Login() {
             const jwt = token.replace('Bearer ', '')
             setCookie('jwt', jwt, 1)
             const email = parseJwt(jwt).sub
-            setUser(email)
+            setUser(email);
+            console.log(email);
+            // 사용자를 로컬 스토리지에 저장
+            localStorage.setItem('user', email);
 
             // await axios.get('http://3.34.182.174/user/mypage',{ email },{ headers:{ ACCESS_TOKEN: jwt}})
 
@@ -72,51 +75,51 @@ function Login() {
     const postAPI = async (url, data) => {
         const response = await axios.post(url, data);
         return response.data;
-//         const accessToken = Cookies.get('ACCESS_TOKEN');
-//   const refreshToken = Cookies.get('REFRESH_TOKEN');
+        //         const accessToken = Cookies.get('ACCESS_TOKEN');
+        //   const refreshToken = Cookies.get('REFRESH_TOKEN');
 
-//   const headers = {
-//     'Content-Type': 'application/json',
-//     'Authorization': `Bearer ${accessToken}`
-//   };
+        //   const headers = {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': `Bearer ${accessToken}`
+        //   };
 
-//   try {
-//     const response = await axios.post(url, data, { headers });
-//     return response.data;
-//   } catch (error) {
-//     if (error.response && error.response.status === 401 && refreshToken) {
-//       // 토큰 갱신 로직 수행
-//       const refreshUrl = 'http://3.34.182.174/user/refresh';
-//       const refreshData = {
-//         refreshToken
-//       };
+        //   try {
+        //     const response = await axios.post(url, data, { headers });
+        //     return response.data;
+        //   } catch (error) {
+        //     if (error.response && error.response.status === 401 && refreshToken) {
+        //       // 토큰 갱신 로직 수행
+        //       const refreshUrl = 'http://3.34.182.174/user/refresh';
+        //       const refreshData = {
+        //         refreshToken
+        //       };
 
-//       try {
-//         const refreshResponse = await axios.post(refreshUrl, refreshData);
-//         const newAccessToken = refreshResponse.data.ACCESS_TOKEN;
-//         const newRefreshToken = refreshResponse.data.REFRESH_TOKEN;
+        //       try {
+        //         const refreshResponse = await axios.post(refreshUrl, refreshData);
+        //         const newAccessToken = refreshResponse.data.ACCESS_TOKEN;
+        //         const newRefreshToken = refreshResponse.data.REFRESH_TOKEN;
 
-//         // 갱신된 토큰을 쿠키에 저장
-//         Cookies.set('ACCESS_TOKEN', newAccessToken);
-//         Cookies.set('REFRESH_TOKEN', newRefreshToken);
+        //         // 갱신된 토큰을 쿠키에 저장
+        //         Cookies.set('ACCESS_TOKEN', newAccessToken);
+        //         Cookies.set('REFRESH_TOKEN', newRefreshToken);
 
-//         // 갱신된 토큰을 헤더에 포함하여 다시 요청
-//         const newHeaders = {
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${newAccessToken}`
-//         };
+        //         // 갱신된 토큰을 헤더에 포함하여 다시 요청
+        //         const newHeaders = {
+        //           'Content-Type': 'application/json',
+        //           'Authorization': `Bearer ${newAccessToken}`
+        //         };
 
-//         const retryResponse = await axios.post(url, data, { headers: newHeaders });
-//         return retryResponse.data;
-//       } catch (refreshError) {
-//         // 토큰 갱신 실패 시 로그아웃 처리 등 필요한 작업 수행
-//         // ...
-//       }
-//     }
+        //         const retryResponse = await axios.post(url, data, { headers: newHeaders });
+        //         return retryResponse.data;
+        //       } catch (refreshError) {
+        //         // 토큰 갱신 실패 시 로그아웃 처리 등 필요한 작업 수행
+        //         // ...
+        //       }
+        //     }
 
-//     // 그 외의 오류 처리
-//     throw error;
-//   }
+        //     // 그 외의 오류 처리
+        //     throw error;
+        //   }
     };
 
     const loginMutation = useMutation(postAPI, {
@@ -129,7 +132,7 @@ function Login() {
             // alert('로그인 실패!');
             console.log(loginMutation)
         }
-        
+
     });
 
     const isEmail = (email) => {

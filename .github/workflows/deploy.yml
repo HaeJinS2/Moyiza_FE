@@ -14,6 +14,7 @@ jobs:
       REACT_APP_KAKAO_MAPS_API_KEY_JS: ${{ secrets.REACT_APP_KAKAO_MAPS_API_KEY_JS }}
       REACT_APP_KAKAO_MAPS_API_KEY_REST: ${{ secrets.REACT_APP_KAKAO_MAPS_API_KEY_REST }}
       REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
+      REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
             
     steps:
     - name: Checkout

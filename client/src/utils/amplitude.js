@@ -1,7 +1,7 @@
 
 import { init, track, setUserId, reset } from "@amplitude/analytics-browser";
 
-const API_KEY = "7899cd0c738c0ec125e0b91c0a0d32e7";
+const API_KEY = `${process.env.REACT_APP_AMPLITUDE_API_KEY}`
 
 export const initAmplitude = () => {
   init(API_KEY);

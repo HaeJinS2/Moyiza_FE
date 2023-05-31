@@ -127,6 +127,7 @@ const Chat = () => {
     setMessages([]);
   };
   const sendMessage = (msg) => {
+    const token = Cookies.get("ACCESS_TOKEN");
     console.log(currentRoom);
     console.log(msg);
     console.log(clientRef);
@@ -134,6 +135,7 @@ const Chat = () => {
     if (input && clientRef.current) {
       clientRef.current.publish({
         destination: `/app/send/clubchat/${currentRoom}`,
+        headers: { 'ACCESS_TOKEN': token },
         body: JSON.stringify(msg),
       });
     }
@@ -181,7 +183,7 @@ const Chat = () => {
                     </div>
                     <div className="flex gap-x-1 items-center">
                       <div className="rounded-full bg-black w-[40px] h-[40px]"></div>
-                      <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] text-white bg-[#bababd]">
+                      <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
                         {console.log(message)}
                         내용 : {message.content + " "}
                       </div>

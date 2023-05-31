@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { motion } from "framer-motion";
 import { slideIn, staggerContainer } from "../utils/motion";
+import Fade from "react-reveal/Fade";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../component/Navbar";
-import Container from "../component/Container";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
 import DetailEvent from "../pages/DetailEvent"
 import MyLocation from "../component/MyLocation";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Cookies from "js-cookie";
-import Fade from "react-reveal/Fade";
+
 
 
 let tabs = ["클럽", "원데이"];
@@ -20,6 +20,8 @@ function Main() {
   const divRef = useRef(null);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(tabs[0]);
+
+  //페이지 렌더링 시 화면 최상단으로 이동하는 코드
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
@@ -46,8 +48,7 @@ function Main() {
 
   return (
     <>
-      <Container>
-        <Navbar />
+      <Navbar />
         <BodyContainer>
           <section ref={divRef}>
             <motion.div
@@ -55,12 +56,12 @@ function Main() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: false, amount: 0.25 }}
-              className={`mx-auto flex flex-col`}
+              className={`mx-auto flex flex-col justify-between`}
             >
-              <div className="flex gap-4 mt-28">
+              <div className="mt-24 grid grid-cols-2 gap-x-2">
                 <motion.div
                   variants={slideIn("left", "tween", 0.2, 1)}
-                  className="relative w-auto"
+                  className="relative w-auto "
                 >
                   <div className="p-4 flex flex-1 flex-col h-[380px] font-bold text-5xl bg-rose-400 rounded-lg text-white justify-center items-center">
                     {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
@@ -78,13 +79,13 @@ function Main() {
                 </motion.div>
                 <motion.div
                   variants={slideIn("right", "tween", 0.2, 1)}
-                  className="relative w-auto"
+                  className="relative w-auto flex justify-end items-end"
                 >
                   <div className="p-4 flex flex-1 flex-col h-[380px] font-bold text-5xl bg-gatherBlue rounded-lg text-white justify-center items-center">
                     {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
                     <div className="flex justify-between">
                       <button
-                        onClick={() => alert("아직 준비중인 기능입니다.")}
+                        onClick={() => navigate('/event')}
                       >
                         ❤️이벤트로❤️
                       </button>
@@ -93,7 +94,6 @@ function Main() {
                 </motion.div>
               </div>
             </motion.div>
-            <DetailEvent />
             <MyLocation />
           </section>
           <section>
@@ -123,6 +123,7 @@ function Main() {
                 ))}
               </div>
             </div>
+
             <div className="flex flex-col justify-between ">
               <div className="grid grid-cols-1 mt-8 gap-x-2 gap-y-[350px]">
                 <Fade bottom>
@@ -135,7 +136,6 @@ function Main() {
           </section>
         </BodyContainer>
         <Footer />
-      </Container>
     </>
   );
 }

@@ -5,17 +5,19 @@ import { useRecoilState } from "recoil";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import { userEmailState } from "../states/userStateTmp";
+// import { userState } from "../states/userState";
 import { getAPI } from "../axios";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
-import { logEvent } from "../utils/amplitude";
+import { logEvent, setAmplitudeUserId } from "../utils/amplitude";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [emailState, setEserEmailState] = useRecoilState(userEmailState);
+  // const [user, setUser] = useRecoilState(userState);
   const [input, setInput] = useState("");
-  const [roomId, setRoomId] = useState("");
-  const roomIdTmp = [1, 2, 3, 19, 11, 12, 13, 14, 15, 16, 17];
+  const [roomId, setRoomId] = useState([]);
+  // const roomIdTmp = [1, 2, 3, 19, 11, 12, 13, 14, 15, 16, 17];
   const [currentRoom, setCurrentRoom] = useState("");
   const messagesEndRef = useRef(null);
 
@@ -24,14 +26,29 @@ const Chat = () => {
 
   console.log(emailState)
   useEffect(() => {
-    getAPI(`/user/mypage`)
-      .then((res) => {
-        setRoomId(res.data);
-        console.log(roomId);
+    getAPI(`/chat`)
+      .then((response) => {
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          const chatIds = response.data.map(item => item.chatId);
+          setRoomId(chatIds);
+        }
+    
+        
       })
       .catch((error) => console.log(error));
         // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    getAPI(`/chat/1`)
+      .then((response) => {
+        console.log("/chat/1",response);
+    
+        
+      })
+      .catch((error) => console.log(error));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId]); 
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
@@ -93,7 +110,7 @@ const Chat = () => {
       }
       // 새로운 구독 생성
       subscriptionRef.current = clientRef.current.subscribe(
-        `/chat/clubchat/${roomId}`,
+        `/chat/${roomId}`,
         (message) => {
           if (message.body) {
             let newMessage = JSON.parse(message.body);
@@ -112,7 +129,7 @@ const Chat = () => {
           console.log("Connected: " + frame);
           // 새로운 구독 생성
           subscriptionRef.current = clientRef.current.subscribe(
-            `/chat/clubchat/${roomId}`,
+            `/chat/${roomId}`,
             (message) => {
               if (message.body) {
                 let newMessage = JSON.parse(message.body);
@@ -122,7 +139,7 @@ const Chat = () => {
           );
         },
         beforeConnect: () => {
-          clientRef.current.connectHeaders['ACCESS_TOKEN'] = token;
+          clientRef.current.connectHeaders['ACCESS_TOKEN'] = `Bearer ${token}`
         }
       });
       clientRef.current.activate();
@@ -139,16 +156,16 @@ const Chat = () => {
     console.log(emailState.userEmail);
     if (input && clientRef.current) {
       clientRef.current.publish({
-        destination: `/app/send/clubchat/${currentRoom}`,
-        headers: { 'ACCESS_TOKEN': token },
+        destination: `/app/chat/${roomId}`,
+        headers: { 'ACCESS_TOKEN': `Bearer ${token}` },
         body: JSON.stringify(msg),
       });
     }
     setInput("");
   };
   const handleOnKeyPress = (e) => {
-    logEvent('Send Chatting', { name: 'handleOnKeyPress', page: 'Chat' })
-
+    logEvent('Send Chatting', { name: 'handleOnKeyPress', page: 'Chat', useremail: emailState.userEmail})
+    setAmplitudeUserId(emailState.userEmail)
     if (e.key === 'Enter') {
       sendMessage({
         content: input,
@@ -224,7 +241,7 @@ const Chat = () => {
           <div className="flex w-[300px] h-[600px] border-l overflow-y-auto">
             <div className="flex flex-col w-full  gap-1">
               <div className="">
-                {roomIdTmp.map((id) => (
+                {roomId?.map((id) => (
                   <button
                     className={`w-full h-[60px]  px-4 gap-x-4 flex flex-col items-start justify-center border-b-2
                     ${id === currentRoom ? 'bg-slate-400' : 'bg-slate-300'}`}

@@ -146,24 +146,30 @@ function Detail() {
   });
 
   const progressEvents = newEventLists.filter((item) => {
-    const eventStartTime = new Date(item.eventStartTime);
     const eventEndTime = new Date(item.eventEndTime);
     const today = new Date();
-    return eventStartTime <= today && today < eventEndTime;
+
+    // Extract year, month, and day from item.eventStartTime
+    const [year, month, day] = item.eventStartTime.split("T")[0].split("-");
+    const startTime = new Date(year, month - 1, day); // month - 1 since month is zero-based
+
+    return startTime <= today && today < eventEndTime;
   });
 
   const endedEvents = newEventLists.filter((item) => {
     const eventEndTime = new Date(item.eventEndTime);
     const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set the time to 00:00:00 for accurate comparison
+
     return eventEndTime <= today;
   });
   console.log(eventlists);
   console.log(clubMemberNicknameArr);
 
-  const handleJoinEvent = (clubId,eventId) => {
+  const handleJoinEvent = (clubId, eventId) => {
     postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
-      console.log(res)
-      alert("참가완료!")
+      console.log(res);
+      alert("참가완료!");
     });
   };
   const handleLeaveEvent = () => {
@@ -199,23 +205,23 @@ function Detail() {
         <body className="flex flex-col gap-4">
           <div className="flex justify-between gap-10">
             <div>
-          <p className="text-xl">진행중인 클럽 이벤트</p>
-          </div>
-          <div>
-            {progressEventPage > 0 && (
-              <button
-                onClick={() => setProgressEventPage(progressEventPage - 1)}
-              >
-                이전으로
-              </button>
-            )}
-            {progressEventPage < Math.ceil(progressEvents.length / 4) - 1 && (
-              <button
-                onClick={() => setProgressEventPage(progressEventPage + 1)}
-              >
-                다음으로
-              </button>
-            )}
+              <p className="text-xl">진행중인 클럽 이벤트</p>
+            </div>
+            <div>
+              {progressEventPage > 0 && (
+                <button
+                  onClick={() => setProgressEventPage(progressEventPage - 1)}
+                >
+                  이전으로
+                </button>
+              )}
+              {progressEventPage < Math.ceil(progressEvents.length / 4) - 1 && (
+                <button
+                  onClick={() => setProgressEventPage(progressEventPage + 1)}
+                >
+                  다음으로
+                </button>
+              )}
             </div>
           </div>
           <div className="text-black">
@@ -293,14 +299,8 @@ function Detail() {
                       {endedEvents.length === 0 ? (
                         <EmptyState page="detail" />
                       ) : (
-                        [
-                          endedEvents[endedEventPage * 3],
-                          endedEvents.length % 3 !== 0 &&
-                          endedEventPage === Math.floor(endedEvents.length / 3)
-                            ? null
-                            : endedEvents[endedEventPage * 3 + 1],
-                        ]
-                          .filter((item) => item)
+                        endedEvents
+                          .slice(endedEventPage * 3, endedEventPage * 3 + 3) 
                           .map((item) => {
                             return (
                               <ClubEventCard

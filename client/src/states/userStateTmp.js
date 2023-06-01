@@ -4,5 +4,13 @@ export const userEmailState = atom({
     key: 'userEmailState',
     default: {
         userEmail: '',
+        userNickName: ''
+    }
+})
+
+export const userNicknameState = atom({
+    key: 'userNicknameState',
+    default: {
+        userNickname: ''
     }
 })

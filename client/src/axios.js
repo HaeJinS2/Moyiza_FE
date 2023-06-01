@@ -69,9 +69,9 @@ axios.interceptors.response.use(
             }
         }
 
-        if (error.response.status === 404) {
-            window.location = "/404";
-        }
+        // if (error.response.status === 404) {
+        //     window.location = "/404";
+        // }
         return Promise.reject(error);
     }
 );

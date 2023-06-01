@@ -184,7 +184,7 @@ function CreateEvent() {
                         className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={location} onChange={(e) => setLocation(e.target.value)} /> */}
                         <GlobalStyle />
                         startDate
-                        <div className='flex'>
+                        <div className='flex z-[999]'>
                             <StyledDatePicker
                                 className="shadow-md"
                                 dateFormat="yyyy-MM-dd"

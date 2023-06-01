@@ -2,8 +2,13 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 // import { getAPI, postAPI } from "../axios";
 import "../index.css";
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
 import { getAPI } from "../axios";
 // import { getHeaderAPI } from '../axios';
+import { useRecoilState } from "recoil";
+import { userNicknameState } from "../states/userStateTmp";
+
 
 Modal.setAppElement("#root");
 
@@ -16,9 +21,29 @@ function DetailEvent({ handleJoinEvent, clubId, eventId, modalIsOpen, setIsOpen 
   // const [userAddress, setUserAddress] = useState("");
   const [marker, setMarker] = useState(null);
   const [content, setContent] = useState({});
+  const [nicknameState, setNicknameState] = useRecoilState(userNicknameState);
+
+  // 내가 참석중이라면 true 아니면 false
+  const [isNicknameExists, setIsNicknameExists] = useState(false);
 
   console.log(content.eventAttendantList);
   console.log(marker);
+
+  useEffect(() => {
+    const token = Cookies.get("ACCESS_TOKEN");
+    console.log(token);
+    if (token) {
+      try {
+        const decoded = jwt_decode(token);
+        setNicknameState({ userNickname: decoded.nickName });
+        console.log("Decoded sub: ", decoded.nickName);
+        console.log(nicknameState);
+      } catch (error) {
+        console.error("토큰 오류", error);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     getAPI(`/club/${clubId}/event/${eventId}`)
@@ -30,7 +55,14 @@ function DetailEvent({ handleJoinEvent, clubId, eventId, modalIsOpen, setIsOpen 
       });
   }, [clubId, eventId]);
 
+  useEffect(() => {
+    const nicknameExists = content?.eventAttendantList?.some(user => user.userName === nicknameState.userNickname);
+    setIsNicknameExists(nicknameExists);
+  }, [content, nicknameState]);
+
+  console.log(isNicknameExists)
   console.log(content);
+  console.log(nicknameState.userNickname)
   // useEffect(() => {
   //     console.log(userLat, userLng)
   // }, [userLat, userLng])
@@ -215,9 +247,9 @@ function DetailEvent({ handleJoinEvent, clubId, eventId, modalIsOpen, setIsOpen 
                             type="text" onChange={handleInputChange} /> */}
             <div id="map" style={{ width: "500px", height: "400px" }}></div>
           </div>
-          <button 
-          onClick={() => handleJoinEvent(clubId,eventId)}
-          className="w-[300px] h-[40px] bg-slate-400 text-white">
+          <button
+            onClick={() => handleJoinEvent(clubId, eventId)}
+            className="w-[300px] h-[40px] bg-slate-400 text-white">
             Join
           </button>
           <button

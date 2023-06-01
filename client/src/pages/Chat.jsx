@@ -20,7 +20,7 @@ const Chat = () => {
   // const roomIdTmp = [1, 2, 3, 19, 11, 12, 13, 14, 15, 16, 17];
   const [currentRoom, setCurrentRoom] = useState("");
   const messagesEndRef = useRef(null);
-
+  const errorCount = useRef(0);  // 에러 카운트 상태를 직접 관리
   const clientRef = useRef(null); // client를 useRef로 설정
   const subscriptionRef = useRef(null);
 
@@ -99,56 +99,63 @@ const Chat = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
 
+
   const connectToRoom = (roomId) => {
     const token = Cookies.get("ACCESS_TOKEN");
-    // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
-    if (clientRef.current) {
-      // 클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
-      if (subscriptionRef.current) {
-        subscriptionRef.current.unsubscribe();
-      }
-      // 새로운 구독 생성
-      subscriptionRef.current = clientRef.current.subscribe(
-        `/chat/${roomId}`,
-        (message) => {
-          if (message.body) {
-            let newMessage = JSON.parse(message.body);
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-          }
-        }
-      );
-    } else {
-      // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
-      clientRef.current = new Client({
-        webSocketFactory: () => new SockJS("http://43.200.169.48/chat/connect"),
-        debug: (str) => {
-          console.log(str);
-        },
-        onConnect: (frame) => {
-          console.log("Connected: " + frame);
-          // 새로운 구독 생성
-          subscriptionRef.current = clientRef.current.subscribe(
-            `/chat/${roomId}`,
-            (message) => {
-              if (message.body) {
-                let newMessage = JSON.parse(message.body);
-                setMessages((prevMessages) => [...prevMessages, newMessage]);
-              }
+    
+    const newClient = new Client({
+      webSocketFactory: () => new SockJS("http://43.200.169.48/chat/connect"),
+      debug: (str) => {
+        console.log(str);
+      },
+      onConnect: (frame) => {
+        console.log("Connected: " + frame);
+        // 새로운 구독 생성
+        subscriptionRef.current = newClient.subscribe(
+          `/chat/${roomId}`,
+          (message) => {
+            if (message.body) {
+              let newMessage = JSON.parse(message.body);
+              setMessages((prevMessages) => [...prevMessages, newMessage]);
             }
-          );
-        },
-        beforeConnect: () => {
-          clientRef.current.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
-        },
-      });
-      clientRef.current.activate();
-    }
-    // 현재 누른 roomId 값 저장
+          }
+        );
+      },
+      beforeConnect: () => {
+        newClient.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
+      },
+      onStompError: (frame) => {
+        console.log('Broker reported error: ' + frame.headers['message']);
+        console.log('Additional details: ' + frame.body);
+        if (errorCount.current < 1) {
+          errorCount.current += 1; 
+        }
+      },
+    });
+    
+    const originalOnWebSocketClose = newClient.onWebSocketClose.bind(newClient);
+  
+    newClient.onWebSocketClose = (evt) => {
+      if (errorCount.current >= 1) { 
+        console.log('연결 실패 해서 끊김!');
+        newClient.deactivate();
+        errorCount.current = 0;
+        return; 
+      }
+    
+      originalOnWebSocketClose(evt);
+    };
+    
+  
+    newClient.activate();
     setCurrentRoom(roomId);
     getAPI(`/chat/${roomId}`).then(res=> {
-      console.log(res)
+      console.log(res);
       setMessages(res.data.content);
-    })
+    });
+  
+    // 새로운 클라이언트를 참조로 설정
+    clientRef.current = newClient;
   };
 
   const sendMessage = (msg) => {

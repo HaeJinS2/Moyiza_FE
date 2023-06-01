@@ -153,8 +153,9 @@ function Detail() {
     const [year, month, day] = item.eventStartTime.split("T")[0].split("-");
     const startTime = new Date(year, month - 1, day); // month - 1 since month is zero-based
 
-    return startTime <= today && today < eventEndTime;
-  });
+    // Including the events in the future and not yet ended
+    return today <= eventEndTime;
+});
 
   const endedEvents = newEventLists.filter((item) => {
     const eventEndTime = new Date(item.eventEndTime);

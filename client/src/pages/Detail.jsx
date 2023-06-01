@@ -148,12 +148,6 @@ function Detail() {
   const progressEvents = newEventLists.filter((item) => {
     const eventEndTime = new Date(item.eventEndTime);
     const today = new Date();
-
-    // Extract year, month, and day from item.eventStartTime
-    const [year, month, day] = item.eventStartTime.split("T")[0].split("-");
-    const startTime = new Date(year, month - 1, day); // month - 1 since month is zero-based
-
-    // Including the events in the future and not yet ended
     return today <= eventEndTime;
 });
 

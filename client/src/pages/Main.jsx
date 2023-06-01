@@ -83,7 +83,7 @@ function Main() {
                   {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
                   <div className="flex justify-between">
                     <button onClick={() => navigate("/event")}>
-                      ❤️이벤트로❤️
+                      ❤️원데이로❤️
                     </button>
                   </div>
                 </div>

@@ -7,7 +7,7 @@ import { getAPI } from "../axios";
 
 Modal.setAppElement("#root");
 
-function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
+function DetailEvent({ handleJoinEvent, clubId, eventId, modalIsOpen, setIsOpen }) {
   // const [modalIsOpen, setIsOpen] = useState(false);
   // const [inputValue, setInputValue] = useState("");
   const [map, setMap] = useState(null);
@@ -16,6 +16,8 @@ function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
   // const [userAddress, setUserAddress] = useState("");
   const [marker, setMarker] = useState(null);
   const [content, setContent] = useState({});
+
+  console.log(content.eventAttendantList);
   console.log(marker);
 
   useEffect(() => {

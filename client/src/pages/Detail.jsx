@@ -160,8 +160,11 @@ function Detail() {
   console.log(eventlists);
   console.log(clubMemberNicknameArr);
 
-  const handleJoinEvent = () => {
-    postAPI("/club/19/event/join/13", {}).then((res) => console.log(res));
+  const handleJoinEvent = (clubId,eventId) => {
+    postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
+      console.log(res)
+      alert("참가완료!")
+    });
   };
   const handleLeaveEvent = () => {
     deleteAPI("/club/19/event/join/13").then((res) => console.log(res));
@@ -230,6 +233,7 @@ function Detail() {
                           .map((item) => {
                             return (
                               <ClubEventCard
+                                handleJoinEvent={handleJoinEvent}
                                 key={item?.id}
                                 clubId={item?.clubId}
                                 eventId={item?.id}

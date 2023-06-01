@@ -3,6 +3,7 @@ import DetailEvent from "../pages/DetailEvent";
 
 function ClubEventCard({
   title,
+  handleJoinEvent,
   content,
   size,
   attendantsNum,
@@ -34,7 +35,6 @@ function ClubEventCard({
     setIsOpen(true)
   }
 
-  console.log(clubId, eventId)
   return (
     <div className="flex">
       <div
@@ -66,7 +66,7 @@ function ClubEventCard({
           <div className="text-sm">{location}</div>
         </div>
       </div>
-      <DetailEvent clubId={clubId} eventId={eventId} modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />
+      <DetailEvent handleJoinEvent={handleJoinEvent} clubId={clubId} eventId={eventId} modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }

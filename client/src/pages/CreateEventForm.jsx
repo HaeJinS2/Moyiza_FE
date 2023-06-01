@@ -14,10 +14,12 @@ function CreateEvent() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     // const [location, setLocation] = useState('');
-    
+
     const initialDate = new Date();
     const [startDate, setStartDate] = useState(initialDate);
     const [dateString, setDateString] = useState(initialDate.toISOString().split('T')[0]);
+    const [time, setTime] = useState(null);
+    const [timeString, setTimeString] = useState('');
 
     const [eventGroupsize, setEventGroupSize] = useState('');
     const [inputValue, setInputValue] = useState("");
@@ -35,7 +37,7 @@ function CreateEvent() {
 
 
     useEffect(() => {
-        console.log("userLat",userLat, "userLng",userLng, userAddress)
+        console.log("userLat", userLat, "userLng", userLng, userAddress)
     }, [userLat, userLng, userAddress])
 
     useEffect(() => {
@@ -146,7 +148,7 @@ function CreateEvent() {
         })
     }
 
-
+    console.log(timeString)
     const handleDateChange = (date) => {
         setStartDate(date);
 
@@ -155,10 +157,32 @@ function CreateEvent() {
     };
     console.log(dateString)
 
+    const handleTimeChange = (time) => {
+        setTime(time);
+        let hours = time.getHours();
+        let minutes = time.getMinutes();
+        let seconds = time.getSeconds();
+
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        const timeString = `${hours}:${minutes}:${seconds}`;
+        setTimeString(timeString)
+        console.log(timeString);
+    }
+
     const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
         <button className="flex items-center justify-center  shadow-md w-80 h-12 rounded-lg mb-4 border-1" onClick={onClick} ref={ref}>
             <FiCalendar className="mr-2" />
             {value}
+        </button>
+    ));
+
+    const CustomInput2 = React.forwardRef(({ value, onClick }, ref) => (
+        <button className="flex items-center justify-center  shadow-md w-80 h-12 rounded-lg mb-4 border-1" onClick={onClick} ref={ref}>
+            <FiCalendar className="mr-2" />
+            {value || '시간을 선택!'}
         </button>
     ));
 
@@ -173,18 +197,18 @@ function CreateEvent() {
                     viewport={{ once: false, amount: 0.3 }}
                     className='flex flex-1 flex-col items-center justify-center  gap-y-[15px]'>
                     <div className='flex flex-1 flex-col items-center justify-center  gap-y-[15px] '>
-                        <input 
-                        placeholder='title'
-                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={title} onChange={(e) => setTitle(e.target.value)} />
-                        <input 
-                        placeholder='content'
-                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={content} onChange={(e) => setContent(e.target.value)} />
+                        <input
+                            placeholder='title'
+                            className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={title} onChange={(e) => setTitle(e.target.value)} />
+                        <input
+                            placeholder='content'
+                            className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={content} onChange={(e) => setContent(e.target.value)} />
                         {/* <input 
                         placeholder='location'
                         className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={location} onChange={(e) => setLocation(e.target.value)} /> */}
                         <GlobalStyle />
-                        startDate
-                        <div className='flex z-[999]'>
+                        <div className='flex flex-col z-[999]'>
+                            startDate
                             <StyledDatePicker
                                 className="shadow-md"
                                 dateFormat="yyyy-MM-dd"
@@ -193,10 +217,39 @@ function CreateEvent() {
                                 onChange={handleDateChange}
                                 customInput={<CustomInput />}
                             />
+                            {/* <DatePicker
+                                selected={time}
+                                onChange={handleTimeChange}
+                                showTimeSelect
+                                showTimeSelectOnly
+                                timeIntervals={60}
+                                timeCaption="Time"
+                                dateFormat="h:mm aa"
+                            /> */}
+                            <DatePicker
+                                className="border border-gray-300 p-2 rounded-md shadow-md bg-white"
+                                selected={time}
+                                showIcon
+                                customInput={<CustomInput2 />}
+                                onChange={handleTimeChange}
+                                showTimeSelect
+                                showTimeSelectOnly
+                                timeIntervals={30}
+                                timeCaption="Time"
+                                dateFormat="h:mm aa"
+                            />
                         </div>
-                        <input 
-                        placeholder='eventGroupSize'
-                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
+
+                        {/* <div className='relative w-10 h-10'>
+    {time === null &&
+        <div className="absolute inset-0 flex items-center justify-center text-gray-400 z-99">
+            시간을 선택해주세요.
+        </div>} */}
+
+                        {/* </div> */}
+                        <input
+                            placeholder='eventGroupSize'
+                            className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
                         <div className='flex flex-col gap-y-4  items-center justify-center '>
                             <input className='w-80 h-[50px] shadow-md'
                                 placeholder='장소를 검색하세요 (예: xx동)'

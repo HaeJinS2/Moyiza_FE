@@ -169,7 +169,7 @@ function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
         }}
       >
         <div className="flex justify-between w-full">
-          <div className="flex justify-end w-full gap-x-2">
+          {/* <div className="flex justify-end w-full gap-x-2">
             <button className="w-[40px] h-[40px] bg-slate-400 rounded-full text-white">
               Join
             </button>
@@ -180,18 +180,18 @@ function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
             >
               X
             </button>
-          </div>
+          </div> */}
         </div>
-        <div className="flex justify-between">
+        {/* <div className="flex justify-between">
           <span>{content.eventTitle}</span>
           <span>2/5</span>
-        </div>
-        <div className="border w-full mb-4"></div>
-        <div className="flex justify-center flex-col gap-[30px]">
-          <div className="flex flex-col gap-3  pl-3">
-            <h3 className="text-2xl">
-              {content.eventTitle ? content.eventTitle : "제목없음"}
-            </h3>
+        </div> */}
+        {/* <div className="border w-full mb-4"></div> */}
+        <div className="flex justify-center flex-col items-center gap-[30px]">
+          <h3 className="text-2xl  px-3 ">
+            {content.eventTitle ? content.eventTitle : "제목없음"}
+          </h3>
+          <div className="flex justify-between gap-3  p-3 w-full">
             <span>
               {content.eventStartTime
                 ? content.eventStartTime.split("T")[0]
@@ -201,22 +201,29 @@ function DetailEvent({ clubId, eventId, modalIsOpen, setIsOpen }) {
               {content.eventLocation ? content.eventLocation : "장소없음"}
             </span>
           </div>
+
           <div className="flex flex-col gap-y-4">
+            <div className="flex flex-col gap-[30px] items-center ">
+              <div className="w-[500px] h-[120px] bg-gray-200 rounded-[10px] p-5">
+                {content.eventContent ? content.eventContent : "내용없음"}
+              </div>
+            </div>
             {/* <input className='w-[500px] h-[50px] shadow-md'
                             placeholder='장소를 검색하세요 (예: xx동)'
                             type="text" onChange={handleInputChange} /> */}
             <div id="map" style={{ width: "500px", height: "400px" }}></div>
           </div>
-          <div className="flex flex-col gap-[30px] items-center ">
-            <div>
-              <div className="w-[500px] h-[120px] bg-gray-200 rounded-[10px] p-5">
-                {content.eventContent ? content.eventContent : "내용없음"}
-              </div>
-            </div>
-            {/* <div>
-                            <button className='w-[500px] h-[70px] bg-slate-200 rounded-[10px]'>참가하기!!!</button>
-                        </div> */}
-          </div>
+          <button 
+          onClick={() => handleJoinEvent(clubId,eventId)}
+          className="w-[300px] h-[40px] bg-slate-400 text-white">
+            Join
+          </button>
+          <button
+            onClick={closeModal}
+            className="bg-gray-300 rounded-full w-[40px] h-[40px] text-white"
+          >
+            X
+          </button>
         </div>
       </Modal>
     </div>

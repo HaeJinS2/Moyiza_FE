@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-// import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import Fade from "react-reveal/Fade";
 
 import BodyContainer from "../component/BodyContainer";
+import ClubCard from "../component/ClubCard";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
 // import ReviewCard from "../component/ReviewCard";
@@ -13,16 +14,17 @@ import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
 import { isLoadingState } from "../states/clubState";
 import EmptyState from "../component/EmptyState";
-import ClubEventCard from "../component/ClubEventCard";
+import Footer from "../component/Footer";
+import { logEvent } from "../utils/amplitude";
 
-function Event() {
-  // const [activeTab, setActiveTab] = useState("전체");
+function Club() {
+  const [activeTab, setActiveTab] = useState("전체");
   const [page, setPage] = useState(0);
   const [club, setClub] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
-  // const [categories, setCategories] = useState(null);
+  const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
 
@@ -35,7 +37,7 @@ function Event() {
     // 클럽 목록을 받아오는 코드
     getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
       setClub([...club, ...res.data.content]);
-      setFilteredClubList([...club, ...res.data.content]);
+      setFilteredClubList([...club, ...res.data.content])
     });
 
     // 클럽 전체 페이지를 가져오는 코드
@@ -47,25 +49,27 @@ function Event() {
   useEffect(() => {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`).then((res) => {
-      // const newCategorylist = ["전체", ...res.data.categoryList];
-      // setCategories(newCategorylist);
+      const newCategorylist = ["전체", ...res.data.categoryList];
+      setCategories(newCategorylist);
     });
   }, []);
 
   //카테고리에 따라 검색하는 코드
   const handleClubCategory = (e) => {
-    if (e.target.innerHTML === "전체") {
-      setFilteredClubList(club);
+    logEvent('Button Clicked', { name: 'handleClubCategory', page: 'Club' })
+    if(e.currentTarget.textContent === "전체") {
+      setFilteredClubList(club)
     } else {
-      getAPI(`/club/search?q=${search}&category=${e.target.innerHTML}`)
-        .then((res) => setFilteredClubList(res.data.content))
-        .catch((err) => setFilteredClubList([]));
+      getAPI(`/club/search?q=&category=${e.currentTarget.textContent}`)
+      .then((res) => setFilteredClubList(res.data.content))
+      .catch((err) => setFilteredClubList([]));
     }
   };
 
   const handleSearchInput = (e) => {
     setSearch(e.target.value);
   };
+
 
   if (isLoading) {
     return <Loading />;
@@ -80,11 +84,11 @@ function Event() {
             <BodyContainer>
               <body className="flex flex-col">
                 <SearchBar
-                  page="event"
+                  page='club'
                   handleSearchInput={handleSearchInput}
                   search={search}
                 />
-                {/* <div className="flex justify-around  my-4">
+                <div className="flex justify-around  my-4">
                   {categories?.map((tab, i) => (
                     <button
                       key={i}
@@ -111,7 +115,7 @@ function Event() {
                       </span>
                     </button>
                   ))}
-                </div> */}
+                </div>
                 <div className="flex flex-col justify-between">
                   <div
                     className={`grid ${
@@ -119,18 +123,23 @@ function Event() {
                     }  gap-x-4 gap-y-4`}
                   >
                     {filteredClubList.length === 0 ? (
-                      <EmptyState
-                        showReset
-                        handleClubCategory={handleClubCategory}
-                      />
+                      <EmptyState showReset
+                      page="club"
+                      handleClubCategory={handleClubCategory} />
                     ) : filteredClubList ? (
                       filteredClubList?.map((item, i) => {
                         return (
                           <Fade bottom>
-                            <ClubEventCard />
-                            <ClubEventCard />
-                            <ClubEventCard />
-                            <ClubEventCard />
+                            <ClubCard
+                              key={i}
+                              title={item.clubTitle}
+                              content={item.clubContent}
+                              tag={item.clubTag}
+                              thumbnail={item.thumbnailUrl}
+                              id={item.club_id}
+                              maxGroupSize={item.maxGroupSize}
+                              nowMemberCount={item.nowMemberCount}
+                            />
                           </Fade>
                         );
                       })
@@ -138,10 +147,17 @@ function Event() {
                       club?.map((item, i) => {
                         return (
                           <Fade bottom>
-                            <ClubEventCard />
-                            <ClubEventCard />
-                            <ClubEventCard />
-                            <ClubEventCard />
+                            <ClubCard
+                              key={i}
+                              title={item.clubTitle}
+                              content={item.clubContent}
+                              tag={item.clubTag}
+                              thumbnail={item.thumbnailUrl}
+                              id={item.club_id}
+                              eventId={item.id}
+                              maxGroupSize={item.maxGroupSize}
+                              nowMemberCount={item.nowMemberCount}
+                            />
                           </Fade>
                         );
                       })
@@ -171,9 +187,10 @@ function Event() {
             </BodyContainer>
           </section>
         </Container>
+        <Footer />
       </div>
     </>
   );
 }
 
-export default Event;
+export default Club;

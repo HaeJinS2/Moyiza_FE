@@ -17,7 +17,7 @@ function Detail() {
   const [eventlists, setEventLists] = useState([]);
   const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const navigate = useNavigate();
-  const [progressEventPage, setProgressEventPage] = useState(1);
+  const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
 
   if (progressTuple[1] !== progressEventPage) {
@@ -27,7 +27,7 @@ function Detail() {
   let progressPrev = progressTuple[0];
   let progressDirection = progressEventPage > progressPrev ? 1 : -1;
 
-  const [endedEventPage, setEndedEventPage] = useState(1);
+  const [endedEventPage, setEndedEventPage] = useState(0);
 
   const [endedTuple, setEndedTuple] = useState([null, endedEventPage]);
 
@@ -146,10 +146,8 @@ function Detail() {
   });
 
   const progressEvents = newEventLists.filter((item) => {
-    console.log(item);
     const eventStartTime = new Date(item.eventStartTime);
     const eventEndTime = new Date(item.eventEndTime);
-    console.log(eventStartTime, eventEndTime);
     const today = new Date();
     return eventStartTime <= today && today < eventEndTime;
   });

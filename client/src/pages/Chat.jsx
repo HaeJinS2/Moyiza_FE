@@ -24,31 +24,27 @@ const Chat = () => {
   const clientRef = useRef(null); // client를 useRef로 설정
   const subscriptionRef = useRef(null);
 
-  console.log(emailState)
+  console.log(emailState);
   useEffect(() => {
     getAPI(`/chat`)
       .then((response) => {
         console.log(response.data);
         if (Array.isArray(response.data)) {
-          const chatIds = response.data.map(item => item.chatId);
+          const chatIds = response.data.map((item) => item.chatId);
           setRoomId(chatIds);
         }
-    
-        
       })
       .catch((error) => console.log(error));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     getAPI(`/chat/1`)
       .then((response) => {
-        console.log("/chat/1",response);
-    
-        
+        console.log("/chat/1", response);
       })
       .catch((error) => console.log(error));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomId]); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId]);
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
@@ -69,7 +65,6 @@ const Chat = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
 
   // useEffect(() => {
   //   clientRef.current = new Client({ // clientRef.current에 직접 할당
@@ -139,8 +134,8 @@ const Chat = () => {
           );
         },
         beforeConnect: () => {
-          clientRef.current.connectHeaders['ACCESS_TOKEN'] = `Bearer ${token}`
-        }
+          clientRef.current.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
+        },
       });
       clientRef.current.activate();
     }
@@ -148,6 +143,56 @@ const Chat = () => {
     setCurrentRoom(roomId);
     setMessages([]);
   };
+
+  // 재형님 구독 버튼
+  const jaeHyung = (roomId) => {
+    const token = Cookies.get("ACCESS_TOKEN");
+    // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
+    if (clientRef.current) {
+      //  클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe();
+      }
+      // 새로운 구독 생성
+      subscriptionRef.current = clientRef.current.subscribe(
+        `/chat/${roomId}`,
+        (message) => {
+          if (message.body) {
+            let newMessage = JSON.parse(message.body);
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+          }
+        }
+      );
+    } else {
+      // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
+      clientRef.current = new Client({
+        webSocketFactory: () => new SockJS("http://43.200.169.48/chat/connect"),
+        debug: (str) => {
+          console.log(str);
+        },
+        onConnect: (frame) => {
+          console.log("연결 완료")
+          console.log("Connected: " + frame);
+          // 새로운 구독 생성
+          subscriptionRef.current = clientRef.current.subscribe(
+            `/chat/${roomId}`,
+            (message) => {
+              if (message.body) {
+                let newMessage = JSON.parse(message.body);
+                setMessages((prevMessages) => [...prevMessages, newMessage]);
+              }
+            }
+          );
+        },
+        beforeConnect: () => {
+          clientRef.current.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
+        },
+      });
+      clientRef.current.activate();
+    }
+    // 현재 누른 roomId 값 저장
+  };
+
   const sendMessage = (msg) => {
     const token = Cookies.get("ACCESS_TOKEN");
     console.log(currentRoom);
@@ -157,16 +202,20 @@ const Chat = () => {
     if (input && clientRef.current) {
       clientRef.current.publish({
         destination: `/app/chat/${roomId}`,
-        headers: { 'ACCESS_TOKEN': `Bearer ${token}` },
+        headers: { ACCESS_TOKEN: `Bearer ${token}` },
         body: JSON.stringify(msg),
       });
     }
     setInput("");
   };
   const handleOnKeyPress = (e) => {
-    logEvent('Send Chatting', { name: 'handleOnKeyPress', page: 'Chat', useremail: emailState.userEmail})
-    setAmplitudeUserId(emailState.userEmail)
-    if (e.key === 'Enter') {
+    logEvent("Send Chatting", {
+      name: "handleOnKeyPress",
+      page: "Chat",
+      useremail: emailState.userEmail,
+    });
+    setAmplitudeUserId(emailState.userEmail);
+    if (e.key === "Enter") {
       sendMessage({
         content: input,
         senderNickname: emailState.userEmail,
@@ -189,7 +238,6 @@ const Chat = () => {
                         보낸사람 : {message.senderNickname}
                       </div>
                       <div className="flex gap-x-1 items-center justify-end">
-
                         <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] text-white bg-[#0084ff]">
                           {console.log(message)}
                           내용 : {message.content + " "}
@@ -201,9 +249,7 @@ const Chat = () => {
                 ) : (
                   <div key={index}>
                     <div>
-                      <div>
-                        보낸사람 : {message.senderNickname}
-                      </div>
+                      <div>보낸사람 : {message.senderNickname}</div>
                     </div>
                     <div className="flex gap-x-1 items-center">
                       <div className="rounded-full bg-black w-[40px] h-[40px]"></div>
@@ -212,7 +258,8 @@ const Chat = () => {
                         내용 : {message.content + " "}
                       </div>
                     </div>
-                  </div>)
+                  </div>
+                );
               })}
               <div ref={messagesEndRef} />
             </div>
@@ -225,7 +272,9 @@ const Chat = () => {
                 onKeyPress={handleOnKeyPress}
               />
               <button
-                className={`h-[50px] w-[100px] rounded-lg ${input ? 'bg-[#FF7701] ' : 'bg-[#a5a5a5] text-gray-500'} `}
+                className={`h-[50px] w-[100px] rounded-lg ${
+                  input ? "bg-[#FF7701] " : "bg-[#a5a5a5] text-gray-500"
+                } `}
                 onClick={() =>
                   sendMessage({
                     content: input,
@@ -244,18 +293,21 @@ const Chat = () => {
                 {roomId?.map((id) => (
                   <button
                     className={`w-full h-[60px]  px-4 gap-x-4 flex flex-col items-start justify-center border-b-2
-                    ${id === currentRoom ? 'bg-slate-400' : 'bg-slate-300'}`}
+                    ${id === currentRoom ? "bg-slate-400" : "bg-slate-300"}`}
                     key={id}
                     onClick={() => connectToRoom(id)}
                   >
-                    <div>
-                      Room {id}
-                    </div>
-                    <div>
-                      미리볼내용
-                    </div>
+                    <div>Room {id}</div>
+                    <div>미리볼내용</div>
                   </button>
                 ))}
+                <button
+                  className={`w-full h-[60px]  px-4 gap-x-4 flex flex-col items-start justify-center border-b-2
+                 `}
+                  onClick={() => jaeHyung()}
+                >
+                  재형님 연결 확인 버튼
+                </button>
               </div>
             </div>
           </div>

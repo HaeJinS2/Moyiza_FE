@@ -8,6 +8,7 @@ import Navbar from "../component/Navbar";
 import { FiCalendar } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { textVariant } from "../utils/motion";
+import { format } from 'date-fns'
 
 function CreateEvent() {
     // const navigate = useNavigate();
@@ -15,12 +16,14 @@ function CreateEvent() {
     const [content, setContent] = useState('');
     // const [location, setLocation] = useState('');
 
-    const initialDate = new Date();
-    const [startDate, setStartDate] = useState(initialDate);
-    const [dateString, setDateString] = useState(initialDate.toISOString().split('T')[0]);
-    const [time, setTime] = useState(null);
-    const [timeString, setTimeString] = useState('');
+    // const initialDate = new Date();
+    // const [startDate, setStartDate] = useState(initialDate);
+    // const [dateString, setDateString] = useState(initialDate.toISOString().split('T')[0]);
+    // const [time, setTime] = useState(null);
+    // const [timeString, setTimeString] = useState('');
 
+    const [dateTime, setDateTime] = useState(null);
+    const [dateTimeString, setDateTimeString] = useState('');
     const [eventGroupsize, setEventGroupSize] = useState('');
     const [inputValue, setInputValue] = useState("");
     const [map, setMap] = useState(null);
@@ -32,7 +35,7 @@ function CreateEvent() {
     const [marker, setMarker] = useState(null);
     const navigate = useNavigate();
 
-    console.log(startDate, dateString)
+    // console.log(startDate, dateString)
     const { id } = useParams();
 
 
@@ -139,7 +142,7 @@ function CreateEvent() {
 
     const handleCreateButton = () => {
         postAPI(`/club/${id}/event`, {
-            eventTitle: title, eventContent: content, eventLocation: userAddress, eventLatitude: "" + userLat, eventLongitude: "" + userLng, eventStartTime: dateString, eventGroupSize: Number(eventGroupsize),
+            eventTitle: title, eventContent: content, eventLocation: userAddress, eventLatitude: "" + userLat, eventLongitude: "" + userLng, eventStartTime: dateTimeString, eventGroupSize: Number(eventGroupsize),
         }).then((response) => {
             console.log(response)
             navigate(-1)
@@ -148,43 +151,47 @@ function CreateEvent() {
         })
     }
 
-    console.log(timeString)
-    const handleDateChange = (date) => {
-        setStartDate(date);
+    // const handleDateChange = (date) => {
+    //     setStartDate(date);
 
-        const dateString = date.toISOString().split('T')[0];
-        setDateString(dateString);
+    //     const dateString = date.toISOString().split('T')[0];
+    //     setDateString(dateString);
+    // };
+    // console.log(dateString)
+
+    // const handleTimeChange = (time) => {
+    //     setTime(time);
+    //     let hours = time.getHours();
+    //     let minutes = time.getMinutes();
+    //     let seconds = time.getSeconds();
+
+    //     hours = hours < 10 ? '0' + hours : hours;
+    //     minutes = minutes < 10 ? '0' + minutes : minutes;
+    //     seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    //     const timeString = `${hours}:${minutes}:${seconds}`;
+    //     setTimeString(timeString)
+    //     console.log(timeString);
+    // }
+    const handleDateTimeChange = (date) => {
+        setDateTime(date)
+        const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm");
+        setDateTimeString(formattedDate)
+        console.log(dateTimeString)
     };
-    console.log(dateString)
-
-    const handleTimeChange = (time) => {
-        setTime(time);
-        let hours = time.getHours();
-        let minutes = time.getMinutes();
-        let seconds = time.getSeconds();
-
-        hours = hours < 10 ? '0' + hours : hours;
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        seconds = seconds < 10 ? '0' + seconds : seconds;
-
-        const timeString = `${hours}:${minutes}:${seconds}`;
-        setTimeString(timeString)
-        console.log(timeString);
-    }
-
     const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
         <button className="flex items-center justify-center  shadow-md w-80 h-12 rounded-lg mb-4 border-1" onClick={onClick} ref={ref}>
             <FiCalendar className="mr-2" />
-            {value}
+            {value || '일시를 선택!'}
         </button>
     ));
 
-    const CustomInput2 = React.forwardRef(({ value, onClick }, ref) => (
-        <button className="flex items-center justify-center  shadow-md w-80 h-12 rounded-lg mb-4 border-1" onClick={onClick} ref={ref}>
-            <FiCalendar className="mr-2" />
-            {value || '시간을 선택!'}
-        </button>
-    ));
+    // const CustomInput2 = React.forwardRef(({ value, onClick }, ref) => (
+    //     <button className="flex items-center justify-center  shadow-md w-80 h-12 rounded-lg mb-4 border-1" onClick={onClick} ref={ref}>
+    //         <FiCalendar className="mr-2" />
+    //         {value || '시간을 선택!'}
+    //     </button>
+    // ));
 
     return (
         <>
@@ -211,21 +218,21 @@ function CreateEvent() {
                             startDate
                             <StyledDatePicker
                                 className="shadow-md"
+                                dateFormat="yyyy'년'MM'월'dd'일' HH'시'mm'분'"
+                                showIcon
+                                selected={dateTime}
+                                onChange={handleDateTimeChange}
+                                customInput={<CustomInput />}
+                                showTimeSelect
+                            />
+                            {/* <StyledDatePicker
+                                className="shadow-md"
                                 dateFormat="yyyy-MM-dd"
                                 showIcon
                                 selected={startDate}
                                 onChange={handleDateChange}
                                 customInput={<CustomInput />}
                             />
-                            {/* <DatePicker
-                                selected={time}
-                                onChange={handleTimeChange}
-                                showTimeSelect
-                                showTimeSelectOnly
-                                timeIntervals={60}
-                                timeCaption="Time"
-                                dateFormat="h:mm aa"
-                            /> */}
                             <DatePicker
                                 className="border border-gray-300 p-2 rounded-md shadow-md bg-white"
                                 selected={time}
@@ -237,7 +244,7 @@ function CreateEvent() {
                                 timeIntervals={30}
                                 timeCaption="Time"
                                 dateFormat="h:mm aa"
-                            />
+                            /> */}
                         </div>
 
                         {/* <div className='relative w-10 h-10'>

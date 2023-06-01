@@ -37,14 +37,18 @@ const Chat = () => {
       .catch((error) => console.log(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(() => {
-    getAPI(`/chat/1`)
-      .then((response) => {
-        console.log("/chat/1", response);
-      })
-      .catch((error) => console.log(error));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomId]);
+
+  
+  // useEffect(() => {
+  //   getAPI(`/chat/1`)
+  //     .then((response) => {
+  //       console.log("/chat/1",response);
+    
+        
+  //     })
+  //     .catch((error) => console.log(error));
+  //       // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [roomId]); 
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");

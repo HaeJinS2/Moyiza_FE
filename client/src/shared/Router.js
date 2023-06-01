@@ -21,7 +21,7 @@ const Router = () => {
         <Route path="/user/profile" element={<MyInfo />} />
         <Route path="/create-club-form" element={<CreateClubForm />} />
         <Route path="/club" element={<Club />} />
-        <Route path="/Oneday" element={<Oneday />} />
+        <Route path="/oneday" element={<Oneday />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/create-event-form/:id" element={<CreateEventForm />}/>
         <Route path="/chat" element={<Chat />} />

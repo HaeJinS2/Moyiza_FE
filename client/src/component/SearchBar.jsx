@@ -49,10 +49,10 @@ const SearchBar = ({ handleSearchInput, search, page }) => {
             ) : (
               <>
                 <div className="hidden sm:block text-sm font-semibold border-l-[1px] flex-1 text-center">
-                  인기 이벤트
+                  인기 원데이
                 </div>
                 <div className="hidden sm:block text-sm font-semibold border-x-[1px] flex-1 text-center">
-                  내 주변 이벤트
+                  내 주변 원데이
                 </div>
               </>
             ))

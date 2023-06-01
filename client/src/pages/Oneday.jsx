@@ -84,7 +84,7 @@ function Club() {
             <BodyContainer>
               <body className="flex flex-col">
                 <SearchBar
-                  page='club'
+                  page='oneday'
                   handleSearchInput={handleSearchInput}
                   search={search}
                 />

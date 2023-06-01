@@ -173,7 +173,7 @@ function Detail() {
   const handleDeleteEvent = () => {
     deleteAPI("/club/19/event/13").then((res) => console.log(res));
   };
-
+  console.log(progressEvents);
   return (
     <>
       <div ref={divRef} />
@@ -197,8 +197,27 @@ function Detail() {
           <p>{clubDetail?.clubContent}</p>
         </header>
         <body className="flex flex-col gap-4">
+          <div className="flex justify-between gap-10">
+            <div>
           <p className="text-xl">진행중인 클럽 이벤트</p>
-
+          </div>
+          <div>
+            {progressEventPage > 0 && (
+              <button
+                onClick={() => setProgressEventPage(progressEventPage - 1)}
+              >
+                이전으로
+              </button>
+            )}
+            {progressEventPage < Math.ceil(progressEvents.length / 4) - 1 && (
+              <button
+                onClick={() => setProgressEventPage(progressEventPage + 1)}
+              >
+                다음으로
+              </button>
+            )}
+            </div>
+          </div>
           <div className="text-black">
             <div className="flex justify-center items-center">
               <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
@@ -215,21 +234,17 @@ function Detail() {
                   >
                     <div
                       className={`${
-                        progressEvents.length === 0 ? "" : "grid grid-cols-2"
+                        progressEvents.length === 0 ? "" : "grid grid-cols-4"
                       } gap-x-4 gap-y-8 w-full`}
                     >
                       {progressEvents.length === 0 ? (
                         <EmptyState page="detail" />
                       ) : (
-                        [
-                          progressEvents[progressEventPage * 2],
-                          progressEvents.length % 2 !== 0 &&
-                          progressEventPage ===
-                            Math.floor(progressEvents.length / 2)
-                            ? null
-                            : progressEvents[progressEventPage * 2 + 1],
-                        ]
-                          .filter((item) => item)
+                        progressEvents
+                          .slice(
+                            progressEventPage * 4,
+                            progressEventPage * 4 + 4
+                          ) // progressEvents 배열에서 현재 페이지에 해당하는 4개의 요소만 선택
                           .map((item) => {
                             return (
                               <ClubEventCard
@@ -252,22 +267,6 @@ function Detail() {
                 </AnimatePresence>
               </div>
             </div>
-            <div className="flex justify-center gap-10">
-              {progressEventPage > 0 && (
-                <button
-                  onClick={() => setProgressEventPage(progressEventPage - 1)}
-                >
-                  이전으로
-                </button>
-              )}
-              {progressEventPage < Math.ceil(progressEvents.length / 2) - 1 && (
-                <button
-                  onClick={() => setProgressEventPage(progressEventPage + 1)}
-                >
-                  다음으로
-                </button>
-              )}
-            </div>
           </div>
 
           <p className="text-xl">종료된 클럽 이벤트</p>
@@ -288,18 +287,18 @@ function Detail() {
                   >
                     <div
                       className={`${
-                        endedEvents.length === 0 ? "" : "grid grid-cols-2"
+                        endedEvents.length === 0 ? "" : "grid grid-cols-3"
                       } gap-x-4 gap-y-8 w-full`}
                     >
                       {endedEvents.length === 0 ? (
                         <EmptyState page="detail" />
                       ) : (
                         [
-                          endedEvents[endedEventPage * 2],
-                          endedEvents.length % 2 !== 0 &&
-                          endedEventPage === Math.floor(endedEvents.length / 2)
+                          endedEvents[endedEventPage * 3],
+                          endedEvents.length % 3 !== 0 &&
+                          endedEventPage === Math.floor(endedEvents.length / 3)
                             ? null
-                            : endedEvents[endedEventPage * 2 + 1],
+                            : endedEvents[endedEventPage * 3 + 1],
                         ]
                           .filter((item) => item)
                           .map((item) => {
@@ -330,7 +329,7 @@ function Detail() {
                   이전으로
                 </button>
               )}
-              {endedEventPage < Math.ceil(endedEvents.length / 2) - 1 && (
+              {endedEventPage < Math.ceil(endedEvents.length / 3) - 1 && (
                 <button onClick={() => setEndedEventPage(endedEventPage + 1)}>
                   다음으로
                 </button>

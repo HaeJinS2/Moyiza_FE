@@ -82,7 +82,7 @@ function Main() {
                 <div className="p-4 flex flex-1 flex-col h-[380px] font-bold text-5xl bg-gatherBlue rounded-lg text-white justify-center items-center">
                   {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
                   <div className="flex justify-between">
-                    <button onClick={() => navigate("/event")}>
+                    <button onClick={() => navigate("/oneday")}>
                       ❤️원데이로❤️
                     </button>
                   </div>

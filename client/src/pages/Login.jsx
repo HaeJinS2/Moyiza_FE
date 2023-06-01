@@ -7,6 +7,10 @@ import axios from 'axios';
 import { userState } from '../states/userState';
 import { useRecoilState } from 'recoil';
 import { parseJwt, setCookie } from '../utils/jwtUtils';
+import Navbar from '../component/Navbar';
+// import kakao from '../component/img/kakao.png';
+// import naver from '../component/img/naver.png';
+// import google from '../component/img/google.png'
 
 function Login() {
     const [user, setUser] = useRecoilState(userState);
@@ -21,6 +25,10 @@ function Login() {
     const goMain = () => {
         navigate('/');
     };
+
+    const handleFind = () => {
+        alert('준비 중입니다');
+      };
 
     const [userloginInput, setUserloginInput] = useState({
         email: '',
@@ -59,7 +67,7 @@ function Login() {
             setCookie('REFRESH_TOKEN', jwt2, 1);
             const email = parseJwt(jwt1).sub;
             setUser(email);
-            
+
             // 사용자를 로컬 스토리지에 저장
             localStorage.setItem('user', email);
 
@@ -173,31 +181,74 @@ function Login() {
         return matches ? decodeURIComponent(matches[1]) : undefined;
     };
 
-    return (
-        <LoginContainer>
-            <div style={{ display: 'flex' }}>
-                <Desc>Don't have an account?</Desc>
-                <button className="bg-white text-rose-400 rounded-xl px-4 py-1 shadow hover:shadow-lg" onClick={goSignUp}>
-                    Create Profile
-                </button>
-            </div>
-            <form onSubmit={submitHandler} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div>email</div>
-                <input value={userloginInput.email} onChange={emailChangeHandler} className="shadow-md w-64 h-10 rounded-lg mb-4" />
-                {!isEmailValid && userloginInput.email.length > 0 && (
-                    <p className="inputCheck text-rose-400">* 이메일 양식을 맞춰주세요!</p>
-                )}
-                <div>password</div>
-                <input value={userloginInput.password} onChange={pwChangeHandler} className="shadow-md w-64 h-10 rounded-lg mb-4" />
+    // {/* 회원가입 이동 */}
+    // {/* <div style={{ display: 'flex' }} className="flex items-center justify-center">
+    //     <Desc>Don't have an account?</Desc>
+    //     <button className="bg-white text-rose-400 rounded-xl px-4 py-1 shadow hover:shadow-lg " onClick={goSignUp}>
+    //         Create Profile
+    //     </button>
+    // </div> */}
 
-                {!isPwValid && userloginInput.password.length > 0 && (
-                    <p className="inputCheck text-rose-400">* 비밀번호는 대소문자, 숫자, 특수문자 포함 8자리 이상 적어주세요!</p>
-                )}
-                <button className={`${activeBtn} bg-rose-400 text-white rounded-xl px-4 py-1 shadow hover:shadow-lg`}>
-                    Login
-                </button>
-            </form>
-        </LoginContainer>
+    return (
+        <>
+            <Navbar />
+            <div
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+                <LoginContainer
+                    style={{ marginTop: '120px', width: '500px', height: '650px' }}
+                    className=" p-8 shadow-md w-full h-full rounded-lg bg-gray-50 flex items-center justify-center"
+                >
+                    <form
+                        onSubmit={submitHandler}
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
+                    >
+                        <div className="mb-3 mt-3" style={{ minHeight: '48px' }}>
+                            <input placeholder="이메일" value={userloginInput.email} onChange={emailChangeHandler} className="shadow-md w-80 h-10 rounded-lg mb-3 px-3.5 py-2 " />
+                            {!isEmailValid && userloginInput.email.length > 0 && (
+                                <p className="inputCheck text-rose-400 text-xs absolute ">* 이메일 양식을 맞춰주세요!</p>
+                            )}
+
+                        </div>
+                        <div className="mb-3 mt-3" style={{ minHeight: '48px' }}>
+                            <input placeholder="비밀번호" value={userloginInput.password} onChange={pwChangeHandler} className="shadow-md w-80 h-10 rounded-lg mb-3 px-3.5 py-2" />
+
+                            {!isPwValid && userloginInput.password.length > 0 && (
+                                <p className="inputCheck text-rose-400 text-xs absolute">* 비밀번호는 대소문자, 숫자, 특수문자 포함 8자리 이상 적어주세요!</p>
+                            )}
+                        </div>
+
+                        <button className={`${activeBtn} bg-rose-400 text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg`}>
+                            Login
+                        </button>
+                    </form>
+                    <Signup className={`mt-11`}>
+                        <div onClick={goSignUp} style={{ cursor: 'pointer' }}>회원가입</div>
+                        <div>|</div>
+                        <div onClick={handleFind} style={{ cursor: 'pointer' }}>이메일 찾기</div>
+                        <div>|</div>
+                        <div onClick={handleFind} style={{ cursor: 'pointer' }}>비밀번호 찾기</div>
+                    </Signup>
+                    <Social className={`mt-11`}>
+                        <a href="/oauth2/authorization/kakao">
+                            <button type='button' style={{ display: 'flex', backgroundColor: '#FEE500', color: '#191919' }} className={`text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center justify-center`}>
+                                {/* <img src={kakao} alt='' className="mr-2 w-10 h-10 object-contain" style={{backgroundColor: 'transparent'}}></img> */}
+                                카카오톡 로그인</button>
+                        </a>
+                        <a href="/oauth2/authorization/naver">
+                            <button type='button' style={{ display: 'flex', backgroundColor: '#2db300', color: 'white' }} className={`text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center justify-center`}>
+                                {/* <img src={naver} alt='' className="mr-2 w-10 h-10 object-contain"></img> */}
+                                네이버 로그인</button>
+                        </a>
+                        <a href="/oauth2/authorization/google">
+                            <button type='button' style={{ display: 'flex', backgroundColor: 'white', color: '#191919' }} className={`text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center justify-center`}>
+                                {/* <img src={google} alt='' className="mr-2 w-10 h-10 object-contain"></img> */}
+                                구글 로그인</button>
+                        </a>
+                    </Social>
+                </LoginContainer>
+            </div>
+        </>
     );
 }
 
@@ -206,6 +257,18 @@ export default Login;
 const LoginContainer = styled.div`
   display: flex;
   align-items: center;
+  flex-direction: column;
 `;
 
-const Desc = styled.div``;
+const Signup = styled.div`
+  display: flex;
+  align-items: center;
+  color: #626262;
+  width: 300px;
+  justify-content: space-between;
+`
+const Social = styled.div`
+display: flex;
+align-items: center;
+flex-direction: column;
+`

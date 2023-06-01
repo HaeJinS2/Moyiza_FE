@@ -104,7 +104,7 @@ const Chat = () => {
     const token = Cookies.get("ACCESS_TOKEN");
     
     const newClient = new Client({
-      webSocketFactory: () => new SockJS("http://3.34.182.174/chat/connect"),
+      webSocketFactory: () => new SockJS("http://43.200.169.48/chat/connect"),
       debug: (str) => {
         console.log(str);
       },

@@ -103,7 +103,7 @@ const Chat = () => {
     const token = Cookies.get("ACCESS_TOKEN");
     // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
     if (clientRef.current) {
-      //  클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
+      // 클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
       if (subscriptionRef.current) {
         subscriptionRef.current.unsubscribe();
       }
@@ -120,7 +120,7 @@ const Chat = () => {
     } else {
       // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
       clientRef.current = new Client({
-        webSocketFactory: () => new SockJS("http://3.34.182.174/chat/connect"),
+        webSocketFactory: () => new SockJS("http://43.200.169.48/chat/connect"),
         debug: (str) => {
           console.log(str);
         },
@@ -145,56 +145,10 @@ const Chat = () => {
     }
     // 현재 누른 roomId 값 저장
     setCurrentRoom(roomId);
-    setMessages([]);
-  };
-
-  // 재형님 구독 버튼
-  const jaeHyung = (roomId) => {
-    const token = Cookies.get("ACCESS_TOKEN");
-    // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
-    if (clientRef.current) {
-      //  클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
-      if (subscriptionRef.current) {
-        subscriptionRef.current.unsubscribe();
-      }
-      // 새로운 구독 생성
-      subscriptionRef.current = clientRef.current.subscribe(
-        `/chat/${roomId}`,
-        (message) => {
-          if (message.body) {
-            let newMessage = JSON.parse(message.body);
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-          }
-        }
-      );
-    } else {
-      // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
-      clientRef.current = new Client({
-        webSocketFactory: () => new SockJS("http://43.200.169.48/chat/connect"),
-        debug: (str) => {
-          console.log(str);
-        },
-        onConnect: (frame) => {
-          console.log("연결 완료")
-          console.log("Connected: " + frame);
-          // 새로운 구독 생성
-          subscriptionRef.current = clientRef.current.subscribe(
-            `/chat/${roomId}`,
-            (message) => {
-              if (message.body) {
-                let newMessage = JSON.parse(message.body);
-                setMessages((prevMessages) => [...prevMessages, newMessage]);
-              }
-            }
-          );
-        },
-        beforeConnect: () => {
-          clientRef.current.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
-        },
-      });
-      clientRef.current.activate();
-    }
-    // 현재 누른 roomId 값 저장
+    getAPI(`/chat/${roomId}`).then(res=> {
+      console.log(res)
+      setMessages(res.data.content);
+    })
   };
 
   const sendMessage = (msg) => {
@@ -205,7 +159,7 @@ const Chat = () => {
     console.log(emailState.userEmail);
     if (input && clientRef.current) {
       clientRef.current.publish({
-        destination: `/app/chat/${roomId}`,
+        destination: `/app/chat/${currentRoom}`,
         headers: { ACCESS_TOKEN: `Bearer ${token}` },
         body: JSON.stringify(msg),
       });
@@ -258,7 +212,6 @@ const Chat = () => {
                     <div className="flex gap-x-1 items-center">
                       <div className="rounded-full bg-black w-[40px] h-[40px]"></div>
                       <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
-                        {console.log(message)}
                         내용 : {message.content + " "}
                       </div>
                     </div>
@@ -305,13 +258,6 @@ const Chat = () => {
                     <div>미리볼내용</div>
                   </button>
                 ))}
-                <button
-                  className={`w-full h-[60px]  px-4 gap-x-4 flex flex-col items-start justify-center border-b-2
-                 `}
-                  onClick={() => jaeHyung()}
-                >
-                  재형님 연결 확인 버튼
-                </button>
               </div>
             </div>
           </div>

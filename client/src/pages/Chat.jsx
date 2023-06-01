@@ -126,7 +126,7 @@ const Chat = () => {
     // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
     else {
       const newClient = new Client({
-        webSocketFactory: () => new SockJS("http://43.200.169.48/chat/connect"),
+        webSocketFactory: () => new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
         debug: (str) => {
           console.log(str);
         },

@@ -184,7 +184,7 @@ function Detail() {
       <div ref={divRef} />
       <Navbar />
       <BodyContainer>
-        <header className="flex flex-col mt-32 justify-center items-center relative gap-10 mb-10">
+        <header className="flex pt-40 flex-col justify-center items-center relative gap-10 mb-10">
           <div className="self-end">
             <button
               onClick={handleDeleteClub}

@@ -6,22 +6,33 @@ export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput,
 
     return (
         <Container>
-            <section className="h-[100vh] flex flex-col items-center justify-center">
-                {/* <input type="text" value={categoryInput} onChange={handleCategoryChange} /> */}
-                <div className="flex flex-col items-center">
-                    <div className="grid grid-cols-4 gap-4 w-[1200px] h-auto mb-4">
-                        {Object.keys(option?.categoryLists || {}).map((category, index) => (
-                            <button
-                                key={index}
-                                onClick={() => setSelectedCategory(category)}
-                                className={`${selectedCategory === category ? 'bg-[#b54e5d] text-white w-full h-32' : 'bg-[#FB7185] text-white w-full h-32'}`}
-                            >
-                                {category}
-                            </button>
-                        ))}
+            <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
+                <div className="flex flex-col">
+                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
-                    <div className="flex  items-center justify-center">
-                        <button className=" w-[1200px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
+                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px]">
+                        <div className="flex w-[800px] py-[103px] flex-col gap-y-24 z-10">
+                            <div className="flex justify-start items-start w-full">
+                                <span className="text-[20px] text-left">1. 관심사를 선택하세요.</span>
+                            </div>
+                            <div className="flex flex-1 items-center justify-center">
+                                <div className="grid grid-cols-3 gap-x-[120px] gap-y-[59px] w-auto h-auto mb-4">
+                                    {Object.keys(option?.categoryLists || {}).map((category, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setSelectedCategory(category)}
+                                            className={`${selectedCategory === category ? 'shadow-cms bg-[#dddddd] w-[11rem] h-[3.7rem]  rounded-3xl' : 'shadow-cms bg-white w-[11rem] h-[3.7rem]  rounded-3xl'}`}
+                                        >
+                                            {category}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="flex  items-center justify-center">
+                                <button className=" w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={nextStep}>다음</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

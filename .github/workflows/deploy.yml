@@ -12,7 +12,6 @@ jobs:
     env:
       REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
       REACT_APP_KAKAO_MAPS_API_KEY_JS: ${{ secrets.REACT_APP_KAKAO_MAPS_API_KEY_JS }}
-      VITE_KAKAO_MAPS_API_KEY_JS: ${{ secrets.VITE_KAKAO_MAPS_API_KEY_JS }}
       REACT_APP_KAKAO_MAPS_API_KEY_REST: ${{ secrets.REACT_APP_KAKAO_MAPS_API_KEY_REST }}
       REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
       REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
@@ -41,4 +40,4 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'ap-northeast-2'
-        SOURCE_DIR: client/dist
+        SOURCE_DIR: client/bulid

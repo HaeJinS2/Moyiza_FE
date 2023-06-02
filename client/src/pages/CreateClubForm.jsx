@@ -388,7 +388,7 @@ function CreateClubForm() {
             {
                 step === 7 && <Step7 prevStep={prevStep} progress={progress} handleSubmit={handleSubmit} />
             }
-            <div className="fixed inset-x-0 bottom-5 flex justify-center">
+            <div className="fixed inset-x-0 bottom-0 z-10 flex justify-center items-center">
                 <div className="w-[1200px] h-[20px]">
                     <LinearProgress variant="determinate" value={step / 7 * 100} />
                 </div>

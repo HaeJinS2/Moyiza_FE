@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { BiSearch } from "react-icons/bi";
 
 const SearchBar = ({ handleSearchInput, search, page }) => {
-  const [onSearch, setOnSearch] = useState(false);
+  // const [onSearch, setOnSearch] = useState(false);
   const inputRef = useRef(null);
   console.log(page);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (inputRef.current && !inputRef.current.contains(event.target)) {
-        setOnSearch(false);
+        // setOnSearch(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -18,57 +18,19 @@ const SearchBar = ({ handleSearchInput, search, page }) => {
   }, []);
 
   return (
-    <div className="border-[1px] w-2/6 self-center py-2 mb-4 rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
-      {onSearch ? (
-        <>
-          <div className="w-full flex justify-between pr-2 pl-6">
-            <input
-              onChange={handleSearchInput}
-              value={search}
-              ref={inputRef}
-              placeholder="검색"
-              className="w-full"
-            />
-            <div className="p-2 bg-rose-400 rounded-full text-white">
-              <BiSearch size={18} />
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="flex flex-row items-center justify-between ">
-          {
-            (page === "club" ? (
-              <>
-                <div className="hidden sm:block text-sm font-semibold border-l-[1px] flex-1 text-center">
-                  인기 클럽
-                </div>
-                <div className="hidden sm:block text-sm font-semibold border-x-[1px] flex-1 text-center">
-                  오늘 생성된 클럽
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="hidden sm:block text-sm font-semibold border-l-[1px] flex-1 text-center">
-                  인기 원데이
-                </div>
-                <div className="hidden sm:block text-sm font-semibold border-x-[1px] flex-1 text-center">
-                  내 주변 원데이
-                </div>
-              </>
-            ))
-          }
-
-          <div
-            onClick={() => setOnSearch(true)}
-            className="text-sm text-gray-600 flex flex-row flex-1 justify-center items-center gap-3"
-          >
-            <div className="hidden sm:block  ">검색</div>
-            <div className="p-2 bg-rose-400 rounded-full text-white">
-              <BiSearch size={18} />
-            </div>
-          </div>
+    <div className="border-[1px] flex border-orange-500 w-[480px] h-[60px] items-center rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
+      <div className="w-full flex justify-between pr-6 pl-6 font-sans">
+        <input
+          onChange={handleSearchInput}
+          value={search}
+          ref={inputRef}
+          placeholder="어떤 모임을 가져볼까요?"
+          className="w-full"
+        />
+        <div className="p-2 rounded-full text-orange-500">
+          <BiSearch size={24} />
         </div>
-      )}
+      </div>
     </div>
   );
 };

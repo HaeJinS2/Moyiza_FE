@@ -87,15 +87,25 @@ export const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleIn
     return (
         <>
             <Container>
-                <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                    <div>
-                        <input className='shadow-md w-[1200px] h-32 rounded-lg mb-4 border-2 px-2'
-                            placeholder="클럽이름을 입력하세요"
-                            type="text" value={titleInput} onChange={handleTitleChange} />
-                    </div>
-                    <div className="flex items-center justify-center gap-x-4">
-                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
-                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
+                <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
+                    <div className="flex flex-col">
+                        <div className="flex  w-full h-[500px] items-center justify-center ">
+                            <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                        </div>
+                        <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
+                            <div className="flex w-[800px] py-[220.5px] flex-col gap-y-24 z-10">
+                                <div className="flex justify-start items-start w-full">
+                                    <span className="text-[20px] text-left">3. 원하는 일상속 이름을 작성해주세요.</span>
+                                </div>
+                                <input className='shadow-cms w-[788px] h-[60px] rounded-3xl mb-4 border-2 px-2'
+                                    placeholder="이름을 입력하세요."
+                                    type="text" value={titleInput} onChange={handleTitleChange} />
+                                <div className="flex items-center justify-center gap-x-4">
+                                    <button className="w-[14rem] h-[3.8rem] bg-[#747474] text-white rounded-3xl" onClick={prevStep}>이전</button>
+                                    <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={nextStep}>다음</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </Container>

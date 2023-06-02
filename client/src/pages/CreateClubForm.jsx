@@ -8,6 +8,7 @@ import imageCompression from 'browser-image-compression';
 import { Step1, Step2, Step3, Step4, Step5, Step6, Step7 } from '../component/createclubform/Steps.jsx'
 import Navbar from "../component/Navbar";
 
+
 function CreateClubForm() {
     const [club, setClub] = useRecoilState(clubState);
     // const [tempId, setTempId] = useRecoilState(tempIdState);
@@ -90,7 +91,7 @@ function CreateClubForm() {
 
 
     useEffect(() => {
-        if (club.clubCategory in option.categoryLists) {
+        if (option.categoryLists && club.clubCategory in option.categoryLists) {
             setSelectedTags(option.categoryLists[club.clubCategory]);
         } else {
             setSelectedTags([]);
@@ -170,11 +171,11 @@ function CreateClubForm() {
     }
 
     console.log(club)
-    
+
     const handleCategory = () => {
         const url = `/club/create/${club.createclub_id}/category`;
         const data = selectedCategory;
-       
+
         putAPI(url, { category: data })
             .then(response => {
                 console.log(response);
@@ -305,14 +306,14 @@ function CreateClubForm() {
         setSelectedFile(file);
 
         const options = {
-            maxSizeMB: 1, 
-            maxWidthOrHeight: 300, 
+            maxSizeMB: 1,
+            maxWidthOrHeight: 300,
             useWebWorker: true
         };
 
         try {
             const resizingFile = await imageCompression(file, options);
-            console.log('Compressed file:', resizingFile); 
+            console.log('Compressed file:', resizingFile);
             setSelectedFile(resizingFile);
             let reader = new FileReader();
 
@@ -357,11 +358,9 @@ function CreateClubForm() {
         // setSelectedFile(null);
     };
 
-
-
     return (
         <>
-        <Navbar />
+            <Navbar />
             {
                 step === 1 && <Step1 nextStep={nextStep} progress={progress} option={option} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} handleCategoryChange={handleCategoryChange} />
             }
@@ -389,10 +388,9 @@ function CreateClubForm() {
             {
                 step === 7 && <Step7 prevStep={prevStep} progress={progress} handleSubmit={handleSubmit} />
             }
-            <div className="fixed inset-x-0 bottom-0">
-                <div className="w-100vh h-[30px]">
-                    <LinearProgress sx={{ height: '30px' }} color="inherit" variant="determinate"
-                        value={step / 7 * 100} />
+            <div className="fixed inset-x-0 bottom-5 flex justify-center">
+                <div className="w-[1200px] h-[20px]">
+                    <LinearProgress variant="determinate" value={step / 7 * 100} />
                 </div>
             </div>
         </>

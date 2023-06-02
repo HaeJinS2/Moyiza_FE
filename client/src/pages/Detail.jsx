@@ -141,7 +141,7 @@ function Detail() {
     const eventEndTime = new Date(eventStartTime.setHours(23, 59, 59));
     return {
       ...item,
-      eventEndTime, // update the event with the new eventEndTime
+      eventEndTime,
     };
   });
 
@@ -149,12 +149,12 @@ function Detail() {
     const eventEndTime = new Date(item.eventEndTime);
     const today = new Date();
     return today <= eventEndTime;
-});
+  });
 
   const endedEvents = newEventLists.filter((item) => {
     const eventEndTime = new Date(item.eventEndTime);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set the time to 00:00:00 for accurate comparison
+    today.setHours(0, 0, 0, 0);
 
     return eventEndTime <= today;
   });
@@ -167,12 +167,16 @@ function Detail() {
       alert("참가완료!");
     });
   };
-  const handleLeaveEvent = () => {
-    deleteAPI("/club/19/event/join/13").then((res) => console.log(res));
+  const handleLeaveEvent = (clubId, eventId) => {
+    deleteAPI(`/club/${clubId}/event/join/${eventId}`).then((res) =>
+      console.log(res)
+    );
   };
 
-  const handleDeleteEvent = () => {
-    deleteAPI("/club/19/event/13").then((res) => console.log(res));
+  const handleDeleteEvent = (clubId, eventId) => {
+    deleteAPI(`/club/${clubId}/event/${eventId}`).then((res) =>
+      console.log(res)
+    );
   };
   console.log(progressEvents);
   return (
@@ -219,7 +223,6 @@ function Detail() {
               )}
             </div>
           </div>
-          <div className="text-black">
             <div className="flex justify-center items-center">
               <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
                 <AnimatePresence custom={progressDirection}>
@@ -267,14 +270,12 @@ function Detail() {
                   </motion.div>
                 </AnimatePresence>
               </div>
-            </div>
           </div>
 
           <p className="text-xl">종료된 클럽 이벤트</p>
 
-          <div className="text-black">
-            <div className="flex justify-center items-center">
-              <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
+            <div className="flex h-full justify-center items-center">
+              <div className="flex justify-center w-full h-[100vh] text-black items-center overflow-hidden relative">
                 <AnimatePresence custom={endedDirection}>
                   <motion.div
                     key={endedEventPage}
@@ -284,18 +285,20 @@ function Detail() {
                     exit="exit"
                     custom={endedDirection}
                     transition={{ duration: 0.5 }}
-                    className={`h-[200px] absolute flex justify-center items-center w-full `}
+                    className={`h-full absolute flex justify-center items-center w-full `}
                   >
                     <div
                       className={`${
-                        endedEvents.length === 0 ? "" : "grid grid-cols-3"
-                      } gap-x-4 gap-y-8 w-full`}
+                        endedEvents.length === 0
+                          ? ""
+                          : "grid grid-cols-3 grid-rows-4"
+                      } gap-x-4 gap-y-8 w-full `}
                     >
                       {endedEvents.length === 0 ? (
                         <EmptyState page="detail" />
                       ) : (
                         endedEvents
-                          .slice(endedEventPage * 3, endedEventPage * 3 + 3) 
+                          .slice(endedEventPage * 12, endedEventPage * 12 + 12)
                           .map((item) => {
                             return (
                               <ClubEventCard
@@ -330,7 +333,6 @@ function Detail() {
                 </button>
               )}
             </div>
-          </div>
 
           <div className="flex justify-end">
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">

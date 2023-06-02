@@ -73,7 +73,7 @@ function Navbar() {
                   <img
                     className="cursor-pointer ml-[10px]"
                     onClick={() => navigate("/")}
-                    src={`${process.env.PUBLIC_URL}/images/logo.svg`}
+                    src={`/images/logo.svg`}
                     width="100px"
                     alt="moyizaLogo"
                   />

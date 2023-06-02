@@ -44,27 +44,36 @@ export const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagC
 
     return (
         <Container>
-            <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                <div>
-                    <input type="text" value={tagInput1} onChange={handleTagChange1} placeholder="Tag 1" />
-                    <input type="text" value={tagInput2} onChange={handleTagChange2} placeholder="Tag 2" />
-                    <input type="text" value={tagInput3} onChange={handleTagChange3} placeholder="Tag 3" />
-
-                    <div className="grid grid-cols-4 gap-4 w-[1200px] h-32 mb-4">
-                        {selectedTags?.map((tag, index) => (
-                            <button
-                                key={index}
-                                onClick={() => handleTagClick(tag)}
-                                className={`${selectedTag.includes(tag) ? 'bg-[#b54e5d] text-white w-full h-32' : 'bg-[#FB7185] text-white w-full h-32'}`}
-                            >
-                                {tag}
-                            </button>
-                        ))}
+            <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
+                <div className="flex flex-col">
+                    <div className="flex flex-col  w-full h-[500px] items-center justify-center ">
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
-                </div>
-                <div className="flex items-center justify-center gap-x-4">
-                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
-                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
+                    <div>
+                        <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
+                            <div className="flex w-[800px] h-[800px] justify-center items-center flex-col gap-y-24 z-10">
+                                <div className="flex justify-start items-start w-full">
+                                    <span className="text-[20px] text-left">2. 원하는 카테고리를 선택하세요.</span>
+                                </div>
+                                <div className="grid grid-cols-3 gap-x-[120px] gap-y-[59px] w-auto h-auto mb-4">
+                                    {selectedTags?.map((tag, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleTagClick(tag)}
+                                            className={`${selectedTag.includes(tag) ? 'shadow-cms bg-[#dddddd] w-[11rem] h-[3.7rem]  rounded-3xl' : 'shadow-cms bg-white w-[11rem] h-[3.7rem]  rounded-3xl'}`}
+                                        >
+                                            {tag}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="flex items-center justify-center gap-x-4">
+                                    <button className="w-[14rem] h-[3.8rem] bg-[#747474] text-white rounded-3xl" onClick={prevStep}>이전</button>
+                                    <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={nextStep}>다음</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </Container>

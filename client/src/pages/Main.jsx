@@ -12,7 +12,7 @@ import Footer from "../component/Footer";
 import MyLocation from "../component/MyLocation";
 import { logEvent } from "../utils/amplitude";
 
-let tabs = ["클럽", "원데이"];
+let tabs = ["일상속", "하루속"];
 
 function Main() {
   const divRef = useRef(null);
@@ -57,21 +57,17 @@ function Main() {
             viewport={{ once: false, amount: 0.25 }}
             className={`mx-auto flex flex-col justify-between`}
           >
-            <div className="mt-24 grid grid-cols-2 gap-x-2">
+            <div className="mt-40 grid grid-cols-2 gap-x-2">
               <motion.div
                 variants={slideIn("left", "tween", 0.2, 1)}
                 className="relative w-auto "
               >
-                <div className="p-4 flex flex-1 flex-col h-[380px] font-bold text-5xl bg-rose-400 rounded-lg text-white justify-center items-center">
-                  {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
-                  <div className="flex justify-between">
-                    <button
-                      onClick={() => {
-                        navigate("/club");
-                      }}
-                    >
-                      ❤️클럽으로❤️
-                    </button>
+                <div className="p-4 flex flex-1 flex-col h-[422px] font-bold text-5xl rounded-lg text-black justify-center ">
+                  <div className="flex flex-col font-sans">
+                    <p>취미 공유할 사람</p>
+                    <p>모두 여기, 모이자!</p>
+                    <br/>
+                    <p className="text-2xl font-semibold">당일 모임부터 정기 모임까지</p>
                   </div>
                 </div>
               </motion.div>
@@ -79,18 +75,30 @@ function Main() {
                 variants={slideIn("right", "tween", 0.2, 1)}
                 className="relative w-auto flex justify-end items-end"
               >
-                <div className="p-4 flex flex-1 flex-col h-[380px] font-bold text-5xl bg-gatherBlue rounded-lg text-white justify-center items-center">
-                  {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
-                  <div className="flex justify-between">
-                    <button onClick={() => navigate("/oneday")}>
-                      ❤️원데이로❤️
-                    </button>
-                  </div>
+                <div className="p-4 flex flex-1 flex-col h-[422px] font-bold text-5xl bg-transparent rounded-lg text-white justify-center items-center">
+                  <img src={`${process.env.PUBLIC_URL}/images/main.png`} alt="main_image" />
                 </div>
               </motion.div>
             </div>
           </motion.div>
           <MyLocation />
+          <br />
+          <button
+            onClick={() => {
+              navigate("/club");
+            }}
+          >
+            ❤️일상속으로❤️
+          </button>
+          <br />
+          <button
+            onClick={() => {
+              navigate("/oneday");
+            }}
+          >
+            ❤️하루속으로❤️
+          </button>
+          <br />
           <button
             onClick={() => {
               btn2();
@@ -107,17 +115,14 @@ function Main() {
                   key={i}
                   onClick={() => setActiveTab(tab)}
                   className={`${
-                    activeTab === tab ? "text-white" : "hover:opacity-50"
+                    activeTab === tab ? "text-black" : "hover:opacity-50"
                   } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                 >
                   {activeTab === tab && (
                     <motion.div
                       layoutId="active-pill"
                       transition={{ type: "spring", duration: 0.5 }}
-                      className="bg-gatherBlue absolute inset-0"
-                      style={{
-                        borderRadius: 9999,
-                      }}
+                      className="border-b-[4px] border-black absolute inset-0"
                     />
                   )}
                   <span className="relative text-base z-10 mix-blend">

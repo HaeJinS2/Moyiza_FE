@@ -118,11 +118,25 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
 
     return (
         <Container>
-            <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                <div className="flex justify-start w-[1200px] pl-4 items-center gap-x-4">
-                    {preview && (
-                        <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
-                    )}
+            <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
+                <div className="flex flex-col">
+                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                    </div>
+                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
+                        <div className="flex w-[800px] py-[62px] flex-col gap-y-24 z-10">
+                            <div className="flex justify-start items-start w-full">
+                                <span className="text-[20px] text-left">4. 일상속 정보를 입력하세요.</span>
+                            </div>
+
+                            <div className="flex flex-col justify-start w-[1200px] items-center gap-x-4 gap-y-2">
+                                <div className="flex  justify-start items-start w-full">
+                                    <span className="text-[20px] text-left">1) 일상속 이미지를 등록하세요.</span>
+                                </div>
+                                <div className="flex justify-start items-start w-full">
+                                    {preview && (
+                                        <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
+                                    )}
                     <input
                         type="file"
                         id="fileInput"

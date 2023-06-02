@@ -64,7 +64,7 @@ function Main() {
               >
                 <div className="p-4 flex flex-1 flex-col h-[380px] font-bold text-5xl bg-rose-400 rounded-lg text-white justify-center items-center">
                   {/* <div>대한민국 1등 모임 앱, Moyiza</div> */}
-                  <div className="flex justify-between">
+                  <div className="flex justify-between font-sans">
                     <button
                       onClick={() => {
                         navigate("/club");

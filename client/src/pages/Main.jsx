@@ -11,7 +11,6 @@ import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
 import MyLocation from "../component/MyLocation";
 import { logEvent } from "../utils/amplitude";
-import { getAPI } from "../axios";
 
 let tabs = ["클럽", "원데이"];
 
@@ -19,12 +18,6 @@ function Main() {
   const divRef = useRef(null);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(tabs[0]);
-
-  useEffect(() => {
-    getAPI(`/user/mypage`).then((res) => {
-      console.log(res.data.clubsInParticipatingInfo)
-    })
-  }, [])
 
   //페이지 렌더링 시 화면 최상단으로 이동하는 코드
   useEffect(() => {

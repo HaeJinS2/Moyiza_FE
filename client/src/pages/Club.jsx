@@ -14,6 +14,7 @@ import { isLoadingState } from "../states/clubState";
 import EmptyState from "../component/EmptyState";
 import Footer from "../component/Footer";
 import { logEvent } from "../utils/amplitude";
+import { useNavigate } from "react-router-dom";
 
 let pageTabs = ["일상속", "하루속"];
 
@@ -28,6 +29,8 @@ function Club() {
   const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
+  const navigate = useNavigate()
+
 
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -80,7 +83,10 @@ function Club() {
             {pageTabs.map((tab, i) => (
               <button
                 key={i}
-                onClick={() => setActivePageTab(tab)}
+                onClick={() => {
+                  setActivePageTab(tab)
+                  i === 0 ? navigate('/club') : navigate('/oneday')
+                } }
                 className={`${
                   activePageTab === tab ? "text-black" : "hover:opacity-50"
                 } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
@@ -192,7 +198,7 @@ function Club() {
                 <div className="flex justify-center mt-10">
                   <button
                     onClick={() => setPage(page + 1)}
-                    className="bg-rose-400 text-white px-3 py-2 rounded-full"
+                    className="bg-orange-400 text-white px-3 py-2 rounded-full"
                   >
                     더보기
                   </button>
@@ -204,7 +210,7 @@ function Club() {
         <section className="h-auto mb-10">
           <BodyContainer>
             <div className="flex justify-end">
-              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[130px] py-2 rounded-lg">
+              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg">
                 <CreateClub />
               </div>
             </div>

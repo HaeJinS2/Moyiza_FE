@@ -12,11 +12,11 @@ export default defineConfig({
 ],
 build: {
   rollupOptions: {
-    external: ['@sentry/browser', '@sentry/utils', 'axios', '@amplitude/analytics-client-common', 'sockjs-client'],
+    external: ['@sentry/browser', '@sentry/utils', '@amplitude/analytics-client-common', 'sockjs-client'],
   },
   // 또는 esbuild 외부로 설정
   esbuild: {
-    external: ['@sentry/browser', '@sentry/utils', 'axios', '@amplitude/analytics-client-common', 'sockjs-client']
+    external: ['@sentry/browser', '@sentry/utils', '@amplitude/analytics-client-common', 'sockjs-client']
   },
 },
 })

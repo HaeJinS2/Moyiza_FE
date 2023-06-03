@@ -73,7 +73,7 @@ function Club() {
   if (isLoading) {
     return <Loading />;
   }
-
+  console.log(club)
   return (
     <>
       <div ref={divRef}>

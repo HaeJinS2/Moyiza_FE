@@ -4,7 +4,6 @@ import { BiSearch } from "react-icons/bi";
 const SearchBar = ({ handleSearchInput, search, page }) => {
   // const [onSearch, setOnSearch] = useState(false);
   const inputRef = useRef(null);
-  console.log(page);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (inputRef.current && !inputRef.current.contains(event.target)) {

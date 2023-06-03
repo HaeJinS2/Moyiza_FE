@@ -11,11 +11,11 @@ export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput,
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
-                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[103px] flex-col gap-y-24 z-10">
+                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px] overflow-hidden">
+                        <div className="flex w-[800px] py-[128px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
                                 <span className="text-[20px] text-left">1. 관심사를 선택하세요.</span>
                             </div>
@@ -49,12 +49,12 @@ export const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagC
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex flex-col  w-full h-[500px] items-center justify-center ">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                            <div className="flex w-[800px] h-[800px] justify-center items-center flex-col gap-y-24 z-10">
+                            <div className="flex w-[800px] py-[187px] justify-center items-center flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
                                     <span className="text-[20px] text-left">2. 원하는 카테고리를 선택하세요.</span>
                                 </div>
@@ -92,11 +92,11 @@ export const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleIn
             <Container>
                 <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                     <div className="flex flex-col">
-                        <div className="flex  w-full h-[500px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                             <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                         </div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                            <div className="flex w-[800px] py-[220.5px] flex-col gap-y-24 z-10">
+                            <div className="flex w-[800px] py-[246px] flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
                                     <span className="text-[20px] text-left">3. 원하는 일상속 이름을 작성해주세요.</span>
                                 </div>
@@ -123,11 +123,11 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[62px] flex-col gap-y-24 z-10">
+                        <div className="flex w-[800px] py-[79px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
                                 <span className="text-[20px] text-left">4. 일상속 정보를 입력하세요.</span>
                             </div>
@@ -175,11 +175,11 @@ export const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setS
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[111px] flex-col gap-y-24 z-10">
+                        <div className="flex w-[800px] py-[136px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
                                 <span className="text-[20px] text-left">5. 함께할 일상속 멤버 조건을 설정하세요.</span>
                             </div>
@@ -253,12 +253,12 @@ export const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, 
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                            <div className="flex w-[800px] py-[283px] flex-col gap-y-24 z-10">
+                            <div className="flex w-[800px] py-[260px] flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
                                     <span className="text-[20px] text-left">6. 몇명과 함께할까요?</span>
                                 </div>
@@ -313,11 +313,11 @@ export const Step7 = ({ prevStep, progress, handleSubmit }) => {
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[307px] flex-col gap-y-24 z-10">
+                        <div className="flex w-[800px] py-[332px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
                                 <span className="text-[20px] text-left">제출?</span>
                             </div>

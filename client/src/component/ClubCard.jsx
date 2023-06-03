@@ -17,7 +17,7 @@ function ClubCard({
       {page === "club" ? (
         <div
           onClick={() => navigate(`/detail/${id}`)}
-          className="cursor-pointer flex w-full shadow-cms rounded-xl h-[260px] items-center justify-center px-2"
+          className="cursor-pointer flex w-full shadow-cms bg-white rounded-xl h-[260px] items-center justify-center px-2"
         >
           <div className="aspect-square flex w-full h-full items-center relative overflow-hidden rounded-xl">
             <img
@@ -54,7 +54,7 @@ function ClubCard({
       ) : (
         <div
           onClick={() => navigate(`/detail/${id}`)}
-          className="cursor-pointer flex w-full shadow-cm rounded-xl h-[260px] items-center justify-center px-2"
+          className="cursor-pointer bg-white flex w-full shadow-cm rounded-xl h-[260px] items-center justify-center px-2"
         >
           <div className="aspect-square flex w-full h-full items-center relative overflow-hidden rounded-xl">
             <img

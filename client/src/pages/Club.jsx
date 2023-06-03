@@ -206,7 +206,7 @@ function Club() {
             </body>
           </BodyContainer>
         </section>
-        <section className="h-auto mb-10">
+        <section className="h-auto">
           <BodyContainer>
             <div className="flex flex-col items-center gap-4 justify-center h-[228px]">
               {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}

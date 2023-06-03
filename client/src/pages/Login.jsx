@@ -13,6 +13,18 @@ import Navbar from '../component/Navbar';
 // import google from '../component/img/google.png'
 
 function Login() {
+    // 소셜로그인   
+    // const kakaoLink = `http://3.34.182.174/oauth2/authorization/kakao?redirect_uri=http://moyiza.s3-website.ap-northeast-2.amazonaws.com/login/oauth2/code/kakao`;
+    // const naverLink = `http://3.34.182.174/oauth2/authorization/naver?redirect_uri=http://moyiza.s3-website.ap-northeast-2.amazonaws.com/login/oauth2/code/naver`;
+    // const search = new URL(window.location.href).searchParams.get('code')
+    // const kakaologinHandler = () => {
+    //     window.location.href = kakaoLink;
+    // };
+    // const naverloginHandler = () => {
+    //     window.location.href = naverLink;
+    // };
+
+
     const [user, setUser] = useRecoilState(userState);
     const navigate = useNavigate();
 
@@ -28,7 +40,7 @@ function Login() {
 
     const handleFind = () => {
         alert('준비 중입니다');
-      };
+    };
 
     const [userloginInput, setUserloginInput] = useState({
         email: '',
@@ -193,7 +205,7 @@ function Login() {
         <>
             <Navbar />
             <div
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                class="flex items-center justify-center"
             >
                 <LoginContainer
                     style={{ marginTop: '120px', width: '500px', height: '650px' }}
@@ -218,7 +230,7 @@ function Login() {
                             )}
                         </div>
 
-                        <button className={`${activeBtn} bg-rose-400 text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg`}>
+                        <button style={{ backgroundColor: '#FF7F1E' }} className={`${activeBtn} text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg`}>
                             Login
                         </button>
                     </form>
@@ -235,7 +247,7 @@ function Login() {
                                 {/* <img src={kakao} alt='' className="mr-2 w-10 h-10 object-contain" style={{backgroundColor: 'transparent'}}></img> */}
                                 카카오톡 로그인</button>
                         </a>
-                        <a href="/oauth2/authorization/naver">
+                        <a href="/oauth2/authorization/kakao">
                             <button type='button' style={{ display: 'flex', backgroundColor: '#2db300', color: 'white' }} className={`text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center justify-center`}>
                                 {/* <img src={naver} alt='' className="mr-2 w-10 h-10 object-contain"></img> */}
                                 네이버 로그인</button>

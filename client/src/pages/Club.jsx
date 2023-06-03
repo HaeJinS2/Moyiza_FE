@@ -161,6 +161,7 @@ function Club() {
                       return (
                         <Fade bottom>
                           <ClubCard
+                            page="club"
                             key={i}
                             title={item.clubTitle}
                             content={item.clubContent}
@@ -178,6 +179,7 @@ function Club() {
                       return (
                         <Fade bottom>
                           <ClubCard
+                            page="club"
                             key={i}
                             title={item.clubTitle}
                             content={item.clubContent}
@@ -213,36 +215,34 @@ function Club() {
 
             <div className="flex flex-col justify-between">
               <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
-{
-  club?.map((item, i) => {
-    return (
-      <Fade bottom>
-        <RecommendCard
-          key={i}
-          title={item.clubTitle}
-          content={item.clubContent}
-          tag={item.clubTag}
-          thumbnail={item.thumbnailUrl}
-          id={item.club_id}
-          eventId={item.id}
-          maxGroupSize={item.maxGroupSize}
-          nowMemberCount={item.nowMemberCount}
-        />
-      </Fade>
-    );
-  })
-}
-
+                {club?.map((item, i) => {
+                  return (
+                    <Fade bottom>
+                      <RecommendCard
+                        page="club"
+                        key={i}
+                        title={item.clubTitle}
+                        content={item.clubContent}
+                        tag={item.clubTag}
+                        thumbnail={item.thumbnailUrl}
+                        id={item.club_id}
+                        eventId={item.id}
+                        maxGroupSize={item.maxGroupSize}
+                        nowMemberCount={item.nowMemberCount}
+                      />
+                    </Fade>
+                  );
+                })}
               </div>
             </div>
           </BodyContainer>
         </section>
         <section className="h-auto">
           <BodyContainer>
-            <div className="flex flex-col items-center gap-4 justify-center h-[228px]">
+          <div className="flex flex-col bg-neutral-100 items-center gap-4 justify-center h-[228px]">
               {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
               <p className="text-5xl font-sans font-semibold">
-                내가 찾는 일상이 없다면?
+                내가 찾는 일상속 이벤트가 없다면?
               </p>
               <div className="text-orange-400 text-xl font-sans">
                 <CreateClub />

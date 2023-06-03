@@ -15,6 +15,7 @@ import EmptyState from "../component/EmptyState";
 import Footer from "../component/Footer";
 import { logEvent } from "../utils/amplitude";
 import { useNavigate } from "react-router-dom";
+import RecommendCard from "../component/RecommendCard";
 
 let pageTabs = ["일상속", "하루속"];
 
@@ -29,8 +30,7 @@ function Oneday() {
   const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -84,9 +84,9 @@ function Oneday() {
               <button
                 key={i}
                 onClick={() => {
-                  setActivePageTab(tab)
-                  i === 0 ? navigate('/club') : navigate('/oneday')
-                } }
+                  setActivePageTab(tab);
+                  i === 0 ? navigate("/club") : navigate("/oneday");
+                }}
                 className={`${
                   activePageTab === tab ? "text-black" : "hover:opacity-50"
                 } 
@@ -105,7 +105,7 @@ function Oneday() {
           </div>
         </BodyContainer>
         <BodyContainer>
-        <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
+          <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
             <p>당신의 특별한 하루</p>
             <p>'하루속'에서 함께하세요!</p>
           </div>
@@ -208,11 +208,42 @@ function Oneday() {
             </body>
           </BodyContainer>
         </section>
+
+        <section>
+          <BodyContainer>
+            <p className="text-3xl font-semibold py-4">일상속 추천주제</p>
+
+            <div className="flex flex-col justify-between">
+              <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
+                {club?.map((item, i) => {
+                  return (
+                    <Fade bottom>
+                      <RecommendCard
+                        page="oneday"
+                        key={i}
+                        title={item.clubTitle}
+                        content={item.clubContent}
+                        tag={item.clubTag}
+                        thumbnail={item.thumbnailUrl}
+                        id={item.club_id}
+                        eventId={item.id}
+                        maxGroupSize={item.maxGroupSize}
+                        nowMemberCount={item.nowMemberCount}
+                      />
+                    </Fade>
+                  );
+                })}
+              </div>
+            </div>
+          </BodyContainer>
+        </section>
         <section className="h-auto">
           <BodyContainer>
-            <div className="flex flex-col items-center gap-4 justify-center h-[228px]">
+            <div className="flex flex-col bg-neutral-100 items-center gap-4 justify-center h-[228px]">
               {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
-              <p className="text-5xl font-sans font-semibold">내가 찾는 일상이 없다면?</p>
+              <p className="text-5xl font-sans font-semibold">
+                내가 찾는 하루속 이벤트가 없다면?
+              </p>
               <div className="text-green-400 text-xl font-sans">
                 <CreateClub />
               </div>

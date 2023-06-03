@@ -14,7 +14,7 @@ function ClubCard({
   return (
     <div
       onClick={() => navigate(`/detail/${id}`)}
-      className="cursor-pointer flex w-full shadow-lg rounded-xl h-[260px] items-center justify-center px-2"
+      className="cursor-pointer flex w-full shadow-cm rounded-xl h-[260px] items-center justify-center px-2"
     >
       <div className="aspect-square flex w-full h-full items-center relative overflow-hidden rounded-xl">
         <img

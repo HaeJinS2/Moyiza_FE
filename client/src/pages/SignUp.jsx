@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
-import { styled } from 'styled-components';
+// import { styled } from 'styled-components';
 
 
 function SignUp() {

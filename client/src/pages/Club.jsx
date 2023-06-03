@@ -103,156 +103,161 @@ function Club() {
             ))}
           </div>
         </BodyContainer>
-        <BodyContainer>
+        <div className="flex justify-center items-center">
+
+        <section className="absolute top-52 h-auto min-w-[1920px]">
           <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
             <p>당신의 일상을 함께할 취미를</p>
             <p>'일상속'에서 찾아보세요!</p>
           </div>
-        </BodyContainer>
-        <section className=" h-auto mb-10 pt-10">
-          <BodyContainer>
-            <body className="flex flex-col">
-              <div className="flex justify-between mb-10">
+        </section>
+        </div>
+        <div className="flex flex-col justify-center items-center">
+          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#FFFBF8] pt-10 rounded-t-[100px] mt-[535px] z-10">
+            <BodyContainer>
+              <div className="flex justify-between items-center my-10">
                 <p className="text-3xl font-semibold">일상속 인기주제</p>
                 <button>필터</button>
               </div>
-              <div className="flex justify-around  my-4">
-                {categories?.map((tab, i) => (
-                  <button
-                    key={i}
-                    onClick={(e) => {
-                      setActiveTab(tab);
-                      handleClubCategory(e);
-                    }}
-                    className={`${
-                      activeTab === tab ? "text-black" : "hover:opacity-50"
-                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
-                  >
-                    {activeTab === tab && (
-                      <motion.div
-                        layoutId="active-pill-2"
-                        transition={{ type: "spring", duration: 0.5 }}
-                        className="bg-transparent border-2 border-orange-400 absolute inset-0"
-                        style={{
-                          borderRadius: 9999,
-                        }}
-                      />
-                    )}
-                    <span className="relative text-base z-10 mix-blend">
-                      {tab}
-                    </span>
-                  </button>
-                ))}
-              </div>
-              <div className="flex flex-col justify-between">
-                <div
-                  className={`grid ${
-                    filteredClubList.length === 0 ? "" : "grid-cols-2"
-                  }  gap-x-4 gap-y-4`}
-                >
-                  {filteredClubList.length === 0 ? (
-                    <EmptyState
-                      showReset
-                      page="club"
-                      handleClubCategory={handleClubCategory}
-                    />
-                  ) : filteredClubList ? (
-                    filteredClubList?.map((item, i) => {
-                      return (
-                        <Fade bottom>
-                          <ClubCard
-                            page="club"
-                            key={i}
-                            title={item.clubTitle}
-                            content={item.clubContent}
-                            tag={item.clubTag}
-                            thumbnail={item.thumbnailUrl}
-                            id={item.club_id}
-                            maxGroupSize={item.maxGroupSize}
-                            nowMemberCount={item.nowMemberCount}
-                          />
-                        </Fade>
-                      );
-                    })
-                  ) : (
-                    club?.map((item, i) => {
-                      return (
-                        <Fade bottom>
-                          <ClubCard
-                            page="club"
-                            key={i}
-                            title={item.clubTitle}
-                            content={item.clubContent}
-                            tag={item.clubTag}
-                            thumbnail={item.thumbnailUrl}
-                            id={item.club_id}
-                            eventId={item.id}
-                            maxGroupSize={item.maxGroupSize}
-                            nowMemberCount={item.nowMemberCount}
-                          />
-                        </Fade>
-                      );
-                    })
-                  )}
+              <body className="flex flex-col">
+                <div className="flex justify-around  my-4">
+                  {categories?.map((tab, i) => (
+                    <button
+                      key={i}
+                      onClick={(e) => {
+                        setActiveTab(tab);
+                        handleClubCategory(e);
+                      }}
+                      className={`${
+                        activeTab === tab ? "text-black" : "hover:opacity-50"
+                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                    >
+                      {activeTab === tab && (
+                        <motion.div
+                          layoutId="active-pill-2"
+                          transition={{ type: "spring", duration: 0.5 }}
+                          className="bg-transparent border-2 border-orange-400 absolute inset-0"
+                          style={{
+                            borderRadius: 9999,
+                          }}
+                        />
+                      )}
+                      <span className="relative text-base z-10 mix-blend">
+                        {tab}
+                      </span>
+                    </button>
+                  ))}
                 </div>
-              </div>
-              {filteredClubList.length >= 8 && totalPages > page + 1 && (
-                <div className="flex justify-center mt-10">
-                  <button
-                    onClick={() => setPage(page + 1)}
-                    className="bg-orange-400 text-white px-3 py-2 rounded-full"
+                <div className="flex flex-col justify-between">
+                  <div
+                    className={`grid ${
+                      filteredClubList.length === 0 ? "" : "grid-cols-2"
+                    }  gap-x-4 gap-y-4`}
                   >
-                    더보기
-                  </button>
-                </div>
-              )}
-            </body>
-          </BodyContainer>
-        </section>
-        <section>
-          <BodyContainer>
-            <p className="text-3xl font-semibold py-4">일상속 추천주제</p>
-
-            <div className="flex flex-col justify-between">
-              <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
-                {club?.map((item, i) => {
-                  return (
-                    <Fade bottom>
-                      <RecommendCard
+                    {filteredClubList.length === 0 ? (
+                      <EmptyState
+                        showReset
                         page="club"
-                        key={i}
-                        title={item.clubTitle}
-                        content={item.clubContent}
-                        tag={item.clubTag}
-                        thumbnail={item.thumbnailUrl}
-                        id={item.club_id}
-                        eventId={item.id}
-                        maxGroupSize={item.maxGroupSize}
-                        nowMemberCount={item.nowMemberCount}
+                        handleClubCategory={handleClubCategory}
                       />
-                    </Fade>
-                  );
-                })}
+                    ) : filteredClubList ? (
+                      filteredClubList?.map((item, i) => {
+                        return (
+                          <Fade bottom>
+                            <ClubCard
+                              page="club"
+                              key={i}
+                              title={item.clubTitle}
+                              content={item.clubContent}
+                              tag={item.clubTag}
+                              thumbnail={item.thumbnailUrl}
+                              id={item.club_id}
+                              maxGroupSize={item.maxGroupSize}
+                              nowMemberCount={item.nowMemberCount}
+                            />
+                          </Fade>
+                        );
+                      })
+                    ) : (
+                      club?.map((item, i) => {
+                        return (
+                          <Fade bottom>
+                            <ClubCard
+                              page="club"
+                              key={i}
+                              title={item.clubTitle}
+                              content={item.clubContent}
+                              tag={item.clubTag}
+                              thumbnail={item.thumbnailUrl}
+                              id={item.club_id}
+                              eventId={item.id}
+                              maxGroupSize={item.maxGroupSize}
+                              nowMemberCount={item.nowMemberCount}
+                            />
+                          </Fade>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+                {filteredClubList.length >= 8 && totalPages > page + 1 && (
+                  <div className="flex justify-center mt-10">
+                    <button
+                      onClick={() => setPage(page + 1)}
+                      className="bg-orange-400 text-white px-3 py-2 rounded-full"
+                    >
+                      더보기
+                    </button>
+                  </div>
+                )}
+              </body>
+            </BodyContainer>
+          </section>
+          <section>
+            <BodyContainer>
+              <p className="text-3xl font-semibold py-4">일상속 추천주제</p>
+
+              <div className="flex flex-col justify-between">
+                <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
+                  {club?.map((item, i) => {
+                    return (
+                      <Fade bottom>
+                        <RecommendCard
+                          page="club"
+                          key={i}
+                          title={item.clubTitle}
+                          content={item.clubContent}
+                          tag={item.clubTag}
+                          thumbnail={item.thumbnailUrl}
+                          id={item.club_id}
+                          eventId={item.id}
+                          maxGroupSize={item.maxGroupSize}
+                          nowMemberCount={item.nowMemberCount}
+                        />
+                      </Fade>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          </BodyContainer>
-        </section>
-        <section className="h-auto">
-          <BodyContainer>
-          <div className="flex flex-col bg-neutral-100 items-center gap-4 justify-center h-[228px]">
-              {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
-              <p className="text-5xl font-sans font-semibold">
-                내가 찾는 일상속 이벤트가 없다면?
-              </p>
-              <div className="text-orange-400 text-xl font-sans">
-                <CreateClub />
+            </BodyContainer>
+          </section>
+          <section className="h-auto">
+            <BodyContainer>
+            <div className="flex flex-col w-full bg-neutral-100 items-center gap-4 justify-center h-[228px]">
+                {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
+                <p className="text-5xl font-sans font-semibold">
+                  내가 찾는 일상속 이벤트가 없다면?
+                </p>
+                <div className="text-orange-400 text-xl font-sans">
+                  <CreateClub />
+                </div>
+                {/* </div> */}
               </div>
-              {/* </div> */}
-            </div>
-          </BodyContainer>
-        </section>
-        <Footer />
+            </BodyContainer>
+          </section>
+        </div>
       </div>
+      <Footer />
     </>
   );
 }

@@ -233,7 +233,7 @@ const Chat = () => {
                           {console.log(message)}
                           내용 : {message.content + " "}
                         </div>
-                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]"/>
+                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image"/>
                       </div>
                     </div>
                   </div>
@@ -243,7 +243,7 @@ const Chat = () => {
                       <div>보낸사람 : {message.senderNickname}</div>
                     </div>
                     <div className="flex gap-x-1 items-center">
-                    <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]"/>
+                    <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image"/>
                       <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
                         내용 : {message.content + " "}
                       </div>

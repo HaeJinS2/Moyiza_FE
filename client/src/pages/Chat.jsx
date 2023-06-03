@@ -7,7 +7,6 @@ import jwt_decode from "jwt-decode";
 import { userEmailState } from "../states/userStateTmp";
 // import { userState } from "../states/userState";
 import { getAPI } from "../axios";
-import Container from "../component/Container";
 import Navbar from "../component/Navbar";
 import { logEvent, setAmplitudeUserId } from "../utils/amplitude";
 

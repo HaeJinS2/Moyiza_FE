@@ -126,7 +126,8 @@ const Chat = () => {
     // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
     else {
       const newClient = new Client({
-        webSocketFactory: () => new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
+        webSocketFactory: () =>
+          new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
         debug: (str) => {
           console.log(str);
         },
@@ -214,9 +215,9 @@ const Chat = () => {
   };
   // Render the messages from the server.
   return (
-    <Container>
+    <>
       <Navbar />
-      <div className="mt-8 flex justify-center items-center h-[calc(100vh-31.89px)]">
+      <div className="flex justify-center items-center h-[calc(100vh-31.89px)]">
         <div className="flex justify-between w-[1000px] h-[600px] border-[1px]">
           <div className="flex flex-col justify-between w-[700px]">
             <div className="flex flex-col h-[530px] p-2 overflow-y-auto">
@@ -295,71 +296,7 @@ const Chat = () => {
           </div>
         </div>
       </div>
-      {/* <div className="mt-28 flex justify-center h-screen">
-        <div className="w-3/5  h-[100vh] ">
-          <ul className="border-2 border-black w-full h-3/5 p-2">
-            {messages.map((message, index) => (
-              <li className="flex gap-[10px]" key={index}>
-                {console.log(message)}
-                내용 : {message.content + " "}
-                보낸사람 : {message.senderNickname}
-              </li>
-            ))}
-          </ul>
-
-          <div className="flex justify-between">
-            <input
-              className="border-2 border-black w-full"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="내용"
-            />
-            <button
-              className="border-2 border-rose-400"
-              onClick={() =>
-                sendMessage({
-                  content: input,
-                  senderNickname: emailState.userEmail,
-                })
-              }
-            >
-              Send Message1
-            </button>
-          </div>
-          <br />
-          <div className="flex justify-between">
-            <input
-              className="border-2 border-black w-full"
-              value={input2}
-              onChange={(e) => setInput2(e.target.value)}
-              placeholder="내용"
-            />
-            <button
-              className="border-2 border-rose-400"
-              onClick={() =>
-                sendMessage({
-                  content: input2,
-                  senderNickname: emailState.userEmail,
-                })
-              }
-            >
-              Send Message2
-            </button>
-          </div>
-        </div>
-        <div className="flex flex-col gap-1">
-          {roomIdTmp.map((id) => (
-            <button
-              className="w-[100px] h-[50px] bg-slate-300"
-              key={id}
-              onClick={() => connectToRoom(id)}
-            >
-              Room {id}
-            </button>
-          ))}
-        </div>
-      </div> */}
-    </Container>
+    </>
   );
 };
 

@@ -71,7 +71,7 @@ function Navbar() {
               </div>
 
               <SearchBar />
-              <div className="w-[140px] flex items-center text-md font-semibold justify-center">
+              <div className="w-[150px] flex items-center text-md font-semibold justify-center gap-4">
                 {isLoggedIn ? (
                   //로그인 상태인 경우
                   <>
@@ -79,13 +79,25 @@ function Navbar() {
                       onClick={() => navigate("/chat")}
                       className="cursor-pointer"
                     >
-                      채팅
+                      <img
+                        className="w-[60px] h-[60px]"
+                        src={`${process.env.PUBLIC_URL}/images/chat_icon.svg`}
+                        alt="chat_icon"
+                      />
                     </div>
                     <div onClick={logoutHandler} className="cursor-pointer">
-                      알림
+                      <img
+                        className="w-[60px] h-[60px]"
+                        src={`${process.env.PUBLIC_URL}/images/alarm_icon.svg`}
+                        alt="alarm_icon"
+                      />
                     </div>
                     <div onClick={goMyInfo} className="cursor-pointer">
-                      프로필
+                      <img
+                        className="w-[60px] h-[60px]"
+                        src={`${process.env.PUBLIC_URL}/images/profile_icon.svg`}
+                        alt="profile_icon"
+                      />
                     </div>
                   </>
                 ) : (

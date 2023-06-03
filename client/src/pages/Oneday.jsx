@@ -79,7 +79,7 @@ function Oneday() {
       <div ref={divRef}>
         <Navbar />
         <BodyContainer>
-          <div className="flex gap-10 pt-40">
+          <div className="flex  gap-10 pt-40">
             {pageTabs.map((tab, i) => (
               <button
                 key={i}
@@ -89,7 +89,8 @@ function Oneday() {
                 } }
                 className={`${
                   activePageTab === tab ? "text-black" : "hover:opacity-50"
-                } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                } 
+                relative rounded-full px-3 py-1.5 text-black outline-2 transition focus-visible:outline`}
               >
                 {activePageTab === tab && (
                   <motion.div
@@ -104,12 +105,12 @@ function Oneday() {
           </div>
         </BodyContainer>
         <BodyContainer>
-          <div className="flex flex-col justify-center items-center h-[300px]">
+        <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
             <p>당신의 특별한 하루</p>
             <p>'하루속'에서 함께하세요!</p>
           </div>
         </BodyContainer>
-        <section className=" h-auto mb-10 pt-20">
+        <section className=" h-auto mb-10 pt-10">
           <BodyContainer>
             <body className="flex flex-col">
               <div className="flex justify-between mb-10">

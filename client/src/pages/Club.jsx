@@ -29,8 +29,7 @@ function Club() {
   const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -73,7 +72,7 @@ function Club() {
   if (isLoading) {
     return <Loading />;
   }
-  console.log(club)
+  console.log(club);
   return (
     <>
       <div ref={divRef}>
@@ -84,9 +83,9 @@ function Club() {
               <button
                 key={i}
                 onClick={() => {
-                  setActivePageTab(tab)
-                  i === 0 ? navigate('/club') : navigate('/oneday')
-                } }
+                  setActivePageTab(tab);
+                  i === 0 ? navigate("/club") : navigate("/oneday");
+                }}
                 className={`${
                   activePageTab === tab ? "text-black" : "hover:opacity-50"
                 } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
@@ -104,12 +103,12 @@ function Club() {
           </div>
         </BodyContainer>
         <BodyContainer>
-          <div className="flex flex-col justify-center items-center h-[300px]">
+          <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
             <p>당신의 일상을 함께할 취미를</p>
             <p>'일상속'에서 찾아보세요!</p>
           </div>
         </BodyContainer>
-        <section className=" h-auto mb-10 pt-20">
+        <section className=" h-auto mb-10 pt-10">
           <BodyContainer>
             <body className="flex flex-col">
               <div className="flex justify-between mb-10">
@@ -209,10 +208,13 @@ function Club() {
         </section>
         <section className="h-auto mb-10">
           <BodyContainer>
-            <div className="flex justify-end">
-              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg">
+            <div className="flex flex-col items-center gap-4 justify-center h-[228px]">
+              {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
+              <p className="text-5xl font-sans font-semibold">내가 찾는 일상이 없다면?</p>
+              <div className="text-orange-400 text-xl font-sans">
                 <CreateClub />
               </div>
+              {/* </div> */}
             </div>
           </BodyContainer>
         </section>

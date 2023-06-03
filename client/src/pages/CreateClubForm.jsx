@@ -5,7 +5,7 @@ import { postAPI, putAPI, filePutAPI } from "../axios";
 import { useNavigate } from "react-router-dom";
 import { LinearProgress } from '@mui/material'
 import imageCompression from 'browser-image-compression';
-import { Step1, Step2, Step3, Step4, Step5, Step6, Step7 } from '../component/createclubform/Steps.jsx'
+import { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 } from '../component/createclubform/Steps.jsx'
 import Navbar from "../component/Navbar";
 
 
@@ -37,7 +37,7 @@ function CreateClubForm() {
     const [restrictionInput, setRestrictionInput] = useState(club?.genderPolicy == null ? '' : club.genderPolicy);
     const [restrictionInput2, setRestrictionInput2] = useState(club?.agePolicy == null ? '' : club.agePolicy);
     const [agePolicy, setAgePolicy] = useState(club?.agePolicy == null ? { x: 20 } : { x: club.agePolicy });
-    const [maxGroupSize, setMaxGroupSize] = useState(club?.maxGroupSize == null ? { x: 1 } : { x: club?.maxGroupSize });
+    const [maxGroupSize, setMaxGroupSize] = useState(club?.maxGroupSize == null ? { x: 5 } : { x: club?.maxGroupSize });
 
     const [selectedFile, setSelectedFile] = useState(club?.thumbnailUrl || '');
     const [selectedFileName, setSelectedFileName] = useState("");
@@ -294,7 +294,7 @@ function CreateClubForm() {
         postAPI(`/club/create/${club.createclub_id}/confirm`, {}).then((response) => {
             console.log(response)
             setClub({});
-            navigate(`/`)
+            setStep(step + 1);
         }).catch((error) => {
             console.log(error)
         })
@@ -388,9 +388,13 @@ function CreateClubForm() {
             {
                 step === 7 && <Step7 prevStep={prevStep} progress={progress} handleSubmit={handleSubmit} />
             }
+            {
+                step === 8 && <Step8 titleInput={titleInput} navigate={navigate} prevStep={prevStep} progress={progress} handleSubmit={handleSubmit} />
+            }
+
             <div className="fixed inset-x-0 bottom-0 z-10 flex justify-center items-center">
                 <div className="w-[1200px] h-[20px]">
-                    <LinearProgress variant="determinate" value={step / 7 * 100} />
+                    <LinearProgress variant="determinate" value={step / 8 * 100} />
                 </div>
             </div>
         </>

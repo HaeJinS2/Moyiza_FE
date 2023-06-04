@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Fade from "react-reveal/Fade";
+// import { useQueries } from "react-query";
 
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
@@ -24,6 +25,8 @@ function Club() {
   const [activePageTab, setActivePageTab] = useState(pageTabs[0]);
 
   const [page, setPage] = useState(0);
+  // const [pageChanged, setPageChanged] = useState(false);
+
   const [club, setClub] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
@@ -32,9 +35,44 @@ function Club() {
   const divRef = useRef(null);
   const navigate = useNavigate();
 
+//   const [club1, categories1] = useQueries(
+//     [
+//       {
+//         queryKey: "clubs",
+//         queryFn: () => getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`),
+//         onSuccess: (newClubData) => {
+//           if(page === 0) {
+//             setFilteredClubList([...filteredClubList,...newClubData.data.content])
+//           }
+//           setClub((prevClubData) => [...prevClubData, ...newClubData.data.content]);
+//           setPageChanged(false) 
+//         },
+//         enabled: pageChanged,
+//       },
+//       {
+//         queryKey: "categories",
+//         queryFn: () => getAPI(`/enums`),
+//         onSuccess: (categories) => {
+//           setCategories(["전체", ...categories.data.categoryList]);
+//         },
+//       },
+//     ],
+//     {
+//       refetchOnWindowFocus: false,
+//     }
+//   );
+// console.log(club1.data,categories)
   useEffect(() => {
-    divRef.current.scrollIntoView({ behavior: "smooth" });
+    if (divRef.current) {
+      divRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, []);
+
+  // useEffect(() => {
+  //   setPageChanged(true);
+  // }, []);  // 컴포넌트가 마운트될 때만 실행
+
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -104,13 +142,12 @@ function Club() {
           </div>
         </BodyContainer>
         <div className="flex justify-center items-center">
-
-        <section className="absolute top-52 h-auto min-w-[1920px]">
-          <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
-            <p>당신의 일상을 함께할 취미를</p>
-            <p>'일상속'에서 찾아보세요!</p>
-          </div>
-        </section>
+          <section className="absolute top-52 h-auto min-w-[1920px]">
+            <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
+              <p>당신의 일상을 함께할 취미를</p>
+              <p>'일상속'에서 찾아보세요!</p>
+            </div>
+          </section>
         </div>
         <div className="flex flex-col justify-center items-center">
           <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#FFFBF8] pt-10 rounded-t-[100px] mt-[535px] z-10">
@@ -201,9 +238,12 @@ function Club() {
                   </div>
                 </div>
                 {filteredClubList.length >= 8 && totalPages > page + 1 && (
-                  <div className="flex justify-center mt-10">
+                  <div className="flex justify-center mt-10  pb-10">
                     <button
-                      onClick={() => setPage(page + 1)}
+                      onClick={() => {
+                        setPage(page + 1)
+                        // setPageChanged(true)
+                      } }
                       className="bg-orange-400 text-white px-3 py-2 rounded-full"
                     >
                       더보기
@@ -240,10 +280,7 @@ function Club() {
                 </div>
               </div>
             </BodyContainer>
-          </section>
-          <section className="h-auto">
-            <BodyContainer>
-            <div className="flex flex-col w-full bg-neutral-100 items-center gap-4 justify-center h-[228px]">
+              <div className="min-w-[1920px] flex flex-col bg-neutral-100 items-center gap-4 justify-center h-[228px]">
                 {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
                 <p className="text-5xl font-sans font-semibold">
                   내가 찾는 일상속 이벤트가 없다면?
@@ -253,7 +290,9 @@ function Club() {
                 </div>
                 {/* </div> */}
               </div>
-            </BodyContainer>
+          </section>
+          <section className="h-auto ">
+
           </section>
         </div>
       </div>

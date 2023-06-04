@@ -390,7 +390,7 @@ export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }
             clearInterval(interval); 
           }        
 
-    }, []); 
+    }, [navigate]); 
 
 
     return (

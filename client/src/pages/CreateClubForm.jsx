@@ -386,7 +386,7 @@ function CreateClubForm() {
                 step === 6 && <Step6 nextStep={nextStep} prevStep={prevStep} progress={progress} maxGroupSize={maxGroupSize} handleMaxGroupSizeChange={handleMaxGroupSizeChange} handleMaxGroupSize={handleMaxGroupSize} />
             }
             {
-                step === 7 && <Step7 prevStep={prevStep} progress={progress} handleSubmit={handleSubmit} />
+                step === 7 && <Step7 prevStep={prevStep} progress={progress} titleInput={titleInput} handleSubmit={handleSubmit} />
             }
             {
                 step === 8 && <Step8 titleInput={titleInput} navigate={navigate} prevStep={prevStep} progress={progress} handleSubmit={handleSubmit} />

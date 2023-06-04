@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "../Container";
 import Slider from 'react-input-slider';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import confetti from 'canvas-confetti';
 
 export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option, setSelectedCategory, selectedCategory }) => {
@@ -306,7 +306,7 @@ export const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, 
 }
 
 // 완료
-export const Step7 = ({ prevStep, progress, handleSubmit }) => {
+export const Step7 = ({ prevStep, progress, titleInput, handleSubmit }) => {
 
 
     return (
@@ -319,8 +319,10 @@ export const Step7 = ({ prevStep, progress, handleSubmit }) => {
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                         <div className="flex w-[800px] py-[332px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
-                                <span className="text-[20px] text-left">제출?</span>
                             </div>
+                            <span className="text-[20px] text-center">"{titleInput}의 정보를 다 입력했어요. 
+                            <br />
+                            개설하여 일상을 진행할까요?</span>
                             <div className="flex items-center justify-center gap-4">
                                 <button className="w-[14rem] h-[3.8rem] bg-[#747474] text-white rounded-3xl" onClick={prevStep}>이전</button>
                                 <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={handleSubmit}>제출</button>
@@ -334,6 +336,8 @@ export const Step7 = ({ prevStep, progress, handleSubmit }) => {
 }
 
 export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }) => {
+    const [counter, setCounter] = useState(3);
+
     useEffect(() => {
         var duration = 0.5 * 1000;
         var animationEnd = Date.now() + duration;
@@ -372,7 +376,20 @@ export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }
             requestAnimationFrame(frame);
           }
         }());
-        
+
+        const interval = setInterval(() => {
+            setCounter(counter => counter - 1); 
+          }, 1000); 
+  
+          const timeout = setTimeout(() => {
+              navigate(-1);
+          }, 3000); 
+  
+          return () => {
+            clearTimeout(timeout); 
+            clearInterval(interval); 
+          }        
+
     }, []); 
 
 
@@ -389,8 +406,10 @@ export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }
           
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                         <div className="flex w-[800px] py-[307px] flex-col gap-y-24 z-10">
-                            <div className="flex justify-center items-center w-full">
+                            <div className="flex flex-col justify-center items-center w-full">
                                 <span className="text-[20px] text-center">"{titleInput}"개설완료 <br /> 당신의 일상을 함께하세요!</span>
+                                <br />
+                                <span className="text-[20px] text-center"> {counter}초뒤 이전 화면으로 넘어갑니다.</span>
                             </div>
                             <div className="flex items-center justify-center gap-4">
                                 <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={() => { navigate(`/`) }}>홈으로</button>

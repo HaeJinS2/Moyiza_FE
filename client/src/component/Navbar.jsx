@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
+import { useRecoilState } from "recoil";
+import { roomIdStates } from "../states/chatState";
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 // import { userState } from "../states/userState";
@@ -19,6 +21,7 @@ function Navbar() {
   // const subscriptionRef = useRef(null);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
 
@@ -68,6 +71,10 @@ function Navbar() {
       setIsScrolled(false);
     }
   };
+
+  const handleRoomIdState = (id) => {
+    setRoomIdState([...roomIdState, id])
+  }
 
   useEffect(() => {
     window.addEventListener("scroll", checkScroll);
@@ -196,9 +203,8 @@ function Navbar() {
       ${isScrolled ? " border-b-[1px] border-gray-300" : ""}`}
         >
           <div
-            className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${
-              isScrolled ? "h-[100px]" : "h-[120px]"
-            }`}
+            className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? "h-[100px]" : "h-[120px]"
+              }`}
           >
             <div className="w-full flex justify-between items-center ">
               <div className="flex justify-between items-center text-lg gap-x-2 ml-[-10px]">
@@ -249,11 +255,11 @@ function Navbar() {
                                     // ? "bg-slate-400"
                                     // :
                                     "bg-slate-300"
-                                  }`}
+                                    }`}
                                   key={id}
                                   onClick={
                                     () => {
-                                      navigate("/chat");
+                                      handleRoomIdState(id)
                                       setChatModalOpen(false);
                                     }
                                     // connectToRoom(id)

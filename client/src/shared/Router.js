@@ -12,9 +12,14 @@ import Chat from "../pages/Chat";
 import MyInfoClub from "../pages/MyInfoClub";
 import CreateFeed from "../pages/CreateFeed";
 import Navbar from "../component/Navbar";
+import ChatWindow from "../component/ChatWindow";
+import { useRecoilValue } from "recoil";
+import { roomIdStates } from "../states/chatState";
 import CreateOnedayForm from "../pages/CreateOnedayForm";
 
 const Router = () => {
+  const roomIdState = useRecoilValue(roomIdStates);
+  console.log(roomIdState)
   return (
     <>
       <BrowserRouter>
@@ -36,6 +41,11 @@ const Router = () => {
 
           {/* <Route path="/404" element={<NotFound />} /> */}
         </Routes>
+        {roomIdState ?
+          roomIdState.map((item, index) =>
+            <ChatWindow style={{ right: `${index * 360}px` }} key={index} item={item} />)
+          : null}
+        {/* <ChatWindow /> */}
       </BrowserRouter>
     </>
   );

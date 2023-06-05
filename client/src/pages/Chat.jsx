@@ -202,13 +202,12 @@ const Chat = () => {
     logEvent("Send Chatting", {
       name: "handleOnKeyPress",
       page: "Chat",
-      useremail: emailState.userEmail,
+      userEmail: emailState.userEmail,
     });
     setAmplitudeUserId(emailState.userEmail);
     if (e.key === "Enter") {
       sendMessage({
         content: input,
-        senderNickname: emailState.userEmail,
       });
     }
   };
@@ -259,7 +258,7 @@ const Chat = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="내용을 입력해주세요"
-                onKeyPress={handleOnKeyPress}
+                onKeyPress={handleOnKeyPress} 
               />
               <button
                 className={`h-[50px] w-[100px] rounded-lg ${

@@ -14,9 +14,9 @@ import google from '../component/img/google.png'
 
 function Login() {
     // 소셜로그인   
-    const KAKAO_AUTH_URL = `http://3.34.182.174/oauth2/authorization/kakao`;
-    const NAVER_AUTH_URL = `http://ec2-3-34-182-174.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver`;
-    const GOOGLE_AUTH_URL = `http://ec2-3-34-182-174.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google`;
+    const KAKAO_AUTH_URL = `http://43.201.150.14/oauth2/authorization/kakao`;
+    const NAVER_AUTH_URL = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver`;
+    const GOOGLE_AUTH_URL = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google`;
 
     const kakaologin = () => {
         window.location.href = KAKAO_AUTH_URL;
@@ -39,13 +39,13 @@ function Login() {
                 let apiUrl = '';
 
                 if (currentUrl.includes('/oauth2/code/kakao')) {
-                    apiUrl = `http://3.34.182.174/login/oauth2/code/kakao`;
+                    apiUrl = `http://43.201.150.14/login/oauth2/code/kakao`;
                     console.log('code',code);
                 } else if (currentUrl.includes('/oauth2/code/naver')) {
                     console.log('code',code);
-                    apiUrl = `http://ec2-3-34-182-174.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/naver`;
+                    apiUrl = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/naver`;
                 } else if (currentUrl.includes('/oauth2/code/google')) {
-                    apiUrl = `http://ec2-3-34-182-174.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/google`;
+                    apiUrl = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/google`;
                     console.log('code',code);
                 }
 
@@ -104,7 +104,7 @@ function Login() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const url = `http://3.34.182.174/user/login`;
+        const url = `http://43.201.150.14/user/login`;
         const data = {
             ...userloginInput
         };

@@ -10,12 +10,12 @@ import { getAPI } from '../axios';
 
 function ChatWindow({roomIdState, style}) {
     const [messages, setMessages] = useState([]);
-    const tmpMessage = [{ userId: "dd", senderId: "xx", content: "내용1" },
+    const [tmpMessage, setTmpMessage] = useState([{ userId: "dd", senderId: "xx", content: "내용1" },
     { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" },
     { userId: "dd", senderId: "xx", content: "내용1" },
     { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" },
     { userId: "dd", senderId: "xx", content: "내용1" },
-    { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" }]
+    { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" }]);
     // const roomIdState = useRecoilValue(roomIdStates);
     const [input, setInput] = useState("");
     console.log("roomIdState",roomIdState)
@@ -32,9 +32,9 @@ function ChatWindow({roomIdState, style}) {
 
     const handleOnKeyPress = (e) => {
         if (e.key === "Enter") {
-            // sendMessage({
-            //     content: input,
-            // });
+            sendMessage({
+                content: input,
+            });
         }
     };
 
@@ -126,9 +126,15 @@ function ChatWindow({roomIdState, style}) {
     // };
 
 
-
+// useEffect (() => {
+//     getAPI(`/chat/${roomIdState}`).then((res) => {
+//         console.log(res);
+//         setMessages(res.data.content);
+//         setTmpMessage([...tmpMessage,res.data.content]);
+//     });
+// },[roomIdState])
     
-
+console.log("messages~", messages)
 
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
@@ -136,6 +142,11 @@ function ChatWindow({roomIdState, style}) {
         // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
         if (clientRef.current) {
             // 클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
+            if (!clientRef.current.connected) {
+                console.log("No underlying STOMP connection.");
+                return;
+              }
+          
             if (subscriptionRef.current) {
                 subscriptionRef.current.unsubscribe();
             }
@@ -154,6 +165,7 @@ function ChatWindow({roomIdState, style}) {
             getAPI(`/chat/${roomIdState}`).then((res) => {
                 console.log(res);
                 setMessages(res.data.content);
+                setTmpMessage([...tmpMessage,res.data.content]);
             });
         }
         // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
@@ -210,6 +222,7 @@ function ChatWindow({roomIdState, style}) {
             getAPI(`/chat/${roomIdState}`).then((res) => {
                 console.log(res);
                 setMessages(res.data.content);
+                setTmpMessage([...tmpMessage,res.data.content]);
             });
 
             // Set the new client as current
@@ -283,6 +296,7 @@ function ChatWindow({roomIdState, style}) {
                         <button className='bg-[#FF7701] h-[28px] w-[28px] rounded-full text-white flex items-center justify-center'>+</button>
                         <input
                             onKeyPress={handleOnKeyPress}
+                            value={input}
                             onChange={(e) => setInput(e.target.value)}
                             className="px-2 rounded-3xl w-[206px] h-[28px] bg-gray-200 focus:outline-none focus:ring-0"
                             placeholder="내용을 입력해주세요"

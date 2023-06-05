@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import { getAPI } from '../axios';
 
 
-function ChatWindow({roomIdState, style}) {
+function ChatWindow({ roomIdState, style }) {
     const [messages, setMessages] = useState([]);
     const [tmpMessage, setTmpMessage] = useState([{ userId: "dd", senderId: "xx", content: "내용1" },
     { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" },
@@ -18,7 +18,7 @@ function ChatWindow({roomIdState, style}) {
     { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" }]);
     // const roomIdState = useRecoilValue(roomIdStates);
     const [input, setInput] = useState("");
-    console.log("roomIdState",roomIdState)
+    console.log("roomIdState", roomIdState)
     const messagesEndRef = useRef(null);
     const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
     const clientRef = useRef(null); // client를 useRef로 설정
@@ -126,15 +126,15 @@ function ChatWindow({roomIdState, style}) {
     // };
 
 
-// useEffect (() => {
-//     getAPI(`/chat/${roomIdState}`).then((res) => {
-//         console.log(res);
-//         setMessages(res.data.content);
-//         setTmpMessage([...tmpMessage,res.data.content]);
-//     });
-// },[roomIdState])
-    
-console.log("messages~", messages)
+    // useEffect (() => {
+    //     getAPI(`/chat/${roomIdState}`).then((res) => {
+    //         console.log(res);
+    //         setMessages(res.data.content);
+    //         setTmpMessage([...tmpMessage,res.data.content]);
+    //     });
+    // },[roomIdState])
+
+    console.log("messages~", messages)
 
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
@@ -145,8 +145,8 @@ console.log("messages~", messages)
             if (!clientRef.current.connected) {
                 console.log("No underlying STOMP connection.");
                 return;
-              }
-          
+            }
+
             if (subscriptionRef.current) {
                 subscriptionRef.current.unsubscribe();
             }
@@ -165,7 +165,7 @@ console.log("messages~", messages)
             getAPI(`/chat/${roomIdState}`).then((res) => {
                 console.log(res);
                 setMessages(res.data.content);
-                setTmpMessage([...tmpMessage,res.data.content]);
+                setTmpMessage([...tmpMessage, res.data.content]);
             });
         }
         // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
@@ -222,13 +222,14 @@ console.log("messages~", messages)
             getAPI(`/chat/${roomIdState}`).then((res) => {
                 console.log(res);
                 setMessages(res.data.content);
-                setTmpMessage([...tmpMessage,res.data.content]);
+                setTmpMessage([...tmpMessage, res.data.content]);
             });
 
             // Set the new client as current
             clientRef.current = newClient;
         }
-    },[roomIdState])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [roomIdState])
 
     const sendMessage = (msg) => {
         const token = Cookies.get("ACCESS_TOKEN");
@@ -302,7 +303,7 @@ console.log("messages~", messages)
                             placeholder="내용을 입력해주세요"
                         />
                         <button
-                            onClick={()=>sendMessage({
+                            onClick={() => sendMessage({
                                 content: input,
                             })}
                             className='w-[70px] h-[28px] bg-[#FF7701] text-white rounded-3xl'>전송</button>

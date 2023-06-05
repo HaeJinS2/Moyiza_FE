@@ -5,7 +5,6 @@ import Fade from "react-reveal/Fade";
 
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
-import Navbar from "../component/Navbar";
 // import ReviewCard from "../component/ReviewCard";
 import CreateClub from "./CreateClub";
 import { getAPI } from "../axios";
@@ -62,6 +61,7 @@ function Club() {
 //     }
 //   );
 // console.log(club1.data,categories)
+
   useEffect(() => {
     if (divRef.current) {
       divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -115,7 +115,6 @@ function Club() {
   return (
     <>
       <div ref={divRef}>
-        <Navbar />
         <BodyContainer>
           <div className="flex gap-10 pt-40">
             {pageTabs.map((tab, i) => (

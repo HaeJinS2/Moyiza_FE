@@ -10,25 +10,31 @@ import Detail from "../pages/Detail";
 import Oneday from "../pages/Oneday";
 import Chat from "../pages/Chat";
 import MyInfo from "../pages/MyInfo";
+import CreateFeed from "../pages/CreateFeed";
+import Navbar from "../component/Navbar";
 
 const Router = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/logins" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/user/profile" element={<MyInfo />} />
-        <Route path="/create-club-form" element={<CreateClubForm />} />
-        <Route path="/club" element={<Club />} />
-        <Route path="/oneday" element={<Oneday />} />
-        <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/create-event-form/:id" element={<CreateEventForm />}/>
-        <Route path="/chat" element={<Chat />} />
+    <>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/logins" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/user/profile" element={<MyInfo />} />
+          <Route path="/create-club-form" element={<CreateClubForm />} />
+          <Route path="/club" element={<Club />} />
+          <Route path="/oneday" element={<Oneday />} />
+          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/create-event-form/:id" element={<CreateEventForm />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/create-feed" element={<CreateFeed />} />
 
-        {/* <Route path="/404" element={<NotFound />} /> */}
-      </Routes>
-    </BrowserRouter>
+          {/* <Route path="/404" element={<NotFound />} /> */}
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
 

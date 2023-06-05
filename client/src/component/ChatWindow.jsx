@@ -259,7 +259,7 @@ function ChatWindow({ roomIdState, style }) {
                     <div className="w-[360px] h-px bg-gray-200"></div>
                 </div>
                 <div className='h-[370px] w-full overflow-y-auto'>
-                    {tmpMessage.map((message, index) => {
+                    {messages.map((message, index) => {
                         return message.userId === message.senderId ? (
                             <div className="flex justify-end">
                                 <div key={index} className=" flex-end">

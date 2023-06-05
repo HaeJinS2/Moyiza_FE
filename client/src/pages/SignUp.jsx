@@ -10,7 +10,7 @@ function SignUp() {
   //회원가입 성공 시, 로그인 페이지로 이동
   const navigate = useNavigate();
   const goLogin = () => {
-    navigate('/logins');
+    navigate('/login');
   }
   const handleFind = () => {
     alert('준비 중입니다');
@@ -139,7 +139,7 @@ function SignUp() {
     // console.log('formData',formData);
 
     try {
-      const response = await axios.post("http://3.34.182.174/user/signup", formData);
+      const response = await axios.post("http://43.201.150.14/user/signup", formData);
       console.log(response.data);
       alert('회원가입 성공!');
       goLogin();
@@ -158,36 +158,12 @@ function SignUp() {
         class="flex justify-center"
       >
         <div
-          style={{ marginTop: '120px', width: '650px', height: '1000px', marginBottom: '40px' }}
-          class="p-16 shadow-md w-full h-full rounded-lg bg-gray-50 flex justify-center"
+          style={{ marginTop: '200px', width: '800px', height: '1100px', marginBottom: '40px' }}
+          class="p-16 shadow-md w-full h-full rounded-[30px] bg-gray-50 flex justify-center"
         >
           <form onSubmit={submitHandler} name="signUpBox" class="flex flex-col justify-center space-between w-full" >
             <div style={{ display: 'flex' }}>
-              <div className="profileBox mb-5 flex w-full">
-                <div style={{ width: '27%', display: 'flex', alignItems: 'center' }}>프로필 사진</div>
-                <label style={{display:'flex'}}className="imgBoxLabel " htmlFor="profileImg">
-                  <div style={{ width: '100%', marginRight: '5%', backgroundColor: '#FF7F1E', color: '#fff',display:'flex',alignItems:'center',justifyContent:'center'}} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">파일 선택</div>
-                  <input
-                    id="profileImg"
-                    className="profileImgInput"
-                    type="file"
-                    name="imageFile"
-                    ref={imgRef}
-                    onChange={onChangeImage}
-                    style={{ display: 'none' ,flexDirection:'row'}}
-                  />
-                  {/* 사진 */}
-                  <div class="w-12">
-                    {imageFile &&
-                    <img style={{display:'flex', width:'50px', height:'50px'}} className="labelImg" src={imageFile} alt="uploadImg" />
-                  }
-                  </div>
-
-                  {/* <div className="imgUploadBtn">
-                <i className="fa-sharp fa-solid fa-camera" />
-              </div> */}
-                </label>
-              </div>
+              
             </div>
 
             {/* 이름 입력 */}
@@ -387,7 +363,7 @@ function SignUp() {
               )}
             </div>
             {/* 비밀번호 확인 */}
-            <div className='flex items-center mb-20'>
+            <div className='flex items-center mb-5'>
               <div style={{ width: '27%' }}>
                 <p>비밀번호 확인</p>
               </div>
@@ -402,6 +378,27 @@ function SignUp() {
                 autoComplete="current-password"
               />
             </div>
+            <div className="profileBox mb-20 flex w-full">
+                <div style={{ width: '27%', display: 'flex', alignItems: 'center' }}>프로필 사진</div>
+                <label style={{display:'flex'}}className="imgBoxLabel " htmlFor="profileImg">
+                  <div style={{ width: '100%', marginRight: '5%', backgroundColor: '#FF7F1E', color: '#fff',display:'flex',alignItems:'center',justifyContent:'center'}} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">파일 선택</div>
+                  <input
+                    id="profileImg"
+                    className="profileImgInput"
+                    type="file"
+                    name="imageFile"
+                    ref={imgRef}
+                    onChange={onChangeImage}
+                    style={{ display: 'none' ,flexDirection:'row'}}
+                  />
+                  {/* 사진 */}
+                  <div class="w-12">
+                    {imageFile &&
+                    <img style={{display:'flex', width:'50px', height:'50px'}} className="labelImg" src={imageFile} alt="uploadImg" />
+                  }
+                  </div>
+                </label>
+              </div>
             <hr/>
             <button style={{display:'flex', justifyContent:'center', alignItems:'center' ,width:'100%'}}className={`signupBtn ${activeBtn} ${colorBtn} mt-20`} >
               가입하기

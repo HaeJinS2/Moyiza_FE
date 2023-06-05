@@ -10,6 +10,7 @@ import Detail from "../pages/Detail";
 import Oneday from "../pages/Oneday";
 import Chat from "../pages/Chat";
 import MyInfo from "../pages/MyInfo";
+import CreateFeed from "../pages/CreateFeed";
 
 const Router = () => {
   return (
@@ -23,8 +24,9 @@ const Router = () => {
         <Route path="/club" element={<Club />} />
         <Route path="/oneday" element={<Oneday />} />
         <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/create-event-form/:id" element={<CreateEventForm />}/>
+        <Route path="/create-event-form/:id" element={<CreateEventForm />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/create-feed" element={<CreateFeed />} />
 
         {/* <Route path="/404" element={<NotFound />} /> */}
       </Routes>

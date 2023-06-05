@@ -73,7 +73,8 @@ function Navbar() {
   };
 
   const handleRoomIdState = (id) => {
-    setRoomIdState([...roomIdState, id])
+    const tmpId = new Set([...roomIdState, id])
+    setRoomIdState([...tmpId])
   }
 
   useEffect(() => {

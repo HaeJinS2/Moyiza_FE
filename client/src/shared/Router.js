@@ -9,12 +9,13 @@ import Detail from "../pages/Detail";
 // import NotFound from "../pages/NotFound";
 import Oneday from "../pages/Oneday";
 import Chat from "../pages/Chat";
-import MyInfo from "../pages/MyInfo";
+import MyInfoClub from "../pages/MyInfoClub";
 import CreateFeed from "../pages/CreateFeed";
 import Navbar from "../component/Navbar";
 import ChatWindow from "../component/ChatWindow";
 import { useRecoilValue } from "recoil";
 import { roomIdStates } from "../states/chatState";
+import CreateOnedayForm from "../pages/CreateOnedayForm";
 
 const Router = () => {
   const roomIdState = useRecoilValue(roomIdStates);
@@ -25,9 +26,9 @@ const Router = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/logins" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/user/profile" element={<MyInfo />} />
+          <Route path="/user/mypage" element={<MyInfoClub />} />
           <Route path="/create-club-form" element={<CreateClubForm />} />
           <Route path="/club" element={<Club />} />
           <Route path="/oneday" element={<Oneday />} />
@@ -35,6 +36,9 @@ const Router = () => {
           <Route path="/create-event-form/:id" element={<CreateEventForm />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/create-feed" element={<CreateFeed />} />
+          <Route path="/create-oneday-form" element={<CreateOnedayForm />} />
+
+
           {/* <Route path="/404" element={<NotFound />} /> */}
         </Routes>
         {roomIdState ?

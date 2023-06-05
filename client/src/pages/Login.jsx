@@ -8,23 +8,64 @@ import { userState } from '../states/userState';
 import { useRecoilState } from 'recoil';
 import { parseJwt, setCookie } from '../utils/jwtUtils';
 import Navbar from '../component/Navbar';
-// import kakao from '../component/img/kakao.png';
-// import naver from '../component/img/naver.png';
-// import google from '../component/img/google.png'
+import kakao from '../component/img/kakao.png';
+import naver from '../component/img/naver.png';
+import google from '../component/img/google.png'
 
 function Login() {
     // 소셜로그인   
-    // const kakaoLink = `http://3.34.182.174/oauth2/authorization/kakao?redirect_uri=http://moyiza.s3-website.ap-northeast-2.amazonaws.com/login/oauth2/code/kakao`;
-    // const naverLink = `http://3.34.182.174/oauth2/authorization/naver?redirect_uri=http://moyiza.s3-website.ap-northeast-2.amazonaws.com/login/oauth2/code/naver`;
-    // const search = new URL(window.location.href).searchParams.get('code')
-    // const kakaologinHandler = () => {
-    //     window.location.href = kakaoLink;
-    // };
-    // const naverloginHandler = () => {
-    //     window.location.href = naverLink;
-    // };
+    const KAKAO_AUTH_URL = `http://43.201.150.14/oauth2/authorization/kakao`;
+    const NAVER_AUTH_URL = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver`;
+    const GOOGLE_AUTH_URL = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google`;
 
+    const kakaologin = () => {
+        window.location.href = KAKAO_AUTH_URL;
+    }
+    const naverlogin = () => {
+        window.location.href = NAVER_AUTH_URL;
+    }
+    const googlelogin = () => {
+        window.location.href = GOOGLE_AUTH_URL;
+    }
 
+    const handleAuthorizationCode = async () => {
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get('code');
+        const currentUrl = window.location.href;
+        console.log('code',code);
+
+        if (code) {
+            try {
+                let apiUrl = '';
+
+                if (currentUrl.includes('/oauth2/code/kakao')) {
+                    apiUrl = `http://43.201.150.14/login/oauth2/code/kakao`;
+                    console.log('code',code);
+                } else if (currentUrl.includes('/oauth2/code/naver')) {
+                    console.log('code',code);
+                    apiUrl = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/naver`;
+                } else if (currentUrl.includes('/oauth2/code/google')) {
+                    apiUrl = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/google`;
+                    console.log('code',code);
+                }
+
+                const response = await axios.post(apiUrl, { code });
+                console.log(response.data); // 백엔드로부터 받은 응답 데이터 출력
+
+            } catch (error) {
+                console.error(error);
+                // 오류 처리
+            }
+        } else {
+            console.log('인가 코드가 없습니다.');
+        }
+    };
+
+    // 페이지 로드 시 인가 코드 처리
+    useEffect(() => {
+        handleAuthorizationCode();
+    }, []);
+//--------------------------------------------------------------------
     const [user, setUser] = useRecoilState(userState);
     const navigate = useNavigate();
 
@@ -63,7 +104,7 @@ function Login() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const url = `http://3.34.182.174/user/login`;
+        const url = `http://43.201.150.14/user/login`;
         const data = {
             ...userloginInput
         };
@@ -82,11 +123,6 @@ function Login() {
 
             // 사용자를 로컬 스토리지에 저장
             localStorage.setItem('user', email);
-
-            // await axios.get('http://3.34.182.174/user/mypage',{ email },{ headers:{ ACCESS_TOKEN: jwt}})
-
-            // loginMutation.mutate(response.data);
-            // console.log(response.data);
             alert('로그인 성공');
             goMain();
         } catch (error) {
@@ -99,51 +135,6 @@ function Login() {
     const postAPI = async (url, data) => {
         const response = await axios.post(url, data);
         return response.data;
-        //         const accessToken = Cookies.get('ACCESS_TOKEN');
-        //   const refreshToken = Cookies.get('REFRESH_TOKEN');
-
-        //   const headers = {
-        //     'Content-Type': 'application/json',
-        //     'Authorization': `Bearer ${accessToken}`
-        //   };
-
-        //   try {
-        //     const response = await axios.post(url, data, { headers });
-        //     return response.data;
-        //   } catch (error) {
-        //     if (error.response && error.response.status === 401 && refreshToken) {
-        //       // 토큰 갱신 로직 수행
-        //       const refreshUrl = 'http://3.34.182.174/user/refresh';
-        //       const refreshData = {
-        //         refreshToken
-        //       };
-
-        //       try {
-        //         const refreshResponse = await axios.post(refreshUrl, refreshData);
-        //         const newAccessToken = refreshResponse.data.ACCESS_TOKEN;
-        //         const newRefreshToken = refreshResponse.data.REFRESH_TOKEN;
-
-        //         // 갱신된 토큰을 쿠키에 저장
-        //         Cookies.set('ACCESS_TOKEN', newAccessToken);
-        //         Cookies.set('REFRESH_TOKEN', newRefreshToken);
-
-        //         // 갱신된 토큰을 헤더에 포함하여 다시 요청
-        //         const newHeaders = {
-        //           'Content-Type': 'application/json',
-        //           'Authorization': `Bearer ${newAccessToken}`
-        //         };
-
-        //         const retryResponse = await axios.post(url, data, { headers: newHeaders });
-        //         return retryResponse.data;
-        //       } catch (refreshError) {
-        //         // 토큰 갱신 실패 시 로그아웃 처리 등 필요한 작업 수행
-        //         // ...
-        //       }
-        //     }
-
-        //     // 그 외의 오류 처리
-        //     throw error;
-        //   }
     };
 
     const loginMutation = useMutation(postAPI, {
@@ -177,8 +168,6 @@ function Login() {
 
     const activeBtn = isAllValid ? undefined : 'disabled';
 
-    // const [userEmail, setUserEmail] = useState('');
-    // const [, setUser] = useRecoilState(userState);
     useEffect(() => {
         const emailCookie = getCookie('email');
         if (emailCookie) {
@@ -193,14 +182,6 @@ function Login() {
         return matches ? decodeURIComponent(matches[1]) : undefined;
     };
 
-    // {/* 회원가입 이동 */}
-    // {/* <div style={{ display: 'flex' }} className="flex items-center justify-center">
-    //     <Desc>Don't have an account?</Desc>
-    //     <button className="bg-white text-rose-400 rounded-xl px-4 py-1 shadow hover:shadow-lg " onClick={goSignUp}>
-    //         Create Profile
-    //     </button>
-    // </div> */}
-
     return (
         <>
             <Navbar />
@@ -208,61 +189,60 @@ function Login() {
                 class="flex items-center justify-center"
             >
                 <LoginContainer
-                    style={{ marginTop: '120px', width: '500px', height: '650px' }}
-                    className=" p-8 shadow-md w-full h-full rounded-lg bg-gray-50 flex items-center justify-center"
+                    style={{ marginTop: '200px', width: '590px', height: '670px' }}
+                    className=" p-8 shadow-md w-full h-full rounded-[50px] bg-gray-50 flex items-center justify-center"
                 >
                     <form
                         onSubmit={submitHandler}
                         style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
                     >
                         <div className="mb-3 mt-3" style={{ minHeight: '48px' }}>
-                            <input placeholder="이메일" value={userloginInput.email} onChange={emailChangeHandler} className="shadow-md w-80 h-10 rounded-lg mb-3 px-3.5 py-2 " />
+                            <input placeholder="이메일" value={userloginInput.email} onChange={emailChangeHandler} className="shadow-md w-80 h-10 rounded-[50px] mb-3 px-3.5 py-2 " />
                             {!isEmailValid && userloginInput.email.length > 0 && (
                                 <p className="inputCheck text-rose-400 text-xs absolute ">* 이메일 양식을 맞춰주세요!</p>
                             )}
 
                         </div>
                         <div className="mb-3 mt-3" style={{ minHeight: '48px' }}>
-                            <input placeholder="비밀번호" value={userloginInput.password} onChange={pwChangeHandler} className="shadow-md w-80 h-10 rounded-lg mb-3 px-3.5 py-2" />
+                            <input placeholder="비밀번호" value={userloginInput.password} onChange={pwChangeHandler} className="shadow-md w-80 h-10 rounded-[50px] mb-3 px-3.5 py-2" />
 
                             {!isPwValid && userloginInput.password.length > 0 && (
                                 <p className="inputCheck text-rose-400 text-xs absolute">* 비밀번호는 대소문자, 숫자, 특수문자 포함 8자리 이상 적어주세요!</p>
                             )}
                         </div>
 
-                        <button style={{ backgroundColor: '#FF7F1E' }} className={`${activeBtn} text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg`}>
+                        <button style={{ backgroundColor: '#FF7F1E' }} className={`${activeBtn} text-white rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg`}>
                             Login
                         </button>
                     </form>
                     <Signup className={`mt-11`}>
                         <div onClick={goSignUp} style={{ cursor: 'pointer' }}>회원가입</div>
-                        <div>|</div>
+                        <div className={`text-gray-400 opacity-50`}>|</div>
                         <div onClick={handleFind} style={{ cursor: 'pointer' }}>이메일 찾기</div>
-                        <div>|</div>
+                        <div className={`text-gray-400 opacity-50`}>|</div>
                         <div onClick={handleFind} style={{ cursor: 'pointer' }}>비밀번호 찾기</div>
                     </Signup>
-                    <Social className={`mt-11`}>
-                        <a href="/oauth2/authorization/kakao">
-                            <button type='button' style={{ display: 'flex', backgroundColor: '#FEE500', color: '#191919' }} className={`text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center justify-center`}>
-                                {/* <img src={kakao} alt='' className="mr-2 w-10 h-10 object-contain" style={{backgroundColor: 'transparent'}}></img> */}
-                                카카오톡 로그인</button>
-                        </a>
-                        <a href="/oauth2/authorization/kakao">
-                            <button type='button' style={{ display: 'flex', backgroundColor: '#2db300', color: 'white' }} className={`text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center justify-center`}>
-                                {/* <img src={naver} alt='' className="mr-2 w-10 h-10 object-contain"></img> */}
-                                네이버 로그인</button>
-                        </a>
-                        <a href="/oauth2/authorization/google">
-                            <button type='button' style={{ display: 'flex', backgroundColor: 'white', color: '#191919' }} className={`text-white rounded-xl w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center justify-center`}>
-                                {/* <img src={google} alt='' className="mr-2 w-10 h-10 object-contain"></img> */}
+                    <Social>
+                        <button onClick={kakaologin} type='button' style={{ display: 'flex', backgroundColor: 'white'}} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
+                            <img src={kakao} alt='' className="m-3 p-2 h-full object-contain" style={{backgroundColor: 'transparent'}}></img>
+                            <div className={`mr-4 text-gray-400 opacity-50`}>|</div>
+                            카카오톡 로그인</button>
+                       
+                        <button onClick={naverlogin} type='button' style={{ display: 'flex', backgroundColor: 'white'}} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
+                            <img src={naver} alt='' className="m-3 p-2 h-full object-contain"></img>
+                            <div className={`mr-4 text-gray-400 opacity-50`}>|</div>
+                            네이버 로그인</button>
+                        
+                            <button onClick={googlelogin} type='button' style={{ display: 'flex', backgroundColor: 'white'}} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
+                                <img src={google} alt='' className="m-3 p-2 h-full object-contain"></img>
+                                <div className={`mr-4 text-gray-400 opacity-50`}>|</div>
                                 구글 로그인</button>
-                        </a>
                     </Social>
                 </LoginContainer>
             </div>
         </>
-    );
-}
+    )
+};
 
 export default Login;
 
@@ -270,7 +250,7 @@ const LoginContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-`;
+`
 
 const Signup = styled.div`
   display: flex;
@@ -279,8 +259,7 @@ const Signup = styled.div`
   width: 300px;
   justify-content: space-between;
 `
+
 const Social = styled.div`
-display: flex;
-align-items: center;
-flex-direction: column;
+    margin-top: 20px;
 `

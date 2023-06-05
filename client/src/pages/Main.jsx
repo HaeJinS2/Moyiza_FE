@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { motion } from "framer-motion";
-import { slideIn, staggerContainer } from "../utils/motion";
+import { staggerContainer } from "../utils/motion";
 import Fade from "react-reveal/Fade";
 import { useNavigate } from "react-router-dom";
 import BodyContainer from "../component/BodyContainer";
@@ -57,27 +57,40 @@ function Main() {
             className={`mx-auto flex flex-col justify-between`}
           >
             <div className="mt-40 grid grid-cols-2 gap-x-2">
-              <motion.div
+              {/* <motion.div
                 variants={slideIn("left", "tween", 0.2, 1)}
                 className="relative w-auto "
-              >
+              > */}
+              <div className="relative w-auto ">
                 <div className="p-4 flex flex-1 flex-col h-[422px] font-bold text-5xl rounded-lg text-black justify-center ">
                   <div className="flex flex-col font-sans">
-                    <p>취미 공유할 사람</p>
-                    <p>모두 여기, 모이자!</p>
-                    <br/>
-                    <p className="text-2xl font-semibold">당일 모임부터 정기 모임까지</p>
+                  <Fade bottom delay={0}>
+                      <p>취미 공유할 사람</p>
+                      <p>모두 여기, 모이자!</p>
+                    </Fade>
+                    <br />
+                    <Fade bottom delay={500}>
+                      <p className="text-2xl font-semibold">
+                        일일 모임부터 정기 모임까지
+                      </p>
+                    </Fade>
                   </div>
                 </div>
-              </motion.div>
-              <motion.div
+              </div>
+              {/* </motion.div> */}
+              {/* <motion.div
                 variants={slideIn("right", "tween", 0.2, 1)}
                 className="relative w-auto flex justify-end items-end"
-              >
+              > */}
+              <div className="relative w-auto flex justify-end items-end">
                 <div className="p-4 flex flex-1 flex-col h-[422px] font-bold text-5xl bg-transparent rounded-lg text-white justify-center items-center">
-                  <img src={`${process.env.PUBLIC_URL}/images/main.png`} alt="main_image" />
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/main.png`}
+                    alt="main_image"
+                  />
                 </div>
-              </motion.div>
+              </div>
+              {/* </motion.div> */}
             </div>
           </motion.div>
           <MyLocation />

@@ -59,7 +59,7 @@ function Navbar() {
   // }
 
   const goMyInfo = () => {
-    navigate("/user/profile");
+    navigate("/user/mypage");
   };
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -322,7 +322,7 @@ function Navbar() {
                     <div></div>
                     <div></div>
                     <div
-                      onClick={() => navigate("/logins")}
+                      onClick={() => navigate("/login")}
                       className="flex cursor-pointer w-[70px] h-[60px] items-center"
                     >
                       로그인

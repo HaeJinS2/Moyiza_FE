@@ -1,9 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
 // import CreateClub from "./CreateClub";
 
 function CreateFeed() {
+  const navigate = useNavigate()
   return (
     <>
       <Navbar />
@@ -16,7 +18,10 @@ function CreateFeed() {
           {/* <CreateClub> */}
             <img src={`${process.env.PUBLIC_URL}/images/create_club.svg`} alt="create-club"/>
           {/* </CreateClub> */}
-          <img src={`${process.env.PUBLIC_URL}/images/create_oneday.svg`} alt="create-oneday"/>
+          <img 
+          className=" cursor-pointer"
+          onClick={() => navigate('/create-oneday-form')}
+          src={`${process.env.PUBLIC_URL}/images/create_oneday.svg`} alt="create-oneday"/>
           </div>
       </div>
       </Container>

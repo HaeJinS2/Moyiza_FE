@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import confetti from 'canvas-confetti';
 
 export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option, setSelectedCategory, selectedCategory }) => {
-  
+
 
     return (
         <Container>
@@ -49,7 +49,7 @@ export const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagC
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
@@ -92,7 +92,7 @@ export const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleIn
             <Container>
                 <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                     <div className="flex flex-col">
-                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                        <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                             <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                         </div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
@@ -123,7 +123,7 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
@@ -175,7 +175,7 @@ export const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setS
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
@@ -253,7 +253,7 @@ export const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, 
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
@@ -313,16 +313,11 @@ export const Step7 = ({ prevStep, progress, titleInput, handleSubmit }) => {
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
-                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
-                    </div>
-                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[332px] flex-col gap-y-24 z-10">
-                            <div className="flex justify-start items-start w-full">
-                            </div>
-                            <span className="text-[20px] text-center">"{titleInput}의 정보를 다 입력했어요. 
-                            <br />
-                            개설하여 일상을 진행할까요?</span>
+                    <div className="flex flex-col items-center w-full md:w-[1920px] h-[100vh] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
+                        <div className="flex w-[800px] h-[100vh] justify-center flex-col gap-y-24 z-10">
+                            <span className="text-[20px] text-center">"{titleInput}"의 정보를 다 입력했어요.
+                                <br />
+                                개설하여 일상을 진행할까요?</span>
                             <div className="flex items-center justify-center gap-4">
                                 <button className="w-[14rem] h-[3.8rem] bg-[#747474] text-white rounded-3xl" onClick={prevStep}>이전</button>
                                 <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={handleSubmit}>제출</button>
@@ -342,55 +337,55 @@ export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }
         var duration = 0.5 * 1000;
         var animationEnd = Date.now() + duration;
         var skew = 1;
-        
+
         function getRandomColor() {
-          const colors = ['#ff0000', '#0000ff', '#ffff00', '#00ff00']; // 여기에 원하는 색상을 추가
-          return colors[Math.floor(Math.random() * colors.length)];
+            const colors = ['#ff0000', '#0000ff', '#ffff00', '#00ff00']; // 여기에 원하는 색상을 추가
+            return colors[Math.floor(Math.random() * colors.length)];
         }
-        
+
         function randomInRange(min, max) {
-          return Math.random() * (max - min) + min;
+            return Math.random() * (max - min) + min;
         }
-        
+
         (function frame() {
-          var timeLeft = animationEnd - Date.now();
-          var ticks = Math.max(200, 500 * (timeLeft / duration));
-          skew = Math.max(0.8, skew - 0.001);
-        
-          confetti({
-            particleCount: 1,
-            startVelocity: 0, // increase this for faster initial velocity
-            ticks: ticks,
-            origin: {
-              x: Math.random(),
-              y: (Math.random() * skew) - 0.2
-            },
-            colors: [getRandomColor()],
-            shapes: ['circle'],
-            gravity: 3, // increase this for faster fall speed
-            scalar: randomInRange(0.8, 1.4),
-            drift: randomInRange(-0.4, 0.4)
-          });
-        
-          if (timeLeft > 0) {
-            requestAnimationFrame(frame);
-          }
+            var timeLeft = animationEnd - Date.now();
+            var ticks = Math.max(200, 500 * (timeLeft / duration));
+            skew = Math.max(0.8, skew - 0.001);
+
+            confetti({
+                particleCount: 1,
+                startVelocity: 0, // increase this for faster initial velocity
+                ticks: ticks,
+                origin: {
+                    x: Math.random(),
+                    y: (Math.random() * skew) - 0.2
+                },
+                colors: [getRandomColor()],
+                shapes: ['circle'],
+                gravity: 3, // increase this for faster fall speed
+                scalar: randomInRange(0.8, 1.4),
+                drift: randomInRange(-0.4, 0.4)
+            });
+
+            if (timeLeft > 0) {
+                requestAnimationFrame(frame);
+            }
         }());
 
         const interval = setInterval(() => {
-            setCounter(counter => counter - 1); 
-          }, 1000); 
-  
-          const timeout = setTimeout(() => {
-              navigate(-1);
-          }, 3000); 
-  
-          return () => {
-            clearTimeout(timeout); 
-            clearInterval(interval); 
-          }        
+            setCounter(counter => counter - 1);
+        }, 1000);
 
-    }, [navigate]); 
+        const timeout = setTimeout(() => {
+            navigate(-1);
+        }, 3000);
+
+        return () => {
+            clearTimeout(timeout);
+            clearInterval(interval);
+        }
+
+    }, [navigate]);
 
 
     return (
@@ -399,13 +394,8 @@ export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }
 
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
-                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
-                    </div>
-
-          
-                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[307px] flex-col gap-y-24 z-10">
+                    <div className="flex flex-col items-center w-full md:w-[1920px] h-[100vh] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
+                        <div className="flex w-[800px] h-[100vh] justify-center flex-col gap-y-24 z-10">
                             <div className="flex flex-col justify-center items-center w-full">
                                 <span className="text-[20px] text-center">"{titleInput}"개설완료 <br /> 당신의 일상을 함께하세요!</span>
                                 <br />

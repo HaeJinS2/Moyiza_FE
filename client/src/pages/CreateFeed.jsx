@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "../component/Container";
 import Navbar from "../component/Navbar";
-import CreateClub from "./CreateClub";
+// import CreateClub from "./CreateClub";
 
 function CreateFeed() {
   return (

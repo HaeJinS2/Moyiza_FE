@@ -53,7 +53,7 @@ const Chat = () => {
     if (token) {
       try {
         const decoded = jwt_decode(token);
-        setEserEmailState({ userEmail: decoded.sub });
+        setEserEmailState({user: decoded });
         console.log("Decoded sub: ", decoded.sub);
         console.log(emailState);
       } catch (error) {
@@ -202,16 +202,16 @@ const Chat = () => {
     logEvent("Send Chatting", {
       name: "handleOnKeyPress",
       page: "Chat",
-      useremail: emailState.userEmail,
+      userEmail: emailState.userEmail,
     });
     setAmplitudeUserId(emailState.userEmail);
     if (e.key === "Enter") {
       sendMessage({
         content: input,
-        senderNickname: emailState.userEmail,
       });
     }
   };
+  console.log(emailState)
   // Render the messages from the server.
   return (
     <>
@@ -221,7 +221,7 @@ const Chat = () => {
           <div className="flex flex-col justify-between w-[700px]">
             <div className="flex flex-col h-[530px] p-2 overflow-y-auto">
               {messages.map((message, index) => {
-                return emailState.userEmail === message.senderNickname ? (
+                return emailState.user.userId === message.senderId ? (
                   <div className="flex justify-end">
                     <div key={index} className=" flex-end">
                       <div className="flex justify-end">
@@ -232,7 +232,7 @@ const Chat = () => {
                           {console.log(message)}
                           내용 : {message.content + " "}
                         </div>
-                        <div className="rounded-full bg-black w-[40px] h-[40px]"></div>
+                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image"/>
                       </div>
                     </div>
                   </div>
@@ -242,7 +242,7 @@ const Chat = () => {
                       <div>보낸사람 : {message.senderNickname}</div>
                     </div>
                     <div className="flex gap-x-1 items-center">
-                      <div className="rounded-full bg-black w-[40px] h-[40px]"></div>
+                    <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image"/>
                       <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
                         내용 : {message.content + " "}
                       </div>
@@ -258,7 +258,7 @@ const Chat = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="내용을 입력해주세요"
-                onKeyPress={handleOnKeyPress}
+                onKeyPress={handleOnKeyPress} 
               />
               <button
                 className={`h-[50px] w-[100px] rounded-lg ${

@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { slideIn, staggerContainer } from "../utils/motion";
 import Fade from "react-reveal/Fade";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../component/Navbar";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
@@ -47,7 +46,7 @@ function Main() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <BodyContainer>
         <section ref={divRef}>
           <motion.div

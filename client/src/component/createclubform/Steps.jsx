@@ -1,18 +1,21 @@
 import React from "react";
 import Container from "../Container";
 import Slider from 'react-input-slider';
+import { useEffect, useState } from "react";
+import confetti from 'canvas-confetti';
 
 export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option, setSelectedCategory, selectedCategory }) => {
+  
 
     return (
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
-                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[103px] flex-col gap-y-24 z-10">
+                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px] overflow-hidden">
+                        <div className="flex w-[800px] py-[128px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
                                 <span className="text-[20px] text-left">1. 관심사를 선택하세요.</span>
                             </div>
@@ -46,12 +49,12 @@ export const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagC
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex flex-col  w-full h-[500px] items-center justify-center ">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                            <div className="flex w-[800px] h-[800px] justify-center items-center flex-col gap-y-24 z-10">
+                            <div className="flex w-[800px] py-[187px] justify-center items-center flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
                                     <span className="text-[20px] text-left">2. 원하는 카테고리를 선택하세요.</span>
                                 </div>
@@ -89,11 +92,11 @@ export const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleIn
             <Container>
                 <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                     <div className="flex flex-col">
-                        <div className="flex  w-full h-[500px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                             <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                         </div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                            <div className="flex w-[800px] py-[220.5px] flex-col gap-y-24 z-10">
+                            <div className="flex w-[800px] py-[246px] flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
                                     <span className="text-[20px] text-left">3. 원하는 일상속 이름을 작성해주세요.</span>
                                 </div>
@@ -120,11 +123,11 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[62px] flex-col gap-y-24 z-10">
+                        <div className="flex w-[800px] py-[79px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
                                 <span className="text-[20px] text-left">4. 일상속 정보를 입력하세요.</span>
                             </div>
@@ -133,7 +136,7 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
                                 <div className="flex  justify-start items-start w-full">
                                     <span className="text-[20px] text-left">1) 일상속 이미지를 등록하세요.</span>
                                 </div>
-                                <div className="flex justify-start items-start w-full">
+                                <div className="flex justify-start items-center gap-x-2 w-full">
                                     {preview && (
                                         <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
                                     )}
@@ -172,11 +175,11 @@ export const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setS
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
-                        <div className="flex w-[800px] py-[111px] flex-col gap-y-24 z-10">
+                        <div className="flex w-[800px] py-[136px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
                                 <span className="text-[20px] text-left">5. 함께할 일상속 멤버 조건을 설정하세요.</span>
                             </div>
@@ -227,7 +230,7 @@ export const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setS
                                             <div>35</div>
                                             <div>40</div>
                                             <div>45</div>
-                                            <div>50+</div>
+                                            <div>50</div>
                                         </div>
                                     </div>
                                 </div>
@@ -248,33 +251,53 @@ export const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setS
 export const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, maxGroupSize }) => {
     return (
         <Container>
-            <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                <div className="flex flex-col gap-y-10">
-                    <div>                    {/* <input type="text" value={maxGroupSize} onChange={handleMaxGroupSizeChange} /> */}
-                        <div>{'몇명까지?: ' + maxGroupSize.x}</div>
-                        {maxGroupSize && (
-                            <Slider
-                                styles={{
-                                    track: {
-                                        width: 1200,
-                                    },
-                                    active: {
-                                        backgroundColor: '#FB7185'
-                                    },
-                                }}
-                                axis="x"
-                                xstep={1}
-                                xmin={20}
-                                xmax={100}
-                                x={maxGroupSize.x}
-                                onChange={({ x }) => handleMaxGroupSizeChange({ x: parseFloat(x.toFixed(2)) })}
-                            />
-                        )}
+            <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
+                <div className="flex flex-col">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
                     </div>
+                    <div>
+                        <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
+                            <div className="flex w-[800px] py-[260px] flex-col gap-y-24 z-10">
+                                <div className="flex justify-start items-start w-full">
+                                    <span className="text-[20px] text-left">6. 몇명과 함께할까요?</span>
+                                </div>
+                                <div>
+                                    {maxGroupSize && (
+                                        <Slider
+                                            styles={{
+                                                track: {
+                                                    width: 1000,
+                                                },
+                                                active: {
+                                                    backgroundColor: '#FFE14F'
+                                                },
+                                            }}
+                                            axis="x"
+                                            xstep={5}
+                                            xmin={5}
+                                            xmax={35}
+                                            x={maxGroupSize.x}
+                                            onChange={({ x }) => handleMaxGroupSizeChange({ x: parseFloat(x.toFixed(2)) })}
+                                        />
+                                    )}
+                                    <div className="flex justify-between w-[1000px]">
+                                        <div>5</div>
+                                        <div>10</div>
+                                        <div>15</div>
+                                        <div>20</div>
+                                        <div>25</div>
+                                        <div>30</div>
+                                        <div>35</div>
+                                    </div>
+                                </div>
+                                <div className="flex items-center justify-center gap-4">
+                                    <button className="w-[14rem] h-[3.8rem] bg-[#747474] text-white rounded-3xl" onClick={prevStep}>이전</button>
+                                    <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={nextStep}>다음</button>
+                                </div>
+                            </div>
 
-                    <div className="flex items-center justify-center gap-4">
-                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
-                        <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={nextStep}>다음</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -283,13 +306,117 @@ export const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, 
 }
 
 // 완료
-export const Step7 = ({ prevStep, progress, handleSubmit }) => {
+export const Step7 = ({ prevStep, progress, titleInput, handleSubmit }) => {
+
+
     return (
         <Container>
-            <section className="h-[100vh] flex flex-1 flex-col items-center justify-center">
-                <div className="flex items-center justify-center gap-4">
-                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={prevStep}>이전</button>
-                    <button className=" w-[600px] h-32 bg-[#FB7185]" onClick={handleSubmit}>제출</button>
+            <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
+                <div className="flex flex-col">
+                <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                    </div>
+                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
+                        <div className="flex w-[800px] py-[332px] flex-col gap-y-24 z-10">
+                            <div className="flex justify-start items-start w-full">
+                            </div>
+                            <span className="text-[20px] text-center">"{titleInput}의 정보를 다 입력했어요. 
+                            <br />
+                            개설하여 일상을 진행할까요?</span>
+                            <div className="flex items-center justify-center gap-4">
+                                <button className="w-[14rem] h-[3.8rem] bg-[#747474] text-white rounded-3xl" onClick={prevStep}>이전</button>
+                                <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={handleSubmit}>제출</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </Container>
+    )
+}
+
+export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }) => {
+    const [counter, setCounter] = useState(3);
+
+    useEffect(() => {
+        var duration = 0.5 * 1000;
+        var animationEnd = Date.now() + duration;
+        var skew = 1;
+        
+        function getRandomColor() {
+          const colors = ['#ff0000', '#0000ff', '#ffff00', '#00ff00']; // 여기에 원하는 색상을 추가
+          return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        function randomInRange(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+        
+        (function frame() {
+          var timeLeft = animationEnd - Date.now();
+          var ticks = Math.max(200, 500 * (timeLeft / duration));
+          skew = Math.max(0.8, skew - 0.001);
+        
+          confetti({
+            particleCount: 1,
+            startVelocity: 0, // increase this for faster initial velocity
+            ticks: ticks,
+            origin: {
+              x: Math.random(),
+              y: (Math.random() * skew) - 0.2
+            },
+            colors: [getRandomColor()],
+            shapes: ['circle'],
+            gravity: 3, // increase this for faster fall speed
+            scalar: randomInRange(0.8, 1.4),
+            drift: randomInRange(-0.4, 0.4)
+          });
+        
+          if (timeLeft > 0) {
+            requestAnimationFrame(frame);
+          }
+        }());
+
+        const interval = setInterval(() => {
+            setCounter(counter => counter - 1); 
+          }, 1000); 
+  
+          const timeout = setTimeout(() => {
+              navigate(-1);
+          }, 3000); 
+  
+          return () => {
+            clearTimeout(timeout); 
+            clearInterval(interval); 
+          }        
+
+    }, [navigate]); 
+
+
+    return (
+
+        <Container>
+
+            <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
+                <div className="flex flex-col">
+                    <div className="flex  w-full h-[500px] items-center justify-center ">
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                    </div>
+
+          
+                    <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
+                        <div className="flex w-[800px] py-[307px] flex-col gap-y-24 z-10">
+                            <div className="flex flex-col justify-center items-center w-full">
+                                <span className="text-[20px] text-center">"{titleInput}"개설완료 <br /> 당신의 일상을 함께하세요!</span>
+                                <br />
+                                <span className="text-[20px] text-center"> {counter}초뒤 이전 화면으로 넘어갑니다.</span>
+                            </div>
+                            <div className="flex items-center justify-center gap-4">
+                                <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={() => { navigate(`/`) }}>홈으로</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
         </Container>

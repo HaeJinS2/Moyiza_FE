@@ -6,35 +6,34 @@ import { deleteAPI, getAPI, postAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import ClubEventCard from "../component/ClubEventCard";
 // import ClubReviewCard from "../component/ClubReviewCard";
-import Navbar from "../component/Navbar";
 import { latestClubState } from "../states/clubState";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
+import EndedClubEventCard from "../component/EndedClubEventCard";
 
 function Detail() {
   const { id } = useParams();
   const [clubMemberNicknameArr, setClubMemberNicknameArr] = useState([]);
   const [eventlists, setEventLists] = useState([]);
+  const [onEdit, setOnEdit] = useState(false);
   const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const navigate = useNavigate();
+
+  // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
-
   if (progressTuple[1] !== progressEventPage) {
     setProgressTuple([progressTuple[1], progressEventPage]);
   }
-
   let progressPrev = progressTuple[0];
   let progressDirection = progressEventPage > progressPrev ? 1 : -1;
 
+  // 지난 이벤트 상태관리
   const [endedEventPage, setEndedEventPage] = useState(0);
-
   const [endedTuple, setEndedTuple] = useState([null, endedEventPage]);
-
   if (endedTuple[1] !== endedEventPage) {
     setEndedTuple([endedTuple[1], endedEventPage]);
   }
-
   let endedPrev = endedTuple[0];
   let endedDirection = endedEventPage > endedPrev ? 1 : -1;
 
@@ -123,7 +122,7 @@ function Detail() {
   };
 
   console.log(eventlists);
-
+  console.log(clubDetail?.data);
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
   useEffect(() => {
@@ -136,6 +135,7 @@ function Detail() {
     <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
   }
 
+  // EventList에 eventEndTime key 추가
   const newEventLists = eventlists.map((item) => {
     const eventStartTime = new Date(item.eventStartTime);
     const eventEndTime = new Date(eventStartTime.setHours(23, 59, 59));
@@ -145,17 +145,18 @@ function Detail() {
     };
   });
 
+  // 진행중인 이벤트 리스트
   const progressEvents = newEventLists.filter((item) => {
     const eventEndTime = new Date(item.eventEndTime);
     const today = new Date();
     return today <= eventEndTime;
   });
 
+  // 지난 이벤트 리스트
   const endedEvents = newEventLists.filter((item) => {
     const eventEndTime = new Date(item.eventEndTime);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     return eventEndTime <= today;
   });
   console.log(eventlists);
@@ -182,164 +183,216 @@ function Detail() {
   return (
     <>
       <div ref={divRef} />
-      <Navbar />
       <BodyContainer>
         <header className="flex pt-40 flex-col justify-center items-center relative gap-10 mb-10">
-          <div className="self-end">
-            <button
-              onClick={handleDeleteClub}
-              className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80"
-            >
-              클럽삭제
+          <div className="flex justify-between w-full items-center">
+            <button onClick={() => navigate(-1)}>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                alt="previous_button"
+              />
             </button>
+            <div className="font-bold text-2xl">
+              {clubDetail?.data.clubTitle}
+            </div>
+            {onEdit ? (
+              <button onClick={() => setOnEdit(false)}>
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/setting.svg`}
+                  alt="cancel_button"
+                />
+              </button>
+            ) : (
+              <button onClick={() => setOnEdit(true)}>
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/setting.svg`}
+                  alt="setting_button"
+                />
+              </button>
+            )}
           </div>
-          <img
-            src={clubDetail?.data.thumbnailUrl}
-            className="w-[240px] h-[240px] rounded-full"
-            alt="club-thumbnail"
-          />
-          <p className="font-bold text-2xl">{clubDetail?.data.clubTitle}</p>
-          <p>{clubDetail?.clubContent}</p>
+          <div className="self-end">
+            {onEdit && (
+              <button
+                onClick={handleDeleteClub}
+                className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80"
+              >
+                모임 삭제
+              </button>
+            )}
+          </div>
+          <div>
+            <div className="aspect-square flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl py-2">
+              <img
+                className="rounded-md w-[219px] h-[219px] object-fill"
+                src={clubDetail?.data.thumbnailUrl}
+                alt="clubThumbnail"
+              />
+            </div>
+            <div className="flex justify-center gap-20">
+              {clubDetail?.data.clubTag.map((item) => {
+                return (
+                  <>
+                    <div className="flex font-semibold  cursor-default items-center justify-center text-orange-400 text-xl border-orange-400 border-2 px-2 pt-[4px] rounded-full h-[35px]">
+                      {item}
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+          </div>
+          <div className="w-full h-[237px] bg-neutral-200 rounded-2xl">
+            {clubDetail?.clubContent}
+          </div>
         </header>
         <body className="flex flex-col gap-4">
           <div className="flex justify-between gap-10">
             <div>
-              <p className="text-xl">진행중인 클럽 이벤트</p>
+              <p className="text-xl">진행중인 일상속 이벤트</p>
             </div>
             <div>
               {progressEventPage > 0 && (
                 <button
                   onClick={() => setProgressEventPage(progressEventPage - 1)}
                 >
-                  이전으로
+                  <img
+                    alt="prev_button"
+                    src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                  />
                 </button>
               )}
               {progressEventPage < Math.ceil(progressEvents.length / 4) - 1 && (
                 <button
                   onClick={() => setProgressEventPage(progressEventPage + 1)}
                 >
-                  다음으로
+                  <img
+                    alt="next_button"
+                    src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                  />
                 </button>
               )}
             </div>
           </div>
-            <div className="flex justify-center items-center">
-              <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
-                <AnimatePresence custom={progressDirection}>
-                  <motion.div
-                    key={progressEventPage}
-                    variants={varients}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    custom={progressDirection}
-                    transition={{ duration: 0.5 }}
-                    className={`h-[200px] absolute flex justify-center items-center w-full `}
+          <div className="flex justify-center items-center">
+            <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
+              <AnimatePresence custom={progressDirection}>
+                <motion.div
+                  key={progressEventPage}
+                  variants={varients}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={progressDirection}
+                  transition={{ duration: 0.5 }}
+                  className={`h-[200px] absolute flex justify-center items-center w-full `}
+                >
+                  <div
+                    className={`${
+                      progressEvents.length === 0 ? "" : "grid grid-cols-4"
+                    } gap-x-4 gap-y-8 w-full`}
                   >
-                    <div
-                      className={`${
-                        progressEvents.length === 0 ? "" : "grid grid-cols-4"
-                      } gap-x-4 gap-y-8 w-full`}
-                    >
-                      {progressEvents.length === 0 ? (
-                        <EmptyState page="detail" />
-                      ) : (
-                        progressEvents
-                          .slice(
-                            progressEventPage * 4,
-                            progressEventPage * 4 + 4
-                          ) // progressEvents 배열에서 현재 페이지에 해당하는 4개의 요소만 선택
-                          .map((item) => {
-                            return (
-                              <ClubEventCard
-                                handleJoinEvent={handleJoinEvent}
-                                key={item?.id}
-                                clubId={item?.clubId}
-                                eventId={item?.id}
-                                title={item?.eventTitle}
-                                content={item?.eventContent}
-                                size={item?.eventGroupSize}
-                                attendantsNum={item?.attendantsNum}
-                                startTime={item?.eventStartTime}
-                                location={item?.eventLocation}
-                              />
-                            );
-                          })
-                      )}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                    {progressEvents.length === 0 ? (
+                      <EmptyState page="detail" />
+                    ) : (
+                      progressEvents
+                        .slice(progressEventPage * 4, progressEventPage * 4 + 4) // progressEvents 배열에서 현재 페이지에 해당하는 4개의 요소만 선택
+                        .map((item) => {
+                          return (
+                            <ClubEventCard
+                              handleJoinEvent={handleJoinEvent}
+                              key={item?.id}
+                              clubId={item?.clubId}
+                              eventId={item?.id}
+                              title={item?.eventTitle}
+                              content={item?.eventContent}
+                              size={item?.eventGroupSize}
+                              attendantsNum={item?.attendantsNum}
+                              startTime={item?.eventStartTime}
+                              location={item?.eventLocation}
+                            />
+                          );
+                        })
+                    )}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
 
-          <p className="text-xl">종료된 클럽 이벤트</p>
+          <p className="text-xl">종료된 일상속 이벤트</p>
 
-            <div className="flex h-full justify-center items-center">
-              <div className="flex justify-center w-full h-[100vh] text-black items-center overflow-hidden relative">
-                <AnimatePresence custom={endedDirection}>
-                  <motion.div
-                    key={endedEventPage}
-                    variants={varients}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    custom={endedDirection}
-                    transition={{ duration: 0.5 }}
-                    className={`h-full absolute flex justify-center items-center w-full `}
+          <div className="flex h-full justify-center items-center">
+            <div className="flex justify-center w-full h-[100vh] text-black items-center overflow-hidden relative">
+              <AnimatePresence custom={endedDirection}>
+                <motion.div
+                  key={endedEventPage}
+                  variants={varients}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={endedDirection}
+                  transition={{ duration: 0.5 }}
+                  className={`h-full absolute flex justify-center items-center w-full `}
+                >
+                  <div
+                    className={`${
+                      endedEvents.length === 0
+                        ? ""
+                        : "grid grid-cols-3 grid-rows-3"
+                    } gap-x-4 gap-y-8 w-full `}
                   >
-                    <div
-                      className={`${
-                        endedEvents.length === 0
-                          ? ""
-                          : "grid grid-cols-3 grid-rows-4"
-                      } gap-x-4 gap-y-8 w-full `}
-                    >
-                      {endedEvents.length === 0 ? (
-                        <EmptyState page="detail" />
-                      ) : (
-                        endedEvents
-                          .slice(endedEventPage * 12, endedEventPage * 12 + 12)
-                          .map((item) => {
-                            return (
-                              <ClubEventCard
-                                key={item?.id}
-                                clubId={item?.clubId}
-                                eventId={item?.id}
-                                title={item?.eventTitle}
-                                content={item?.eventContent}
-                                size={item?.eventGroupSize}
-                                attendantsNum={item?.attendantsNum}
-                                startTime={item?.eventStartTime}
-                                location={item?.eventLocation}
-                              />
-                            );
-                          })
-                      )}
-                      <div className="flex justify-center gap-10"></div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                    {endedEvents.length === 0 ? (
+                      <EmptyState page="detail" />
+                    ) : (
+                      endedEvents
+                        .slice(endedEventPage * 9, endedEventPage * 9 + 9)
+                        .map((item) => {
+                          return (
+                            <EndedClubEventCard
+                              key={item?.id}
+                              clubId={item?.clubId}
+                              eventId={item?.id}
+                              title={item?.eventTitle}
+                              content={item?.eventContent}
+                              size={item?.eventGroupSize}
+                              attendantsNum={item?.attendantsNum}
+                              startTime={item?.eventStartTime}
+                              location={item?.eventLocation}
+                            />
+                          );
+                        })
+                    )}
+                    <div className="flex justify-center gap-10"></div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
-            <div className="flex justify-center gap-10">
-              {endedEventPage > 0 && (
-                <button onClick={() => setEndedEventPage(endedEventPage - 1)}>
-                  이전으로
-                </button>
-              )}
-              {endedEventPage < Math.ceil(endedEvents.length / 3) - 1 && (
-                <button onClick={() => setEndedEventPage(endedEventPage + 1)}>
-                  다음으로
-                </button>
-              )}
-            </div>
+          </div>
+          <div className="flex justify-center gap-10">
+            {endedEventPage > 0 && (
+              <button onClick={() => setEndedEventPage(endedEventPage - 1)}>
+                <img
+                  alt="prev_button"
+                  src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                />
+              </button>
+            )}
+            {endedEventPage < Math.ceil(endedEvents.length / 3) - 1 && (
+              <button onClick={() => setEndedEventPage(endedEventPage + 1)}>
+                <img
+                  alt="next_button"
+                  src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                />
+              </button>
+            )}
+          </div>
 
           <div className="flex justify-end">
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
-              <button onClick={handleJoinClub}>클럽 가입하기</button>
+              <button onClick={handleJoinClub}>모임 가입하기</button>
             </div>
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-3/4">
-              <button onClick={handleGoodbyeClub}>클럽 탈퇴하기</button>
+              <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
             </div>
             <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-2/4">
               <button onClick={() => navigate(`/create-event-form/${id}`)}>

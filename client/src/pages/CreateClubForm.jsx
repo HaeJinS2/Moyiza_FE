@@ -42,6 +42,7 @@ function CreateClubForm() {
     const [selectedFile, setSelectedFile] = useState(club?.thumbnailUrl || '');
     const [selectedFileName, setSelectedFileName] = useState("");
     const [preview, setPreview] = useState(null);
+    
     console.log(selectedGenderPolicy)
     // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
@@ -56,7 +57,7 @@ function CreateClubForm() {
             setStep(1)
             return
         }
-        if (tagInput1 && tagInput2 && tagInput3) {
+        if (tagInput1 || tagInput2 || tagInput3) {
             setStep(3)
         } else {
             setStep(2)

@@ -4,7 +4,7 @@ import Heading from "./Heading";
 
 const EmptyState = ({
   page,
-  subtitle = "클럽 개설하러가기",
+  subtitle = "일상속 개설하러가기",
   showReset = false,
 }) => {
   console.log(page)
@@ -14,7 +14,7 @@ const EmptyState = ({
         <div className="h-[500px] flex flex-col gap-2 justify-center items-center">
           {
             (page === "club" ? (
-              <Heading center title="등록된 클럽이 없어요!" />
+              <Heading center title="등록된 일상속이 없어요!" />
             ) : (
               <Heading center title="등록된 이벤트가 없어요!" />
             ))

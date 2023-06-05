@@ -12,6 +12,7 @@ import Chat from "../pages/Chat";
 import MyInfo from "../pages/MyInfo";
 import CreateFeed from "../pages/CreateFeed";
 import Navbar from "../component/Navbar";
+import CreateOnedayForm from "../pages/CreateOnedayForm";
 
 const Router = () => {
   return (
@@ -30,6 +31,8 @@ const Router = () => {
           <Route path="/create-event-form/:id" element={<CreateEventForm />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/create-feed" element={<CreateFeed />} />
+          <Route path="/create-oneday-form" element={<CreateOnedayForm />} />
+
 
           {/* <Route path="/404" element={<NotFound />} /> */}
         </Routes>

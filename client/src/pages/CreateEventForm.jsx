@@ -9,6 +9,8 @@ import { FiCalendar } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { textVariant } from "../utils/motion";
 import { format } from 'date-fns'
+import imageCompression from 'browser-image-compression';
+import { filePostAPI } from '../axios';
 
 function CreateEvent() {
     // const navigate = useNavigate();
@@ -34,6 +36,9 @@ function CreateEvent() {
     const [userAddress, setUserAddress] = useState("");
     const [marker, setMarker] = useState(null);
     const navigate = useNavigate();
+
+    const [selectedFile, setSelectedFile] = useState('');
+    const [preview, setPreview] = useState(null);
 
     // console.log(startDate, dateString)
     const { id } = useParams();
@@ -141,8 +146,30 @@ function CreateEvent() {
     };
 
     const handleCreateButton = () => {
-        postAPI(`/club/${id}/event`, {
-            eventTitle: title, eventContent: content, eventLocation: userAddress, eventLatitude: "" + userLat, eventLongitude: "" + userLng, eventStartTime: dateTimeString, eventGroupSize: Number(eventGroupsize),
+        const data = { eventTitle: title, eventContent: content, eventLocation: userAddress, eventLatitude: "" + userLat, eventLongitude: "" + userLng, eventStartTime: dateTimeString, eventGroupSize: Number(eventGroupsize) }
+        const formData = new FormData();
+
+        if (selectedFile) {
+            formData.append("image", selectedFile);
+        }
+        const blob = new Blob([JSON.stringify(data)], {
+            type: "application/json",
+        });
+
+        formData.append("data", blob);
+        //   formData.append("data", data);
+
+        filePostAPI(`/club/${id}/event`,
+            // eventTitle: title, eventContent: content, eventLocation: userAddress, eventLatitude: "" + userLat, eventLongitude: "" + userLng, eventStartTime: dateTimeString, eventGroupSize: Number(eventGroupsize),
+            formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            transformRequest: [
+                function () {
+                    return formData;
+                },
+            ],
         }).then((response) => {
             console.log(response)
             navigate(-1)
@@ -186,6 +213,44 @@ function CreateEvent() {
         </button>
     ));
 
+
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 500,
+            useWebWorker: true
+        };
+
+        try {
+            const resizingFile = await imageCompression(file, options);
+            console.log('Compressed file:', resizingFile);
+            setSelectedFile(resizingFile);
+            let reader = new FileReader();
+
+            reader.onloadend = () => {
+                setPreview(reader.result);
+            }
+            if (resizingFile) {
+                reader.readAsDataURL(resizingFile);
+            }
+
+            event.preventDefault();
+            const formData = new FormData();
+
+            if (resizingFile) {
+                formData.append("image", resizingFile);
+
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        // setSelectedFile(null);
+    };
+
     // const CustomInput2 = React.forwardRef(({ value, onClick }, ref) => (
     //     <button className="flex items-center justify-center  shadow-md w-80 h-12 rounded-lg mb-4 border-1" onClick={onClick} ref={ref}>
     //         <FiCalendar className="mr-2" />
@@ -196,7 +261,7 @@ function CreateEvent() {
     return (
         <>
             <Navbar />
-            <div className='min-h-screen mt-[80px] flex flex-col items-center justify-center'>
+            <div className='min-h-screen pt-[140px] flex flex-col items-center justify-center'>
                 <motion.div
                     variants={textVariant(0.5)}
                     initial="hidden"
@@ -204,6 +269,16 @@ function CreateEvent() {
                     viewport={{ once: false, amount: 0.3 }}
                     className='flex flex-1 flex-col items-center justify-center  gap-y-[15px]'>
                     <div className='flex flex-1 flex-col items-center justify-center  gap-y-[15px] '>
+                        <div className="flex justify-start items-center gap-x-2 w-full">
+                            {preview && (
+                                <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
+                            )}
+                            <input
+                                type="file"
+                                id="fileInput"
+                                onChange={handleFileChange}
+                            />
+                        </div>
                         <input
                             placeholder='title'
                             className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={title} onChange={(e) => setTitle(e.target.value)} />

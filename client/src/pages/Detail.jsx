@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { deleteAPI, getAPI, postAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import ClubEventCard from "../component/ClubEventCard";
@@ -10,6 +10,7 @@ import { latestClubState } from "../states/clubState";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import EndedClubEventCard from "../component/EndedClubEventCard";
+import { userNicknameState } from "../states/userStateTmp";
 
 function Detail() {
   const { id } = useParams();
@@ -18,7 +19,9 @@ function Detail() {
   const [onEdit, setOnEdit] = useState(false);
   const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const navigate = useNavigate();
-
+  const userNickname = useRecoilValue(userNicknameState);
+  const [isMember, setIsMember] = useState(false);
+  
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
@@ -50,7 +53,7 @@ function Detail() {
   useEffect(() => {
     getClubMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userNickname]);
 
   //이벤트 리스트 가져오는 코드
   useEffect(() => {
@@ -78,6 +81,13 @@ function Detail() {
     getAPI(`/club/${id}/members`).then((res) => {
       const clubMember = res.data;
       setClubMemberNicknameArr(clubMember.map((member) => member.userNickname));
+      if (
+        clubMember
+          .map((member) => member.userNickname)
+          .includes(userNickname.userNickname)
+      ) {
+        setIsMember(true);
+      }
     });
   };
 
@@ -85,6 +95,7 @@ function Detail() {
   const handleJoinClub = () => {
     postAPI(`/club/${id}/join`, {})
       .then((res) => {
+        setIsMember(true);
         console.log(res.data.message);
         alert("가입이 승인됐습니다!");
       })
@@ -96,6 +107,7 @@ function Detail() {
   const handleGoodbyeClub = () => {
     postAPI(`/club/${id}/goodbye`, {})
       .then((res) => {
+        setIsMember(false);
         console.log(res.data.message);
         alert("클럽 탈퇴 완료");
       })
@@ -115,12 +127,16 @@ function Detail() {
       });
   };
   const getClubEventLists = () => {
-    getAPI(`/club/${id}/eventlist`).then((res) => {
-      console.log(res);
-      setEventLists(res.data);
-    });
+    getAPI(`/club/${id}/eventlist`)
+      .then((res) => {
+        console.log(res);
+        setEventLists(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
+  console.log(isMember);
   console.log(eventlists);
   console.log(clubDetail?.data);
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
@@ -160,18 +176,21 @@ function Detail() {
     return eventEndTime <= today;
   });
   console.log(eventlists);
-  console.log(clubMemberNicknameArr);
 
-  const handleJoinEvent = (clubId, eventId) => {
+  const handleJoinEvent = (clubId, eventId, onJoinSuccess) => {
     postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
       console.log(res);
-      alert("참가완료!");
+      onJoinSuccess && onJoinSuccess();
+      alert("이벤트 참가 신청이 승인됐습니다!");
     });
   };
-  const handleLeaveEvent = (clubId, eventId) => {
-    deleteAPI(`/club/${clubId}/event/join/${eventId}`).then((res) =>
-      console.log(res)
-    );
+
+  const handleLeaveEvent = (clubId, eventId, onLeaveSuccess) => {
+    deleteAPI(`/club/${clubId}/event/join/${eventId}`).then((res) => {
+      console.log(res);
+      onLeaveSuccess && onLeaveSuccess();
+      alert("이벤트 참가 신청이 취소됐습니다!");
+    });
   };
 
   const handleDeleteEvent = (clubId, eventId) => {
@@ -179,7 +198,9 @@ function Detail() {
       console.log(res)
     );
   };
+  console.log(clubMemberNicknameArr);
   console.log(progressEvents);
+  console.log(clubDetail);
   return (
     <>
       <div ref={divRef} />
@@ -241,8 +262,11 @@ function Detail() {
               })}
             </div>
           </div>
-          <div className="w-full h-[237px] bg-neutral-200 rounded-2xl">
-            {clubDetail?.clubContent}
+          <div className="flex justify-between w-full h-[237px] bg-neutral-200 rounded-2xl">
+            <p className="text-black text-7xl">{clubDetail?.clubContent}</p>
+            <button onClick={() => navigate(`/create-event-form/${id}`)}>
+              이벤트 생성
+            </button>
           </div>
         </header>
         <body className="flex flex-col gap-4">
@@ -299,6 +323,7 @@ function Detail() {
                         .map((item) => {
                           return (
                             <ClubEventCard
+                              handleLeaveEvent={handleLeaveEvent}
                               handleJoinEvent={handleJoinEvent}
                               key={item?.id}
                               clubId={item?.clubId}
@@ -388,23 +413,16 @@ function Detail() {
           </div>
 
           <div className="flex justify-end">
-            <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
-              <button onClick={handleJoinClub}>모임 가입하기</button>
-            </div>
-            <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-3/4">
-              <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
-            </div>
-            <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-2/4">
-              <button onClick={() => navigate(`/create-event-form/${id}`)}>
-                이벤트 생성
-              </button>
-            </div>
-            <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-3/4">
-              <button onClick={handleJoinEvent}>이벤트 참여</button>
-            </div>
-            <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg right-2/4">
-              <button onClick={handleLeaveEvent}>이벤트 탈퇴</button>
-            </div>
+            {isMember ? (
+              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg ">
+                <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
+              </div>
+            ) : (
+              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
+                <button onClick={handleJoinClub}>모임 가입하기</button>
+              </div>
+            )}
+
             <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
               <button onClick={handleDeleteEvent}>이벤트 삭제</button>
             </div>

@@ -34,33 +34,33 @@ function Club() {
   const divRef = useRef(null);
   const navigate = useNavigate();
 
-//   const [club1, categories1] = useQueries(
-//     [
-//       {
-//         queryKey: "clubs",
-//         queryFn: () => getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`),
-//         onSuccess: (newClubData) => {
-//           if(page === 0) {
-//             setFilteredClubList([...filteredClubList,...newClubData.data.content])
-//           }
-//           setClub((prevClubData) => [...prevClubData, ...newClubData.data.content]);
-//           setPageChanged(false) 
-//         },
-//         enabled: pageChanged,
-//       },
-//       {
-//         queryKey: "categories",
-//         queryFn: () => getAPI(`/enums`),
-//         onSuccess: (categories) => {
-//           setCategories(["전체", ...categories.data.categoryList]);
-//         },
-//       },
-//     ],
-//     {
-//       refetchOnWindowFocus: false,
-//     }
-//   );
-// console.log(club1.data,categories)
+  //   const [club1, categories1] = useQueries(
+  //     [
+  //       {
+  //         queryKey: "clubs",
+  //         queryFn: () => getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`),
+  //         onSuccess: (newClubData) => {
+  //           if(page === 0) {
+  //             setFilteredClubList([...filteredClubList,...newClubData.data.content])
+  //           }
+  //           setClub((prevClubData) => [...prevClubData, ...newClubData.data.content]);
+  //           setPageChanged(false)
+  //         },
+  //         enabled: pageChanged,
+  //       },
+  //       {
+  //         queryKey: "categories",
+  //         queryFn: () => getAPI(`/enums`),
+  //         onSuccess: (categories) => {
+  //           setCategories(["전체", ...categories.data.categoryList]);
+  //         },
+  //       },
+  //     ],
+  //     {
+  //       refetchOnWindowFocus: false,
+  //     }
+  //   );
+  // console.log(club1.data,categories)
 
   useEffect(() => {
     if (divRef.current) {
@@ -72,28 +72,38 @@ function Club() {
   //   setPageChanged(true);
   // }, []);  // 컴포넌트가 마운트될 때만 실행
 
-
-
   useEffect(() => {
     setIsLoading(true);
     // 클럽 목록을 받아오는 코드
-    getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
-      setClub([...club, ...res.data.content]);
-      setFilteredClubList([...club, ...res.data.content]);
-    });
+    getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`)
+      .then((res) => {
+        setClub([...club, ...res.data.content]);
+        setFilteredClubList([...club, ...res.data.content]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     // 클럽 전체 페이지를 가져오는 코드
-    getAPI("/club").then((res) => setTotalPages(res.data.totalPages));
+    getAPI("/club")
+      .then((res) => setTotalPages(res.data.totalPages))
+      .catch((err) => {
+        console.log(err);
+      });
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   useEffect(() => {
     // 클럽 카테고리를 가져오는 코드
-    getAPI(`/enums`).then((res) => {
-      const newCategorylist = ["전체", ...res.data.categoryList];
-      setCategories(newCategorylist);
-    });
+    getAPI(`/enums`)
+      .then((res) => {
+        const newCategorylist = ["전체", ...res.data.categoryList];
+        setCategories(newCategorylist);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   //카테고리에 따라 검색하는 코드
@@ -240,9 +250,9 @@ function Club() {
                   <div className="flex justify-center mt-10  pb-10">
                     <button
                       onClick={() => {
-                        setPage(page + 1)
+                        setPage(page + 1);
                         // setPageChanged(true)
-                      } }
+                      }}
                       className="bg-orange-400 text-white px-3 py-2 rounded-full"
                     >
                       더보기
@@ -279,20 +289,18 @@ function Club() {
                 </div>
               </div>
             </BodyContainer>
-              <div className="min-w-[1920px] flex flex-col bg-neutral-100 items-center gap-4 justify-center h-[228px]">
-                {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
-                <p className="text-5xl font-sans font-semibold">
-                  내가 찾는 일상속 이벤트가 없다면?
-                </p>
-                <div className="text-orange-400 text-xl font-sans">
-                  <CreateClub />
-                </div>
-                {/* </div> */}
+            <div className="min-w-[1920px] flex flex-col bg-neutral-100 items-center gap-4 justify-center h-[228px]">
+              {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
+              <p className="text-5xl font-sans font-semibold">
+                내가 찾는 일상속 이벤트가 없다면?
+              </p>
+              <div className="text-orange-400 text-xl font-sans">
+                <CreateClub />
               </div>
+              {/* </div> */}
+            </div>
           </section>
-          <section className="h-auto ">
-
-          </section>
+          <section className="h-auto "></section>
         </div>
       </div>
       <Footer />

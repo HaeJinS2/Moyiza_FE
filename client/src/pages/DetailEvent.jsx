@@ -9,10 +9,16 @@ import { getAPI } from "../axios";
 import { useRecoilState } from "recoil";
 import { userNicknameState } from "../states/userStateTmp";
 
-
 Modal.setAppElement("#root");
 
-function DetailEvent({ handleJoinEvent, clubId, eventId, modalIsOpen, setIsOpen }) {
+function DetailEvent({
+  handleJoinEvent,
+  clubId,
+  eventId,
+  modalIsOpen,
+  setIsOpen,
+  handleLeaveEvent,
+}) {
   // const [modalIsOpen, setIsOpen] = useState(false);
   // const [inputValue, setInputValue] = useState("");
   const [map, setMap] = useState(null);
@@ -56,13 +62,15 @@ function DetailEvent({ handleJoinEvent, clubId, eventId, modalIsOpen, setIsOpen 
   }, [clubId, eventId]);
 
   useEffect(() => {
-    const nicknameExists = content?.eventAttendantList?.some(user => user.userName === nicknameState.userNickname);
+    const nicknameExists = content?.eventAttendantList?.some(
+      (user) => user.userNickName === nicknameState.userNickname
+    );
     setIsNicknameExists(nicknameExists);
   }, [content, nicknameState]);
 
-  console.log(isNicknameExists)
+  console.log(isNicknameExists);
   console.log(content);
-  console.log(nicknameState.userNickname)
+  console.log(nicknameState.userNickname);
   // useEffect(() => {
   //     console.log(userLat, userLng)
   // }, [userLat, userLng])
@@ -247,11 +255,22 @@ function DetailEvent({ handleJoinEvent, clubId, eventId, modalIsOpen, setIsOpen 
                             type="text" onChange={handleInputChange} /> */}
             <div id="map" style={{ width: "500px", height: "400px" }}></div>
           </div>
-          <button
-            onClick={() => handleJoinEvent(clubId, eventId)}
-            className="w-[300px] h-[40px] bg-slate-400 text-white">
-            Join
-          </button>
+          {isNicknameExists ? (
+            <button
+              onClick={() => handleLeaveEvent(clubId, eventId, () => setIsNicknameExists(false))}
+              className="w-[300px] h-[40px] bg-slate-400 text-white"
+            >
+              Leave
+            </button>
+          ) : (
+            <button
+              onClick={() => handleJoinEvent(clubId, eventId, () => setIsNicknameExists(true))}
+              className="w-[300px] h-[40px] bg-slate-400 text-white"
+            >
+              Join
+            </button>
+          )}
+
           <button
             onClick={closeModal}
             className="bg-gray-300 rounded-full w-[40px] h-[40px] text-white"

@@ -164,7 +164,8 @@ function ChatWindow({ roomIdState, style }) {
             // setCurrentRoom(roomId);
             getAPI(`/chat/${roomIdState}`).then((res) => {
                 console.log(res);
-                setMessages(res.data.content);
+                // setMessages(res.data.content);
+                setMessages(res.data.content.reverse());
                 setTmpMessage([...tmpMessage, res.data.content]);
             });
         }
@@ -221,7 +222,8 @@ function ChatWindow({ roomIdState, style }) {
             // setCurrentRoom(roomId);
             getAPI(`/chat/${roomIdState}`).then((res) => {
                 console.log(res);
-                setMessages(res.data.content);
+                // setMessages(res.data.content);
+                setMessages(res.data.content.reverse());
                 setTmpMessage([...tmpMessage, res.data.content]);
             });
 

@@ -14,9 +14,10 @@ import google from '../component/img/google.png'
 
 function Login() {
     // 소셜로그인   
-    const KAKAO_AUTH_URL = `http://43.201.150.14/oauth2/authorization/kakao`;
-    const NAVER_AUTH_URL = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver`;
-    const GOOGLE_AUTH_URL = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google`;
+    const KAKAO_AUTH_URL = `http://13.125.51.14/oauth2/authorization/kakao`;
+    // const NAVER_AUTH_URL = `http://43.201.150.14/oauth2/authorization/naver`;
+    const NAVER_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver`;
+    const GOOGLE_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google`;
 
     const kakaologin = () => {
         window.location.href = KAKAO_AUTH_URL;
@@ -32,21 +33,21 @@ function Login() {
         const url = new URL(window.location.href);
         const code = url.searchParams.get('code');
         const currentUrl = window.location.href;
-        console.log('code',code);
+        console.log('code', code);
 
         if (code) {
             try {
                 let apiUrl = '';
 
                 if (currentUrl.includes('/oauth2/code/kakao')) {
-                    apiUrl = `http://43.201.150.14/login/oauth2/code/kakao`;
-                    console.log('code',code);
+                    apiUrl = `http://13.125.51.14/login/oauth2/code/kakao`;
+                    console.log('code', code);
                 } else if (currentUrl.includes('/oauth2/code/naver')) {
-                    console.log('code',code);
-                    apiUrl = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/naver`;
+                    console.log('code', code);
+                    apiUrl = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/naver`;
                 } else if (currentUrl.includes('/oauth2/code/google')) {
-                    apiUrl = `http://ec2-43-201-150-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/google`;
-                    console.log('code',code);
+                    apiUrl = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/google`;
+                    console.log('code', code);
                 }
 
                 const response = await axios.post(apiUrl, { code });
@@ -65,7 +66,7 @@ function Login() {
     useEffect(() => {
         handleAuthorizationCode();
     }, []);
-//--------------------------------------------------------------------
+    //--------------------------------------------------------------------
     const [user, setUser] = useRecoilState(userState);
     const navigate = useNavigate();
 
@@ -104,7 +105,7 @@ function Login() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const url = `http://43.201.150.14/user/login`;
+        const url = `http://13.125.51.14/user/login`;
         const data = {
             ...userloginInput
         };
@@ -204,7 +205,7 @@ function Login() {
 
                         </div>
                         <div className="mb-3 mt-3" style={{ minHeight: '48px' }}>
-                            <input placeholder="비밀번호" value={userloginInput.password} onChange={pwChangeHandler} className="shadow-md w-80 h-10 rounded-[50px] mb-3 px-3.5 py-2" />
+                            <input placeholder="비밀번호" value={userloginInput.password} onChange={pwChangeHandler} type="password" className="shadow-md w-80 h-10 rounded-[50px] mb-3 px-3.5 py-2" />
 
                             {!isPwValid && userloginInput.password.length > 0 && (
                                 <p className="inputCheck text-rose-400 text-xs absolute">* 비밀번호는 대소문자, 숫자, 특수문자 포함 8자리 이상 적어주세요!</p>
@@ -223,20 +224,20 @@ function Login() {
                         <div onClick={handleFind} style={{ cursor: 'pointer' }}>비밀번호 찾기</div>
                     </Signup>
                     <Social>
-                        <button onClick={kakaologin} type='button' style={{ display: 'flex', backgroundColor: 'white'}} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
-                            <img src={kakao} alt='' className="m-3 p-2 h-full object-contain" style={{backgroundColor: 'transparent'}}></img>
+                        <button onClick={kakaologin} type='button' style={{ display: 'flex', backgroundColor: 'white' }} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
+                            <img src={kakao} alt='' className="m-3 p-2 h-full object-contain" style={{ backgroundColor: 'transparent' }}></img>
                             <div className={`mr-4 text-gray-400 opacity-50`}>|</div>
                             카카오톡 로그인</button>
-                       
-                        <button onClick={naverlogin} type='button' style={{ display: 'flex', backgroundColor: 'white'}} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
+
+                        <button onClick={naverlogin} type='button' style={{ display: 'flex', backgroundColor: 'white' }} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
                             <img src={naver} alt='' className="m-3 p-2 h-full object-contain"></img>
                             <div className={`mr-4 text-gray-400 opacity-50`}>|</div>
                             네이버 로그인</button>
-                        
-                            <button onClick={googlelogin} type='button' style={{ display: 'flex', backgroundColor: 'white'}} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
-                                <img src={google} alt='' className="m-3 p-2 h-full object-contain"></img>
-                                <div className={`mr-4 text-gray-400 opacity-50`}>|</div>
-                                구글 로그인</button>
+
+                        <button onClick={googlelogin} type='button' style={{ display: 'flex', backgroundColor: 'white' }} className={`rounded-[50px] w-80 h-10 mt-4 shadow hover:shadow-lg flex items-center flex-start`}>
+                            <img src={google} alt='' className="m-3 p-2 h-full object-contain"></img>
+                            <div className={`mr-4 text-gray-400 opacity-50`}>|</div>
+                            구글 로그인</button>
                     </Social>
                 </LoginContainer>
             </div>

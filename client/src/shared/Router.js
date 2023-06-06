@@ -13,6 +13,7 @@ import MyInfoClub from "../pages/MyInfoClub";
 import CreateFeed from "../pages/CreateFeed";
 import Navbar from "../component/Navbar";
 import CreateOnedayForm from "../pages/CreateOnedayForm";
+import MyInfoOneday from "../pages/MyInfoOneday";
 
 const Router = () => {
   return (
@@ -24,6 +25,7 @@ const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/user/mypage" element={<MyInfoClub />} />
+          <Route path="/user/mypage/oneday" element={<MyInfoOneday />} />
           <Route path="/create-club-form" element={<CreateClubForm />} />
           <Route path="/club" element={<Club />} />
           <Route path="/oneday" element={<Oneday />} />

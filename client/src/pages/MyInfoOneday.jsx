@@ -5,7 +5,7 @@ import Container from '../component/Container';
 import { motion } from 'framer-motion';
 import ProfileCard from '../component/ProfileCard';
 
-function MyInfoClub() {
+function MyInfoOneday() {
     let tabs = ['일상속', '하루속'];
 
     const [activeTab, setActiveTab] = useState([tabs[0]]); // 배열로 초기화
@@ -42,10 +42,8 @@ function MyInfoClub() {
                                                 </button>
                                             ))}
                                         </div>
-                                        <div className='flex justify-between align-center text-[28px]'>
-                                        <div className="text-[36px]">세영님의 운영중인 일상속</div>
+                                        <div className="text-[36px]">세영님의 참여중인 하루속</div>
                                         <div> 총 2개</div>
-                                        </div>
                                         {activeTab.map((item, i) => {
                                             return (
                                                 <ProfileCard
@@ -64,11 +62,8 @@ function MyInfoClub() {
                                                 />
                                             );
                                         })}
-                                        <div className='flex justify-between align-center mt-[90px] text-[28px]'>
-                                            <div className="text-[36px]">세영님의 지난 일상속</div>
-                                            <div> 총 2개</div>
-                                        </div>
-
+                                        <div className="text-[36px] mt-[90px]">세영님의 지난 하루속</div>
+                                        <div> 총 1개</div>
                                         {activeTab.map((item, i) => {
                                             return (
                                                 <ProfileCard
@@ -98,4 +93,4 @@ function MyInfoClub() {
     );
 }
 
-export default MyInfoClub;
+export default MyInfoOneday;

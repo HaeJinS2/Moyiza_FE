@@ -16,6 +16,7 @@ import ChatWindow from "../component/ChatWindow";
 import { useRecoilValue } from "recoil";
 import { roomIdStates } from "../states/chatState";
 import CreateOnedayForm from "../pages/CreateOnedayForm";
+import MyInfoOneday from "../pages/MyInfoOneday";
 
 const Router = () => {
   const roomIdState = useRecoilValue(roomIdStates);
@@ -29,6 +30,7 @@ const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/user/mypage" element={<MyInfoClub />} />
+          <Route path="/user/mypage/oneday" element={<MyInfoOneday />} />
           <Route path="/create-club-form" element={<CreateClubForm />} />
           <Route path="/club" element={<Club />} />
           <Route path="/oneday" element={<Oneday />} />

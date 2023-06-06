@@ -119,7 +119,7 @@ const Chat = () => {
       setCurrentRoom(roomId);
       getAPI(`/chat/${roomId}`).then((res) => {
         console.log(res);
-        setMessages(res.data.content);
+        setMessages(res.data.content.reverse());
       });
     }
     // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
@@ -175,7 +175,7 @@ const Chat = () => {
       setCurrentRoom(roomId);
       getAPI(`/chat/${roomId}`).then((res) => {
         console.log(res);
-        setMessages(res.data.content);
+        setMessages(res.data.content.reverse());
       });
 
       // Set the new client as current

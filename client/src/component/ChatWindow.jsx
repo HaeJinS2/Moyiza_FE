@@ -4,9 +4,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import Cookies from "js-cookie";
-// import jwt_decode from "jwt-decode";
+import jwt_decode from "jwt-decode";
 import { getAPI } from '../axios';
-
+import { useRecoilState } from "recoil";
+import { userIdState } from "../states/userStateTmp";
 
 function ChatWindow({ roomIdState, style }) {
     const [messages, setMessages] = useState([]);
@@ -18,6 +19,8 @@ function ChatWindow({ roomIdState, style }) {
     { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" }]);
     // const roomIdState = useRecoilValue(roomIdStates);
     const [input, setInput] = useState("");
+    const [userId, setUserId] = useRecoilState(userIdState);
+
     console.log("roomIdState", roomIdState)
     const messagesEndRef = useRef(null);
     const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
@@ -28,7 +31,20 @@ function ChatWindow({ roomIdState, style }) {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-
+    useEffect(() => {
+        const token = Cookies.get("ACCESS_TOKEN");
+        console.log(token);
+        if (token) {
+            try {
+                const decoded = jwt_decode(token);
+                setUserId(decoded.userId);
+                console.log("Decoded sub: ", decoded.userId);
+            } catch (error) {
+                console.error("토큰 오류", error);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleOnKeyPress = (e) => {
         if (e.key === "Enter") {
@@ -262,30 +278,43 @@ function ChatWindow({ roomIdState, style }) {
                 </div>
                 <div className='h-[370px] w-full overflow-y-auto'>
                     {messages.map((message, index) => {
-                        return message.userId === message.senderId ? (
-                            <div className="flex justify-end">
+                        const sentAt = message.sentAt
+                        const formattedTime = new Date(sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+                        return userId === message.senderId ? (
+                            <div className="flex justify-end px-4">
                                 <div key={index} className=" flex-end">
                                     <div className="flex justify-end">
-                                        {/* 보낸사람 : {message.senderNickname} */}
+                                        {message.senderNickname}
                                     </div>
                                     <div className="flex gap-x-1 items-center justify-end">
+                                        <div className='text-[8px] h-[50px] flex mx-[-5px] items-end'>
+                                            {formattedTime}
+                                        </div>
                                         <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] text-white bg-[#0084ff]">
                                             {console.log(message)}
-                                            내용 : {message.content + " "}
+                                            {message.content + " "}
                                         </div>
-                                        {/* <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image"/> */}
+                                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image" />
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <div key={index}>
-                                <div>
-                                    {/* <div>보낸사람 : {message.senderNickname}</div> */}
-                                </div>
-                                <div className="flex gap-x-1 items-center">
-                                    {/* <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image"/> */}
-                                    <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
-                                        내용 : {message.content + " "}
+                            <div className="flex justify-start px-4">
+                                <div key={index}>
+                                    <div>
+                                        <div className="flex justify-start">
+                                            {message.senderNickname}
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-x-1 items-center">
+                                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image" />
+                                        <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
+                                            {message.content + " "}
+                                        </div>
+                                        <div className='text-[8px] h-[50px] flex mx-[-5px] items-end'>
+                                            {formattedTime}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

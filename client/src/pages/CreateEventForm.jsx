@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from "framer-motion";
-import { postAPI, getHeaderAPI } from "../axios";
+import { getHeaderAPI } from "../axios";
 import DatePicker from 'react-datepicker';
 import styled, { createGlobalStyle } from "styled-components";
 import Navbar from "../component/Navbar";

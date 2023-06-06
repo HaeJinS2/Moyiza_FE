@@ -113,12 +113,12 @@ function Login() {
             const response = await axios.post(url, data);
 
             const accessToken = response.headers.access_token;
-            const refreshToken = response.headers.refresh_token;
+            // const refreshToken = response.headers.refresh_token;
 
             const jwt1 = accessToken.replace('Bearer ', '');
-            const jwt2 = refreshToken.replace('Bearer ', '');
+            // const jwt2 = refreshToken.replace('Bearer ', '');
             setCookie('ACCESS_TOKEN', jwt1, 1)
-            setCookie('REFRESH_TOKEN', jwt2, 1);
+            // setCookie('REFRESH_TOKEN', jwt2, 1);
             const email = parseJwt(jwt1).sub;
             setUser(email);
 

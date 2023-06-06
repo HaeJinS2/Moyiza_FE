@@ -11,14 +11,16 @@ function MyInfoClub() {
     const [activeTab, setActiveTab] = useState([tabs[0]]); // 배열로 초기화
 
     return (
-        <>
+        <>  <div>
+
+        </div>
             <Navbar />
             <Container>
                 <section className="h-[calc(100vh-0px)] flex flex-col items-center ">
                     <div className="flex flex-col">
-                        <div className="flex w-full h-[500px] items-center justify-center ">
+                        {/* <div className="flex w-full h-[500px] items-center justify-center "> */}
                             <UserProfile />
-                        </div>
+                        {/* </div> */}
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px]">
                             <div className="flex w-[1230px] py-[103px] flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
@@ -43,8 +45,8 @@ function MyInfoClub() {
                                             ))}
                                         </div>
                                         <div className='flex justify-between align-center text-[28px]'>
-                                        <div className="text-[36px]">세영님의 운영중인 일상속</div>
-                                        <div> 총 2개</div>
+                                            <div className="text-[36px]">세영님의 운영중인 일상속</div>
+                                            <div> 총 2개</div>
                                         </div>
                                         {activeTab.map((item, i) => {
                                             return (

@@ -295,7 +295,17 @@ function ChatWindow({ roomIdState, style }) {
                                             {console.log(message)}
                                             {message.content + " "}
                                         </div>
-                                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image" />
+                                        <img src={message.senderProfileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image" />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : -1 === message.senderId ? (
+                            <div className="flex items-center justify-center">
+                                <div key={index}>
+                                    <div className="flex gap-x-1 items-center justify-center">
+                                        <div className="flex items-center justify-center w-[300px] p-[5px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
+                                            {message.content + " "}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -308,7 +318,7 @@ function ChatWindow({ roomIdState, style }) {
                                         </div>
                                     </div>
                                     <div className="flex gap-x-1 items-center">
-                                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image" />
+                                        <img src={message.senderProfileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image" />
                                         <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
                                             {message.content + " "}
                                         </div>

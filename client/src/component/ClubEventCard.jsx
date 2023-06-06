@@ -11,6 +11,7 @@ function ClubEventCard({
   eventId,
   startTime,
   location,
+  handleLeaveEvent
 }) {
   // const dateObj = new Date(startTime);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -88,6 +89,7 @@ function ClubEventCard({
         {/* </div> */}
       </div>
       <DetailEvent
+      handleLeaveEvent={handleLeaveEvent}
         handleJoinEvent={handleJoinEvent}
         clubId={clubId}
         eventId={eventId}

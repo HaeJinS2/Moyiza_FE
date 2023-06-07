@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { userNicknameState } from './states/userStateTmp';
+import { userNicknameState, isLoggedInState } from './states/userStateTmp';
 import Cookies from 'js-cookie';
 import jwt_decode from 'jwt-decode';
 import Router from './shared/Router';
@@ -8,18 +8,20 @@ import { initAmplitude } from './utils/amplitude';
 
 function AppContent() {
   const [nicknameState, setNicknameState] = useRecoilState(userNicknameState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
+  const token = Cookies.get('ACCESS_TOKEN');
 
-  useEffect(() => {
-    initAmplitude();
-  }, []);
+
+
 
   useEffect(() => {
     const token = Cookies.get('ACCESS_TOKEN');
-    console.log(token);
+    console.log("token", token);
     if (token) {
       try {
         const decoded = jwt_decode(token);
         setNicknameState({ userNickname: decoded.nickName });
+        setIsLoggedIn(true)
         console.log('Decoded sub: ', decoded.nickName);
         console.log(nicknameState);
       } catch (error) {
@@ -27,6 +29,15 @@ function AppContent() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  useEffect(() => {
+    console.log("로그인했나?", isLoggedIn)
+  }, [isLoggedIn])
+
+
+  useEffect(() => {
+    initAmplitude();
   }, []);
 
   return <Router />;

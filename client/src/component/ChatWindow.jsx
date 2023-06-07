@@ -8,6 +8,7 @@ import jwt_decode from "jwt-decode";
 import { getAPI } from '../axios';
 import { useRecoilState } from "recoil";
 import { userIdState } from "../states/userStateTmp";
+import { roomIdStates } from '../states/chatState';
 
 function ChatWindow({ roomIdState, style }) {
     const [messages, setMessages] = useState([]);
@@ -20,8 +21,10 @@ function ChatWindow({ roomIdState, style }) {
     // const roomIdState = useRecoilValue(roomIdStates);
     const [input, setInput] = useState("");
     const [userId, setUserId] = useRecoilState(userIdState);
+    const [roomIdList, setRoomIdList] = useRecoilState(roomIdStates);
+    
+    console.log("messagess", messages)
 
-    console.log("roomIdState", roomIdState)
     const messagesEndRef = useRef(null);
     const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
     const clientRef = useRef(null); // client를 useRef로 설정
@@ -152,6 +155,15 @@ function ChatWindow({ roomIdState, style }) {
 
     console.log("messages~", messages)
 
+    // useEffect(() => {
+    //     getAPI(`/chat/${roomIdState}`).then((res) => {
+    //         console.log(res);
+    //         // setMessages(res.data.content);
+    //         setMessages(res.data.content.reverse());
+    //         setTmpMessage([...tmpMessage, res.data.content]);
+    //     });
+    // }, [roomIdState])
+
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
         if (!roomIdState) { return; }
@@ -249,6 +261,7 @@ function ChatWindow({ roomIdState, style }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomIdState])
 
+
     const sendMessage = (msg) => {
         const token = Cookies.get("ACCESS_TOKEN");
         console.log(roomIdState);
@@ -264,15 +277,27 @@ function ChatWindow({ roomIdState, style }) {
         setInput("");
     };
 
+    const removeChatRoom = (id) => {
+        const removeRoom = roomIdList.filter((item) => item !== roomIdState)
+        setRoomIdList(removeRoom)
+    }
+
     return (
         <div>
             <div style={style}
                 className="w-[360px] h-[488px] fixed flex-col right-5 bottom-5 z-10 shadow-cm rounded-3xl bg-white flex outline-none"
             >
-                <div className='flex flex-col'>
-                    <div className='flex h-[55px] px-4 items-center gap-x-[10px]'>
-                        <div>이미지</div>
-                        <span>클럽명</span>
+                <div className=''>
+                    <div className='flex h-[55px] px-4 justify-between items-center gap-x-[10px]'>
+                        <div className='flex gap-x-2'>
+                            <div>이미지</div>
+                            <span>클럽명</span>
+                        </div>
+                        <div>
+                            <button 
+                            onClick={()=>removeChatRoom(roomIdState)}
+                            className='text-[#FF7700] font-semibold text-[20px] w-[30px] h-[30px] text-right'>X</button>
+                        </div>
                     </div>
                     <div className="w-[360px] h-px bg-gray-200"></div>
                 </div>
@@ -288,8 +313,9 @@ function ChatWindow({ roomIdState, style }) {
                                         {message.senderNickname}
                                     </div>
                                     <div className="flex gap-x-1 items-center justify-end">
-                                        <div className='text-[8px] h-[50px] flex mx-[-5px] items-end'>
-                                            {formattedTime}
+                                        <div className='text-[8px] h-[50px] flex mx-[-5px] items-end gap-x-2'>
+                                            <span>{message.unreadCount}</span>
+                                            <span>{formattedTime}</span>
                                         </div>
                                         <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] text-white bg-[#0084ff]">
                                             {console.log(message)}
@@ -322,8 +348,9 @@ function ChatWindow({ roomIdState, style }) {
                                         <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
                                             {message.content + " "}
                                         </div>
-                                        <div className='text-[8px] h-[50px] flex mx-[-5px] items-end'>
-                                            {formattedTime}
+                                        <div className='text-[8px] h-[50px] flex mx-[-5px] items-end gap-x-2'>
+                                            <span>{formattedTime}</span>
+                                            <span>{message.unreadCount}</span>
                                         </div>
                                     </div>
                                 </div>

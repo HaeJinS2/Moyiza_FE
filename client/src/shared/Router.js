@@ -45,7 +45,7 @@ const Router = () => {
         </Routes>
         {roomIdState ?
           roomIdState.map((item, index) =>
-            <ChatWindow style={{ right: `${index * 360}px` }} key={index} roomIdState={item} />)
+            <ChatWindow style={{ right: `${index * 370}px` }} key={index} roomIdState={item} />)
           : null}
         {/* <ChatWindow /> */}
       </BrowserRouter>

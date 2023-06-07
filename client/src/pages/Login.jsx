@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { userState } from '../states/userState';
 import { useRecoilState } from 'recoil';
+import { isLoggedInState } from '../states/userStateTmp';
 import { parseJwt, setCookie } from '../utils/jwtUtils';
 // import Navbar from '../component/Navbar';
 import kakao from '../component/img/kakao.png';
@@ -18,7 +19,9 @@ function Login() {
     // const NAVER_AUTH_URL = `http://43.201.150.14/oauth2/authorization/naver`;
     const NAVER_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver`;
     const GOOGLE_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google`;
-
+    
+    const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
+    console.log(isLoggedIn2)
     const kakaologin = () => {
         window.location.href = KAKAO_AUTH_URL;
     }
@@ -124,6 +127,7 @@ function Login() {
 
             // 사용자를 로컬 스토리지에 저장
             localStorage.setItem('user', email);
+            setIsLoggedIn2(true)
             alert('로그인 성공');
             goMain();
         } catch (error) {

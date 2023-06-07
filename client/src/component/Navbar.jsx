@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState } from "recoil";
 import { roomIdStates } from "../states/chatState";
+import { isLoggedInState } from '../states/userStateTmp';
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 // import { userState } from "../states/userState";
@@ -22,6 +23,8 @@ function Navbar() {
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
+  const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
+
   const chatModalRef = useRef();
   const profileModalRef = useRef();
 
@@ -47,6 +50,7 @@ function Navbar() {
 
   const logoutHandler = () => {
     setIsLoggedIn(false);
+    setIsLoggedIn2(false);
     // console.log(Cookies)
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
@@ -220,7 +224,7 @@ function Navbar() {
 
               <SearchBar />
               <div className="w-[150px] flex items-center text-md font-semibold justify-center gap-4">
-                {isLoggedIn ? (
+                {isLoggedIn2 ? (
                   //로그인 상태인 경우
                   <>
                     <div

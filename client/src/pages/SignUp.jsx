@@ -40,12 +40,12 @@ function SignUp() {
   // 프로필 사진 입력
   const imgRef = useRef();
   const onChangeImage = () => {
-    const reader = new FileReader();
-    const file = imgRef.current.files[0];
-    reader.readAsDataURL(file);
+    let reader = new FileReader();
+    let file = imgRef.current.files[0];
     reader.onloadend = () => {
       setImageFile(reader.result);
-    };
+    }
+    reader.readAsDataURL(file);
   };
   // 이메일 유효성 검사
   const isEmail = email => {
@@ -127,17 +127,44 @@ function SignUp() {
       nickname: nickname,
       gender: gender,
       birth: birth,
-      phone: phoneNum
+      phone: phoneNum,
+
     }
+   
+    const base64ToBlob = (base64String, contentType = '') => {
+      const byteCharacters = atob(base64String);
+      const byteArrays = [];
+    
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+    
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+    
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+    
+      return new Blob(byteArrays, { type: contentType });
+    };
 
-    const json = JSON.stringify(data);
-    const blob = new Blob([json], { type: "application/json" });
-    const imgblob = new Blob([imageFile], { type: "image/jpeg" })
-    formData.append("imageFile", imgblob);
+    // const json = JSON.stringify(data);
+    const blob = new Blob([JSON.stringify(data)], {
+      type: "application/json",
+    });
+    // const imgblob = new Blob([imageFile], { type: "image/jpeg" })
+
     formData.append('data', blob);
-
-    // console.log('formData',formData);
-
+    if (imageFile) {
+      const blobImageFile = base64ToBlob(imageFile.replace(/^data:image\/[a-z]+;base64,/, ''), 'image/jpeg');
+      formData.append('imageFile', blobImageFile);
+    } else {
+      
+      setImageFile(null);
+      formData.append('imageFile',imageFile);
+    }
     try {
       const response = await axios.post("http://13.125.51.14/user/signup", formData);
       console.log(response.data);
@@ -163,7 +190,7 @@ function SignUp() {
         >
           <form onSubmit={submitHandler} name="signUpBox" class="flex flex-col justify-center space-between w-full" >
             <div style={{ display: 'flex' }}>
-              
+
             </div>
 
             {/* 이름 입력 */}
@@ -379,28 +406,28 @@ function SignUp() {
               />
             </div>
             <div className="profileBox mb-20 flex w-full">
-                <div style={{ width: '27%', display: 'flex', alignItems: 'center' }}>프로필 사진</div>
-                <label style={{display:'flex'}}className="imgBoxLabel " htmlFor="profileImg">
-                  <div style={{ width: '100%', marginRight: '5%', backgroundColor: '#FF7F1E', color: '#fff',display:'flex',alignItems:'center',justifyContent:'center'}} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">파일 선택</div>
-                  <input
-                    id="profileImg"
-                    className="profileImgInput"
-                    type="file"
-                    name="imageFile"
-                    ref={imgRef}
-                    onChange={onChangeImage}
-                    style={{ display: 'none' ,flexDirection:'row'}}
-                  />
-                  {/* 사진 */}
-                  <div class="w-12">
-                    {imageFile &&
-                    <img style={{display:'flex', width:'50px', height:'50px'}} className="labelImg" src={imageFile} alt="uploadImg" />
+              <div style={{ width: '27%', display: 'flex', alignItems: 'center' }}>프로필 사진</div>
+              <label style={{ display: 'flex' }} className="imgBoxLabel " htmlFor="profileImg">
+                <div style={{ width: '100%', marginRight: '5%', backgroundColor: '#FF7F1E', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">파일 선택</div>
+                <input
+                  id="profileImg"
+                  className="profileImgInput"
+                  type="file"
+                  name="imageFile"
+                  ref={imgRef}
+                  onChange={onChangeImage}
+                  style={{ display: 'none', flexDirection: 'row' }}
+                />
+                {/* 사진 */}
+                <div class="w-12">
+                  {imageFile &&
+                    <img style={{ display: 'flex', width: '50px', height: '50px' }} className="labelImg" src={imageFile} alt="uploadImg" />
                   }
-                  </div>
-                </label>
-              </div>
-            <hr/>
-            <button style={{display:'flex', justifyContent:'center', alignItems:'center' ,width:'100%'}}className={`signupBtn ${activeBtn} ${colorBtn} mt-20`} >
+                </div>
+              </label>
+            </div>
+            <hr />
+            <button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-20`} >
               가입하기
             </button>
           </form>

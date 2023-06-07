@@ -4,51 +4,41 @@ import UserProfile from '../component/UserProfile';
 import Container from '../component/Container';
 import { motion } from 'framer-motion';
 import ProfileCard from '../component/ProfileCard';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { getAPI } from '../axios';
 
 function MyInfoClub() {
     let tabs = ['일상속', '하루속'];
 
     const [activeTab, setActiveTab] = useState([tabs[0]]); // 배열로 초기화
-    const navigate = useNavigate();
-    const [userInfo, setUserInfo] = useState(null);
-    // const [clubsInOperation, setClubsInOperation] = useState([]);
-    // const [clubsInParticipating, setClubsInParticipating] = useState([]);
-
-
     // const navigate = useNavigate();
-    // const [userData, setUserData] = useState(null);
-    // const [clubsInOperation, setClubsInOperation] = useState([]);
-    // const [clubsInParticipating, setClubsInParticipating] = useState([]);
+    const [userInfo, setUserInfo] = useState(null);
+    const [clubsInOperationInfo, setClubsInOperationInfo] = useState([]);
+    const [clubsInParticipatingInfo, setClubsInParticipatingInfo] = useState([]);
 
-    // useEffect(() => {
-    //     getAPI(`/user/mypage`)
-    //       .then((response) => {
-    //         console.log(response.data);
 
-    //       })
-    //       .catch((error) => console.log(error));
-    //   }, []);
+   
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 // GET 요청 수행
                 const response = await getAPI('/user/mypage', {
-
+                
                 });
 
                 // 응답이 성공적인지 확인
                 if (response.data) {
-                    const { userInfo} = response.data;
+                    const { userInfo, clubsInOperationInfo, clubsInParticipatingInfo } = response.data;
                     setUserInfo(userInfo);
-                    // setClubsInOperation(clubsInOperationInfo);
-                    // setClubsInParticipating(clubsInParticipatingInfo);
-                    console.log(response)
+                    setClubsInOperationInfo(clubsInOperationInfo);
+                    setClubsInParticipatingInfo(clubsInParticipatingInfo);
+                    console.log(response.data.userInfo);
+                    console.log(response.data.clubsInOperationInfo);
+                    console.log(response.data.clubsInParticipatingInfo);
                 }
 
-            
+
             } catch (error) {
                 console.error(error);
                 // 에러 상태 처리 또는 에러 페이지로 리디렉션 처리
@@ -67,8 +57,10 @@ function MyInfoClub() {
                 <section className="h-[calc(100vh-0px)] flex flex-col items-center ">
                     <div className="flex flex-col">
                         {/* <div className="flex w-full h-[500px] items-center justify-center "> */}
-                        <UserProfile 
-                        userInfo={userInfo}
+                        <UserProfile
+                            userInfo={userInfo}
+                            // nickname={nickname}
+                            // profileImage={profileImage}
                         />
                         {/* </div> */}
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px]">
@@ -95,45 +87,42 @@ function MyInfoClub() {
                                             ))}
                                         </div>
                                         <div className='flex justify-between align-center text-[28px]'>
-                                            <div className="text-[36px]">세영님의 운영중인 일상속</div>
-                                            <div> 총 2개</div>
+                                            <div className="text-[36px]"> {userInfo ? `${userInfo.nickname} 님의 참여중인 일상속`: null }님의 운영중인 일상속</div>
+                                            {/* { userInfo.clubsInOperationCount == 0 ?():() } */}
+                                            <div> 총 {clubsInOperationInfo.length}개</div>
                                         </div>
-                                        {activeTab.map((item, i) => {
+                                        {clubsInOperationInfo.map((item, i) => {
                                             return (
                                                 <ProfileCard
                                                     className="mb-[30px]"
-                                                    page="club"
-                                                    key={i}
-                                                    title={item.clubTitle}
-                                                    content={item.clubContent}
-                                                    tag={item.clubTag}
+                                                    clubTitle={item.clubTitle}
+                                                    clubContent={item.clubContent}
+                                                    clubTag={item.clubTag}
                                                     location={item.clubLocation}
-                                                    thumbnail={item.thumbnailUrl}
-                                                    id={item.club_id}
+                                                    thumbnailUrl={item.thumbnailUrl}
+                                                    club_id={item.club_id}
                                                     eventId={item.id}
                                                     maxGroupSize={item.maxGroupSize}
                                                     nowMemberCount={item.nowMemberCount}
-                                                    navigate={navigate}
+                                                    
                                                 />
                                             );
                                         })}
                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
-                                            <div className="text-[36px]">세영님의 지난 일상속</div>
-                                            <div> 총 2개</div>
+                                            <div className="text-[36px]"> {userInfo ? `${userInfo.nickname} 님의 참여중인 일상속`: null }</div>
+                                            <div> 총 {clubsInParticipatingInfo.length}개</div>
                                         </div>
 
-                                        {activeTab.map((item, i) => {
+                                        {clubsInParticipatingInfo.map((item, i) => {
                                             return (
                                                 <ProfileCard
                                                     className="mb-[30px]"
-                                                    page="club"
-                                                    key={i}
-                                                    title={item.clubTitle}
-                                                    content={item.clubContent}
-                                                    tag={item.clubTag}
+                                                    clubTitle={item.clubTitle}
+                                                    clubContent={item.clubContent}
+                                                    clubTag={item.clubTag}
                                                     location={item.clubLocation}
-                                                    thumbnail={item.thumbnailUrl}
-                                                    id={item.club_id}
+                                                    thumbnailUrl={item.thumbnailUrl}
+                                                    club_id={item.club_id}
                                                     eventId={item.id}
                                                     maxGroupSize={item.maxGroupSize}
                                                     nowMemberCount={item.nowMemberCount}

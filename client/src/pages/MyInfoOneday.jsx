@@ -11,7 +11,8 @@ function MyInfoOneday() {
     const [activeTab, setActiveTab] = useState([tabs[0]]); // 배열로 초기화
 
     return (
-        <>
+        <>  
+        
             <Navbar />
             <Container>
                 <section className="h-[calc(100vh-0px)] flex flex-col items-center ">

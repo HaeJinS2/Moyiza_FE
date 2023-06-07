@@ -4,7 +4,7 @@ import SockJS from "sockjs-client";
 import { useRecoilState } from "recoil";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
-import { userEmailState } from "../states/userStateTmp";
+import { userEmailState, userIdState } from "../states/userStateTmp";
 // import { userState } from "../states/userState";
 import { getAPI } from "../axios";
 import Navbar from "../component/Navbar";
@@ -13,17 +13,35 @@ import { logEvent, setAmplitudeUserId } from "../utils/amplitude";
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [emailState, setEserEmailState] = useRecoilState(userEmailState);
+  const [userId, setUserId] = useRecoilState(userIdState);
   // const [user, setUser] = useRecoilState(userState);
   const [input, setInput] = useState("");
   const [roomId, setRoomId] = useState([]);
   // const roomIdTmp = [1, 2, 3, 19, 11, 12, 13, 14, 15, 16, 17];
   const [currentRoom, setCurrentRoom] = useState("");
+  const [headerState, setHeaderState] = useState({})
   const messagesEndRef = useRef(null);
   const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
   const clientRef = useRef(null); // client를 useRef로 설정
   const subscriptionRef = useRef(null);
+  console.log("userId",userId)
+  console.log("headerState",headerState)
+  useEffect(() => {
+    const token = Cookies.get("ACCESS_TOKEN");
+    console.log(token);
+    if (token) {
+      try {
+        const decoded = jwt_decode(token);
+        setUserId(decoded.userId);
+        console.log("Decoded sub: ", decoded.userId);
+      } catch (error) {
+        console.error("토큰 오류", error);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  console.log(emailState);
+
   useEffect(() => {
     getAPI(`/chat`)
       .then((response) => {
@@ -37,15 +55,6 @@ const Chat = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   getAPI(`/chat/1`)
-  //     .then((response) => {
-  //       console.log("/chat/1",response);
-
-  //     })
-  //     .catch((error) => console.log(error));
-  //       // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [roomId]);
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
@@ -53,7 +62,7 @@ const Chat = () => {
     if (token) {
       try {
         const decoded = jwt_decode(token);
-        setEserEmailState({user: decoded });
+        setEserEmailState({ user: decoded });
         console.log("Decoded sub: ", decoded.sub);
         console.log(emailState);
       } catch (error) {
@@ -67,34 +76,13 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // useEffect(() => {
-  //   clientRef.current = new Client({ // clientRef.current에 직접 할당
-  //     webSocketFactory: () => new SockJS("http://3.34.182.174/chat/connect"),
-  //     debug: (str) => {
-  //       console.log(str);
-  //     },
-  //     onConnect: (frame) => {
-  //       console.log("Connected: " + frame);
-
-  //       clientRef.current.subscribe("/chat/clubchat/19", (message) => { // clientRef.current 사용
-  //         if (message.body) {
-  //           let newMessage = JSON.parse(message.body);
-  //           setMessages((prevMessages) => [...prevMessages, newMessage]);
-  //         }
-  //       });
-  //     },
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   });
-
-  //   clientRef.current.activate(); // clientRef.current 사용
-
-  //   return () => {
-  //     if (clientRef.current) { // clientRef.current 확인
-  //       clientRef.current.deactivate();
-  //     }
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    if (currentRoom)
+{    getAPI(`/chat/${currentRoom}`).then((res) => {
+      console.log("res.data.content",res.data.content);
+      setMessages(res.data.content.reverse());
+    });}
+  }, [currentRoom])
 
   const connectToRoom = (roomId) => {
     const token = Cookies.get("ACCESS_TOKEN");
@@ -110,17 +98,17 @@ const Chat = () => {
       subscriptionRef.current = clientRef.current.subscribe(
         `/chat/${roomId}`,
         (message) => {
-          if (message.body) {
+          if (message) {
+            if (message.headers.lastReadMessage) {
+              console.log("userId",userId)
+              setHeaderState(message.headers)
+            }
             let newMessage = JSON.parse(message.body);
             setMessages((prevMessages) => [...prevMessages, newMessage]);
           }
         }
       );
       setCurrentRoom(roomId);
-      getAPI(`/chat/${roomId}`).then((res) => {
-        console.log(res);
-        setMessages(res.data.content.reverse());
-      });
     }
     // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
     else {
@@ -137,7 +125,12 @@ const Chat = () => {
           subscriptionRef.current = newClient.subscribe(
             `/chat/${roomId}`,
             (message) => {
-              if (message.body) {
+              if (message) {
+                if (message.headers.lastReadMessage) {
+                  console.log("들어오면안돼")
+                  console.log("userId",userId)
+                  setHeaderState(message.headers)
+                }
                 let newMessage = JSON.parse(message.body);
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
               }
@@ -173,15 +166,27 @@ const Chat = () => {
       newClient.activate();
       // 현재 누른 roomId 값 저장
       setCurrentRoom(roomId);
-      getAPI(`/chat/${roomId}`).then((res) => {
-        console.log(res);
-        setMessages(res.data.content.reverse());
-      });
-
       // Set the new client as current
       clientRef.current = newClient;
     }
   };
+
+  useEffect(() => {
+    if(headerState.lastReadMessage){
+      let updatedMessages = [...messages]; 
+      let indexStart = updatedMessages.findIndex(msg => msg.chatRecordId === Number(headerState.lastReadMessage));
+      if (indexStart !== -1) {
+          for (let i = indexStart + 1 ; i < updatedMessages.length; i++) {
+              if (updatedMessages[i].unreadCount > 0) {
+                  updatedMessages[i] = { ...updatedMessages[i], unreadCount: updatedMessages[i].unreadCount - 1 };
+              }
+          }
+      }
+      setMessages(updatedMessages);  
+      setHeaderState({})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[headerState])
 
   const sendMessage = (msg) => {
     const token = Cookies.get("ACCESS_TOKEN");
@@ -212,6 +217,7 @@ const Chat = () => {
     }
   };
   console.log(emailState)
+
   // Render the messages from the server.
   return (
     <>
@@ -221,18 +227,18 @@ const Chat = () => {
           <div className="flex flex-col justify-between w-[700px]">
             <div className="flex flex-col h-[530px] p-2 overflow-y-auto">
               {messages.map((message, index) => {
-                return emailState.user.userId === message.senderId ? (
+                return emailState.user.userId === message?.senderId ? (
                   <div className="flex justify-end">
                     <div key={index} className=" flex-end">
                       <div className="flex justify-end">
                         보낸사람 : {message.senderNickname}
                       </div>
                       <div className="flex gap-x-1 items-center justify-end">
+                        <span>{message.unreadCount}</span>
                         <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] text-white bg-[#0084ff]">
-                          {console.log(message)}
                           내용 : {message.content + " "}
                         </div>
-                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image"/>
+                        <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image" />
                       </div>
                     </div>
                   </div>
@@ -242,10 +248,11 @@ const Chat = () => {
                       <div>보낸사람 : {message.senderNickname}</div>
                     </div>
                     <div className="flex gap-x-1 items-center">
-                    <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image"/>
+                      <img src={message.profileUrl} className="rounded-full w-[40px] h-[40px]" alt="user_profile_image" />
                       <div className="flex p-[10px] rounded-lg m-[10px] gap-[10px] bg-[#E5E5E9]">
                         내용 : {message.content + " "}
                       </div>
+                      <span>{message.unreadCount}</span>
                     </div>
                   </div>
                 );
@@ -258,12 +265,11 @@ const Chat = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="내용을 입력해주세요"
-                onKeyPress={handleOnKeyPress} 
+                onKeyPress={handleOnKeyPress}
               />
               <button
-                className={`h-[50px] w-[100px] rounded-lg ${
-                  input ? "bg-[#FF7701] " : "bg-[#a5a5a5] text-gray-500"
-                } `}
+                className={`h-[50px] w-[100px] rounded-lg ${input ? "bg-[#FF7701] " : "bg-[#a5a5a5] text-gray-500"
+                  } `}
                 onClick={() =>
                   sendMessage({
                     content: input,

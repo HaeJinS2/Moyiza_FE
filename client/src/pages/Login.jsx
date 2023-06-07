@@ -7,7 +7,7 @@ import axios from 'axios';
 import { userState } from '../states/userState';
 import { useRecoilState } from 'recoil';
 import { parseJwt, setCookie } from '../utils/jwtUtils';
-import Navbar from '../component/Navbar';
+// import Navbar from '../component/Navbar';
 import kakao from '../component/img/kakao.png';
 import naver from '../component/img/naver.png';
 import google from '../component/img/google.png'
@@ -185,7 +185,6 @@ function Login() {
 
     return (
         <>
-            <Navbar />
             <div
                 class="flex items-center justify-center"
             >

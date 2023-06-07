@@ -1,25 +1,75 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../component/Navbar';
 import UserProfile from '../component/UserProfile';
 import Container from '../component/Container';
 import { motion } from 'framer-motion';
 import ProfileCard from '../component/ProfileCard';
+import { useNavigate } from 'react-router-dom';
+import { getAPI } from '../axios';
 
 function MyInfoClub() {
     let tabs = ['일상속', '하루속'];
 
     const [activeTab, setActiveTab] = useState([tabs[0]]); // 배열로 초기화
+    const navigate = useNavigate();
+    const [userInfo, setUserInfo] = useState(null);
+    // const [clubsInOperation, setClubsInOperation] = useState([]);
+    // const [clubsInParticipating, setClubsInParticipating] = useState([]);
+
+
+    // const navigate = useNavigate();
+    // const [userData, setUserData] = useState(null);
+    // const [clubsInOperation, setClubsInOperation] = useState([]);
+    // const [clubsInParticipating, setClubsInParticipating] = useState([]);
+
+    // useEffect(() => {
+    //     getAPI(`/user/mypage`)
+    //       .then((response) => {
+    //         console.log(response.data);
+
+    //       })
+    //       .catch((error) => console.log(error));
+    //   }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // GET 요청 수행
+                const response = await getAPI('/user/mypage', {
+
+                });
+
+                // 응답이 성공적인지 확인
+                if (response.data) {
+                    const { userInfo} = response.data;
+                    setUserInfo(userInfo);
+                    // setClubsInOperation(clubsInOperationInfo);
+                    // setClubsInParticipating(clubsInParticipatingInfo);
+                    console.log(response)
+                }
+
+            
+            } catch (error) {
+                console.error(error);
+                // 에러 상태 처리 또는 에러 페이지로 리디렉션 처리
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     return (
         <>  <div>
-
         </div>
             <Navbar />
             <Container>
                 <section className="h-[calc(100vh-0px)] flex flex-col items-center ">
                     <div className="flex flex-col">
                         {/* <div className="flex w-full h-[500px] items-center justify-center "> */}
-                            <UserProfile />
+                        <UserProfile 
+                        userInfo={userInfo}
+                        />
                         {/* </div> */}
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px]">
                             <div className="flex w-[1230px] py-[103px] flex-col gap-y-24 z-10">
@@ -63,6 +113,7 @@ function MyInfoClub() {
                                                     eventId={item.id}
                                                     maxGroupSize={item.maxGroupSize}
                                                     nowMemberCount={item.nowMemberCount}
+                                                    navigate={navigate}
                                                 />
                                             );
                                         })}

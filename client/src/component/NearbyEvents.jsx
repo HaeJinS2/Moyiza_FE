@@ -20,7 +20,7 @@ function NearbyEvents() {
         timeout: 1000 * 60 * 1,
         maximumAge: 1000 * 3600 * 24,
     };
-    const { getLocation, location, error } = useCurrentLocation(geolocationOptions);
+    const { getLocation, location } = useCurrentLocation(geolocationOptions);
 
     const openModal = () => {
         setIsOpen(true)
@@ -52,6 +52,7 @@ function NearbyEvents() {
     useEffect(() => {
         setLoading(true);
         getLocation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -59,6 +60,7 @@ function NearbyEvents() {
             setLoading(true);
             latlng();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
 
     useEffect(() => {
@@ -85,6 +87,7 @@ function NearbyEvents() {
             // 거리 데이터를 상태로 업데이트
             setDistances(distances);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataLat, dataLng, location]);
 
     function calculateDistance(lat1, lon1, lat2, lon2) {

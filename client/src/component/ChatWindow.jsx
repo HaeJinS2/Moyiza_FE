@@ -22,7 +22,7 @@ function ChatWindow({ roomIdState, style }) {
     const [input, setInput] = useState("");
     const [userId, setUserId] = useRecoilState(userIdState);
     const [roomIdList, setRoomIdList] = useRecoilState(roomIdStates);
-    
+
     console.log("messagess", messages)
 
     const messagesEndRef = useRef(null);
@@ -278,8 +278,11 @@ function ChatWindow({ roomIdState, style }) {
     };
 
     const removeChatRoom = (id) => {
-        const removeRoom = roomIdList.filter((item) => item !== roomIdState)
-        setRoomIdList(removeRoom)
+        if (subscriptionRef.current) {
+            const removeRoom = roomIdList.filter((item) => item !== roomIdState)
+            setRoomIdList(removeRoom)
+            subscriptionRef.current.unsubscribe();
+        }
     }
 
     return (
@@ -294,9 +297,9 @@ function ChatWindow({ roomIdState, style }) {
                             <span>클럽명</span>
                         </div>
                         <div>
-                            <button 
-                            onClick={()=>removeChatRoom(roomIdState)}
-                            className='text-[#FF7700] font-semibold text-[20px] w-[30px] h-[30px] text-right'>X</button>
+                            <button
+                                onClick={() => removeChatRoom(roomIdState)}
+                                className='text-[#FF7700] font-semibold text-[20px] w-[30px] h-[30px] text-right'>X</button>
                         </div>
                     </div>
                     <div className="w-[360px] h-px bg-gray-200"></div>

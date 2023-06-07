@@ -157,7 +157,7 @@ function NearbyEvents() {
                                                             </div>
                                                             <div className='w-full h-[25px] flex justify-between text-[19px] text-[#A4A4A4]'>
                                                                 <div>{formattedDate}</div>
-                                                                <div>{d.oneDay.attendantsNum}/{d.oneDay.oneDayGroupSize}</div>
+                                                                <div>{d.oneDay.attendantsNum}/{d.oneDay.oneDayGroupSize}명</div>
                                                                 <div>{(d.distance * 1000).toFixed(1)}M</div>
                                                             </div>
                                                         </div>

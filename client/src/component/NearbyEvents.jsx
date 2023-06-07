@@ -11,12 +11,11 @@ function NearbyEvents() {
     const [data, setData] = useState([]);
     const [dataLat, setDataLat] = useState([]);
     const [dataLng, setDataLng] = useState([]);
-    const [distances, setDistances] = useState([]);
+    // const [distances, setDistances] = useState([]);
     const nicknameState = useRecoilValue(userNicknameState);
 
     console.log(data)
     console.log("받은 위치", dataLat, dataLng)
-    console.log("거리", distances)
     const geolocationOptions = {
         enableHighAccuracy: true,
         timeout: 1000 * 60 * 1,

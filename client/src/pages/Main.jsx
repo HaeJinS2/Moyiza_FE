@@ -10,6 +10,7 @@ import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
 import MyLocation from "../component/MyLocation";
 import { logEvent } from "../utils/amplitude";
+import NearbyEvents from "../component/NearbyEvents";
 
 let tabs = ["일상속", "하루속"];
 
@@ -118,6 +119,7 @@ function Main() {
           >
             누르지마세요(해킹당함)
           </button>
+          <NearbyEvents />
         </section>
         <section>
           <div>

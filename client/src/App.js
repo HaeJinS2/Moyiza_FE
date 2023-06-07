@@ -1,10 +1,8 @@
 import "./App.css";
-import Router from "./shared/Router";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { initAmplitude } from "./utils/amplitude";
-import { useEffect } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AppContent from "./AppContent";
 
 const queryClient = new QueryClient();
 const theme = createTheme({
@@ -24,19 +22,16 @@ const theme = createTheme({
     },
   },
 });
-function App() {
-  useEffect(() => {
-    initAmplitude();
-  }, []);
 
+function App() {
   return (
     <div>
       <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <Router />
-        </RecoilRoot>
-      </QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <AppContent />
+          </RecoilRoot>
+        </QueryClientProvider>
       </ThemeProvider>
     </div>
   );

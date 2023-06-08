@@ -5,7 +5,18 @@ import { useEffect, useState } from "react";
 import confetti from 'canvas-confetti';
 
 export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput, option, setSelectedCategory, selectedCategory }) => {
-
+    const imgArr = [
+        `${process.env.PUBLIC_URL}/images/category/art.png`, // 예술
+        `${process.env.PUBLIC_URL}/images/category/book.png`, // 자기계발
+        `${process.env.PUBLIC_URL}/images/category/activity.png`, // 액티비티
+        `${process.env.PUBLIC_URL}/images/category/travel.png`, // 여행
+        `${process.env.PUBLIC_URL}/images/category/love.png`, // 연애
+        `${process.env.PUBLIC_URL}/images/category/hobby.png`, // 취미
+        `${process.env.PUBLIC_URL}/images/category/food.png`, // 음식
+        `${process.env.PUBLIC_URL}/images/category/culture.png`, // 문화
+        `${process.env.PUBLIC_URL}/images/category/exercise.png`, // 운동
+        `${process.env.PUBLIC_URL}/images/category/exercise.png`, // 스포츠
+    ]
 
     return (
         <Container>
@@ -27,7 +38,12 @@ export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput,
                                             onClick={() => setSelectedCategory(category)}
                                             className={`${selectedCategory === category ? 'shadow-cms bg-[#dddddd] w-[11rem] h-[3.7rem]  rounded-3xl' : 'shadow-cms bg-white w-[11rem] h-[3.7rem]  rounded-3xl'}`}
                                         >
-                                            {category}
+                                            <div className="flex items-center justify-center gap-x-2">
+                                                <img className="w-[23px] h-[23px]"
+                                                src={imgArr[index]}
+                                                ></img>
+                                                <div>{category}</div>
+                                            </div>
                                         </button>
                                     ))}
                                 </div>

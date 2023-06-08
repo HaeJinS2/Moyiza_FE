@@ -6,6 +6,8 @@ import { getAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import OnedayCard from "../component/OnedayCard";
 import { userNicknameState } from "../states/userStateTmp";
+import { AnimatePresence, motion } from "framer-motion";
+import EmptyState from "../component/EmptyState";
 
 function OnedayDetail() {
   const { id } = useParams();
@@ -17,6 +19,28 @@ function OnedayDetail() {
   const [isMember, setIsMember] = useState(false);
   // eslint-disable-next-line
   const [isOwner, setIsOwner] = useState(true);
+  const similarOneday = [1, 1, 1, 1, 1, 1];
+
+  // 멤버 페이지 관리
+  const [memberPage, setMemberPage] = useState(0);
+  const [memberTuple, setMemberTuple] = useState([null, memberPage]);
+  if (memberTuple[1] !== memberPage) {
+    setMemberTuple([memberTuple[1], memberPage]);
+  }
+  let memberPrev = memberTuple[0];
+  let memberDirection = memberPage > memberPrev ? 1 : -1;
+
+  // 비슷한 원데이 관리
+  const [similarOnedayPage, setSimilarOnedayPage] = useState(0);
+  const [similarOnedayTuple, setSimilarOnedayTuple] = useState([
+    null,
+    similarOnedayPage,
+  ]);
+  if (similarOnedayTuple[1] !== similarOnedayPage) {
+    setSimilarOnedayTuple([similarOnedayTuple[1], similarOnedayPage]);
+  }
+  let similarOnedayPrev = similarOnedayTuple[0];
+  let similarOnedayDirection = similarOnedayPage > similarOnedayPrev ? 1 : -1;
 
   // 원데이 상세조회
   const {
@@ -130,7 +154,7 @@ function OnedayDetail() {
             <div className="aspect-square flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl my-4">
               <img
                 className="rounded-md w-[219px] h-[219px] object-fill"
-                src={onedayDetail?.data.thumbnailUrl}
+                src={onedayDetail?.data.imageList[0]}
                 alt="oneday_thumbnail"
               />
             </div>
@@ -197,7 +221,7 @@ function OnedayDetail() {
                 alt="oneday_attendant_state"
               />
               {onedayDetail?.data.oneDayAttendantListSize}/
-              {onedayDetail?.data.oneDayGroupSize}{" "}
+              {onedayDetail?.data.oneDayGroupSize}
             </div>
           </div>
           <div className="flex justify-center items-center w-full h-[237px] bg-neutral-100 rounded-2xl pr-10">
@@ -206,42 +230,151 @@ function OnedayDetail() {
           <div className="flex justify-between w-full">
             <div className="font-sans text-2xl font-semibold">참여멤버</div>
             <div className="flex gap-4">
-              <div>이전버튼</div>
-              <div>다음버튼</div>
+              {memberPage > 0 && (
+                <button onClick={() => setMemberPage(memberPage - 1)}>
+                  <img
+                    alt="prev_button"
+                    src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                  />
+                </button>
+              )}
+              {memberPage < Math.ceil(onedayMember.length / 5) - 1 && (
+                <button onClick={() => setMemberPage(memberPage + 1)}>
+                  <img
+                    alt="next_button"
+                    src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                  />
+                </button>
+              )}
             </div>
           </div>
-          <div className="grid grid-cols-5 w-full">
-            {onedayMember.map((member, i) => {
-              return (
-                <div 
-                key={i}
-                className="flex gap-4 items-center">
-                  <img
-                    className="w-[90px] h-[90px] bg-rose-400 rounded-full "
-                    src={member.userProfileImage}
-                    alt="profile_image"
-                  />
-                  <div>{member.userNickName}</div>
-                </div>
-              );
-            })}
+          <div className="flex h-full justify-center items-center">
+            <div className="flex justify-center w-full h-[100px] text-black items-center overflow-hidden relative ">
+              <AnimatePresence custom={memberDirection}>
+                <motion.div
+                  key={memberPage}
+                  variants={varients}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={memberDirection}
+                  transition={{ duration: 0.5 }}
+                  className={`h-[90px] flex justify-center items-center w-full `}
+                >
+                  <div
+                    className={`${
+                      onedayMember.length === 0 ? "" : "grid grid-cols-5"
+                    } w-full gap-16`}
+                  >
+                    {onedayMember.length === 0 ? (
+                      <EmptyState page="onedayDetail" />
+                    ) : (
+                      onedayMember
+                        .slice(memberPage * 5, memberPage * 5 + 5)
+                        .map((member, i) => {
+                          return (
+                            <>
+                              <div
+                                key={i}
+                                className="flex justify-center items-center gap-10"
+                              >
+                                <img
+                                  className="w-[90px] h-[90px] bg-rose-400 rounded-full "
+                                  src={member.userProfileImage}
+                                  alt="profile_image"
+                                />
+                                <div>{member.userNickName}</div>
+                              </div>
+                              <div
+                                key={i + 1}
+                                className="flex justify-center items-center  gap-10"
+                              >
+                                <img
+                                  className="w-[90px] h-[90px] bg-rose-400 rounded-full "
+                                  src={member.userProfileImage}
+                                  alt="profile_image"
+                                />
+                                <div>{member.userNickName}</div>
+                              </div>
+                            </>
+                          );
+                        })
+                    )}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
 
           <div className="flex justify-between w-full">
             <div className="font-sans text-2xl font-semibold">비슷한 하루</div>
-            <div className="flex gap-4">
-              <div>이전버튼</div>
-              <div>다음버튼</div>
+            <div className="flex justify-center gap-10">
+              {similarOnedayPage > 0 && (
+                <button
+                  onClick={() => setSimilarOnedayPage(similarOnedayPage - 1)}
+                >
+                  <img
+                    alt="prev_button"
+                    src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                  />
+                </button>
+              )}
+              {similarOnedayPage < Math.ceil(similarOneday.length / 2) - 1 && (
+                <button
+                  onClick={() => setSimilarOnedayPage(similarOnedayPage + 1)}
+                >
+                  <img
+                    alt="next_button"
+                    src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                  />
+                </button>
+              )}
             </div>
           </div>
-          <div className="grid grid-cols-2 w-full">
-            <OnedayCard />
-            <OnedayCard />
+          <div className="flex w-full h-full justify-center items-center">
+            <div className="flex justify-center w-full h-[300px] text-black items-center overflow-hidden relative ">
+              <AnimatePresence custom={similarOnedayDirection}>
+                <motion.div
+                  key={similarOnedayPage}
+                  variants={varients}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={similarOnedayDirection}
+                  transition={{ duration: 0.5 }}
+                  className={`h-[260px] flex justify-center items-center w-full `}
+                >
+                  <div
+                    className={`${
+                      similarOneday.length === 0
+                        ? ""
+                        : "grid grid-cols-2"
+                    } w-full gap-4 `}
+                  >
+                    {similarOneday.length === 0 ? (
+                      <EmptyState page="onedayDetail" />
+                    ) : (
+                      similarOneday
+                        .slice(similarOnedayPage * 2, similarOnedayPage * 2 + 2)
+                        .map((item, i) => {
+                          return <OnedayCard key={i} />;
+                        })
+                    )}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </BodyContainer>
     </>
   );
 }
+
+let varients = {
+  enter: (direction) => ({ x: direction * 700 }),
+  center: { x: 0 },
+  exit: (direction) => ({ x: direction * -700 }),
+};
 
 export default OnedayDetail;

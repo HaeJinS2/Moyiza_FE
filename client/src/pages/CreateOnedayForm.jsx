@@ -79,6 +79,13 @@ function CreateOnedayForm() {
             .then((res) => console.log(res.data.message))
             .catch((error) => console.log(error));
           break;
+        case 8:
+          putAPI(`/oneday/create/${tmpOnedayId}/maxgroupsize`, {
+            oneDayGroupSize: savedOnedayData.oneDayGroupSize,
+          })
+            .then((res) => console.log(res.data.message))
+            .catch((error) => console.log(error));
+          break;
         default:
           break;
       }

@@ -21,7 +21,8 @@ function Detail() {
   const navigate = useNavigate();
   const userNickname = useRecoilValue(userNicknameState);
   const [isMember, setIsMember] = useState(false);
-
+  const [isOwner, setIsOwner] = useState(false);
+  console.log(userNickname);
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
@@ -48,6 +49,19 @@ function Detail() {
   } = useQuery("getDetailClub", () => getAPI(`/club/${id}`), {
     refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
   });
+
+  // isOwner의 상태 관리
+  useEffect(() => {
+    if (clubDetail && clubDetail.data) {
+      if (userNickname.userNickname === clubDetail.data.ownerNickname) {
+        setIsOwner(true);
+      } else {
+        setIsOwner(false);
+      }
+    }
+  }, [clubDetail, userNickname]);
+
+  console.log(isOwner);
 
   //클럽 멤버 가져오는 코드
   useEffect(() => {
@@ -216,7 +230,7 @@ function Detail() {
             <div className="font-bold text-2xl">
               {clubDetail?.data.clubTitle}
             </div>
-            {onEdit ? (
+            {isOwner ? onEdit ? (
               <button onClick={() => setOnEdit(false)}>
                 <img
                   src={`${process.env.PUBLIC_URL}/images/setting.svg`}
@@ -230,7 +244,7 @@ function Detail() {
                   alt="setting_button"
                 />
               </button>
-            )}
+            ) : <div className="h-[60px] w-[60px]"/>}
           </div>
           <div className="self-end">
             {onEdit && (
@@ -243,7 +257,7 @@ function Detail() {
             )}
           </div>
           <div>
-            <div className="aspect-square flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl py-2">
+            <div className="aspect-square flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl my-4">
               <img
                 className="rounded-md w-[219px] h-[219px] object-fill"
                 src={clubDetail?.data.thumbnailUrl}
@@ -261,12 +275,28 @@ function Detail() {
                 );
               })}
             </div>
+            <div className="flex justify-center">
+              {isMember ? (
+                <div className="flex  text-2xl  justify-center items-center mt-10 bg-orange-400 text-white w-[224px] h-[60px]  py-2 rounded-full ">
+                  <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
+                </div>
+              ) : (
+                <div className="flex text-2xl justify-center items-center mt-10 bg-orange-400 text-white w-[224px] h-[60px] py-2 rounded-full">
+                  <button onClick={handleJoinClub}>모임 가입하기</button>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex justify-between w-full h-[237px] bg-neutral-200 rounded-2xl">
+          <div className="flex justify-between items-center w-full h-[237px] bg-neutral-200 rounded-2xl pr-10">
             <p className="text-black text-7xl">{clubDetail?.clubContent}</p>
-            <button onClick={() => navigate(`/create-event-form/${id}`)}>
-              이벤트 생성
-            </button>
+            {isOwner && (
+              <button
+                className="bg-orange-400 text-white flex justify-center items-center w-[60px] h-[60px] rounded-full text-5xl pt-[6px]"
+                onClick={() => navigate(`/create-event-form/${id}`)}
+              >
+                +
+              </button>
+            )}
           </div>
         </header>
         <body className="flex flex-col gap-4">
@@ -415,16 +445,6 @@ function Detail() {
           </div>
 
           <div className="flex justify-end">
-            {isMember ? (
-              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg ">
-                <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
-              </div>
-            ) : (
-              <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
-                <button onClick={handleJoinClub}>모임 가입하기</button>
-              </div>
-            )}
-
             <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
               <button onClick={handleDeleteEvent}>이벤트 삭제</button>
             </div>

@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { getAPI } from "../axios";
+import { getAPI, postAPI, deleteAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import OnedayCard from "../component/OnedayCard";
 import { userNicknameState } from "../states/userStateTmp";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
-
+import swal from "sweetalert";
 function OnedayDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -108,6 +108,41 @@ function OnedayDetail() {
   let hours = oneDayStartTime.getHours();
   let minutes = oneDayStartTime.getMinutes();
 
+  const handleDeleteOneday = () => {
+    deleteAPI(`/oneday/${id}`)
+      .then((res) => {
+        console.log(res.data.message);
+        swal("하루속 삭제 완료");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleJoinOneday = () => {
+    postAPI(`/oneday/${id}/join`, {})
+      .then((res) => {
+        setIsMember(true);
+        console.log(res.data.message);
+        swal("하루속 가입이 승인됐습니다!");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleQuitOneday = () => {
+    deleteAPI(`/oneday/${id}/join`, {})
+      .then((res) => {
+        setIsMember(true);
+        console.log(res.data.message);
+        swal("하루속 가입이 취소되었습니다!");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <div ref={divRef} />
@@ -145,7 +180,9 @@ function OnedayDetail() {
           </div>
           <div className="self-end">
             {onEdit && (
-              <button className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80">
+              <button 
+              onClick={handleDeleteOneday}
+              className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80">
                 모임 삭제
               </button>
             )}
@@ -173,11 +210,15 @@ function OnedayDetail() {
             <div className="flex justify-center">
               {isMember ? (
                 <div className="flex  text-2xl  justify-center items-center mt-10 bg-green-500 text-white w-[224px] h-[60px]  py-2 rounded-full ">
-                  <button>모임 탈퇴하기</button>
+                  <button
+                  onClick={handleQuitOneday}
+                  >모임 탈퇴하기</button>
                 </div>
               ) : (
                 <div className="flex text-2xl justify-center items-center mt-10 bg-green-500 text-white w-[224px] h-[60px] py-2 rounded-full">
-                  <button>모임 가입하기</button>
+                  <button
+                  onClick={handleJoinOneday}
+                  >모임 가입하기</button>
                 </div>
               )}
             </div>

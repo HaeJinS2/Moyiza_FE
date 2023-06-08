@@ -19,7 +19,9 @@ function ClubEventCard({
   const handleDetailClubButton = () => {
     setIsOpen(true);
   };
-
+  const month = startTime.split("T")[0].split("-")[1];
+  const date = startTime.split("T")[0].split("-")[2];
+  console.log(month, date);
   console.log(clubId, eventId);
   return (
     <div className="flex">
@@ -35,11 +37,31 @@ function ClubEventCard({
             alt="clubThumbnail"
           />
         </div>
-        <div className="pl-3">타이틀</div>
-        <div className="flex justify-around gap-10">
-          <div>8명</div>
-          <div>날짜</div>
-          <div>장소</div>
+        <div className="pl-3 py-2">{title}</div>
+        <div className="flex justify-around gap-1 text-sm items-center">
+          <div className="flex items-center">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/club/club_people.png`}
+              alt="club_people"
+            />
+            {attendantsNum}/{size}
+          </div>
+          <div className="flex items-center">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/club/club_calender.png`}
+              alt="club_calender"
+            />
+            {month}월 {date}일
+          </div>
+          <div className="flex items-center">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/club/club_location.png`}
+              alt="club_location"
+            />
+            {location.split(" ")[0] === "서울"
+              ? location.split(" ")[1]
+              : location.split(" ")[0]}
+          </div>
         </div>
       </div>
       <DetailEvent

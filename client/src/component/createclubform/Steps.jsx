@@ -23,7 +23,7 @@ export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput,
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
                     <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
-                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px] overflow-hidden">
                         <div className="flex w-[800px] py-[128px] flex-col gap-y-24 z-10">
@@ -67,7 +67,7 @@ export const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagC
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
                     <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
-                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
@@ -110,7 +110,7 @@ export const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleIn
                 <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                     <div className="flex flex-col">
                         <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
-                            <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                            <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                         </div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                             <div className="flex w-[800px] py-[246px] flex-col gap-y-24 z-10">
@@ -141,7 +141,7 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
                     <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
-                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                         <div className="flex w-[800px] py-[79px] flex-col gap-y-24 z-10">
@@ -193,7 +193,7 @@ export const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setS
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
                     <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
-                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                         <div className="flex w-[800px] py-[136px] flex-col gap-y-24 z-10">
@@ -271,7 +271,7 @@ export const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, 
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
                     <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
-                        <span className="text-[30px]">모두와 함께할 <span className="text-[#08B159]">일상</span>을 만들어보세요!</span>
+                        <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">

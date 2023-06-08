@@ -6,6 +6,7 @@ import { getAPI } from "../axios";
 import { useRecoilState } from "recoil";
 import { roomIdStates } from "../states/chatState";
 import { isLoggedInState } from '../states/userStateTmp';
+import swal from 'sweetalert';
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 // import { userState } from "../states/userState";
@@ -78,7 +79,10 @@ function Navbar() {
 
   const handleRoomIdState = (id) => {
     const tmpId = new Set([...roomIdState, id])
-    setRoomIdState([...tmpId])
+    roomIdState.length <= 2 ?
+      setRoomIdState([...tmpId])
+      :
+      swal("세개까지만 띄울 수 있어요!")
   }
 
   useEffect(() => {

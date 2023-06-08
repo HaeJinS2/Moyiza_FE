@@ -112,7 +112,7 @@ function OnedayDetail() {
     <>
       <div ref={divRef} />
       <BodyContainer>
-        <div className="flex pt-40 flex-col justify-center items-center relative gap-10 mb-10">
+        <div className="flex pt-40 flex-col justify-center items-center gap-10 mb-10">
           <div className="flex justify-between w-full items-center">
             <button onClick={() => navigate(-1)}>
               <img
@@ -151,7 +151,7 @@ function OnedayDetail() {
             )}
           </div>
           <div>
-            <div className="aspect-square flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl my-4">
+            <div className="aspect-square flex w-full h-full justify-center items-center  overflow-hidden rounded-xl my-4">
               <img
                 className="rounded-md w-[219px] h-[219px] object-fill"
                 src={onedayDetail?.data.imageList[0]}
@@ -248,7 +248,7 @@ function OnedayDetail() {
               )}
             </div>
           </div>
-          <div className="flex h-full justify-center items-center">
+          <div className="flex h-full w-full justify-center items-center">
             <div className="flex justify-center w-full h-[100px] text-black items-center overflow-hidden relative ">
               <AnimatePresence custom={memberDirection}>
                 <motion.div
@@ -259,7 +259,7 @@ function OnedayDetail() {
                   exit="exit"
                   custom={memberDirection}
                   transition={{ duration: 0.5 }}
-                  className={`h-[90px] flex justify-center items-center w-full `}
+                  className={`h-[90px] flex absolute justify-center items-center w-full `}
                 >
                   <div
                     className={`${
@@ -342,13 +342,11 @@ function OnedayDetail() {
                   exit="exit"
                   custom={similarOnedayDirection}
                   transition={{ duration: 0.5 }}
-                  className={`h-[260px] flex justify-center items-center w-full `}
+                  className={`h-[260px] absolute flex justify-center items-center w-full `}
                 >
                   <div
                     className={`${
-                      similarOneday.length === 0
-                        ? ""
-                        : "grid grid-cols-2"
+                      similarOneday.length === 0 ? "" : "grid grid-cols-2"
                     } w-full gap-4 `}
                   >
                     {similarOneday.length === 0 ? (

@@ -13,6 +13,7 @@ import EndedClubEventCard from "../component/EndedClubEventCard";
 import { userNicknameState } from "../states/userStateTmp";
 import CreateEventModal from "../component/CreateEventModal";
 
+import swal from "sweetalert";
 
 function Detail() {
   const { id } = useParams();
@@ -24,7 +25,6 @@ function Detail() {
   const userNickname = useRecoilValue(userNicknameState);
   const [isMember, setIsMember] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
-  console.log(userNickname);
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
@@ -62,8 +62,6 @@ function Detail() {
       }
     }
   }, [clubDetail, userNickname]);
-
-  console.log(isOwner);
 
   //클럽 멤버 가져오는 코드
   useEffect(() => {
@@ -113,7 +111,8 @@ function Detail() {
       .then((res) => {
         setIsMember(true);
         console.log(res.data.message);
-        alert("가입이 승인됐습니다!");
+
+        swal("가입이 승인됐습니다!");
       })
       .catch((err) => {
         console.log(err);
@@ -125,7 +124,7 @@ function Detail() {
       .then((res) => {
         setIsMember(false);
         console.log(res.data.message);
-        alert("클럽 탈퇴 완료");
+        swal("클럽 탈퇴 완료");
       })
       .catch((err) => {
         console.log(err);
@@ -136,7 +135,7 @@ function Detail() {
     deleteAPI(`/club/${id}/delete`)
       .then((res) => {
         console.log(res.data.message);
-        alert("클럽 삭제 완료");
+        swal("클럽 삭제 완료");
       })
       .catch((err) => {
         console.log(err);
@@ -150,6 +149,7 @@ function Detail() {
       })
       .catch((err) => {
         console.log(err);
+        swal("목록을 가져오는 도중 문제가 발생했습니다.");
       });
   };
   console.log(isMember);
@@ -197,7 +197,7 @@ function Detail() {
     postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
       console.log(res);
       onJoinSuccess && onJoinSuccess();
-      alert("이벤트 참가 신청이 승인됐습니다!");
+      swal("이벤트 참가 신청이 완료되었습니다!");
     });
   };
 
@@ -205,14 +205,17 @@ function Detail() {
     deleteAPI(`/club/${clubId}/event/join/${eventId}`).then((res) => {
       console.log(res);
       onLeaveSuccess && onLeaveSuccess();
-      alert("이벤트 참가 신청이 취소됐습니다!");
+      swal("이벤트 참가 신청이 취소됐습니다!");
     });
   };
 
   const handleDeleteEvent = (clubId, eventId) => {
-    deleteAPI(`/club/${clubId}/event/${eventId}`).then((res) =>
-      console.log(res)
-    );
+    deleteAPI(`/club/${clubId}/event/${eventId}`)
+      .then((res) => {
+        swal("이벤트 삭제 완료!") 
+        getClubEventLists()
+      } )
+      .catch((error) => swal("이벤트 삭제 요청이 거절됐습니다."));
   };
   console.log(clubMemberNicknameArr);
   console.log(progressEvents);
@@ -232,32 +235,27 @@ function Detail() {
             <div className="font-bold text-2xl">
               {clubDetail?.data.clubTitle}
             </div>
-            {isOwner ? onEdit ? (
-              <button onClick={() => setOnEdit(false)}>
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/setting.svg`}
-                  alt="cancel_button"
-                />
-              </button>
+            {isOwner ? (
+              onEdit ? (
+                <button onClick={() => setOnEdit(false)}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/setting.svg`}
+                    alt="cancel_button"
+                  />
+                </button>
+              ) : (
+                <button onClick={() => setOnEdit(true)}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/setting.svg`}
+                    alt="setting_button"
+                  />
+                </button>
+              )
             ) : (
-              <button onClick={() => setOnEdit(true)}>
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/setting.svg`}
-                  alt="setting_button"
-                />
-              </button>
-            ) : <div className="h-[60px] w-[60px]"/>}
-          </div>
-          <div className="self-end">
-            {onEdit && (
-              <button
-                onClick={handleDeleteClub}
-                className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80"
-              >
-                모임 삭제
-              </button>
+              <div className="h-[60px] w-[60px]" />
             )}
           </div>
+
           <div>
             <div className="aspect-square flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl my-4">
               <img
@@ -291,17 +289,28 @@ function Detail() {
           </div>
           <div className="flex justify-between items-center w-full h-[237px] bg-neutral-200 rounded-2xl pr-10">
             <p className="text-black text-7xl">{clubDetail?.clubContent}</p>
-            {isOwner && (
-              <>
-              {/* <button
+            {isOwner ? (
+              onEdit ? (
+                <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">
+                  수정하기
+                </button>
+              ) : (
+                <>
+                  {/* <button
                 className="bg-orange-400 text-white flex justify-center items-center w-[60px] h-[60px] rounded-full text-5xl pt-[6px]"
                 onClick={() => navigate(`/create-event-form/${id}`)}
               >
                 +
               </button> */}
 
-              <CreateEventModal getClubEventLists={getClubEventLists} id={id}/>
-              </>
+                  <CreateEventModal
+                    getClubEventLists={getClubEventLists}
+                    id={id}
+                  />
+                </>
+              )
+            ) : (
+              ""
             )}
           </div>
         </header>
@@ -349,7 +358,7 @@ function Detail() {
                   <div
                     className={`${
                       progressEvents.length === 0 ? "" : "grid grid-cols-4"
-                    } gap-x-4 gap-y-8 w-full`}
+                    } gap-x-4 gap-y-8 justify-items-center w-full`}
                   >
                     {progressEvents.length === 0 ? (
                       <EmptyState page="detail" />
@@ -358,20 +367,39 @@ function Detail() {
                         .slice(progressEventPage * 4, progressEventPage * 4 + 4) // progressEvents 배열에서 현재 페이지에 해당하는 4개의 요소만 선택
                         .map((item) => {
                           return (
-                            <ClubEventCard
-                              image={item?.image}
-                              handleLeaveEvent={handleLeaveEvent}
-                              handleJoinEvent={handleJoinEvent}
-                              key={item?.id}
-                              clubId={item?.clubId}
-                              eventId={item?.id}
-                              title={item?.eventTitle}
-                              content={item?.eventContent}
-                              size={item?.eventGroupSize}
-                              attendantsNum={item?.attendantsNum}
-                              startTime={item?.eventStartTime}
-                              location={item?.eventLocation}
-                            />
+                            <>
+                              <div className="flex flex-col gap-2 ">
+                                <ClubEventCard
+                                  image={item?.image}
+                                  handleLeaveEvent={handleLeaveEvent}
+                                  handleJoinEvent={handleJoinEvent}
+                                  key={item?.id}
+                                  clubId={item?.clubId}
+                                  eventId={item?.id}
+                                  title={item?.eventTitle}
+                                  content={item?.eventConten}
+                                  size={item?.eventGroupSize}
+                                  attendantsNum={item?.attendantsNum}
+                                  startTime={item?.eventStartTime}
+                                  location={item?.eventLocation}
+                                />
+                                {onEdit ? (
+                                  <div className="w-full justify-between flex gap-2">
+                                    <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">
+                                      수정하기
+                                    </button>
+                                    <button
+                                      className="w-[126px] h-[30px] rounded-full border-2 border-orange-400 bg-white text-orange-400 text-lg"
+                                      onClick={() => handleDeleteEvent(id,item.id)}
+                                    >
+                                      삭제하기
+                                    </button>
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            </>
                           );
                         })
                     )}
@@ -450,10 +478,15 @@ function Detail() {
             )}
           </div>
 
-          <div className="flex justify-end">
-            <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
-              <button onClick={handleDeleteEvent}>이벤트 삭제</button>
-            </div>
+          <div className="flex justify-center pb-20">
+            {onEdit && (
+              <button
+                onClick={handleDeleteClub}
+                className=" text-white text-2xl bg-[#646464] w-[224px] h-[60px] px-2 py-1 rounded-full"
+              >
+                모임 삭제
+              </button>
+            )}
           </div>
         </body>
       </BodyContainer>

@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { motion } from "framer-motion";
 import { getHeaderAPI } from "../axios";
 import DatePicker from 'react-datepicker';
 import styled, { createGlobalStyle } from "styled-components";
-import Navbar from "../component/Navbar";
-// import { useNavigate } from "react-router-dom";
 import { FiCalendar } from 'react-icons/fi';
-import { useNavigate, useParams } from 'react-router-dom';
-import { textVariant } from "../utils/motion";
 import { format } from 'date-fns'
 import imageCompression from 'browser-image-compression';
 import { filePostAPI } from '../axios';
 import Modal from "react-modal";
 
-function CreateEventModal({ id }) {
+function CreateEventModal({ id, getClubEventLists }) {
     const [isOpen, setIsOpen] = useState(false);
 
     const [title, setTitle] = useState('');
@@ -30,7 +25,6 @@ function CreateEventModal({ id }) {
 
     const [userAddress, setUserAddress] = useState("");
     const [marker, setMarker] = useState(null);
-    const navigate = useNavigate();
 
     const [selectedFile, setSelectedFile] = useState('');
     const [preview, setPreview] = useState(null);
@@ -68,6 +62,7 @@ function CreateEventModal({ id }) {
         if (isOpen) {
             initializeMap();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -173,7 +168,8 @@ function CreateEventModal({ id }) {
             ],
         }).then((response) => {
             console.log(response)
-            navigate(-1)
+            getClubEventLists();
+            closeModal();
         }).catch((error) => {
             console.error(error)
         })
@@ -236,6 +232,13 @@ function CreateEventModal({ id }) {
 
     const closeModal = () => {
         setIsOpen(false);
+        setTitle('');
+        setContent('');
+        setUserAddress('');
+        setUserLat('');
+        setUserLng('');
+        setDateTimeString('');
+        setEventGroupSize('');
     };
     return (
         <div>

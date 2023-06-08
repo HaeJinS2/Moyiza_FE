@@ -300,7 +300,7 @@ function Detail() {
                 +
               </button> */}
 
-              <CreateEventModal id={id}/>
+              <CreateEventModal getClubEventLists={getClubEventLists} id={id}/>
               </>
             )}
           </div>

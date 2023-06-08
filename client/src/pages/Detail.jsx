@@ -358,20 +358,39 @@ function Detail() {
                         .slice(progressEventPage * 4, progressEventPage * 4 + 4) // progressEvents 배열에서 현재 페이지에 해당하는 4개의 요소만 선택
                         .map((item) => {
                           return (
-                            <ClubEventCard
-                              image={item?.image}
-                              handleLeaveEvent={handleLeaveEvent}
-                              handleJoinEvent={handleJoinEvent}
-                              key={item?.id}
-                              clubId={item?.clubId}
-                              eventId={item?.id}
-                              title={item?.eventTitle}
-                              content={item?.eventContent}
-                              size={item?.eventGroupSize}
-                              attendantsNum={item?.attendantsNum}
-                              startTime={item?.eventStartTime}
-                              location={item?.eventLocation}
-                            />
+                            <>
+                              <div className="flex flex-col gap-2 ">
+                                <ClubEventCard
+                                  image={item?.image}
+                                  handleLeaveEvent={handleLeaveEvent}
+                                  handleJoinEvent={handleJoinEvent}
+                                  key={item?.id}
+                                  clubId={item?.clubId}
+                                  eventId={item?.id}
+                                  title={item?.eventTitle}
+                                  content={item?.eventConten}
+                                  size={item?.eventGroupSize}
+                                  attendantsNum={item?.attendantsNum}
+                                  startTime={item?.eventStartTime}
+                                  location={item?.eventLocation}
+                                />
+                                {onEdit ? (
+                                  <div className="w-full justify-between flex gap-2">
+                                    <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">
+                                      수정하기
+                                    </button>
+                                    <button
+                                      className="w-[126px] h-[30px] rounded-full border-2 border-orange-400 bg-white text-orange-400 text-lg"
+                                      onClick={() => handleDeleteEvent(id,item.id)}
+                                    >
+                                      삭제하기
+                                    </button>
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            </>
                           );
                         })
                     )}
@@ -450,10 +469,15 @@ function Detail() {
             )}
           </div>
 
-          <div className="flex justify-end">
-            <div className="fixed z-100 bottom-40 flex justify-center items-center mt-10 bg-rose-400 text-white w-[100px] py-2 rounded-lg">
-              <button onClick={handleDeleteEvent}>이벤트 삭제</button>
-            </div>
+          <div className="flex justify-center pb-20">
+            {onEdit && (
+              <button
+                onClick={handleDeleteClub}
+                className=" text-white text-2xl bg-[#646464] w-[224px] h-[60px] px-2 py-1 rounded-full"
+              >
+                모임 삭제
+              </button>
+            )}
           </div>
         </body>
       </BodyContainer>

@@ -251,9 +251,11 @@ function Navbar() {
                           <div className="absolute top-[70px] right-[-110px] shadow-cm rounded-[25px]">
 
                             <div className="flex justify-between px-4 py-2 bg-white rounded-t-[25px] border-b border-gray-300">
-                              <div className="text-3xl">채팅</div>
+                              <div className="text-3xl px-4">채팅</div>
 
-                              <button onClick={() => setChatModalOpen(false)}>
+                              <button
+                              className="px-4"
+                              onClick={() => setChatModalOpen(false)}>
                                 X
                               </button>
                             </div>

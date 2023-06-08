@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
+import { postAPI } from '../axios';
 // import { styled } from 'styled-components';
 
 
@@ -29,6 +30,50 @@ function SignUp() {
     month: '',
     day: ''
   });
+
+  //메일 인증
+  const [verificationCode, setVerificationCode] = useState("");
+
+  const handleVerificationCodeChange = (event) => {
+    setVerificationCode(event.target.value);
+  };
+
+  const handleConfirmEmail = () => {
+    const requestData = { email };
+
+    postAPI("/user/signup/confirmEmail", requestData)
+      .then((response) => {
+        if (response.status === 200) {
+          alert("인증번호가 이메일로 전송되었습니다.");
+        } else {
+          alert("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
+
+  const handleConfirm = () => {
+    const requestData = { email, verificationCode };
+
+    postAPI("/user/signup/confirmEmail", requestData)
+      .then((response) => {
+        if (response.status === 200) {
+          alert("이메일 인증이 성공하였습니다.");
+          // 회원가입 등록 등 추가 동작 수행
+        } else {
+          alert("이메일 인증에 실패했습니다. 인증번호를 확인해주세요.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("이메일 인증에 실패했습니다. 인증번호를 확인해주세요.");
+      });
+  };
+
+
   const { email, pw, pwCheck, name, nickname, gender, phoneNum, year, month, day } =
     userInput;
   const handleInput = e => {
@@ -130,23 +175,23 @@ function SignUp() {
       phone: phoneNum,
 
     }
-   
+
     const base64ToBlob = (base64String, contentType = '') => {
       const byteCharacters = atob(base64String);
       const byteArrays = [];
-    
+
       for (let offset = 0; offset < byteCharacters.length; offset += 512) {
         const slice = byteCharacters.slice(offset, offset + 512);
         const byteNumbers = new Array(slice.length);
-    
+
         for (let i = 0; i < slice.length; i++) {
           byteNumbers[i] = slice.charCodeAt(i);
         }
-    
+
         const byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
       }
-    
+
       return new Blob(byteArrays, { type: contentType });
     };
 
@@ -161,9 +206,9 @@ function SignUp() {
       const blobImageFile = base64ToBlob(imageFile.replace(/^data:image\/[a-z]+;base64,/, ''), 'image/jpeg');
       formData.append('imageFile', blobImageFile);
     } else {
-      
+
       setImageFile(null);
-      formData.append('imageFile',imageFile);
+      formData.append('imageFile', imageFile);
     }
     try {
       const response = await axios.post("http://13.125.51.14/user/signup", formData);
@@ -312,7 +357,7 @@ function SignUp() {
                 autoComplete="username"
               />
               {/* 이메일 인증 */}
-              <button onClick={handleFind} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 px-4 py-1 shadow hover:shadow-lg ">인증번호 전송</button>
+              <button onClick={handleConfirmEmail} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 px-4 py-1 shadow hover:shadow-lg ">인증번호 전송</button>
             </div>
             <div className='flex items-center'>
               <div style={{ width: '27%' }}></div>
@@ -330,8 +375,10 @@ function SignUp() {
               <div style={{ width: '27%' }}>
                 {/* <div>이메일 인증</div> */}
               </div>
-              <input style={{ width: '28%', marginRight: '3%' }} placeholder="인증번호" className="h-12 rounded-lg px-3.5 py-2 shadow" type="text" />
-              <button onClick={handleFind} style={{ width: '14%', marginRight: '3%', backgroundColor: '#FF7F1E', color: '#fff' }} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 hover:shadow-lg">확인</button>
+              <input value={verificationCode}
+                onChange={handleVerificationCodeChange} 
+                style={{ width: '28%', marginRight: '3%' }} placeholder="인증번호" className="h-12 rounded-lg px-3.5 py-2 shadow" type="text" />
+              <button onClick={handleConfirm} style={{ width: '14%', marginRight: '3%', backgroundColor: '#FF7F1E', color: '#fff' }} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 hover:shadow-lg">확인</button>
               <button onClick={handleFind} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">재전송</button>
             </div>
 

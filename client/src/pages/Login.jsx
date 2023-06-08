@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
-import Cookies from 'js-cookie';
+// import { useMutation } from 'react-query';
+// import Cookies from 'js-cookie';
 import axios from 'axios';
 import { userState } from '../states/userState';
 import { useRecoilState } from 'recoil';

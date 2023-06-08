@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 import { getAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import OnedayCard from "../component/OnedayCard";
-// import ClubReviewCard from "../component/ClubReviewCard";
 import { userNicknameState } from "../states/userStateTmp";
 
 function OnedayDetail() {
@@ -13,8 +12,8 @@ function OnedayDetail() {
   const navigate = useNavigate();
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
   const [onEdit, setOnEdit] = useState(false);
-  // const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const userNickname = useRecoilValue(userNicknameState);
+  const [onedayMember, setOnedayMember] = useState([]);
   const [isMember, setIsMember] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
 
@@ -47,8 +46,9 @@ function OnedayDetail() {
   const getOnedayMembers = () => {
     getAPI(`/oneday/${id}`).then((res) => {
       const onedayMember = res.data.oneDayAttendantList;
+      setOnedayMember(onedayMember);
       setOnedayMemberNicknameArr(
-        onedayMember.map((member) => member.userNickname)
+        onedayMember.map((member) => member.userNickName)
       );
       if (
         onedayMember
@@ -75,6 +75,13 @@ function OnedayDetail() {
   }
 
   console.log(onedayMemberNicknameArr);
+  console.log(onedayMember);
+
+  const oneDayStartTime = new Date(onedayDetail.data.oneDayStartTime);
+  let month = oneDayStartTime.getMonth() + 1;
+  let date = oneDayStartTime.getDate();
+  let hours = oneDayStartTime.getHours();
+  let minutes = oneDayStartTime.getMinutes();
 
   return (
     <>
@@ -89,7 +96,7 @@ function OnedayDetail() {
               />
             </button>
             <div className="font-bold text-2xl">
-              {onedayDetail?.data.clubTitle}
+              {onedayDetail?.data.oneDayTitle}
             </div>
             {isOwner ? (
               onEdit ? (
@@ -123,7 +130,7 @@ function OnedayDetail() {
               <img
                 className="rounded-md w-[219px] h-[219px] object-fill"
                 src={onedayDetail?.data.thumbnailUrl}
-                alt="clubThumbnail"
+                alt="oneday_thumbnail"
               />
             </div>
             <div className="flex justify-center gap-20">
@@ -140,59 +147,78 @@ function OnedayDetail() {
             </div>
             <div className="flex justify-center">
               {isMember ? (
-                <div className="flex  text-2xl  justify-center items-center mt-10 bg-green-400 text-white w-[224px] h-[60px]  py-2 rounded-full ">
+                <div className="flex  text-2xl  justify-center items-center mt-10 bg-green-500 text-white w-[224px] h-[60px]  py-2 rounded-full ">
                   <button>모임 탈퇴하기</button>
                 </div>
               ) : (
-                <div className="flex text-2xl justify-center items-center mt-10 bg-green-400 text-white w-[224px] h-[60px] py-2 rounded-full">
+                <div className="flex text-2xl justify-center items-center mt-10 bg-green-500 text-white w-[224px] h-[60px] py-2 rounded-full">
                   <button>모임 가입하기</button>
                 </div>
               )}
             </div>
           </div>
-          <div className="flex justify-around w-full">
-            <div>날짜</div>
-            <div>시간</div>
-            <div>장소</div>
-            <div>남여</div>
-            <div>나이</div>
-            <div>참여자</div>
+          <div className="flex w-full  rounded-2xl h-[137px] bg-neutral-100 py-4 items-center justify-center">
+            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
+              <img
+                src={`${process.env.PUBLIC_URL}/images/oneday_calender.png`}
+              />
+              {month}.{date}
+            </div>
+            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
+            <img
+                src={`${process.env.PUBLIC_URL}/images/oneday_clock.png`}
+              />
+              {hours >= 12 ? "오후 " : "오전 "}
+              {hours >= 12 ? hours - 12 : hours}시 {minutes}분
+            </div>
+            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
+            <img
+                src={`${process.env.PUBLIC_URL}/images/oneday_location.png`}
+              />
+              {onedayDetail?.data.oneDayLocation}
+            </div>
+            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
+              <div className="w-[36px] h-[36px]"></div>
+              남, 녀
+            </div>
+            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-r-4 h-4/5">
+            <div className="w-[36px] h-[36px] flex justify-center items-center">Age</div>
+             <div> 30세 이상</div>
+            </div>
+            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
+            <img
+                src={`${process.env.PUBLIC_URL}/images/oneday_attendant.png`}
+              />
+              {onedayDetail?.data.oneDayAttendantListSize}/
+              {onedayDetail?.data.oneDayGroupSize}{" "}
+            </div>
           </div>
-          <div className="flex justify-between items-center w-full h-[237px] bg-neutral-200 rounded-2xl pr-10">
-            <p className="text-black text-7xl">{onedayDetail?.clubContent}</p>
+          <div className="flex justify-center items-center w-full h-[237px] bg-neutral-100 rounded-2xl pr-10">
+            <p className="text-black">{onedayDetail?.data.oneDayContent}</p>
           </div>
           <div className="flex justify-between w-full">
-            <div>참여멤버</div>
+            <div className="font-sans text-2xl font-semibold">참여멤버</div>
             <div className="flex gap-4">
               <div>이전버튼</div>
               <div>다음버튼</div>
             </div>
           </div>
           <div className="grid grid-cols-5 w-full">
-            <div className="flex gap-4">
-              <div>참여자 아이디</div>
-              <div>참여자 프로필</div>
-            </div>
-            <div className="flex gap-4">
-              <div>참여자 아이디</div>
-              <div>참여자 프로필</div>
-            </div>
-            <div className="flex gap-4">
-              <div>참여자 아이디</div>
-              <div>참여자 프로필</div>
-            </div>
-            <div className="flex gap-4">
-              <div>참여자 아이디</div>
-              <div>참여자 프로필</div>
-            </div>
-            <div className="flex gap-4">
-              <div>참여자 아이디</div>
-              <div>참여자 프로필</div>
-            </div>
+            {onedayMember.map((member) => {
+              return (
+                <div className="flex gap-4 items-center">
+                  <img
+                    className="w-[90px] h-[90px] bg-rose-400 rounded-full "
+                    src={member.userProfileImage}
+                  />
+                  <div>{member.userNickName}</div>
+                </div>
+              );
+            })}
           </div>
 
           <div className="flex justify-between w-full">
-            <div>비슷한 하루</div>
+            <div className="font-sans text-2xl font-semibold">비슷한 하루</div>
             <div className="flex gap-4">
               <div>이전버튼</div>
               <div>다음버튼</div>

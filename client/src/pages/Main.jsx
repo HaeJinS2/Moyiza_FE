@@ -24,27 +24,6 @@ function Main() {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const loginUser = {
-    email: "whdgnszz123@naver.com",
-    password: "a123456!",
-  };
-
-  const btn2 = async () => {
-    logEvent("Button Clicked", { name: "btn2", page: "Main" });
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/user/login`,
-        loginUser
-      );
-      const accessToken = response.headers.get("access_token").split(" ")[1];
-      const refreshToken = response.headers.get("refresh_token").split(" ")[1];
-      Cookies.set("ACCESS_TOKEN", accessToken);
-      Cookies.set("REFRESH_TOKEN", refreshToken);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <>
       {/* <Navbar /> */}
@@ -65,7 +44,7 @@ function Main() {
               <div className="relative w-auto ">
                 <div className="p-4 flex flex-1 flex-col h-[422px] font-bold text-5xl rounded-lg text-black justify-center ">
                   <div className="flex flex-col font-sans">
-                  <Fade bottom delay={0}>
+                    <Fade bottom delay={0}>
                       <p>취미 공유할 사람</p>
                       <p>모두 여기, 모이자!</p>
                     </Fade>
@@ -94,32 +73,40 @@ function Main() {
               {/* </motion.div> */}
             </div>
           </motion.div>
+          <div className="flex gap-4">
+            <img
+              className="cursor-pointer"
+              onClick={() => {
+                navigate("/club");
+              }}
+              src={`${process.env.PUBLIC_URL}/images/to_club.png`}
+              alt="to_club_button"
+            />
+            <img
+              className="cursor-pointer"
+              onClick={() => {
+                navigate("/oneday");
+              }}
+              src={`${process.env.PUBLIC_URL}/images/to_oneday.png`}
+              alt="to_oneday_button"
+            />
+            <img
+              className="cursor-pointer"
+              src={`${process.env.PUBLIC_URL}/images/to_recommend.png`}
+              alt="to_recommend_button"
+            />
+          </div>
           <MyLocation />
           <br />
-          <button
-            onClick={() => {
-              navigate("/club");
-            }}
-          >
-            ❤️일상속으로❤️
-          </button>
-          <br />
-          <button
-            onClick={() => {
-              navigate("/oneday");
-            }}
-          >
-            ❤️하루속으로❤️
-          </button>
-          <br />
-          <button
-            onClick={() => {
-              btn2();
-            }}
-          >
-            누르지마세요(해킹당함)
-          </button>
           <NearbyEvents />
+          <br />
+          <button
+            onClick={() => {
+              navigate("/create-feed");
+            }}
+          >
+            게시글 생성 페이지
+          </button>
         </section>
         <section>
           <div>

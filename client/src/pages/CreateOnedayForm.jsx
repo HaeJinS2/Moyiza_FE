@@ -14,7 +14,7 @@ import {
 import Slider from "react-input-slider";
 import ReactDatePicker from "react-datepicker";
 import { setHours, setMinutes } from "date-fns";
-import { putAPI } from "../axios";
+import { postAPI, putAPI } from "../axios";
 
 function CreateOnedayForm() {
   const [onedayStep, setOnedayStep] = useState(1);
@@ -51,6 +51,37 @@ function CreateOnedayForm() {
         case 4:
           putAPI(`/oneday/create/${tmpOnedayId}/content`, {
             oneDayContent: savedOnedayData.oneDayContent,
+          })
+            .then((res) => console.log(res.data.message))
+            .catch((error) => console.log(error));
+          break;
+        case 5:
+          putAPI(`/oneday/create/${tmpOnedayId}/time`, {
+            oneDayStartTime: savedOnedayData.oneDayStartTime,
+          })
+            .then((res) => console.log(res.data.message))
+            .catch((error) => console.log(error));
+          break;
+        case 6:
+          putAPI(`/oneday/create/${tmpOnedayId}/location`, {
+            oneDayLocation: savedOnedayData.oneDayLocation,
+            oneDayLatitude: savedOnedayData.oneDayLatitude,
+            oneDayLongitude: savedOnedayData.oneDayLongitude,
+          })
+            .then((res) => console.log(res.data.message))
+            .catch((error) => console.log(error));
+          break;
+        case 7:
+          putAPI(`/oneday/create/${tmpOnedayId}/policy`, {
+            genderPolicy: savedOnedayData.genderPolicy,
+            agePolicy: savedOnedayData.agePolicy,
+          })
+            .then((res) => console.log(res.data.message))
+            .catch((error) => console.log(error));
+          break;
+        case 8:
+          putAPI(`/oneday/create/${tmpOnedayId}/maxgroupsize`, {
+            oneDayGroupSize: savedOnedayData.oneDayGroupSize,
           })
             .then((res) => console.log(res.data.message))
             .catch((error) => console.log(error));
@@ -105,6 +136,7 @@ function CreateOnedayForm() {
             )}
             {onedayStep === 4 && (
               <OnedayStep4
+                tmpOnedayId={tmpOnedayId}
                 savedOnedayData={savedOnedayData}
                 setSavedOnedayData={setSavedOnedayData}
                 handleOnedayStep={handleOnedayStep}
@@ -146,6 +178,7 @@ function CreateOnedayForm() {
             )}
             {onedayStep === 9 && (
               <OnedayStep9
+                tmpOnedayId={tmpOnedayId}
                 handleOnedayStep={handleOnedayStep}
                 onedayStep={onedayStep}
               />
@@ -219,7 +252,6 @@ function OnedayStep2({
   onedayStep,
   handleOnedayStep,
   tag,
-  selectedTag,
   setSavedOnedayData,
   savedOnedayData,
 }) {
@@ -311,11 +343,13 @@ function OnedayStep4({
   handleOnedayStep,
   savedOnedayData,
   setSavedOnedayData,
+  tmpOnedayId,
 }) {
   // eslint-disable-next-line
   const [file, setFile] = useState(null);
   // eslint-disable-next-line
   const [fileUrl, setFileUrl] = useState("");
+
   const handleFileOnChange = async (e) => {
     let file = e.target.files[0];
 
@@ -329,15 +363,26 @@ function OnedayStep4({
       const compressedFile = await imageCompression(file, options);
       setFile(compressedFile);
 
+      const blob = new Blob([compressedFile], { type: "image" });
+      console.log(compressedFile)
+
+      const formData = new FormData();
+      formData.append("image", blob);
+
       const promise = imageCompression.getDataUrlFromFile(compressedFile);
       promise.then((result) => {
         setFileUrl(result);
         setSavedOnedayData({ ...savedOnedayData, oneDayImage: result });
       });
+
+      putAPI(`/oneday/create/${tmpOnedayId}/images`, formData)
+        .then((res) => console.log(res))
+        .catch((error) => console.log(error));
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <>
       <CreateOnedayFormLayout
@@ -441,29 +486,22 @@ function OnedayStep6({
       const createdMap = new window.kakao.maps.Map(container, options);
       setMap(createdMap);
 
-      
       window.kakao.maps.event.addListener(
         createdMap,
         "click",
         function (mouseEvent) {
           const latlng = mouseEvent.latLng;
 
-          
           if (markerRef.current) {
             markerRef.current.setMap(null);
           }
 
-          
           const newMarker = new window.kakao.maps.Marker({
             position: latlng,
           });
           newMarker.setMap(createdMap);
-          markerRef.current = newMarker; 
-          setSavedOnedayData({
-            ...savedOnedayData,
-            oneDayLatitude: latlng.getLat(),
-            oneDayLongitude: latlng.getLng(),
-          });
+          markerRef.current = newMarker;
+          console.log("위도,경도", latlng.getLat(), latlng.getLng());
 
           const geocoder = new window.kakao.maps.services.Geocoder();
           geocoder.coord2Address(
@@ -478,11 +516,13 @@ function OnedayStep6({
                 if (!detailAddr) {
                   detailAddr = locationInput;
                 }
-                console.log(detailAddr);
-                setSavedOnedayData({
-                  ...savedOnedayData,
+
+                setSavedOnedayData((prev) => ({
+                  ...prev,
+                  oneDayLatitude: latlng.getLat(),
+                  oneDayLongitude: latlng.getLng(),
                   oneDayLocation: detailAddr,
-                });
+                }));
               }
             }
           );
@@ -656,7 +696,10 @@ function OnedayStep8({
   );
 }
 
-function OnedayStep9({ onedayStep, handleOnedayStep }) {
+function OnedayStep9({ onedayStep, handleOnedayStep, tmpOnedayId }) {
+  postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
+    .then((res) => alert("하루속 이벤트 개설 완료!"))
+    .catch((error) => error);
   return (
     <>
       <CreateOnedayFormLayout
@@ -712,6 +755,15 @@ function CreateOnedayFormLayout({
             <div className="flex flex-col justify-center items-center text-4xl gap-2">
               <div>모임이름 개설완료</div>
               <div>당신의 하루를 함께하세요!</div>
+              <div className="py-16 flex gap-20">
+                <button
+                  onClick={handleOnedayStep}
+                  className="w-[224px] h-[60px] bg-[#747474] text-white rounded-full"
+                  name="prev"
+                >
+                  이전
+                </button>
+              </div>
             </div>
           </>
         )}

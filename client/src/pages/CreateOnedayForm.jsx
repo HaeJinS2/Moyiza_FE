@@ -55,6 +55,13 @@ function CreateOnedayForm() {
             .then((res) => console.log(res.data.message))
             .catch((error) => console.log(error));
           break;
+          case 5:
+            putAPI(`/oneday/create/${tmpOnedayId}/time`, {
+              oneDayStartTime: savedOnedayData.oneDayStartTime,
+            })
+              .then((res) => console.log(res.data.message))
+              .catch((error) => console.log(error));
+            break;            
         default:
           break;
       }
@@ -219,7 +226,6 @@ function OnedayStep2({
   onedayStep,
   handleOnedayStep,
   tag,
-  selectedTag,
   setSavedOnedayData,
   savedOnedayData,
 }) {

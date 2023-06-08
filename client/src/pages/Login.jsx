@@ -133,23 +133,23 @@ function Login() {
         }
     };
 
-    const postAPI = async (url, data) => {
-        const response = await axios.post(url, data);
-        return response.data;
-    };
+    // const postAPI = async (url, data) => {
+    //     const response = await axios.post(url, data);
+    //     return response.data;
+    // };
 
-    const loginMutation = useMutation(postAPI, {
-        onSuccess: (data) => {
-            console.log('data', data);
-            Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN);
-            Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN);
-        },
-        onError: (error) => {
-            // alert('로그인 실패!');
-            console.log(loginMutation)
-        }
+    // const loginMutation = useMutation(postAPI, {
+    //     onSuccess: (data) => {
+    //         console.log('data', data);
+    //         Cookies.set('ACCESS_TOKEN', data.ACCESS_TOKEN);
+    //         Cookies.set('REFRESH_TOKEN', data.REFRESH_TOKEN);
+    //     },
+    //     onError: (error) => {
+    //         // alert('로그인 실패!');
+    //         console.log(loginMutation)
+    //     }
 
-    });
+    // });
 
     const isEmail = (email) => {
         const emailRegex = /^[a-z0-9_+.-]+@([a-z0-9-]+\.)+[a-z0-9]{2,4}$/;

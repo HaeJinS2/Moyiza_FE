@@ -15,7 +15,8 @@ function OnedayDetail() {
   const userNickname = useRecoilValue(userNicknameState);
   const [onedayMember, setOnedayMember] = useState([]);
   const [isMember, setIsMember] = useState(false);
-  const [isOwner, setIsOwner] = useState(false);
+  // eslint-disable-next-line
+  const [isOwner, setIsOwner] = useState(true);
 
   // 원데이 상세조회
   const {
@@ -27,15 +28,15 @@ function OnedayDetail() {
   });
 
   // isOwner의 상태 관리
-  useEffect(() => {
-    if (onedayDetail && onedayDetail.data) {
-      if (userNickname.userNickname === onedayDetail.data.ownerNickname) {
-        setIsOwner(true);
-      } else {
-        setIsOwner(false);
-      }
-    }
-  }, [onedayDetail, userNickname]);
+  // useEffect(() => {
+  //   if (onedayDetail && onedayDetail.data) {
+  //     if (userNickname.userNickname === onedayDetail.data.ownerNickname) {
+  //       setIsOwner(true);
+  //     } else {
+  //       setIsOwner(false);
+  //     }
+  //   }
+  // }, [onedayDetail, userNickname]);
 
   // 원데이 멤버 가져오는 코드
   useEffect(() => {
@@ -77,7 +78,7 @@ function OnedayDetail() {
   console.log(onedayMemberNicknameArr);
   console.log(onedayMember);
 
-  const oneDayStartTime = new Date(onedayDetail.data.oneDayStartTime);
+  const oneDayStartTime = new Date(onedayDetail?.data.oneDayStartTime);
   let month = oneDayStartTime.getMonth() + 1;
   let date = oneDayStartTime.getDate();
   let hours = oneDayStartTime.getHours();
@@ -161,19 +162,22 @@ function OnedayDetail() {
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
               <img
                 src={`${process.env.PUBLIC_URL}/images/oneday_calender.png`}
+                alt="oneday_start_time"
               />
               {month}.{date}
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
-            <img
+              <img
                 src={`${process.env.PUBLIC_URL}/images/oneday_clock.png`}
+                alt="oneday_start_time"
               />
               {hours >= 12 ? "오후 " : "오전 "}
               {hours >= 12 ? hours - 12 : hours}시 {minutes}분
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
-            <img
+              <img
                 src={`${process.env.PUBLIC_URL}/images/oneday_location.png`}
+                alt="oneday_location"
               />
               {onedayDetail?.data.oneDayLocation}
             </div>
@@ -182,12 +186,15 @@ function OnedayDetail() {
               남, 녀
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-r-4 h-4/5">
-            <div className="w-[36px] h-[36px] flex justify-center items-center">Age</div>
-             <div> 30세 이상</div>
+              <div className="w-[36px] h-[36px] flex justify-center items-center">
+                Age
+              </div>
+              <div> 30세 이상</div>
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
-            <img
+              <img
                 src={`${process.env.PUBLIC_URL}/images/oneday_attendant.png`}
+                alt="oneday_attendant_state"
               />
               {onedayDetail?.data.oneDayAttendantListSize}/
               {onedayDetail?.data.oneDayGroupSize}{" "}
@@ -204,12 +211,15 @@ function OnedayDetail() {
             </div>
           </div>
           <div className="grid grid-cols-5 w-full">
-            {onedayMember.map((member) => {
+            {onedayMember.map((member, i) => {
               return (
-                <div className="flex gap-4 items-center">
+                <div 
+                key={i}
+                className="flex gap-4 items-center">
                   <img
                     className="w-[90px] h-[90px] bg-rose-400 rounded-full "
                     src={member.userProfileImage}
+                    alt="profile_image"
                   />
                   <div>{member.userNickName}</div>
                 </div>

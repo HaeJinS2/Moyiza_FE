@@ -14,7 +14,7 @@ import {
 import Slider from "react-input-slider";
 import ReactDatePicker from "react-datepicker";
 import { setHours, setMinutes } from "date-fns";
-import { putAPI } from "../axios";
+import { postAPI, putAPI } from "../axios";
 
 function CreateOnedayForm() {
   const [onedayStep, setOnedayStep] = useState(1);
@@ -136,6 +136,7 @@ function CreateOnedayForm() {
             )}
             {onedayStep === 4 && (
               <OnedayStep4
+                tmpOnedayId={tmpOnedayId}
                 savedOnedayData={savedOnedayData}
                 setSavedOnedayData={setSavedOnedayData}
                 handleOnedayStep={handleOnedayStep}
@@ -177,6 +178,7 @@ function CreateOnedayForm() {
             )}
             {onedayStep === 9 && (
               <OnedayStep9
+                tmpOnedayId={tmpOnedayId}
                 handleOnedayStep={handleOnedayStep}
                 onedayStep={onedayStep}
               />
@@ -341,11 +343,13 @@ function OnedayStep4({
   handleOnedayStep,
   savedOnedayData,
   setSavedOnedayData,
+  tmpOnedayId,
 }) {
   // eslint-disable-next-line
   const [file, setFile] = useState(null);
   // eslint-disable-next-line
   const [fileUrl, setFileUrl] = useState("");
+
   const handleFileOnChange = async (e) => {
     let file = e.target.files[0];
 
@@ -359,15 +363,26 @@ function OnedayStep4({
       const compressedFile = await imageCompression(file, options);
       setFile(compressedFile);
 
+      const blob = new Blob([compressedFile], { type: "image" });
+      console.log(compressedFile)
+
+      const formData = new FormData();
+      formData.append("image", blob);
+
       const promise = imageCompression.getDataUrlFromFile(compressedFile);
       promise.then((result) => {
         setFileUrl(result);
         setSavedOnedayData({ ...savedOnedayData, oneDayImage: result });
       });
+
+      putAPI(`/oneday/create/${tmpOnedayId}/images`, formData)
+        .then((res) => console.log(res))
+        .catch((error) => console.log(error));
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <>
       <CreateOnedayFormLayout
@@ -681,7 +696,10 @@ function OnedayStep8({
   );
 }
 
-function OnedayStep9({ onedayStep, handleOnedayStep }) {
+function OnedayStep9({ onedayStep, handleOnedayStep, tmpOnedayId }) {
+  postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
+    .then((res) => alert("하루속 이벤트 개설 완료!"))
+    .catch((error) => error);
   return (
     <>
       <CreateOnedayFormLayout
@@ -737,6 +755,15 @@ function CreateOnedayFormLayout({
             <div className="flex flex-col justify-center items-center text-4xl gap-2">
               <div>모임이름 개설완료</div>
               <div>당신의 하루를 함께하세요!</div>
+              <div className="py-16 flex gap-20">
+                <button
+                  onClick={handleOnedayStep}
+                  className="w-[224px] h-[60px] bg-[#747474] text-white rounded-full"
+                  name="prev"
+                >
+                  이전
+                </button>
+              </div>
             </div>
           </>
         )}

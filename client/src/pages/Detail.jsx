@@ -21,7 +21,7 @@ function Detail() {
   const navigate = useNavigate();
   const userNickname = useRecoilValue(userNicknameState);
   const [isMember, setIsMember] = useState(false);
-  
+
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
@@ -323,6 +323,7 @@ function Detail() {
                         .map((item) => {
                           return (
                             <ClubEventCard
+                              image={item?.image}
                               handleLeaveEvent={handleLeaveEvent}
                               handleJoinEvent={handleJoinEvent}
                               key={item?.id}
@@ -347,7 +348,7 @@ function Detail() {
           <p className="text-xl">종료된 일상속 이벤트</p>
 
           <div className="flex h-full justify-center items-center">
-            <div className="flex justify-center w-full h-[100vh] text-black items-center overflow-hidden relative">
+            <div className="flex justify-center w-full h-[50vh] text-black items-start overflow-hidden relative">
               <AnimatePresence custom={endedDirection}>
                 <motion.div
                   key={endedEventPage}
@@ -374,6 +375,7 @@ function Detail() {
                         .map((item) => {
                           return (
                             <EndedClubEventCard
+                              image={item?.image}
                               key={item?.id}
                               clubId={item?.clubId}
                               eventId={item?.id}

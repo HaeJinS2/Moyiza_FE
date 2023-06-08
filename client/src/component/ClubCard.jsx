@@ -53,7 +53,7 @@ function ClubCard({
         </div>
       ) : (
         <div
-          onClick={() => navigate(`/detail/${id}`)}
+          onClick={() => navigate(`/oneday-detail/${id}`)}
           className="cursor-pointer bg-white flex w-full shadow-cm rounded-xl h-[260px] items-center justify-center px-2"
         >
           <div className="aspect-square flex w-full h-full items-center relative overflow-hidden rounded-xl">
@@ -66,7 +66,7 @@ function ClubCard({
           <div className="flex flex-col gap-4 w-full h-full pl-4 pr-2 py-6">
             <div className="flex justify-between text-xs text-green-400">
               <div className="flex gap-2">
-                {tag.map((tag) => {
+                {tag?.map((tag) => {
                   return (
                     <div className="rounded-full border-2 px-2 py-1 border-green-400">
                       {tag}

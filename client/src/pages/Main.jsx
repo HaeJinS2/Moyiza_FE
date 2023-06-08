@@ -70,7 +70,7 @@ function Main() {
               {/* </motion.div> */}
             </div>
           </motion.div>
-          <div className="flex gap-4">
+          <div className="flex gap-x-4 h-[60px]">
             <img
               className="cursor-pointer"
               onClick={() => {
@@ -87,15 +87,15 @@ function Main() {
               src={`${process.env.PUBLIC_URL}/images/to_oneday.png`}
               alt="to_oneday_button"
             />
-            <img
+            {/* <img
               className="cursor-pointer"
               src={`${process.env.PUBLIC_URL}/images/to_recommend.png`}
               alt="to_recommend_button"
-            />
+            /> */}
+            <NearbyEvents  />
           </div>
           <MyLocation />
           <br />
-          <NearbyEvents />
           <br />
           <button
             onClick={() => {

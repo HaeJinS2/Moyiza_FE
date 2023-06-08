@@ -182,9 +182,9 @@ function CreateEventModal({ id, getClubEventLists }) {
         console.log(dateTimeString)
     };
     const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
-        <button className="flex items-center justify-center  shadow-md w-80 h-12 rounded-lg mb-4 border-1" onClick={onClick} ref={ref}>
+        <button className="flex items-center text-[#979797]  w-[150px] h-[40px] px-2 rounded-lg text-[20px] bg-[#F1F1F1]" onClick={onClick} ref={ref}>
             <FiCalendar className="mr-2" />
-            {value || '일시를 선택!'}
+            {value || '언제?'}
         </button>
     ));
 
@@ -243,7 +243,7 @@ function CreateEventModal({ id, getClubEventLists }) {
     return (
         <div>
             <button
-                className="bg-orange-400 text-white flex justify-center items-center w-[60px] h-[60px] rounded-full text-5xl "
+                className="bg-orange-400 text-white flex justify-center items-center w-[63.42px] h-[60px] rounded-full text-5xl "
                 onClick={openModal}>+</button>
             <Modal
                 isOpen={isOpen}
@@ -273,7 +273,7 @@ function CreateEventModal({ id, getClubEventLists }) {
             >
                 <div>
                     <div className='overflow-auto h-[900px] w-[642px] py-6 flex flex-col justify-center items-center '>
-                        <div className='flex flex-1 flex-col items-center justify-center  gap-y-[15px] '>
+                        <div className='flex flex-col items-center justify-center  gap-y-[15px] '>
                             <div className="flex justify-start items-center gap-x-2 w-full">
                                 {preview && (
                                     <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
@@ -284,66 +284,79 @@ function CreateEventModal({ id, getClubEventLists }) {
                                     onChange={handleFileChange}
                                 />
                             </div>
-                            <input
-                                placeholder='title'
-                                className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={title} onChange={(e) => setTitle(e.target.value)} />
-                            <input
-                                placeholder='content'
-                                className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={content} onChange={(e) => setContent(e.target.value)} />
-                            {/* <input 
-                        placeholder='location'
-                        className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={location} onChange={(e) => setLocation(e.target.value)} /> */}
-                            <GlobalStyle />
-                            <div className='flex flex-col z-[999]'>
-                                startDate
-                                <StyledDatePicker
-                                    className="shadow-md"
-                                    dateFormat="yyyy'년'MM'월'dd'일' HH'시'mm'분'"
-                                    showIcon
-                                    selected={dateTime}
-                                    onChange={handleDateTimeChange}
-                                    customInput={<CustomInput />}
-                                    showTimeSelect
-                                />
-                                {/* <StyledDatePicker
-                                className="shadow-md"
-                                dateFormat="yyyy-MM-dd"
-                                showIcon
-                                selected={startDate}
-                                onChange={handleDateChange}
-                                customInput={<CustomInput />}
-                            />
-                            <DatePicker
-                                className="border border-gray-300 p-2 rounded-md shadow-md bg-white"
-                                selected={time}
-                                showIcon
-                                customInput={<CustomInput2 />}
-                                onChange={handleTimeChange}
-                                showTimeSelect
-                                showTimeSelectOnly
-                                timeIntervals={30}
-                                timeCaption="Time"
-                                dateFormat="h:mm aa"
-                            /> */}
-                            </div>
+                            <div className='flex flex-col gap-y-4 justify-center items-center'>
+                                <div className='flex gap-x-2 justify-center items-center'>
+                                    <span className='w-[83px]  text-[24px]'>이벤트명</span>
+                                    <input
+                                        placeholder='이벤트 이름이 뭔가요?'
+                                        className='w-[405px] h-[40px] px-2 rounded-lg bg-[#F1F1F1] text-[20px]' value={title} onChange={(e) => setTitle(e.target.value)} />
+                                </div>
+                                <div className='flex w-[496px] justify-between items-center'>
+                                    <div className='flex items-center  gap-x-2'>
+                                        <GlobalStyle />
+                                        <div className='flex items-center gap-x-1'>
+                                            <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/date.png`} />
+                                            <span className='w-[63.42px] text-[24px]'>일시</span>
+                                        </div>
+                                        <div className='flex z-[999] gap-x-2'>
 
-                            {/* <div className='relative w-10 h-10'>
-    {time === null &&
-        <div className="absolute inset-0 flex items-center justify-center text-gray-400 z-99">
-            시간을 선택해주세요.
-        </div>} */}
+                                            <StyledDatePicker
+                                                className="shadow-md"
+                                                dateFormat="MM'.'dd HH'시'"
+                                                showIcon
+                                                selected={dateTime}
+                                                onChange={handleDateTimeChange}
+                                                customInput={<CustomInput />}
+                                                showTimeSelect
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='flex gap-x-2 items-center'>
+                                        <div className='flex items-center gap-x-1'>
+                                            <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/maxgroup.png`} />
+                                            <span className='text-[24px]'>인원</span>
+                                        </div>
+                                        <input
+                                            placeholder='몇명이서?'
+                                            className='w-[150px] h-[40px] px-2 rounded-lg bg-[#F1F1F1] text-[20px]' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
+                                    </div>
 
-                            {/* </div> */}
-                            <input
-                                placeholder='eventGroupSize'
-                                className='shadow-md w-80 h-12 rounded-lg mb-4 border-1' value={eventGroupsize} onChange={(e) => setEventGroupSize(e.target.value)} />
-                            <div className='flex flex-col gap-y-4  items-center justify-center '>
-                                <input className='w-80 h-[50px] shadow-md'
-                                    placeholder='장소를 검색하세요 (예: xx동)'
-                                    type="text" onChange={handleInputChange} />
-                                <div id="map" style={{ width: "400px", height: "400px" }}></div>
+                                </div>
+                                <div className='flex gap-x-2 items-center'>
+                                    <div className='flex items-center gap-x-1'>
+                                        <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/location.png`} />
+                                        <span className='w-[63.42px] text-[24px]'> 장소 </span>
+                                    </div>
+                                    <input className='w-[405px] h-[40px] px-2 rounded-lg bg-[#F1F1F1] text-[20px]'
+                                        placeholder='어디서 볼까요?'
+                                        type="text" onChange={handleInputChange} />
+                                </div>
+                                <div className='flex gap-x-2 items-center'>
+                                    <span className='w-[83px] z-50  text-[24px]'></span>
+                                    <div className='w-[405px] h-[111px]'>
+                                        <div id="map" style={{ width: "100%", height: "100%" }}></div>
+                                    </div>
+                                </div>
+                                <div className='flex gap-x-2 items-start'>
+                                    <div className='flex items-center gap-x-1'>
+                                        <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/content.png`} />
+                                        <span className='w-[63.42px] z-50 text-[24px]'>내용</span>
+                                    </div>
+                                    <input
+                                        placeholder='이벤트 내용을 작성해주세요.'
+                                        className='w-[405px] h-[234px] px-2 rounded-lg bg-[#F1F1F1] text-[20px]' value={content} onChange={(e) => setContent(e.target.value)} />
+                                </div>
+                                <div className='flex gap-x-4'>
+                                    <button
+                                        className='w-[308px] h-[60px] text-white bg-[#FF7700] rounded-[30px] text-[28px]'
+                                        onClick={handleCreateButton}>이벤트 열기</button>
+                                    <button
+                                        onClick={closeModal}
+                                        className='w-[177px] h-[60px] text-white rounded-[30px] bg-[#747474] text-[28px]'>
+                                        닫기
+                                    </button>
+                                </div>
                             </div>
-                            <button onClick={handleCreateButton}>이벤트생성하기버튼</button>
                         </div>
                     </div>
                 </div>

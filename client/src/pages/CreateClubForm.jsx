@@ -7,7 +7,7 @@ import { LinearProgress } from '@mui/material'
 import imageCompression from 'browser-image-compression';
 import { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 } from '../component/createclubform/Steps.jsx'
 import Navbar from "../component/Navbar";
-
+import swal from "sweetalert";
 
 function CreateClubForm() {
     const [club, setClub] = useRecoilState(clubState);
@@ -189,7 +189,7 @@ function CreateClubForm() {
             })
             .catch(error => {
                 console.error(error);
-                alert("틀림")
+                swal(error.response.data.message)
             });
     };
 
@@ -208,7 +208,7 @@ function CreateClubForm() {
             })
             .catch(error => {
                 console.error(error);
-                alert("틀림")
+                swal(error.response.data.message)
             });
 
     };
@@ -226,7 +226,7 @@ function CreateClubForm() {
             })
             .catch(error => {
                 console.error(error);
-                alert("틀림")
+                swal(error.response.data.message)
             });
 
     };
@@ -245,7 +245,7 @@ function CreateClubForm() {
             })
             .catch(error => {
                 console.error(error);
-                alert("틀림")
+                swal(error.response.data.message)
             });
 
     };
@@ -266,7 +266,7 @@ function CreateClubForm() {
             .catch(error => {
                 console.error(error);
                 // setStep(step + 1);
-                alert("틀림")
+                swal(error.response.data.message)
             });
 
     };
@@ -287,7 +287,7 @@ function CreateClubForm() {
             .catch(error => {
                 console.error(error);
                 // setStep(step + 1);
-                alert("틀림")
+                swal(error.response.data.message)
             });
 
     };
@@ -297,7 +297,7 @@ function CreateClubForm() {
             setClub({});
             setStep(step + 1);
         }).catch((error) => {
-            console.log(error)
+            swal(error.response.data.message)
         })
     };
 

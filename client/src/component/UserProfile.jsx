@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import Frame from '../component/img/Frame.png';
 
@@ -11,17 +11,17 @@ function UserProfile({
     const { nickname, profileImage,email } = userInfo || '';
     console.log(nickname);
     console.log(profileImage);
-    const [imageFile, setImageFile] = useState(null);
+    // const [imageFile, setImageFile] = useState(null);
     // 프로필 사진 입력
-    const imgRef = useRef();
-    const onChangeImage = () => {
-        let reader = new FileReader();
-        let file = imgRef.current.files[0];
-        reader.onloadend = () => {
-            setImageFile(reader.result);
-        }
-        reader.readAsDataURL(file);
-    };
+    // const imgRef = useRef();
+    // const onChangeImage = () => {
+    //     let reader = new FileReader();
+    //     let file = imgRef.current.files[0];
+    //     reader.onloadend = () => {
+    //         setImageFile(reader.result);
+    //     }
+    //     reader.readAsDataURL(file);
+    // };
 
     // 모달 스타일 설정
     const modalStyles = {

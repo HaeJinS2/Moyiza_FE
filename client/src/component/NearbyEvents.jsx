@@ -93,9 +93,15 @@ function NearbyEvents() {
 
     return (
         <div>
-            <button
+            <button className='w-[224px] h-[60px]'
                 onClick={() => handleButtonClick()}
-            >내위치기반원데이추천</button>
+            >
+                <img
+                    className="cursor-pointer"
+                    src={`${process.env.PUBLIC_URL}/images/to_recommend.png`}
+                    alt="to_recommend_button"
+                />
+            </button>
             <Modal
                 isOpen={isOpen}
                 onRequestClose={closeModal}
@@ -140,7 +146,7 @@ function NearbyEvents() {
                                         {data.map((d) => {
                                             const formattedDate = formatDate(d.oneDay.oneDayStartTime);
                                             return (
-                                                <button onClick={()=>navigate(`/oneday/${d.oneDay.id}`)}>
+                                                <button onClick={() => navigate(`/oneday/${d.oneDay.id}`)}>
                                                     <div className='w-[470px] h-[114px] bg-white rounded-[20px] gap-x-4 flex justify-center items-center'>
                                                         <div className='w-[80px] h-[80px] bg-[#797979] rounded-[20px]'>
                                                             <img src={d?.oneDay?.oneDayImage} alt="onedayImg">

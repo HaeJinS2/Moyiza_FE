@@ -8,6 +8,7 @@ import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
 import MyLocation from "../component/MyLocation";
 import NearbyEvents from "../component/NearbyEvents";
+import swal from 'sweetalert';
 
 let tabs = ["일상속", "하루속"];
 
@@ -70,7 +71,7 @@ function Main() {
               {/* </motion.div> */}
             </div>
           </motion.div>
-          <div className="flex gap-4">
+          <div className="flex gap-x-4 h-[60px]">
             <img
               className="cursor-pointer"
               onClick={() => {
@@ -87,15 +88,16 @@ function Main() {
               src={`${process.env.PUBLIC_URL}/images/to_oneday.png`}
               alt="to_oneday_button"
             />
-            <img
+            {/* <img
               className="cursor-pointer"
               src={`${process.env.PUBLIC_URL}/images/to_recommend.png`}
               alt="to_recommend_button"
-            />
+            /> */}
+            <NearbyEvents />
           </div>
           <MyLocation />
           <br />
-          <NearbyEvents />
+          <button onClick={() => swal("Hello world!")}>커스텀알럿버튼</button>
           <br />
           <button
             onClick={() => {
@@ -112,9 +114,8 @@ function Main() {
                 <button
                   key={i}
                   onClick={() => setActiveTab(tab)}
-                  className={`${
-                    activeTab === tab ? "text-black" : "hover:opacity-50"
-                  } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                  className={`${activeTab === tab ? "text-black" : "hover:opacity-50"
+                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                 >
                   {activeTab === tab && (
                     <motion.div

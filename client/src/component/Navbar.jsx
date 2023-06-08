@@ -248,13 +248,15 @@ function Navbar() {
                       {chatModalOpen && (
                         <>
                           <div className="absolute top-[70px] right-[-110px] shadow-cm rounded-t-xl">
+
                             <div className="flex justify-between px-4 pt-2  ">
                               <div className="text-3xl">채팅</div>
+
                               <button onClick={() => setChatModalOpen(false)}>
                                 X
                               </button>
                             </div>
-
+                            <div className="w-[375px] h-[400px] overflow-auto">
                             {roomId?.map((id) => (
                               <>
                                 <button
@@ -284,6 +286,7 @@ function Navbar() {
                                 </button>
                               </>
                             ))}
+                          </div>
                           </div>
                         </>
                       )}

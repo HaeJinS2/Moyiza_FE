@@ -55,13 +55,22 @@ function CreateOnedayForm() {
             .then((res) => console.log(res.data.message))
             .catch((error) => console.log(error));
           break;
-          case 5:
-            putAPI(`/oneday/create/${tmpOnedayId}/time`, {
-              oneDayStartTime: savedOnedayData.oneDayStartTime,
-            })
-              .then((res) => console.log(res.data.message))
-              .catch((error) => console.log(error));
-            break;            
+        case 5:
+          putAPI(`/oneday/create/${tmpOnedayId}/time`, {
+            oneDayStartTime: savedOnedayData.oneDayStartTime,
+          })
+            .then((res) => console.log(res.data.message))
+            .catch((error) => console.log(error));
+          break;
+        case 6:
+          putAPI(`/oneday/create/${tmpOnedayId}/location`, {
+            oneDayLocation: savedOnedayData.oneDayLocation,
+            oneDayLatitude: savedOnedayData.oneDayLatitude,
+            oneDayLongitude: savedOnedayData.oneDayLongitude,
+          })
+            .then((res) => console.log(res.data.message))
+            .catch((error) => console.log(error));
+          break;
         default:
           break;
       }
@@ -447,29 +456,22 @@ function OnedayStep6({
       const createdMap = new window.kakao.maps.Map(container, options);
       setMap(createdMap);
 
-      
       window.kakao.maps.event.addListener(
         createdMap,
         "click",
         function (mouseEvent) {
           const latlng = mouseEvent.latLng;
 
-          
           if (markerRef.current) {
             markerRef.current.setMap(null);
           }
 
-          
           const newMarker = new window.kakao.maps.Marker({
             position: latlng,
           });
           newMarker.setMap(createdMap);
-          markerRef.current = newMarker; 
-          setSavedOnedayData({
-            ...savedOnedayData,
-            oneDayLatitude: latlng.getLat(),
-            oneDayLongitude: latlng.getLng(),
-          });
+          markerRef.current = newMarker;
+          console.log('위도,경도', latlng.getLat(),latlng.getLng())
 
           const geocoder = new window.kakao.maps.services.Geocoder();
           geocoder.coord2Address(
@@ -480,15 +482,17 @@ function OnedayStep6({
                 let detailAddr = !!result[0].road_address
                   ? result[0].road_address.address_name
                   : "";
-
+              
                 if (!detailAddr) {
                   detailAddr = locationInput;
                 }
-                console.log(detailAddr);
-                setSavedOnedayData({
-                  ...savedOnedayData,
+                
+                setSavedOnedayData(prev => ({
+                  ...prev,
+                  oneDayLatitude: latlng.getLat(),
+                  oneDayLongitude: latlng.getLng(),
                   oneDayLocation: detailAddr,
-                });
+                }));
               }
             }
           );

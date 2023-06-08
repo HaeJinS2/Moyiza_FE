@@ -8,6 +8,7 @@ import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
 import MyLocation from "../component/MyLocation";
 import NearbyEvents from "../component/NearbyEvents";
+import swal from 'sweetalert';
 
 let tabs = ["일상속", "하루속"];
 
@@ -92,10 +93,11 @@ function Main() {
               src={`${process.env.PUBLIC_URL}/images/to_recommend.png`}
               alt="to_recommend_button"
             /> */}
-            <NearbyEvents  />
+            <NearbyEvents />
           </div>
           <MyLocation />
           <br />
+          <button onClick={() => swal("Hello world!")}>커스텀알럿버튼</button>
           <br />
           <button
             onClick={() => {
@@ -112,9 +114,8 @@ function Main() {
                 <button
                   key={i}
                   onClick={() => setActiveTab(tab)}
-                  className={`${
-                    activeTab === tab ? "text-black" : "hover:opacity-50"
-                  } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                  className={`${activeTab === tab ? "text-black" : "hover:opacity-50"
+                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                 >
                   {activeTab === tab && (
                     <motion.div

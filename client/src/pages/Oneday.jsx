@@ -16,7 +16,6 @@ import Footer from "../component/Footer";
 import { logEvent } from "../utils/amplitude";
 import { useNavigate } from "react-router-dom";
 import RecommendCard from "../component/RecommendCard";
-import { useQuery } from 'react-query';
 import { useQueries } from 'react-query';
 
 

@@ -144,26 +144,26 @@ function NearbyEvents() {
                                             </div>
                                         </div>
                                         {data.map((d) => {
-                                            const formattedDate = formatDate(d.oneDay.oneDayStartTime);
+                                            const formattedDate = formatDate(d.oneDayStartTime);
                                             return (
                                                 <button onClick={() => navigate(`/oneday/${d.oneDay.id}`)}>
                                                     <div className='w-[470px] h-[114px] bg-white rounded-[20px] gap-x-4 flex justify-center items-center'>
                                                         <div className='w-[80px] h-[80px] bg-[#797979] rounded-[20px]'>
-                                                            <img src={d?.oneDay?.oneDayImage} alt="onedayImg">
+                                                            <img src={d?.oneDayImage} alt="onedayImg">
                                                             </img>
                                                         </div>
                                                         <div className='w-[330px] h-[80px] flex flex-col justify-between items-center'>
                                                             <div className='w-full h-[25px]   flex justify-between'>
                                                                 <span className='text-[24px]'>
-                                                                    {d?.oneDay?.oneDayTitle}
+                                                                    {d?.oneDayTitle}
                                                                 </span>
                                                                 <div className='px-2 w-auto border border-[#08B159] rounded-[20px] bg-white text-[#08B159]'>
-                                                                    {d.oneDay.category}
+                                                                    {d.oneDayCategory}
                                                                 </div>
                                                             </div>
                                                             <div className='w-full h-[25px] flex justify-between text-[19px] text-[#A4A4A4]'>
                                                                 <div>{formattedDate}</div>
-                                                                <div>{d.oneDay.attendantsNum}/{d.oneDay.oneDayGroupSize}명</div>
+                                                                <div>{d.attendantsNum}/{d.oneDayGroupSize}명</div>
                                                                 <div>{(d.distance * 1000).toFixed(1)}M</div>
                                                             </div>
                                                         </div>

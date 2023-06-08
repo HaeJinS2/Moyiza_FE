@@ -25,17 +25,18 @@ function Navbar() {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
-
+  const [data, setData] = useState([]);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
-
+// console.log("data",data[7].roomName)
   useEffect(() => {
     getAPI(`/chat`)
       .then((response) => {
-        console.log(response.data);
+        console.log("dataa",response.data)
         if (Array.isArray(response.data)) {
           const chatIds = response.data.map((item) => item.chatId);
           setRoomId(chatIds);
+          setData(response.data)
         }
       })
       .catch((error) => console.log(error));
@@ -247,46 +248,48 @@ function Navbar() {
                       />
                       {chatModalOpen && (
                         <>
-                          <div className="absolute top-[70px] right-[-110px] shadow-cm rounded-t-xl">
+                          <div className="absolute top-[70px] right-[-110px] shadow-cm rounded-[25px]">
 
-                            <div className="flex justify-between px-4 pt-2  ">
+                            <div className="flex justify-between px-4 py-2 bg-white rounded-t-[25px] border-b border-gray-300">
                               <div className="text-3xl">채팅</div>
 
                               <button onClick={() => setChatModalOpen(false)}>
                                 X
                               </button>
                             </div>
-                            <div className="w-[375px] h-[400px] overflow-auto">
-                            {roomId?.map((id) => (
-                              <>
-                                <button
-                                  className={`w-[360px]  px-4 gap-x-4 flex items-center justify-start border-b-2 py-2
+                            <div className="w-[360px] h-[400px]  overflow-auto">
+                              {roomId?.map((id, i) => (
+                                <>
+                                  <button
+                                    className={`w-[345px]  px-4 gap-x-4 flex items-center justify-start py-2
                                   ${
-                                    // id === currentRoom
-                                    // ? "bg-slate-400"
-                                    // :
-                                    "bg-slate-300"
-                                    }`}
-                                  key={id}
-                                  onClick={
-                                    () => {
-                                      handleRoomIdState(id)
-                                      setChatModalOpen(false);
+                                      // id === currentRoom
+                                      // ? "bg-slate-400"
+                                      // :
+                                      "bg-white"
+                                      }`}
+                                    key={id}
+                                    onClick={
+                                      () => {
+                                        handleRoomIdState(id)
+                                        setChatModalOpen(false);
+                                      }
+                                      // connectToRoom(id)
                                     }
-                                    // connectToRoom(id)
-                                  }
-                                >
-                                  <div>
-                                    <div className="w-[52px] h-[52px] bg-black rounded-full"></div>
-                                  </div>
-                                  <div className="flex flex-col items-start">
-                                    <div>Room {id}</div>
-                                    <div>미리볼내용</div>
-                                  </div>
-                                </button>
-                              </>
-                            ))}
-                          </div>
+                                  >
+                                    <div className="flex items-center justify-center gap-x-4 px-4 py-1">
+                                      <div>
+                                        <div className="w-[52px] h-[52px] bg-black rounded-full"></div>
+                                      </div>
+                                      <div className="flex flex-col items-start">
+                                        <div>{data[i]?.roomName ? data[i]?.roomName : "이름 없는 채팅방"}</div>
+                                        <div className="font-normal">미리볼내용</div>
+                                      </div>
+                                    </div>
+                                  </button>
+                                </>
+                              ))}
+                            </div>
                           </div>
                         </>
                       )}

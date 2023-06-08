@@ -71,6 +71,14 @@ function CreateOnedayForm() {
             .then((res) => console.log(res.data.message))
             .catch((error) => console.log(error));
           break;
+        case 7:
+          putAPI(`/oneday/create/${tmpOnedayId}/policy`, {
+            genderPolicy: savedOnedayData.genderPolicy,
+            agePolicy: savedOnedayData.agePolicy,
+          })
+            .then((res) => console.log(res.data.message))
+            .catch((error) => console.log(error));
+          break;
         default:
           break;
       }
@@ -471,7 +479,7 @@ function OnedayStep6({
           });
           newMarker.setMap(createdMap);
           markerRef.current = newMarker;
-          console.log('위도,경도', latlng.getLat(),latlng.getLng())
+          console.log("위도,경도", latlng.getLat(), latlng.getLng());
 
           const geocoder = new window.kakao.maps.services.Geocoder();
           geocoder.coord2Address(
@@ -482,12 +490,12 @@ function OnedayStep6({
                 let detailAddr = !!result[0].road_address
                   ? result[0].road_address.address_name
                   : "";
-              
+
                 if (!detailAddr) {
                   detailAddr = locationInput;
                 }
-                
-                setSavedOnedayData(prev => ({
+
+                setSavedOnedayData((prev) => ({
                   ...prev,
                   oneDayLatitude: latlng.getLat(),
                   oneDayLongitude: latlng.getLng(),

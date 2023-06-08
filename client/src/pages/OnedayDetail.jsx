@@ -185,14 +185,14 @@ function OnedayDetail() {
           <div className="flex w-full  rounded-2xl h-[137px] bg-neutral-100 py-4 items-center justify-center">
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
               <img
-                src={`${process.env.PUBLIC_URL}/images/oneday_calender.png`}
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_calender.png`}
                 alt="oneday_start_time"
               />
               {month}.{date}
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
               <img
-                src={`${process.env.PUBLIC_URL}/images/oneday_clock.png`}
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_clock.png`}
                 alt="oneday_start_time"
               />
               {hours >= 12 ? "오후 " : "오전 "}
@@ -200,7 +200,7 @@ function OnedayDetail() {
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
               <img
-                src={`${process.env.PUBLIC_URL}/images/oneday_location.png`}
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_location.png`}
                 alt="oneday_location"
               />
               {onedayDetail?.data.oneDayLocation}
@@ -217,7 +217,7 @@ function OnedayDetail() {
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
               <img
-                src={`${process.env.PUBLIC_URL}/images/oneday_attendant.png`}
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_attendant.png`}
                 alt="oneday_attendant_state"
               />
               {onedayDetail?.data.oneDayAttendantListSize}/

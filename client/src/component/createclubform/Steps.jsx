@@ -41,6 +41,7 @@ export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput,
                                             <div className="flex items-center justify-center gap-x-2">
                                                 <img className="w-[23px] h-[23px]"
                                                 src={imgArr[index]}
+                                                alt="categoryIcon"
                                                 ></img>
                                                 <div>{category}</div>
                                             </div>

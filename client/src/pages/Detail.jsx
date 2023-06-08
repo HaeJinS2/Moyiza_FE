@@ -11,6 +11,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import EndedClubEventCard from "../component/EndedClubEventCard";
 import { userNicknameState } from "../states/userStateTmp";
+import CreateEventModal from "../component/CreateEventModal";
+
 
 function Detail() {
   const { id } = useParams();
@@ -290,12 +292,16 @@ function Detail() {
           <div className="flex justify-between items-center w-full h-[237px] bg-neutral-200 rounded-2xl pr-10">
             <p className="text-black text-7xl">{clubDetail?.clubContent}</p>
             {isOwner && (
-              <button
+              <>
+              {/* <button
                 className="bg-orange-400 text-white flex justify-center items-center w-[60px] h-[60px] rounded-full text-5xl pt-[6px]"
                 onClick={() => navigate(`/create-event-form/${id}`)}
               >
                 +
-              </button>
+              </button> */}
+
+              <CreateEventModal getClubEventLists={getClubEventLists} id={id}/>
+              </>
             )}
           </div>
         </header>

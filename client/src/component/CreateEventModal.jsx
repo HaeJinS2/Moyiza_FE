@@ -295,7 +295,7 @@ function CreateEventModal({ id, getClubEventLists }) {
                                     <div className='flex items-center  gap-x-2'>
                                         <GlobalStyle />
                                         <div className='flex items-center gap-x-1'>
-                                            <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/date.png`} />
+                                            <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/date.png`} alt="createEventIcon" />
                                             <span className='w-[63.42px] text-[24px]'>일시</span>
                                         </div>
                                         <div className='flex z-[999] gap-x-2'>
@@ -313,7 +313,7 @@ function CreateEventModal({ id, getClubEventLists }) {
                                     </div>
                                     <div className='flex gap-x-2 items-center'>
                                         <div className='flex items-center gap-x-1'>
-                                            <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/maxgroup.png`} />
+                                            <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/maxgroup.png`} alt="createEventIcon" />
                                             <span className='text-[24px]'>인원</span>
                                         </div>
                                         <input
@@ -324,7 +324,7 @@ function CreateEventModal({ id, getClubEventLists }) {
                                 </div>
                                 <div className='flex gap-x-2 items-center'>
                                     <div className='flex items-center gap-x-1'>
-                                        <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/location.png`} />
+                                        <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/location.png`} alt="createEventIcon" />
                                         <span className='w-[63.42px] text-[24px]'> 장소 </span>
                                     </div>
                                     <input className='w-[405px] h-[40px] px-2 rounded-lg bg-[#F1F1F1] text-[20px]'
@@ -339,7 +339,7 @@ function CreateEventModal({ id, getClubEventLists }) {
                                 </div>
                                 <div className='flex gap-x-2 items-start'>
                                     <div className='flex items-center gap-x-1'>
-                                        <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/content.png`} />
+                                        <img className='w-[14.68px] h-[14.68px]' src={`${process.env.PUBLIC_URL}/images/createEvent/content.png`} alt="createEventIcon" />
                                         <span className='w-[63.42px] z-50 text-[24px]'>내용</span>
                                     </div>
                                     <input

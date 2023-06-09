@@ -6,9 +6,7 @@ import { useNavigate } from "react-router-dom";
 import BodyContainer from "../component/BodyContainer";
 import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
-import MyLocation from "../component/MyLocation";
 import NearbyEvents from "../component/NearbyEvents";
-import swal from "sweetalert";
 
 let tabs = ["일상속", "하루속"];
 
@@ -94,7 +92,7 @@ function Main() {
             /> */}
             <NearbyEvents />
           </div>
-          <MyLocation />
+          {/* <MyLocation />
           <br />
           <button onClick={() => swal("Hello world!")}>커스텀알럿버튼</button>
           <br />
@@ -104,7 +102,7 @@ function Main() {
             }}
           >
             게시글 생성 페이지
-          </button>
+          </button> */}
         </section>
         <section>
           <div>

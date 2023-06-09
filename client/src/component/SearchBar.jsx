@@ -28,6 +28,16 @@ const SearchBar = () => {
 
   const handleSearch = (e) => {
     if (e.type === "keypress" && e.key !== "Enter") return;
+
+    getAPI(`/oneday/search?q=${search}`)
+      .then((res) => {
+        console.log(res.data.content);
+        setSearchList({ ...searchList, searchedOnedayList: res.data.content });
+        setSearch("")
+        navigate('/search')
+      })
+      .catch((err) => console.log(err));
+
     getAPI(`/club/search?q=${search}`)
       .then((res) => {
         console.log(res.data.content);
@@ -36,6 +46,7 @@ const SearchBar = () => {
         navigate('/search')
       })
       .catch((err) => console.log(err));
+
   };
 
   console.log(search)

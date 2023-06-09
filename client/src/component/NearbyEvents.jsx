@@ -17,7 +17,7 @@ function NearbyEvents() {
     // const [distances, setDistances] = useState([]);
     const nicknameState = useRecoilValue(userNicknameState);
 
-    console.log("data",data)
+    console.log("data", data)
     console.log("받은 위치", dataLat, dataLng)
     const geolocationOptions = {
         enableHighAccuracy: true,
@@ -136,8 +136,17 @@ function NearbyEvents() {
                                     <div className='overflow-auto h-[815px] w-[642px] py-6 flex flex-col justify-center items-center '>
                                         <div className='flex flex-col justify-center items-center gap-y-4'>
                                             <div className='text-white font-semibold text-[30px] flex flex-col items-center '>
-                                                <span>{nicknameState.userNickname}님 근처에</span>
-                                                <span>모임이 진행되고있어요!</span>
+                                                {data.length !== 0 ?
+                                                    <>
+                                                        <span>{nicknameState.userNickname}님 근처에</span>
+                                                        <span>모임이 진행되고있어요!</span>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <span>{nicknameState.userNickname}님 근처에</span>
+                                                        <span>진행되고 있는 모임이 없어요</span>
+                                                    </>
+                                                }
                                             </div>
                                             <div className='w-[470px] h-[25px] flex justify-end text-white'>
                                                 <span>총 {data.length}개</span>

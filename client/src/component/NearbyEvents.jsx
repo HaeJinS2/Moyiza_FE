@@ -98,7 +98,7 @@ function NearbyEvents() {
             >
                 <img
                     className="cursor-pointer"
-                    src={`${process.env.PUBLIC_URL}/images/to_recommend.png`}
+                    src={`${process.env.PUBLIC_URL}/images/main/to_recommend.png`}
                     alt="to_recommend_button"
                 />
             </button>

@@ -30,7 +30,8 @@ function Navbar() {
   const profileModalRef = useRef();
 // console.log("data",data[7].roomName)
   useEffect(() => {
-    getAPI(`/chat`)
+    if(Cookies.get("ACCESS_TOKEN")) {
+      getAPI(`/chat`)
       .then((response) => {
         console.log("dataa",response.data)
         if (Array.isArray(response.data)) {
@@ -40,6 +41,7 @@ function Navbar() {
         }
       })
       .catch((error) => console.log(error));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

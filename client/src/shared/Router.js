@@ -36,12 +36,12 @@ const Router = () => {
           <Route path="/create-club-form" element={<CreateClubForm />} />
           <Route path="/club" element={<Club />} />
           <Route path="/oneday" element={<Oneday />} />
-          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/club/:id" element={<Detail />} />
           <Route path="/create-event-form/:id" element={<CreateEventForm />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/create-feed" element={<CreateFeed />} />
           <Route path="/create-oneday-form" element={<CreateOnedayForm />} />
-          <Route path="/oneday-detail/:id" element={<OnedayDetail />} />
+          <Route path="/oneday/:id" element={<OnedayDetail />} />
           <Route path="/search" element={<Search />} />
 
 

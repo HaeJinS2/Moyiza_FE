@@ -1,10 +1,10 @@
-// import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import Container from "../component/Container"
-// import { searchState } from "../states/searchState";
+import { searchState } from "../states/searchState";
 
 function Search (){
-  // const [searchList, setSearchList] = useRecoilState(searchState)
-
+  const searchList = useRecoilValue(searchState)
+ console.log(searchList.searchedClubList)
   return(<>
 <Container>
   <div className="flex">

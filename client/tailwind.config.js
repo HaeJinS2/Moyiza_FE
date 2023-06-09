@@ -12,6 +12,9 @@ module.exports = {
       fontFamily: {
         'sans': ['Pretendard'],
       },
+      fontWeight: {
+        'regular': '500'
+      },
     },
   },
   plugins: [],

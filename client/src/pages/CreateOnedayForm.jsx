@@ -30,7 +30,7 @@ function CreateOnedayForm() {
       switch (onedayStep) {
         case 1:
           putAPI(`/oneday/create/${tmpOnedayId}/category`, {
-            category: savedOnedayData.oneDayCategory,
+            oneDayCategory: savedOnedayData.oneDayCategory,
           })
             .then((res) => console.log(res.data.message))
             .catch((error) => console.log(error));
@@ -82,7 +82,7 @@ function CreateOnedayForm() {
           break;
         case 8:
           putAPI(`/oneday/create/${tmpOnedayId}/maxgroupsize`, {
-            oneDayGroupSize: savedOnedayData.oneDayGroupSize,
+            size: savedOnedayData.oneDayGroupSize,
           })
             .then((res) => console.log(res.data.message))
             .catch((error) => console.log(error));
@@ -179,6 +179,8 @@ function CreateOnedayForm() {
             )}
             {onedayStep === 9 && (
               <OnedayStep9
+                savedOnedayData={savedOnedayData}
+                setSavedOnedayData={setSavedOnedayData}
                 tmpOnedayId={tmpOnedayId}
                 handleOnedayStep={handleOnedayStep}
                 onedayStep={onedayStep}
@@ -365,7 +367,7 @@ function OnedayStep4({
       setFile(compressedFile);
 
       const blob = new Blob([compressedFile], { type: "image" });
-      console.log(compressedFile)
+      console.log(compressedFile);
 
       const formData = new FormData();
       formData.append("image", blob);
@@ -579,7 +581,7 @@ function OnedayStep7({
   handleOnedayStep,
   setSavedOnedayData,
   savedOnedayData,
-  genderPolicyList, 
+  genderPolicyList,
 }) {
   const [agePolicy, setAgePolicy] = useState(20);
 
@@ -697,16 +699,33 @@ function OnedayStep8({
   );
 }
 
-function OnedayStep9({ onedayStep, handleOnedayStep, tmpOnedayId }) {
+function OnedayStep9({
+  onedayStep,
+  handleOnedayStep,
+  tmpOnedayId,
+  setSavedOnedayData,
+  savedOnedayData,
+}) {
   postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
-    .then((res) => swal("하루속 이벤트 개설 완료!"))
+    .then((res) => {
+      swal("하루속 이벤트 개설 완료!");
+      setSavedOnedayData({});
+    })
     .catch((error) => error);
   return (
     <>
       <CreateOnedayFormLayout
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
-      ></CreateOnedayFormLayout>
+      >
+        <>
+          <div className="flex flex-col justify-center items-center text-4xl gap-2">
+            <div>{savedOnedayData.oneDayTitle} 개설완료</div>
+            <div>당신의 하루를 함께하세요!</div>
+            <div className="py-16 flex gap-20"></div>
+          </div>
+        </>
+      </CreateOnedayFormLayout>
     </>
   );
 }
@@ -724,50 +743,32 @@ function CreateOnedayFormLayout({
           onedayStep < 9 ? "justify-between" : "justify-center"
         }  items-center h-[800px] max-w-[1200px]`}
       >
-        {onedayStep < 9 ? (
-          <>
-            <div className="self-start px-60 pt-20 pb-10 text-3xl font-sans font-semibold">
-              {header}
-            </div>
-            <div className="flex flex-col items-center justify-between w-full h-[500px]">
-              {children}
-            </div>
-            <div className="py-16 flex gap-20">
-              {onedayStep > 1 && (
-                <button
-                  onClick={handleOnedayStep}
-                  className="w-[224px] h-[60px] bg-[#747474] text-white rounded-full"
-                  name="prev"
-                >
-                  이전
-                </button>
-              )}
+        <>
+          <div className="self-start px-60 pt-20 pb-10 text-3xl font-sans font-semibold">
+            {header}
+          </div>
+          <div className="flex flex-col items-center justify-between w-full h-[500px]">
+            {children}
+          </div>
+          <div className="py-16 flex gap-20">
+            {onedayStep > 1 && (
               <button
                 onClick={handleOnedayStep}
-                className="w-[224px] h-[60px] bg-green-600 text-white rounded-full"
-                name="next"
+                className="w-[224px] h-[60px] bg-[#747474] text-white rounded-full"
+                name="prev"
               >
-                다음
+                이전
               </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex flex-col justify-center items-center text-4xl gap-2">
-              <div>모임이름 개설완료</div>
-              <div>당신의 하루를 함께하세요!</div>
-              <div className="py-16 flex gap-20">
-                <button
-                  onClick={handleOnedayStep}
-                  className="w-[224px] h-[60px] bg-[#747474] text-white rounded-full"
-                  name="prev"
-                >
-                  이전
-                </button>
-              </div>
-            </div>
-          </>
-        )}
+            )}
+            <button
+              onClick={handleOnedayStep}
+              className="w-[224px] h-[60px] bg-green-600 text-white rounded-full"
+              name="next"
+            >
+              다음
+            </button>
+          </div>
+        </>
       </div>
     </>
   );

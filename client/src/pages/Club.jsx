@@ -206,7 +206,7 @@ function Club() {
                   <div
                     className={`grid ${
                       filteredClubList.length === 0 ? "" : "grid-cols-2"
-                    }  gap-x-4 gap-y-4`}
+                    }  gap-x-4 gap-y-4 pb-20 `}
                   >
                     {filteredClubList.length === 0 ? (
                       <EmptyState
@@ -254,7 +254,7 @@ function Club() {
                     )}
                   </div>
                 </div>
-                {filteredClubList.length >= 8 && totalPages > page + 1 && (
+                {filteredClubList.length >= 6 && totalPages > page + 1 && (
                   <div className="flex justify-center mt-10  pb-10">
                     <button
                       onClick={() => {
@@ -297,7 +297,7 @@ function Club() {
                 </div>
               </div>
             </BodyContainer>
-            <div className="min-w-[1920px] flex flex-col bg-neutral-100 items-center gap-4 justify-center h-[228px]">
+            <div className="min-w-[1920px] flex flex-col bg-[#FFDFC7] items-center gap-4 justify-center h-[300px]">
               {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
               <p className="text-5xl font-sans font-semibold">
                 내가 찾는 일상속 이벤트가 없다면?

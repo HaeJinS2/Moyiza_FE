@@ -578,7 +578,7 @@ function OnedayStep7({
   handleOnedayStep,
   setSavedOnedayData,
   savedOnedayData,
-  genderPolicyList,
+  genderPolicyList, 
 }) {
   const [agePolicy, setAgePolicy] = useState(20);
 

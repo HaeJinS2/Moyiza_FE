@@ -17,11 +17,11 @@ function ClubCard({
       {page === "club" ? (
         <div
           onClick={() => navigate(`/club/${id}`)}
-          className="cursor-pointer flex w-full shadow-cms bg-white rounded-xl h-[260px] items-center justify-center px-2"
+          className="cursor-pointer flex w-full shadow-cms bg-white rounded-xl h-[260px] items-center justify-center px-5"
         >
           <div className="aspect-square flex w-full h-full items-center relative overflow-hidden rounded-xl">
             <img
-              className="rounded-md w-[219px] h-[219px]"
+              className="rounded-md w-[219px] h-[219px] object-cover"
               src={thumbnail}
               alt="clubThumbnail"
             />
@@ -54,11 +54,11 @@ function ClubCard({
       ) : (
         <div
           onClick={() => navigate(`/oneday/${id}`)}
-          className="cursor-pointer bg-white flex w-full shadow-cm rounded-xl h-[260px] items-center justify-center px-2"
+          className="cursor-pointer bg-white flex w-full shadow-cm rounded-xl h-[260px] items-center justify-center px-5"
         >
           <div className="aspect-square flex w-full h-full items-center relative overflow-hidden rounded-xl">
             <img
-              className="rounded-md w-[219px] h-[219px]"
+              className="rounded-md w-[219px] h-[219px] object-cover"
               src={thumbnail}
               alt="clubThumbnail"
             />

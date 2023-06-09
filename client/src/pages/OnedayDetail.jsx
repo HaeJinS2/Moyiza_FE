@@ -18,7 +18,7 @@ function OnedayDetail() {
   const [onedayMember, setOnedayMember] = useState([]);
   const [isMember, setIsMember] = useState(false);
   // eslint-disable-next-line
-  const [isOwner, setIsOwner] = useState(true);
+  const [isOwner, setIsOwner] = useState(false);
   const similarOneday = [1, 1, 1, 1, 1, 1];
 
   // 멤버 페이지 관리
@@ -244,7 +244,7 @@ function OnedayDetail() {
                 src={`${process.env.PUBLIC_URL}/images/oneday/oneday_location.png`}
                 alt="oneday_location"
               />
-              {onedayDetail?.data.oneDayLocation}
+              {onedayDetail?.data.oneDayLocation.split(" ")[0] === '서울특별시' ? onedayDetail?.data.oneDayLocation.split(" ")[1] : onedayDetail?.data.oneDayLocation.split(" ")[0]}
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
               <div className="w-[36px] h-[36px]"></div>

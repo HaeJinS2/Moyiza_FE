@@ -108,7 +108,7 @@ function Login() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const url = `http://13.125.51.14/user/login`;
+        const url = `${process.env.REACT_APP_SERVER_URL}/user/login`;
         const data = {
             ...userloginInput
         };

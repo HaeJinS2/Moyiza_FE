@@ -118,7 +118,7 @@ function SignUp() {
   const birth = `${year}-${month}-${day}`;
   // 닉네임 중복 검사
   const nicknameValidationPost = async ({ nickname }) => {
-    const response = await axios.post("http://13.125.51.14/user/check/nickname", { nickname });
+    const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/check/nickname`, { nickname });
     return response.data;
   };
 
@@ -211,7 +211,7 @@ function SignUp() {
       formData.append('imageFile', imageFile);
     }
     try {
-      const response = await axios.post("http://13.125.51.14/user/signup", formData);
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData);
       console.log(response.data);
       alert('회원가입 성공!');
       goLogin();

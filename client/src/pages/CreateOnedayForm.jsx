@@ -15,6 +15,7 @@ import Slider from "react-input-slider";
 import ReactDatePicker from "react-datepicker";
 import { setHours, setMinutes } from "date-fns";
 import { postAPI, putAPI } from "../axios";
+import swal from "sweetalert";
 
 function CreateOnedayForm() {
   const [onedayStep, setOnedayStep] = useState(1);
@@ -698,7 +699,7 @@ function OnedayStep8({
 
 function OnedayStep9({ onedayStep, handleOnedayStep, tmpOnedayId }) {
   postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
-    .then((res) => alert("하루속 이벤트 개설 완료!"))
+    .then((res) => swal("하루속 이벤트 개설 완료!"))
     .catch((error) => error);
   return (
     <>

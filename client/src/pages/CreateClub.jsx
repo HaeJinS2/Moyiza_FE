@@ -18,14 +18,14 @@ function CreateClub() {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [progress, setProgress] = useState(0);
 
-    const progressMessage = club?.maxGroupSize ? `최대인원` :
-        club?.agePolicy ? `나이제한` :
-            club?.genderPolicy ? `성별제한` :
-                club?.clubContent ? `모임내용` :
-                    club?.clubTitle ? `모임명` :
-                        club?.clubTag ? `태그` :
-                            club?.clubCategory ? `카테고리` :
-                                "아직 아무것도 저장되지 않았습니다.";
+    let progressMessage = club?.maxGroupSize ? `최대인원` :
+    club?.agePolicy ? `나이제한` :
+        club?.genderPolicy ? `성별제한` :
+            club?.clubContent ? `모임내용` :
+                club?.clubTitle ? `모임명` :
+                    club?.clubTag ? `태그` :
+                        club?.clubCategory ? `카테고리` :
+                            "";
 
     useEffect(() => {
         if (club?.maxGroupSize) {
@@ -168,8 +168,8 @@ function CreateClub() {
                         <span>{club?.maxGroupSize ? `최대인원: ${club?.maxGroupSize}` : `최대인원: 저장된 데이터 없음`}</span> */}
                     </div>
                     <div className="flex flex-col items-center">
-                        <span><span className="text-[#FF7F1E]">{progressMessage}</span>까지 저장되어있어요!</span>
-                        <br />
+                        {/* <span><span className="text-[#FF7F1E]">{progressMessage}</span>까지 저장되어있어요!</span> */}
+                        {progressMessage ? <span><span className="text-[#FF7F1E]">{progressMessage}</span>까지 저장되어있어요!</span> : "아직 아무것도 저장되지 않았습니다."}
                         {club?.clubTitle ?
                             <span>모임명: {club?.clubTitle}</span>
                             : null

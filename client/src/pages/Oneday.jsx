@@ -16,8 +16,7 @@ import Footer from "../component/Footer";
 import { logEvent } from "../utils/amplitude";
 import { useNavigate } from "react-router-dom";
 import RecommendCard from "../component/RecommendCard";
-import { useQueries } from 'react-query';
-
+import { useQueries } from "react-query";
 
 let pageTabs = ["일상속", "하루속"];
 
@@ -53,10 +52,7 @@ function Oneday() {
         setOnedayData(data?.data?.content)
       })
     }
-  ], {
-    // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
-    waitFor: 'all',
-  });
+  );
 
   console.log("onedayData",onedayData)
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
@@ -68,7 +64,9 @@ function Oneday() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (divRef.current) { divRef.current.scrollIntoView({ behavior: "smooth" }); }
+    if (divRef.current) {
+      divRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, []);
 
   useEffect(() => {
@@ -134,8 +132,9 @@ function Oneday() {
                   setActivePageTab(tab);
                   i === 0 ? navigate("/club") : navigate("/oneday");
                 }}
-                className={`${activePageTab === tab ? "text-black" : "hover:opacity-50"
-                  } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                className={`${
+                  activePageTab === tab ? "text-black" : "hover:opacity-50"
+                } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
               >
                 {activePageTab === tab && (
                   <motion.div
@@ -151,14 +150,22 @@ function Oneday() {
         </BodyContainer>
         <div className="flex justify-center items-center">
           <section className="absolute top-52 h-auto min-w-[1920px]">
-            <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
+            <div
+              className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px] pb-16 text-white"
+              style={{
+                backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.png)`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
+            >
               <p>당신의 특별한 하루</p>
               <p>'하루속'에서 함께하세요!</p>
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#F9FFF8] pt-10 rounded-t-[100px] mt-[535px] z-10">
+          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#F9FFF8] pt-10 rounded-t-[100px] mt-[524px] z-10 ">
             <BodyContainer>
               <div className="flex justify-between items-center my-10">
                 <p className="text-3xl font-semibold">하루속 인기주제</p>
@@ -173,8 +180,9 @@ function Oneday() {
                         setActiveTab(tab);
                         handleClubCategory(e);
                       }}
-                      className={`${activeTab === tab ? "text-black" : "hover:opacity-50"
-                        } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                      className={`${
+                        activeTab === tab ? "text-black" : "hover:opacity-50"
+                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                     >
                       {activeTab === tab && (
                         <motion.div
@@ -299,7 +307,6 @@ function Oneday() {
             </section>
           </section>
         </div>
-
       </div>
 
       <Footer />

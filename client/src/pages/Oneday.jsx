@@ -32,22 +32,24 @@ function Oneday() {
   // const [categories, setCategories] = useState(null);
   const [onedayData, setOnedayData] = useState([]);
 
-  const [queryResults1, queryResults2] = useQueries([
+  const [queryResults1, queryResults2, queryResults3] = useQueries([
     {
       queryKey: 'categories',
       queryFn: () => getAPI('/enums'),
     },
-    {
-      queryKey: ['club', page],
-      queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
-      onSuccess: ((data) => {
-        setFilteredClubList(data?.data?.content)
-      })
-    },
+    // {
+    //   queryKey: ['club', page],
+    //   queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
+    //   onSuccess: ((data) => {
+    //     setFilteredOnedayList(data?.data?.content)
+    //   })
+    // },
     {
       queryKey: ['oneday', onedayData],
-      queryFn: () => getAPI(`/oneday`),
+      // queryFn: () => getAPI(`/oneday`),
+      queryFn: () => getAPI(`/oneday?page=0&size=6&sort=createdAt,DESC`),
       onSuccess: ((data) => {
+        setFilteredOnedayList(data?.data?.content)
         setOnedayData(data?.data?.content)
       })
     }
@@ -57,7 +59,7 @@ function Oneday() {
   });
 
   console.log("onedayData",onedayData)
-  const [filteredClubList, setFilteredClubList] = useState([]);
+  const [filteredOnedayList, setFilteredOnedayList] = useState([]);
   //   const res1 = queryResults[0];
   //   const res2 = queryResults[1];
   // console.log("res1", res1)
@@ -74,7 +76,7 @@ function Oneday() {
     // 클럽 목록을 받아오는 코드
     // getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`).then((res) => {
     //   setClub([...club, ...res.data.content]);
-    //   setFilteredClubList([...club, ...res.data.content]);
+    //   setFilteredOnedayList([...club, ...res.data.content]);
     // });
 
     // 클럽 전체 페이지를 가져오는 코드
@@ -83,11 +85,6 @@ function Oneday() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  useEffect(() => {
-    getAPI(`/oneday`).then((res) => {
-      console.log("oneday data", res.data)
-    })
-  })
 
   // useEffect(() => {
   //   // 클럽 카테고리를 가져오는 코드
@@ -99,31 +96,31 @@ function Oneday() {
 
   //카테고리에 따라 검색하는 코드
   const handleClubCategory = (e) => {
-    logEvent("Button Clicked", { name: "handleClubCategory", page: "Club" });
+    logEvent("Button Clicked", { name: "handleClubCategory", page: "Oneday" });
     if (e.currentTarget.textContent === "전체") {
-      setFilteredClubList(club);
+      setFilteredOnedayList(onedayData);
     } else {
-      getAPI(`/club/search?q=&category=${e.currentTarget.textContent}`)
-        .then((res) => setFilteredClubList(res.data.content))
-        .catch((err) => setFilteredClubList([]));
+      getAPI(`/oneday/search?q=&category=${e.currentTarget.textContent}`)
+        .then((res) => setFilteredOnedayList(res.data.content))
+        .catch((err) => setFilteredOnedayList([]));
     }
   };
 
 
 
-  if (queryResults1.isLoading || queryResults2.isLoading) return 'Loading...';
+  if (queryResults1.isLoading) return 'Loading...';
   // if (queryResults1.error || queryResults2.error) return 'An error has occurred: ' + (queryResults1.error?.message || queryResults2.error?.message);
 
 
   const categories = ["전체", ...(queryResults1?.data?.data?.categoryList || [])];
-  const club = [...(queryResults2?.data?.data?.content || [])];
+  // const club = [...(queryResults2?.data?.data?.content || [])];
 
-  //  const filteredClubList = [...res2?.data?.content];
+
+  //  const filteredOnedayList = [...res2?.data?.content];
   if (isLoading) {
     return <Loading />;
   }
-  console.log("이건 클럽", club);
-  console.log("이건 필터클럽", filteredClubList);
+  console.log("이건 필터클럽", filteredOnedayList);
   return (
     <>
       <div ref={divRef}>
@@ -197,59 +194,58 @@ function Oneday() {
                 </div>
                 <div className="flex flex-col justify-between">
                   <div
-                    className={`grid ${onedayData.length === 0 ? "" : "grid-cols-2"
+                    className={`grid ${filteredOnedayList.length === 0 ? "" : "grid-cols-2"
                       }  gap-x-4 gap-y-4`}
                   >
-                    {onedayData.length === 0 ? (
+                    {filteredOnedayList.length === 0 ? (
                       <EmptyState
                         showReset
                         page="oneday"
                         handleClubCategory={handleClubCategory}
                       />
-                    ) : filteredClubList ? (
-                      onedayData?.map((item, i) => {
+                    ) : filteredOnedayList ? (
+                      filteredOnedayList?.map((item, i) => {
                         return (
                           <Fade bottom>
                             <ClubCard
                               page="oneday"
                               key={i}
-                              title={item.oneDayTitle}
-                              content={item.oneDayContent}
-                              tag={item.clubTag}
+                              title={item.onedayTitle}
+                              content={item.onedayContent}
+                              tag={item.onedayTag}
                               thumbnail={item.thumbnailUrl}
                               id={item.oneDayId}
-                              maxGroupSize={item.oneDayGroupSize}
-                              nowMemberCount={item.nowMemberCount}
+                              maxGroupSize={item.onedayGroupSize}
+                              nowMemberCount={item.onedayAttendantsNum}
                             />
                           </Fade>
                         );
                       })
                     )
-                      : null
-                      // : (
-                      //   club?.map((item, i) => {
-                      //     return (
-                      //       <Fade bottom>
-                      //         <ClubCard
-                      //           page="oneday"
-                      //           key={i}
-                      //           title={item.clubTitle}
-                      //           content={item.clubContent}
-                      //           tag={item.clubTag}
-                      //           thumbnail={item.thumbnailUrl}
-                      //           id={item.club_id}
-                      //           eventId={item.id}
-                      //           maxGroupSize={item.maxGroupSize}
-                      //           nowMemberCount={item.nowMemberCount}
-                      //         />
-                      //       </Fade>
-                      //     );
-                      //   })
-                      // )
+                      // : null
+                      : (
+                        onedayData?.map((item, i) => {
+                          return (
+                            <Fade bottom>
+                              <ClubCard
+                              page="oneday"
+                              key={i}
+                              title={item.onedayTitle}
+                              content={item.onedayContent}
+                              tag={item.onedayTag}
+                              thumbnail={item.thumbnailUrl}
+                              id={item.oneDayId}
+                              maxGroupSize={item.onedayGroupSize}
+                              nowMemberCount={item.onedayAttendantsNum}
+                              />
+                            </Fade>
+                          );
+                        })
+                      )
                     }
                   </div>
                 </div>
-                {filteredClubList.length >= 8 && totalPages > page + 1 && (
+                {filteredOnedayList.length >= 6 && totalPages > page + 1 && (
                   <div className="flex justify-center mt-10">
                     <button
                       onClick={() => setPage(page + 1)}
@@ -268,20 +264,19 @@ function Oneday() {
 
                 <div className="flex flex-col justify-between">
                   <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
-                    {club?.map((item, i) => {
+                    {onedayData?.map((item, i) => {
                       return (
                         <Fade bottom>
                           <RecommendCard
                             page="oneday"
                             key={i}
-                            title={item.clubTitle}
-                            content={item.clubContent}
-                            tag={item.clubTag}
+                            title={item.onedayTitle}
+                            content={item.onedayContent}
+                            tag={item.onedayTag}
                             thumbnail={item.thumbnailUrl}
-                            id={item.club_id}
-                            eventId={item.id}
-                            maxGroupSize={item.maxGroupSize}
-                            nowMemberCount={item.nowMemberCount}
+                            id={item.oneDayId}
+                            maxGroupSize={item.onedayGroupSize}
+                            nowMemberCount={item.onedayAttendantsNum}
                           />
                         </Fade>
                       );

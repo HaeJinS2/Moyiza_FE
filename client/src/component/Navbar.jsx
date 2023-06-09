@@ -25,7 +25,7 @@ function Navbar() {
 
   useEffect(() => {
     if(Cookies.get("ACCESS_TOKEN")) {
-      getAPI(`/chat`)
+      getAPI(`/chat/clubchat`)
       .then((response) => {
         console.log("dataa",response.data)
         if (Array.isArray(response.data)) {
@@ -190,7 +190,9 @@ function Navbar() {
                                   >
                                     <div className="flex items-center justify-center gap-x-4 px-4 py-1">
                                       <div>
-                                        <div className="w-[52px] h-[52px] bg-black rounded-full"></div>
+                                        <div className="w-[52px] h-[52px] rounded-full">
+                                          <img src={`${data[i]?.chatThumbnail}`}/>
+                                        </div>
                                       </div>
                                       <div className="flex flex-col items-start">
                                         <div>{data[i]?.roomName ? data[i]?.roomName : "이름 없는 채팅방"}</div>

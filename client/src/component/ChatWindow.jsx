@@ -165,121 +165,218 @@ function ChatWindow({ roomIdState, style }) {
     //     });
     // }, [roomIdState])
 
+    // 수정 전 코드
+    // useEffect(() => {
+    //     const token = Cookies.get("ACCESS_TOKEN");
+    //     if (!roomIdState) { return; }
+    //     // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
+    //     if (clientRef.current) {
+    //         // 클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
+    //         if (!clientRef.current.connected) {
+    //             console.log("No underlying STOMP connection.");
+    //             return;
+    //         }
+
+    //         if (subscriptionRef.current) {
+    //             subscriptionRef.current.unsubscribe();
+    //         }
+
+    //         // 새로운 구독 생성
+    //         subscriptionRef.current = clientRef.current.subscribe(
+    //             `/chat/${roomIdState}`,
+    //             (message) => {
+    //                 if (message.body) {
+    //                     if (message.headers.lastReadMessage) {
+    //                         setHeaderState(message.headers)
+    //                     }
+    //                     let newMessage = JSON.parse(message.body);
+    //                     setMessages((prevMessages) => [...prevMessages, newMessage]);
+    //                 }
+    //             }
+    //         );
+    //         // setCurrentRoom(roomId);
+    //         getAPI(`/chat/${roomIdState}`).then((res) => {
+    //             console.log(res);
+    //             // setMessages(res.data.content);
+    //             setMessages(res.data.content.reverse());
+    //             setTmpMessage([...tmpMessage, res.data.content]);
+    //         });
+    //     }
+    //     // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
+    //     else {
+    //         const newClient = new Client({
+    //             webSocketFactory: () =>
+    //                 new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
+    //             debug: (str) => {
+    //                 console.log(str);
+    //             },
+    //             onConnect: (frame) => {
+    //                 console.log("Connected: " + frame);
+
+    //                 // 새로운 구독 생성
+    //                 subscriptionRef.current = newClient.subscribe(
+    //                     `/chat/${roomIdState}`,
+    //                     (message) => {
+    //                         if (message.body) {
+    //                             if (message.headers.lastReadMessage) {
+    //                                 setHeaderState(message.headers)
+    //                             }
+    //                             let newMessage = JSON.parse(message.body);
+    //                             setMessages((prevMessages) => [...prevMessages, newMessage]);
+    //                         }
+    //                     }
+    //                 );
+    //             },
+    //             beforeConnect: () => {
+    //                 newClient.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
+    //             },
+    //             onStompError: (frame) => {
+    //                 console.log("Broker reported error: " + frame.headers["message"]);
+    //                 console.log("Additional details: " + frame.body);
+    //                 if (errorCount.current < 1) {
+    //                     errorCount.current += 1;
+    //                 }
+    //             },
+    //         });
+
+    //         const originalOnWebSocketClose =
+    //             newClient.onWebSocketClose.bind(newClient);
+
+    //         newClient.onWebSocketClose = (evt) => {
+    //             if (errorCount.current >= 1) {
+    //                 console.log("연결 실패 해서 끊김!");
+    //                 newClient.deactivate();
+    //                 errorCount.current = 0;
+    //                 return;
+    //             }
+
+    //             originalOnWebSocketClose(evt);
+    //         };
+
+    //         newClient.activate();
+    //         // 현재 누른 roomId 값 저장
+    //         // setCurrentRoom(roomId);
+    //         getAPI(`/chat/${roomIdState}`).then((res) => {
+    //             console.log(res);
+    //             // setMessages(res.data.content);
+    //             setMessages(res.data.content.reverse());
+    //             setTmpMessage([...tmpMessage, res.data.content]);
+    //         });
+
+    //         // Set the new client as current
+    //         clientRef.current = newClient;
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [roomIdState])
+
+
+    // 수정 후 코드
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
         if (!roomIdState) { return; }
-        // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
-        if (clientRef.current) {
-            // 클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
-            if (!clientRef.current.connected) {
-                console.log("No underlying STOMP connection.");
-                return;
-            }
-
-            if (subscriptionRef.current) {
-                subscriptionRef.current.unsubscribe();
-            }
-
+        
+        const handleGetAPI = async () => {
+          try {
+            const res = await getAPI(`/chat/${roomIdState}`);
+            console.log(res);
+            console.log('1번이 먼저 실행')
+            setMessages(res.data.content.reverse());
+            setTmpMessage([...tmpMessage, res.data.content]);
+            
             // 새로운 구독 생성
             subscriptionRef.current = clientRef.current.subscribe(
-                `/chat/${roomIdState}`,
-                (message) => {
-                    if (message.body) {
-                        if (message.headers.lastReadMessage) {
-                            setHeaderState(message.headers)
-                        }
-                        let newMessage = JSON.parse(message.body);
-                        setMessages((prevMessages) => [...prevMessages, newMessage]);
-                    }
+              `/chat/${roomIdState}`,
+              (message) => {
+                if (message.body) {
+                  if (message.headers.lastReadMessage) {
+                    setHeaderState(message.headers)
+                  }
+                  let newMessage = JSON.parse(message.body);
+                  setMessages((prevMessages) => [...prevMessages, newMessage]);
                 }
+              }
             );
-            // setCurrentRoom(roomId);
-            getAPI(`/chat/${roomIdState}`).then((res) => {
-                console.log(res);
-                // setMessages(res.data.content);
-                setMessages(res.data.content.reverse());
-                setTmpMessage([...tmpMessage, res.data.content]);
-            });
+          } catch (error) {
+            console.error(error);
+          }
+        };
+      
+        // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
+        if (clientRef.current) {
+          // 클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
+          if (!clientRef.current.connected) {
+            console.log("No underlying STOMP connection.");
+            return;
+          }
+      
+          if (subscriptionRef.current) {
+            subscriptionRef.current.unsubscribe();
+          }
+      
+          handleGetAPI();
         }
         // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
         else {
-            const newClient = new Client({
-                webSocketFactory: () =>
-                    new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
-                debug: (str) => {
-                    console.log(str);
-                },
-                onConnect: (frame) => {
-                    console.log("Connected: " + frame);
-
-                    // 새로운 구독 생성
-                    subscriptionRef.current = newClient.subscribe(
-                        `/chat/${roomIdState}`,
-                        (message) => {
-                            if (message.body) {
-                                if (message.headers.lastReadMessage) {
-                                    setHeaderState(message.headers)
-                                }
-                                let newMessage = JSON.parse(message.body);
-                                setMessages((prevMessages) => [...prevMessages, newMessage]);
-                            }
-                        }
-                    );
-                },
-                beforeConnect: () => {
-                    newClient.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
-                },
-                onStompError: (frame) => {
-                    console.log("Broker reported error: " + frame.headers["message"]);
-                    console.log("Additional details: " + frame.body);
-                    if (errorCount.current < 1) {
-                        errorCount.current += 1;
-                    }
-                },
-            });
-
-            const originalOnWebSocketClose =
-                newClient.onWebSocketClose.bind(newClient);
-
-            newClient.onWebSocketClose = (evt) => {
-                if (errorCount.current >= 1) {
-                    console.log("연결 실패 해서 끊김!");
-                    newClient.deactivate();
-                    errorCount.current = 0;
-                    return;
-                }
-
-                originalOnWebSocketClose(evt);
-            };
-
-            newClient.activate();
-            // 현재 누른 roomId 값 저장
-            // setCurrentRoom(roomId);
-            getAPI(`/chat/${roomIdState}`).then((res) => {
-                console.log(res);
-                // setMessages(res.data.content);
-                setMessages(res.data.content.reverse());
-                setTmpMessage([...tmpMessage, res.data.content]);
-            });
-
-            // Set the new client as current
-            clientRef.current = newClient;
+          const newClient = new Client({
+            webSocketFactory: () =>
+              new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
+            debug: (str) => {
+              console.log(str);
+            },
+            onConnect: (frame) => {
+              console.log("Connected: " + frame);
+      
+              handleGetAPI();
+            },
+            beforeConnect: () => {
+              newClient.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
+            },
+            onStompError: (frame) => {
+              console.log("Broker reported error: " + frame.headers["message"]);
+              console.log("Additional details: " + frame.body);
+              if (errorCount.current < 1) {
+                errorCount.current += 1;
+              }
+            },
+          });
+      
+          const originalOnWebSocketClose =
+            newClient.onWebSocketClose.bind(newClient);
+      
+          newClient.onWebSocketClose = (evt) => {
+            if (errorCount.current >= 1) {
+              console.log("연결 실패 해서 끊김!");
+              newClient.deactivate();
+              errorCount.current = 0;
+              return;
+            }
+      
+            originalOnWebSocketClose(evt);
+          };
+      
+          newClient.activate();
+          handleGetAPI();
+      
+          // Set the new client as current
+          clientRef.current = newClient;
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [roomIdState])
-
+      }, [roomIdState]);
+      
 
     useEffect(() => {
         if (headerState.lastReadMessage) {
             let updatedMessages = [...messages];
             let indexStart = updatedMessages.findIndex(msg => msg.chatRecordId === Number(headerState.lastReadMessage));
             if (indexStart !== -1) {
-                for (let i = indexStart + 1; i < updatedMessages.length; i++) {
+                console.log('2번이 나중에 실행돼야 함')
+                for (let i = indexStart ; i < updatedMessages.length; i++) {
                     if (updatedMessages[i].unreadCount > 0) {
                         updatedMessages[i] = { ...updatedMessages[i], unreadCount: updatedMessages[i].unreadCount - 1 };
                     }
                 }
             }
+            console.log(1)
             setMessages(updatedMessages);
             setHeaderState({})
         }

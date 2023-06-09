@@ -279,44 +279,41 @@ function ChatWindow({ roomIdState, style }) {
           try {
             const res = await getAPI(`/chat/${roomIdState}`);
             console.log(res);
-            console.log('1번이 먼저 실행')
+            console.log('API fetch complete');
             setMessages(res.data.content.reverse());
             setTmpMessage([...tmpMessage, res.data.content]);
-            
-            // 새로운 구독 생성
-            subscriptionRef.current = clientRef.current.subscribe(
-              `/chat/${roomIdState}`,
-              (message) => {
-                if (message.body) {
-                  if (message.headers.lastReadMessage) {
-                    setHeaderState(message.headers)
+    
+            if (clientRef.current && clientRef.current.connected) {
+              subscriptionRef.current = clientRef.current.subscribe(
+                `/chat/${roomIdState}`,
+                (message) => {
+                  if (message.body) {
+                    if (message.headers.lastReadMessage) {
+                      setHeaderState(message.headers)
+                    }
+                    let newMessage = JSON.parse(message.body);
+                    setMessages((prevMessages) => [...prevMessages, newMessage]);
                   }
-                  let newMessage = JSON.parse(message.body);
-                  setMessages((prevMessages) => [...prevMessages, newMessage]);
                 }
-              }
-            );
+              );
+            }
           } catch (error) {
             console.error(error);
           }
         };
-      
-        // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
+    
         if (clientRef.current) {
-          // 클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
           if (!clientRef.current.connected) {
             console.log("No underlying STOMP connection.");
             return;
           }
-      
+    
           if (subscriptionRef.current) {
             subscriptionRef.current.unsubscribe();
           }
-      
+    
           handleGetAPI();
-        }
-        // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
-        else {
+        } else {
           const newClient = new Client({
             webSocketFactory: () =>
               new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
@@ -325,7 +322,6 @@ function ChatWindow({ roomIdState, style }) {
             },
             onConnect: (frame) => {
               console.log("Connected: " + frame);
-      
               handleGetAPI();
             },
             beforeConnect: () => {
@@ -339,25 +335,22 @@ function ChatWindow({ roomIdState, style }) {
               }
             },
           });
-      
+    
           const originalOnWebSocketClose =
             newClient.onWebSocketClose.bind(newClient);
-      
+    
           newClient.onWebSocketClose = (evt) => {
             if (errorCount.current >= 1) {
-              console.log("연결 실패 해서 끊김!");
+              console.log("Connection failed!");
               newClient.deactivate();
               errorCount.current = 0;
               return;
             }
-      
+    
             originalOnWebSocketClose(evt);
           };
-      
+    
           newClient.activate();
-          handleGetAPI();
-      
-          // Set the new client as current
           clientRef.current = newClient;
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -370,7 +363,7 @@ function ChatWindow({ roomIdState, style }) {
             let indexStart = updatedMessages.findIndex(msg => msg.chatRecordId === Number(headerState.lastReadMessage));
             if (indexStart !== -1) {
                 console.log('2번이 나중에 실행돼야 함')
-                for (let i = indexStart ; i < updatedMessages.length; i++) {
+                for (let i = indexStart + 1 ; i < updatedMessages.length; i++) {
                     if (updatedMessages[i].unreadCount > 0) {
                         updatedMessages[i] = { ...updatedMessages[i], unreadCount: updatedMessages[i].unreadCount - 1 };
                     }

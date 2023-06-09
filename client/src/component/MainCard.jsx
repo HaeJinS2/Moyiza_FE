@@ -56,7 +56,7 @@ function MainCard({ image, cardNum }) {
           </div>
         </div>
       ) : cardNum === "club_3" ? (
-        <div className="cursor-default flex w-full h-[500px] justify-between items-center ">
+        <div className="cursor-default flex w-full h-[500px] justify-between items-center mb-10 ">
           <div className="flex gap-x-4">
             {/* <div className="font-semibold text-3xl text-neutral-400">03</div> */}
 
@@ -117,7 +117,7 @@ function MainCard({ image, cardNum }) {
           </div>
         </div>
       ) : cardNum === "oneday_3" ? (
-        <div className="cursor-default flex flex-col w-full h-auto justify-center items-center ">
+        <div className="cursor-default flex flex-col w-full h-auto justify-center items-center mb-20 ">
         <div className="flex justify-center gap-x-4">
           {/* <div className="font-semibold text-3xl text-neutral-400">03</div> */}
 

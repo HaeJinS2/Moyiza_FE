@@ -191,7 +191,7 @@ function Navbar() {
                                     <div className="flex items-center justify-center gap-x-4 px-4 py-1">
                                       <div>
                                         <div className="w-[52px] h-[52px] rounded-full">
-                                          <img src={`${data[i]?.chatThumbnail}`}/>
+                                          <img src={`${data[i]?.chatThumbnail}`} alt="club_thumbnail"/>
                                         </div>
                                       </div>
                                       <div className="flex flex-col items-start">

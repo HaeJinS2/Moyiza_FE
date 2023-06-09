@@ -75,7 +75,7 @@ function Club() {
   useEffect(() => {
     setIsLoading(true);
     // 클럽 목록을 받아오는 코드
-    getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`)
+    getAPI(`/club?page=${page}&size=6&sort=createdAt,DESC`)
       .then((res) => {
         setClub([...club, ...res.data.content]);
         setFilteredClubList([...club, ...res.data.content]);

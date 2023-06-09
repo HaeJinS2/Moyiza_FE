@@ -16,7 +16,7 @@ function ProfileCard({
         <>
 
             <div
-                onClick={() => navigate(`/detail/${club_id}`)}
+                onClick={() => navigate(`/club/${club_id}`)}
                 className="cursor-pointer flex w-[1200px] shadow-cm rounded-xl h-[220px] items-center justify-center px-2 mt-10 bg-white"
             >
                 <div className="flex items-center rounded-xl ">

@@ -8,7 +8,7 @@ import MainCard from "../component/MainCard";
 import Footer from "../component/Footer";
 import MyLocation from "../component/MyLocation";
 import NearbyEvents from "../component/NearbyEvents";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 
 let tabs = ["일상속", "하루속"];
 
@@ -16,7 +16,6 @@ function Main() {
   const divRef = useRef(null);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(tabs[0]);
-
   //페이지 렌더링 시 화면 최상단으로 이동하는 코드
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -63,7 +62,7 @@ function Main() {
               <div className="relative w-auto flex justify-end items-end">
                 <div className="p-4 flex flex-1 flex-col h-[422px] font-bold text-5xl bg-transparent rounded-lg text-white justify-center items-center">
                   <img
-                    src={`${process.env.PUBLIC_URL}/images/main.png`}
+                    src={`${process.env.PUBLIC_URL}/images/main/main.png`}
                     alt="main_image"
                   />
                 </div>
@@ -77,7 +76,7 @@ function Main() {
               onClick={() => {
                 navigate("/club");
               }}
-              src={`${process.env.PUBLIC_URL}/images/to_club.png`}
+              src={`${process.env.PUBLIC_URL}/images/main/to_club.png`}
               alt="to_club_button"
             />
             <img
@@ -85,12 +84,12 @@ function Main() {
               onClick={() => {
                 navigate("/oneday");
               }}
-              src={`${process.env.PUBLIC_URL}/images/to_oneday.png`}
+              src={`${process.env.PUBLIC_URL}/images/main/to_oneday.png`}
               alt="to_oneday_button"
             />
             {/* <img
               className="cursor-pointer"
-              src={`${process.env.PUBLIC_URL}/images/to_recommend.png`}
+              src={`${process.env.PUBLIC_URL}/images/main/to_recommend.png`}
               alt="to_recommend_button"
             /> */}
             <NearbyEvents />
@@ -114,8 +113,9 @@ function Main() {
                 <button
                   key={i}
                   onClick={() => setActiveTab(tab)}
-                  className={`${activeTab === tab ? "text-black" : "hover:opacity-50"
-                    } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                  className={`${
+                    activeTab === tab ? "text-black" : "hover:opacity-50"
+                  } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                 >
                   {activeTab === tab && (
                     <motion.div
@@ -133,22 +133,38 @@ function Main() {
           </div>
 
           <div className="flex flex-col justify-between ">
-            <div className="grid grid-cols-1 mt-8 gap-x-2 gap-y-[350px]">
-              <Fade bottom>
-                <MainCard
-                  description="서비스 소개"
-                  image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"
-                />
-                <MainCard
-                  reverse={true}
-                  description="서비스 소개"
-                  image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"
-                />
-                <MainCard
-                  description="서비스 소개"
-                  image="https://moyiza-image.s3.ap-northeast-2.amazonaws.com/b839185f-ea5e-4a44-94c2-d8088a804c61_1f5a309a0cd847fd98cd6e8927617a94.jpeg"
-                />
-              </Fade>
+            <div className="grid grid-cols-1 mt-8 gap-x-2">
+              {activeTab === "일상속" ? (
+                <Fade bottom>
+                  <MainCard
+                    cardNum="club_1"
+                    image={`${process.env.PUBLIC_URL}/images/main/club_1.png`}
+                  />
+                  <MainCard
+                    cardNum="club_2"
+                    image={`${process.env.PUBLIC_URL}/images/main/club_2.png`}
+                  />
+                  <MainCard
+                    cardNum="club_3"
+                    image={`${process.env.PUBLIC_URL}/images/main/club_3.png`}
+                  />
+                </Fade>
+              ) : (
+                <Fade bottom>
+                  <MainCard
+                    cardNum="oneday_1"
+                    image={`${process.env.PUBLIC_URL}/images/main/oneday_1.png`}
+                  />
+                  <MainCard
+                    cardNum="oneday_2"
+                    image={`${process.env.PUBLIC_URL}/images/main/oneday_2.png`}
+                  />
+                  <MainCard
+                    cardNum="oneday_3"
+                    image={`${process.env.PUBLIC_URL}/images/main/oneday_3.png`}
+                  />
+                </Fade>
+              )}
             </div>
           </div>
         </section>

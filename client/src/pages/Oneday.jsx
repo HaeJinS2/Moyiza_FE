@@ -58,7 +58,7 @@ function Oneday() {
     waitFor: 'all',
   });
 
-  console.log("onedayData",onedayData)
+  console.log("onedayData", onedayData)
   console.log(queryResults2)
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
   //   const res1 = queryResults[0];
@@ -152,7 +152,15 @@ function Oneday() {
         </BodyContainer>
         <div className="flex justify-center items-center">
           <section className="absolute top-52 h-auto min-w-[1920px]">
-            <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
+            <div
+              className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              style={{
+                backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.png)`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
+            >
               <p>당신의 특별한 하루</p>
               <p>'하루속'에서 함께하세요!</p>
             </div>
@@ -229,15 +237,15 @@ function Oneday() {
                           return (
                             <Fade bottom>
                               <ClubCard
-                              page="oneday"
-                              key={i}
-                              title={item.onedayTitle}
-                              content={item.onedayContent}
-                              tag={item.onedayTag}
-                              thumbnail={item.thumbnailUrl}
-                              id={item.oneDayId}
-                              maxGroupSize={item.onedayGroupSize}
-                              nowMemberCount={item.onedayAttendantsNum}
+                                page="oneday"
+                                key={i}
+                                title={item.onedayTitle}
+                                content={item.onedayContent}
+                                tag={item.onedayTag}
+                                thumbnail={item.thumbnailUrl}
+                                id={item.oneDayId}
+                                maxGroupSize={item.onedayGroupSize}
+                                nowMemberCount={item.onedayAttendantsNum}
                               />
                             </Fade>
                           );

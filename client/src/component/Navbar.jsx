@@ -208,7 +208,7 @@ function Navbar() {
                       )}
                     </div>
                     <div
-                      onClick={() => alert("아직 준비중인 기능입니다!")}
+                      onClick={() => swal("아직 준비중인 기능입니다!")}
                       className="cursor-pointer"
                     >
                       <img

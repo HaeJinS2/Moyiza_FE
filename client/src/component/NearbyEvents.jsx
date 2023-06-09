@@ -17,7 +17,7 @@ function NearbyEvents() {
     // const [distances, setDistances] = useState([]);
     const nicknameState = useRecoilValue(userNicknameState);
 
-    console.log(data)
+    console.log("data",data)
     console.log("받은 위치", dataLat, dataLng)
     const geolocationOptions = {
         enableHighAccuracy: true,
@@ -146,7 +146,7 @@ function NearbyEvents() {
                                         {data.map((d) => {
                                             const formattedDate = formatDate(d.oneDayStartTime);
                                             return (
-                                                <button onClick={() => navigate(`/oneday/${d.oneDay.id}`)}>
+                                                <button onClick={() => navigate(`/oneday/${d.oneDayId}`)}>
                                                     <div className='w-[470px] h-[114px] bg-white rounded-[20px] gap-x-4 flex justify-center items-center'>
                                                         <div className='w-[80px] h-[80px] bg-[#797979] rounded-[20px]'>
                                                             <img src={d?.oneDayImage} alt="onedayImg">

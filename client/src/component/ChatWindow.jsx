@@ -22,6 +22,7 @@ function ChatWindow({ roomIdState, style }) {
     const [input, setInput] = useState("");
     const [userId, setUserId] = useRecoilState(userIdState);
     const [roomIdList, setRoomIdList] = useRecoilState(roomIdStates);
+    const [headerState, setHeaderState] = useState({})
 
     console.log("messagess", messages)
 
@@ -184,6 +185,9 @@ function ChatWindow({ roomIdState, style }) {
                 `/chat/${roomIdState}`,
                 (message) => {
                     if (message.body) {
+                        if (message.headers.lastReadMessage) {
+                            setHeaderState(message.headers)
+                        }
                         let newMessage = JSON.parse(message.body);
                         setMessages((prevMessages) => [...prevMessages, newMessage]);
                     }
@@ -213,6 +217,9 @@ function ChatWindow({ roomIdState, style }) {
                         `/chat/${roomIdState}`,
                         (message) => {
                             if (message.body) {
+                                if (message.headers.lastReadMessage) {
+                                    setHeaderState(message.headers)
+                                }
                                 let newMessage = JSON.parse(message.body);
                                 setMessages((prevMessages) => [...prevMessages, newMessage]);
                             }
@@ -261,6 +268,23 @@ function ChatWindow({ roomIdState, style }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomIdState])
 
+
+    useEffect(() => {
+        if (headerState.lastReadMessage) {
+            let updatedMessages = [...messages];
+            let indexStart = updatedMessages.findIndex(msg => msg.chatRecordId === Number(headerState.lastReadMessage));
+            if (indexStart !== -1) {
+                for (let i = indexStart + 1; i < updatedMessages.length; i++) {
+                    if (updatedMessages[i].unreadCount > 0) {
+                        updatedMessages[i] = { ...updatedMessages[i], unreadCount: updatedMessages[i].unreadCount - 1 };
+                    }
+                }
+            }
+            setMessages(updatedMessages);
+            setHeaderState({})
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [headerState])
 
     const sendMessage = (msg) => {
         const token = Cookies.get("ACCESS_TOKEN");

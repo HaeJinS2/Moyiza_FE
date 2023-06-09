@@ -290,7 +290,7 @@ function Oneday() {
               <div className="flex flex-col w-full bg-neutral-100 items-center gap-4 justify-center h-[228px]">
                 {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
                 <p className=" text-5xl font-sans font-semibold">
-                  내가 찾는 일상속 이벤트가 없다면?
+                  내가 찾는 하루속 이벤트가 없다면?
                 </p>
                 <div className="text-green-400 text-xl font-sans">
                   <CreateClub />

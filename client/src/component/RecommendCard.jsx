@@ -39,7 +39,7 @@ function RecommendCard({
       </div>) :(<div className="relative flex flex-col justify-center">
         <div className="absolute z-10 top-3 left-6 flex justify-between text-xs text-green-400">
           <div className="flex gap-2">
-            {tag.map((tag) => {
+            {tag?.map((tag) => {
               return (
                 <div className="rounded-full border-2 px-2 py-1 border-green-400">
                   {tag}

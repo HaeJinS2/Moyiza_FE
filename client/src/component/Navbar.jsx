@@ -14,13 +14,7 @@ import swal from 'sweetalert';
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
   const navigate = useNavigate();
-  // const [messages, setMessages] = useState([]);
   const [roomId, setRoomId] = useState([]);
-  // const [currentRoom, setCurrentRoom] = useState("");
-  // const messagesEndRef = useRef(null);
-  // const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
-  // const clientRef = useRef(null); // client를 useRef로 설정
-  // const subscriptionRef = useRef(null);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
@@ -28,7 +22,7 @@ function Navbar() {
   const [data, setData] = useState([]);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
-// console.log("data",data[7].roomName)
+
   useEffect(() => {
     if(Cookies.get("ACCESS_TOKEN")) {
       getAPI(`/chat`)
@@ -55,7 +49,6 @@ function Navbar() {
   const logoutHandler = () => {
     setIsLoggedIn(false);
     setIsLoggedIn2(false);
-    // console.log(Cookies)
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
     navigate("/");
@@ -120,92 +113,6 @@ function Navbar() {
     };
   }, [chatModalOpen, profileModalOpen]);
 
-  // const connectToRoom = (roomId) => {
-  //   const token = Cookies.get("ACCESS_TOKEN");
-
-  //   // clientRef.current(WebSocket 클라이언트)가 존재하는지 확인
-  //   if (clientRef.current) {
-  //     // 클라이언트의 채팅방 구독이 존재하는지 확인, 존재하면 unsubscribe
-  //     if (subscriptionRef.current) {
-  //       subscriptionRef.current.unsubscribe();
-  //     }
-
-  //     // 새로운 구독 생성
-  //     subscriptionRef.current = clientRef.current.subscribe(
-  //       `/chat/${roomId}`,
-  //       (message) => {
-  //         if (message.body) {
-  //           let newMessage = JSON.parse(message.body);
-  //           setMessages((prevMessages) => [...prevMessages, newMessage]);
-  //         }
-  //       }
-  //     );
-  //     setCurrentRoom(roomId);
-  //     getAPI(`/chat/${roomId}`).then((res) => {
-  //       console.log(res);
-  //       setMessages(res.data.content);
-  //     });
-  //   }
-  //   // 클라이언트가 없는 경우 새 클라이언트 생성하고 구독
-  //   else {
-  //     const newClient = new Client({
-  //       webSocketFactory: () =>
-  //         new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
-  //       debug: (str) => {
-  //         console.log(str);
-  //       },
-  //       onConnect: (frame) => {
-  //         console.log("Connected: " + frame);
-
-  //         // 새로운 구독 생성
-  //         subscriptionRef.current = newClient.subscribe(
-  //           `/chat/${roomId}`,
-  //           (message) => {
-  //             if (message.body) {
-  //               let newMessage = JSON.parse(message.body);
-  //               setMessages((prevMessages) => [...prevMessages, newMessage]);
-  //             }
-  //           }
-  //         );
-  //       },
-  //       beforeConnect: () => {
-  //         newClient.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
-  //       },
-  //       onStompError: (frame) => {
-  //         console.log("Broker reported error: " + frame.headers["message"]);
-  //         console.log("Additional details: " + frame.body);
-  //         if (errorCount.current < 1) {
-  //           errorCount.current += 1;
-  //         }
-  //       },
-  //     });
-
-  //     const originalOnWebSocketClose =
-  //       newClient.onWebSocketClose.bind(newClient);
-
-  //     newClient.onWebSocketClose = (evt) => {
-  //       if (errorCount.current >= 1) {
-  //         console.log("연결 실패 해서 끊김!");
-  //         newClient.deactivate();
-  //         errorCount.current = 0;
-  //         return;
-  //       }
-
-  //       originalOnWebSocketClose(evt);
-  //     };
-
-  //     newClient.activate();
-  //     // 현재 누른 roomId 값 저장
-  //     setCurrentRoom(roomId);
-  //     getAPI(`/chat/${roomId}`).then((res) => {
-  //       console.log(res);
-  //       setMessages(res.data.content);
-  //     });
-
-  //     // Set the new client as current
-  //     clientRef.current = newClient;
-  //   }
-  // };
 
   return (
     <>

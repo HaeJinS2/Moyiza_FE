@@ -152,14 +152,22 @@ function Club() {
         </BodyContainer>
         <div className="flex justify-center items-center">
           <section className="absolute top-52 h-auto min-w-[1920px]">
-            <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
+            <div
+              className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              style={{
+                backgroundImage: `url(${process.env.PUBLIC_URL}/images/club/club_main.png)`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
+            >
               <p>당신의 일상을 함께할 취미를</p>
               <p>'일상속'에서 찾아보세요!</p>
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#FFFBF8] pt-10 rounded-t-[100px] mt-[535px] z-10">
+          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#FFFBF8] pt-10 rounded-t-[100px] mt-[524px] z-10">
             <BodyContainer>
               <div className="flex justify-between items-center my-10">
                 <p className="text-3xl font-semibold">일상속 인기주제</p>

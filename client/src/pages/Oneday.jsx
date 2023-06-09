@@ -16,8 +16,7 @@ import Footer from "../component/Footer";
 import { logEvent } from "../utils/amplitude";
 import { useNavigate } from "react-router-dom";
 import RecommendCard from "../component/RecommendCard";
-import { useQueries } from 'react-query';
-
+import { useQueries } from "react-query";
 
 let pageTabs = ["일상속", "하루속"];
 
@@ -32,31 +31,34 @@ function Oneday() {
   // const [categories, setCategories] = useState(null);
   const [onedayData, setOnedayData] = useState([]);
 
-  const [queryResults1, queryResults2] = useQueries([
+  const [queryResults1, queryResults2] = useQueries(
+    [
+      {
+        queryKey: "categories",
+        queryFn: () => getAPI("/enums"),
+      },
+      {
+        queryKey: ["club", page],
+        queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
+        onSuccess: (data) => {
+          setFilteredClubList(data?.data?.content);
+        },
+      },
+      {
+        queryKey: ["oneday", onedayData],
+        queryFn: () => getAPI(`/oneday`),
+        onSuccess: (data) => {
+          setOnedayData(data?.data?.content);
+        },
+      },
+    ],
     {
-      queryKey: 'categories',
-      queryFn: () => getAPI('/enums'),
-    },
-    {
-      queryKey: ['club', page],
-      queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
-      onSuccess: ((data) => {
-        setFilteredClubList(data?.data?.content)
-      })
-    },
-    {
-      queryKey: ['oneday', onedayData],
-      queryFn: () => getAPI(`/oneday`),
-      onSuccess: ((data) => {
-        setOnedayData(data?.data?.content)
-      })
+      // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
+      waitFor: "all",
     }
-  ], {
-    // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
-    waitFor: 'all',
-  });
+  );
 
-  console.log("onedayData",onedayData)
+  console.log("onedayData", onedayData);
   const [filteredClubList, setFilteredClubList] = useState([]);
   //   const res1 = queryResults[0];
   //   const res2 = queryResults[1];
@@ -66,7 +68,9 @@ function Oneday() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (divRef.current) { divRef.current.scrollIntoView({ behavior: "smooth" }); }
+    if (divRef.current) {
+      divRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, []);
 
   useEffect(() => {
@@ -85,9 +89,9 @@ function Oneday() {
 
   useEffect(() => {
     getAPI(`/oneday`).then((res) => {
-      console.log("oneday data", res.data)
-    })
-  })
+      console.log("oneday data", res.data);
+    });
+  });
 
   // useEffect(() => {
   //   // 클럽 카테고리를 가져오는 코드
@@ -109,13 +113,13 @@ function Oneday() {
     }
   };
 
-
-
-  if (queryResults1.isLoading || queryResults2.isLoading) return 'Loading...';
+  if (queryResults1.isLoading || queryResults2.isLoading) return "Loading...";
   // if (queryResults1.error || queryResults2.error) return 'An error has occurred: ' + (queryResults1.error?.message || queryResults2.error?.message);
 
-
-  const categories = ["전체", ...(queryResults1?.data?.data?.categoryList || [])];
+  const categories = [
+    "전체",
+    ...(queryResults1?.data?.data?.categoryList || []),
+  ];
   const club = [...(queryResults2?.data?.data?.content || [])];
 
   //  const filteredClubList = [...res2?.data?.content];
@@ -137,8 +141,9 @@ function Oneday() {
                   setActivePageTab(tab);
                   i === 0 ? navigate("/club") : navigate("/oneday");
                 }}
-                className={`${activePageTab === tab ? "text-black" : "hover:opacity-50"
-                  } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                className={`${
+                  activePageTab === tab ? "text-black" : "hover:opacity-50"
+                } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
               >
                 {activePageTab === tab && (
                   <motion.div
@@ -154,14 +159,22 @@ function Oneday() {
         </BodyContainer>
         <div className="flex justify-center items-center">
           <section className="absolute top-52 h-auto min-w-[1920px]">
-            <div className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px]">
+            <div
+              className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center h-[600px] pb-16 text-white"
+              style={{
+                backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.png)`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
+            >
               <p>당신의 특별한 하루</p>
               <p>'하루속'에서 함께하세요!</p>
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#F9FFF8] pt-10 rounded-t-[100px] mt-[535px] z-10">
+          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#F9FFF8] pt-10 rounded-t-[100px] mt-[524px] z-10 ">
             <BodyContainer>
               <div className="flex justify-between items-center my-10">
                 <p className="text-3xl font-semibold">하루속 인기주제</p>
@@ -176,8 +189,9 @@ function Oneday() {
                         setActiveTab(tab);
                         handleClubCategory(e);
                       }}
-                      className={`${activeTab === tab ? "text-black" : "hover:opacity-50"
-                        } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                      className={`${
+                        activeTab === tab ? "text-black" : "hover:opacity-50"
+                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                     >
                       {activeTab === tab && (
                         <motion.div
@@ -197,35 +211,36 @@ function Oneday() {
                 </div>
                 <div className="flex flex-col justify-between">
                   <div
-                    className={`grid ${onedayData.length === 0 ? "" : "grid-cols-2"
-                      }  gap-x-4 gap-y-4`}
+                    className={`grid ${
+                      onedayData.length === 0 ? "" : "grid-cols-2"
+                    }  gap-x-4 gap-y-4`}
                   >
-                    {onedayData.length === 0 ? (
-                      <EmptyState
-                        showReset
-                        page="oneday"
-                        handleClubCategory={handleClubCategory}
-                      />
-                    ) : filteredClubList ? (
-                      onedayData?.map((item, i) => {
-                        return (
-                          <Fade bottom>
-                            <ClubCard
-                              page="oneday"
-                              key={i}
-                              title={item.oneDayTitle}
-                              content={item.oneDayContent}
-                              tag={item.clubTag}
-                              thumbnail={item.thumbnailUrl}
-                              id={item.oneDayId}
-                              maxGroupSize={item.oneDayGroupSize}
-                              nowMemberCount={item.nowMemberCount}
-                            />
-                          </Fade>
-                        );
-                      })
-                    )
-                      : null
+                    {
+                      onedayData.length === 0 ? (
+                        <EmptyState
+                          showReset
+                          page="oneday"
+                          handleClubCategory={handleClubCategory}
+                        />
+                      ) : filteredClubList ? (
+                        onedayData?.map((item, i) => {
+                          return (
+                            <Fade bottom>
+                              <ClubCard
+                                page="oneday"
+                                key={i}
+                                title={item.oneDayTitle}
+                                content={item.oneDayContent}
+                                tag={item.clubTag}
+                                thumbnail={item.thumbnailUrl}
+                                id={item.oneDayId}
+                                maxGroupSize={item.oneDayGroupSize}
+                                nowMemberCount={item.nowMemberCount}
+                              />
+                            </Fade>
+                          );
+                        })
+                      ) : null
                       // : (
                       //   club?.map((item, i) => {
                       //     return (
@@ -304,7 +319,6 @@ function Oneday() {
             </section>
           </section>
         </div>
-
       </div>
 
       <Footer />

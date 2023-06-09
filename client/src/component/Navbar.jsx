@@ -37,7 +37,7 @@ function Navbar() {
       .catch((error) => console.log(error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLoggedIn2]);
 
   useEffect(() => {
     console.log("isLoggedIn", isLoggedIn);
@@ -218,7 +218,7 @@ function Navbar() {
                       />
                     </div>
                     <div
-                      ref={profileModalRef}
+                      ref={profileModalRef} 
                       onClick={() => {
                         profileModalOpen
                           ? setProfileModalOpen(false)

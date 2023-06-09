@@ -159,7 +159,7 @@ function Oneday() {
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#F9FFF8] pt-10 rounded-t-[100px] mt-[535px] z-10">
+          <section className="h-auto min-w-[1920px] shadow-cm bg-[#F9FFF8] pt-10 rounded-t-[100px] mt-[535px] z-10">
             <BodyContainer>
               <div className="flex justify-between items-center my-10">
                 <p className="text-3xl font-semibold">하루속 인기주제</p>

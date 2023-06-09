@@ -167,7 +167,7 @@ function Club() {
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto mb-10 min-w-[1920px] shadow-cm bg-[#FFFBF8] pt-10 rounded-t-[100px] mt-[524px] z-10">
+          <section className="h-auto min-w-[1920px] shadow-cm bg-[#FFFBF8] pt-10 rounded-t-[100px] mt-[524px] z-10">
             <BodyContainer>
               <div className="flex justify-between items-center my-10">
                 <p className="text-3xl font-semibold">일상속 인기주제</p>

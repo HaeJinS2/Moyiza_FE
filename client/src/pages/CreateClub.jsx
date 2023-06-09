@@ -157,7 +157,7 @@ function CreateClub() {
             >
                 <div className="flex flex-col items-center  gap-y-[60px]">
                     <div className="flex flex-col items-center">
-                        <h2>만들던 모임이 있습니다. 정보를 불러올까요?</h2>
+                        <h2 className="font-semibold text-[24px]">만들던 모임이 있습니다. 정보를 불러올까요?</h2>
                         {/* <h3>~임시 저장 목록~</h3> */}
                         {/* <span>{club?.clubCategory ? `카테고리: ${club?.clubCategory}` : `카테고리: 저장된 데이터 없음`}</span>
                         <span>{club?.clubTag ? `태그: ${club?.clubTag}` : `태그: 저장된 데이터 없음`}</span>
@@ -167,11 +167,11 @@ function CreateClub() {
                         <span>{club?.agePolicy ? `나이제한: ${club?.agePolicy}` : `나이제한: 저장된 데이터 없음`}</span>
                         <span>{club?.maxGroupSize ? `최대인원: ${club?.maxGroupSize}` : `최대인원: 저장된 데이터 없음`}</span> */}
                     </div>
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center font-semibold text-[24px]">
                         {/* <span><span className="text-[#FF7F1E]">{progressMessage}</span>까지 저장되어있어요!</span> */}
                         {progressMessage ? <span><span className="text-[#FF7F1E]">{progressMessage}</span>까지 저장되어있어요!</span> : "아직 아무것도 저장되지 않았습니다."}
                         {club?.clubTitle ?
-                            <span>모임명: {club?.clubTitle}</span>
+                            <span className="text-[16px]">모임명: {club?.clubTitle}</span>
                             : null
                         }
                     </div>
@@ -230,8 +230,8 @@ function CreateClub() {
                             </div>
                         </div>
                         <div className="flex gap-x-10">
-                            <button className="w-[224px] h-[60px] bg-[#FF7F1E] text-white rounded-3xl" onClick={handleConfirm}>Yes</button>
-                            <button className="w-[224px] h-[60px] bg-[#747474] text-white rounded-3xl" onClick={handleCancel}>No</button>
+                            <button className="w-[224px] h-[60px] bg-[#FF7F1E] text-white rounded-3xl font-semibold text-[28px]" onClick={handleConfirm}>새로만들기</button>
+                            <button className="w-[224px] h-[60px] bg-[#747474] text-white rounded-3xl font-semibold text-[28px]" onClick={handleCancel}>불러오기</button>
                         </div>
                         <div>
                             <span className="text-[#747474]">새로운 모임을 만들면 기존정보는 삭제됩니다.</span>

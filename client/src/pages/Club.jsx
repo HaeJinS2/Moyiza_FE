@@ -210,7 +210,9 @@ function Club() {
                         />
                       )}
                       <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2px]">
-                       <img src={imageArr[i]}/>
+                       <img src={imageArr[i]}
+                       alt="club_category"
+                       />
                         {tab}
                       </span>
                     </button>

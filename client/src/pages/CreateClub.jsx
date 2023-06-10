@@ -19,13 +19,13 @@ function CreateClub() {
     const [progress, setProgress] = useState(0);
 
     let progressMessage = club?.maxGroupSize ? `최대인원` :
-    club?.agePolicy ? `나이제한` :
-        club?.genderPolicy ? `성별제한` :
-            club?.clubContent ? `모임내용` :
-                club?.clubTitle ? `모임명` :
-                    club?.clubTag ? `태그` :
-                        club?.clubCategory ? `카테고리` :
-                            "";
+        club?.agePolicy ? `나이제한` :
+            club?.genderPolicy ? `성별제한` :
+                club?.clubContent ? `모임내용` :
+                    club?.clubTitle ? `모임명` :
+                        club?.clubTag ? `태그` :
+                            club?.clubCategory ? `카테고리` :
+                                "";
 
     useEffect(() => {
         if (club?.maxGroupSize) {
@@ -131,7 +131,15 @@ function CreateClub() {
 
     return (
         <div>
-            <button onClick={handleCreateClubButton}>클럽 만들기 버튼</button>
+           <button
+           onClick={handleCreateClubButton}
+           >
+            <img
+                src={`${process.env.PUBLIC_URL}/images/create_club.svg`}
+                alt="create-club"
+            />
+            </button>
+            {/* <button onClick={handleCreateClubButton}>클럽 만들기 버튼</button> */}
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}

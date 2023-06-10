@@ -19,7 +19,7 @@ import RecommendCard from "../component/RecommendCard";
 
 let pageTabs = ["일상속", "하루속"];
 let imageArr = [
-  "",
+  `${process.env.PUBLIC_URL}/images/category/all.png`,
   `${process.env.PUBLIC_URL}/images/category/exercise.png`,
   `${process.env.PUBLIC_URL}/images/category/exercise.png`,
   `${process.env.PUBLIC_URL}/images/category/travel.png`,

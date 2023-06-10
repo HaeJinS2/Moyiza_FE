@@ -333,7 +333,7 @@ function CreateEventModal({ id, getClubEventLists }) {
                                 </div>
                                 <div className='flex gap-x-2 items-center'>
                                     <span className='w-[83px] z-50  text-[24px]'></span>
-                                    <div className='w-[405px] h-[111px]'>
+                                    <div className='w-[405px] h-[234px]'>
                                         <div id="map" style={{ width: "100%", height: "100%" }}></div>
                                     </div>
                                 </div>

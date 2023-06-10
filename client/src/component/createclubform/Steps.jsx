@@ -396,7 +396,7 @@ export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }
         }, 1000);
 
         const timeout = setTimeout(() => {
-            navigate(-1);
+            navigate(`/club`);
         }, 3000);
 
         return () => {

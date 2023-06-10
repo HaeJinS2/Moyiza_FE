@@ -25,7 +25,7 @@ function RecommendCard({
         </div>
         <div className="aspect-square flex-col flex w-full h-full items-center justify-center relative overflow-hidden rounded-xl">
           <img
-            className="rounded-md w-[219px] h-[219px]"
+            className="rounded-md w-[219px] h-[219px] object-cover"
             src={thumbnail}
             alt="clubThumbnail"
           />
@@ -50,7 +50,7 @@ function RecommendCard({
         </div>
         <div className="aspect-square flex-col flex w-full h-full items-center justify-center relative overflow-hidden rounded-xl">
           <img
-            className="rounded-md w-[219px] h-[219px]"
+            className="rounded-md w-[219px] h-[219px] object-cover"
             src={thumbnail}
             alt="clubThumbnail"
           />

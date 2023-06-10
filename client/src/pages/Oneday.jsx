@@ -36,10 +36,12 @@ function Oneday() {
     {
       queryKey: 'categories',
       queryFn: () => getAPI('/enums'),
+      refetchOnWindowFocus: false,
     },
     // {
     //   queryKey: ['club', page],
     //   queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
+    //   refetchOnWindowFocus: false,
     //   onSuccess: ((data) => {
     //     setFilteredOnedayList(data?.data?.content)
     //   })
@@ -48,15 +50,18 @@ function Oneday() {
       queryKey: ['oneday', onedayData],
       // queryFn: () => getAPI(`/oneday`),
       queryFn: () => getAPI(`/oneday?page=0&size=6&sort=createdAt,DESC`),
+      refetchOnWindowFocus: false,
       onSuccess: ((data) => {
         setFilteredOnedayList(data?.data?.content)
         setOnedayData(data?.data?.content)
       })
     }
-  ], {
-    // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
-    waitFor: 'all',
-  });
+  ],
+    {
+      // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
+      waitFor: 'all',
+    },
+  );
 
   console.log("onedayData", onedayData)
   console.log(queryResults2)

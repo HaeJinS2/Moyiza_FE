@@ -168,11 +168,11 @@ function Navbar() {
                                 X
                               </button>
                             </div>
-                            <div className="w-[360px] h-[400px]  overflow-auto">
+                            <div className="w-[370px] h-[400px]  overflow-auto">
                               {roomId?.map((id, i) => (
                                 <>
                                   <button
-                                    className={`w-[345px]  px-4 gap-x-4 flex items-center justify-start py-2
+                                    className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
                                   ${
                                       // id === currentRoom
                                       // ? "bg-slate-400"

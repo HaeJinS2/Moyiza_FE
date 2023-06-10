@@ -126,7 +126,7 @@ function Club() {
       setFilteredClubList(club);
     } else {
       getAPI(`/club/search?q=&category=${e.currentTarget.textContent}`)
-        .then((res) => setFilteredClubList(res.data.content))
+        .then((res) => setFilteredClubList(res.data.content.slice(0, 6)))
         .catch((err) => setFilteredClubList([]));
     }
   };
@@ -270,7 +270,7 @@ function Club() {
                     )}
                   </div>
                 </div>
-                {filteredClubList.length >= 6 && totalPages > page + 1 && (
+                {filteredClubList.length > 6 && totalPages > page + 1 && (
                   <div className="flex justify-center  pb-12">
                     <button
                       onClick={() => {

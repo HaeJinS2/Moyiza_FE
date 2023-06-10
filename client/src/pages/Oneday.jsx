@@ -20,7 +20,20 @@ import { useQueries } from 'react-query';
 
 
 let pageTabs = ["일상속", "하루속"];
-
+let imageArr = [
+  `${process.env.PUBLIC_URL}/images/category/all.png`,
+  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/category/travel.png`,
+  `${process.env.PUBLIC_URL}/images/category/culture.png`,
+  `${process.env.PUBLIC_URL}/images/category/art.png`,
+  `${process.env.PUBLIC_URL}/images/category/activity.png`,
+  `${process.env.PUBLIC_URL}/images/category/food.png`,
+  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/category/book.png`,
+  `${process.env.PUBLIC_URL}/images/category/hobby.png`,
+  `${process.env.PUBLIC_URL}/images/category/love.png`,
+]
 function Oneday() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[1]);
@@ -187,7 +200,10 @@ function Oneday() {
                           }}
                         />
                       )}
-                      <span className="relative text-base z-10 mix-blend">
+                      <span className="relative text-base z-10 mix-blend flex gap-2 items-center">
+                      <img src={imageArr[i]}
+                       alt="club_category"
+                       />
                         {tab}
                       </span>
                     </button>

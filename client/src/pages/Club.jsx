@@ -18,7 +18,20 @@ import { useNavigate } from "react-router-dom";
 import RecommendCard from "../component/RecommendCard";
 
 let pageTabs = ["일상속", "하루속"];
-
+let imageArr = [
+  "",
+  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/category/travel.png`,
+  `${process.env.PUBLIC_URL}/images/category/culture.png`,
+  `${process.env.PUBLIC_URL}/images/category/art.png`,
+  `${process.env.PUBLIC_URL}/images/category/activity.png`,
+  `${process.env.PUBLIC_URL}/images/category/food.png`,
+  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/category/book.png`,
+  `${process.env.PUBLIC_URL}/images/category/hobby.png`,
+  `${process.env.PUBLIC_URL}/images/category/love.png`,
+]
 function Club() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[0]);
@@ -196,7 +209,8 @@ function Club() {
                           }}
                         />
                       )}
-                      <span className="relative text-base z-10 mix-blend">
+                      <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2px]">
+                       <img src={imageArr[i]}/>
                         {tab}
                       </span>
                     </button>

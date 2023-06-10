@@ -377,7 +377,7 @@ function Detail() {
                                   clubId={item?.clubId}
                                   eventId={item?.id}
                                   title={item?.eventTitle}
-                                  content={item?.eventConten}
+                                  content={item?.eventContent}
                                   size={item?.eventGroupSize}
                                   attendantsNum={item?.attendantsNum}
                                   startTime={item?.eventStartTime}

@@ -288,7 +288,7 @@ function Detail() {
             </div>
           </div>
           <div className="flex justify-between items-center w-full h-[237px] bg-neutral-200 rounded-2xl pr-10">
-            <p className="text-black text-7xl">{clubDetail?.clubContent}</p>
+            <p className="text-black text-2xl px-4">{clubDetail?.data.clubContent}</p>
             {isOwner ? (
               onEdit ? (
                 <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">

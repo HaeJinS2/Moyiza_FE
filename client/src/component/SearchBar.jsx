@@ -6,7 +6,8 @@ import { getAPI } from "../axios";
 import { searchState } from "../states/searchState";
 
 const SearchBar = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  // eslint-disable-next-line
   const [searchList, setSearchList] = useRecoilState(searchState);
   const [search, setSearch] = useState("");
   // const inputRef = useRef(null);
@@ -28,28 +29,30 @@ const SearchBar = () => {
 
   const handleSearch = (e) => {
     if (e.type === "keypress" && e.key !== "Enter") return;
-
-    getAPI(`/oneday/search?q=${search}`)
-      .then((res) => {
+    Promise.all([
+      getAPI(`/oneday/search?q=${search}`).then((res) => {
         console.log(res.data.content);
-        setSearchList({ ...searchList, searchedOnedayList: res.data.content });
-        setSearch("")
-        navigate('/search')
+        setSearchList((prev) => ({
+          ...prev,
+          searchedOnedayList: res.data.content,
+        }));
+      }),
+
+      getAPI(`/club/search?q=${search}`).then((res) => {
+        console.log(res.data.content);
+        setSearchList((prev) => ({
+          ...prev,
+          searchedClubList: res.data.content,
+        }));
+        setSearch("");
+      }),
+    ])
+      .then(() => {
+        navigate("/search");
       })
       .catch((err) => console.log(err));
-
-    getAPI(`/club/search?q=${search}`)
-      .then((res) => {
-        console.log(res.data.content);
-        setSearchList({ ...searchList, searchedClubList: res.data.content });
-        setSearch("")
-        navigate('/search')
-      })
-      .catch((err) => console.log(err));
-
   };
 
-  console.log(search)
   return (
     <div className="border-[1px] flex border-orange-500 w-[480px] h-[50px] items-center rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
       <div className="w-full flex justify-between pr-6 pl-6 font-sans">

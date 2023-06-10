@@ -255,7 +255,7 @@ function Club() {
                   </div>
                 </div>
                 {filteredClubList.length >= 6 && totalPages > page + 1 && (
-                  <div className="flex justify-center mt-10  pb-10">
+                  <div className="flex justify-center  pb-12">
                     <button
                       onClick={() => {
                         setPage(page + 1);
@@ -269,8 +269,6 @@ function Club() {
                 )}
               </body>
             </BodyContainer>
-          </section>
-          <section>
             <BodyContainer>
               <p className="text-3xl font-semibold py-4">일상속 추천주제</p>
 
@@ -297,6 +295,9 @@ function Club() {
                 </div>
               </div>
             </BodyContainer>
+          </section>
+          <section>
+
             <div className="min-w-[1920px] flex flex-col bg-[#FFDFC7] items-center gap-4 justify-center h-[300px]">
               {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
               <p className="text-5xl font-sans font-semibold">

@@ -9,7 +9,7 @@ import {
   onedayTmpIdState,
   savedOnedayDataState,
 } from "../states/onedayState";
-// import CreateClub from "./CreateClub";
+import CreateClub from "./CreateClub";
 
 function CreateFeed() {
   const [onedayOptions, setOnedayOptions] = useRecoilState(onedayOptionState);
@@ -48,12 +48,11 @@ function CreateFeed() {
         </div>
         <div className="max-w-[1920px] self-center h-[screen] flex justify-center items-start py-40 bg-[#FFFCF2] shadow-cm rounded-t-3xl">
           <div className="flex flex-col gap-[60px]">
-            {/* <CreateClub> */}
-            <img
+            <CreateClub />
+            {/* <img
               src={`${process.env.PUBLIC_URL}/images/create_club.svg`}
               alt="create-club"
-            />
-            {/* </CreateClub> */}
+            /> */}
             <img
               className=" cursor-pointer"
               onClick={handleCreateOneday}

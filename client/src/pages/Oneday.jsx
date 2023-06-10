@@ -6,7 +6,7 @@ import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
 import Navbar from "../component/Navbar";
 // import ReviewCard from "../component/ReviewCard";
-import CreateClub from "./CreateClub";
+// import CreateClub from "./CreateClub";
 import { getAPI } from "../axios";
 import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
@@ -301,7 +301,16 @@ function Oneday() {
                   내가 찾는 하루속 이벤트가 없다면?
                 </p>
                 <div className="text-green-400 text-xl font-sans">
-                  <CreateClub />
+                  {/* <CreateClub /> */}
+                  <button
+                    className="flex gap-x-1 justify-center items-center"
+                    onClick={() => navigate(`/create-feed`)}
+                  >하루속 만들러가기
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/oneday/arrow_green.png`}
+                      alt="create-club"
+                    />
+                  </button>
                 </div>
                 {/* </div> */}
               </div>

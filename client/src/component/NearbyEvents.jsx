@@ -93,12 +93,12 @@ function NearbyEvents() {
 
     return (
         <div>
-            <button className='w-[224px] h-[60px]'
+            <button
                 onClick={() => handleButtonClick()}
             >
                 <img
                     className="cursor-pointer"
-                    src={`${process.env.PUBLIC_URL}/images/main/to_recommend.png`}
+                    src={`${process.env.PUBLIC_URL}/images/main/to_recommend.svg`}
                     alt="to_recommend_button"
                 />
             </button>

@@ -27,11 +27,10 @@ let imageArr = [
   `${process.env.PUBLIC_URL}/images/category/art.png`,
   `${process.env.PUBLIC_URL}/images/category/activity.png`,
   `${process.env.PUBLIC_URL}/images/category/food.png`,
-  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
   `${process.env.PUBLIC_URL}/images/category/book.png`,
   `${process.env.PUBLIC_URL}/images/category/hobby.png`,
   `${process.env.PUBLIC_URL}/images/category/love.png`,
-]
+];
 function Club() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[0]);
@@ -139,7 +138,7 @@ function Club() {
     <>
       <div ref={divRef}>
         <BodyContainer>
-          <div className="flex gap-10 pt-40">
+          <div className="flex gap-10 pt-28 px-12">
             {pageTabs.map((tab, i) => (
               <button
                 key={i}
@@ -149,7 +148,7 @@ function Club() {
                 }}
                 className={`${
                   activePageTab === tab ? "text-black" : "hover:opacity-50"
-                } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                } relative rounded-full px-3 py-1.5  text-black outline-2 transition focus-visible:outline`}
               >
                 {activePageTab === tab && (
                   <motion.div
@@ -158,13 +157,15 @@ function Club() {
                     className="border-b-[4px] border-black absolute inset-0"
                   />
                 )}
-                <span className="relative text-base z-10 mix-blend">{tab}</span>
+                <span className="relative text-2xl font-bold z-10 mix-blend">
+                  {tab}
+                </span>
               </button>
             ))}
           </div>
         </BodyContainer>
         <div className="flex justify-center items-center">
-          <section className="absolute top-52 h-auto min-w-[1920px]">
+          <section className="absolute top-52 h-auto min-w-[1280px]">
             <div
               className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
@@ -180,14 +181,19 @@ function Club() {
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1920px] shadow-cm bg-[#FFFBF8] pt-10 rounded-t-[100px] mt-[524px] z-10">
-            <BodyContainer>
-              <div className="flex justify-between items-center my-10">
-                <p className="text-3xl font-semibold">일상속 인기주제</p>
-                <button>필터</button>
+          <section className="h-auto min-w-[1280px] shadow-cm bg-[#FFFBF8] rounded-t-[90px] mt-[524px] z-10">
+            <div className="max-w-[1140px] mx-auto">
+              <div className="flex justify-between items-center pt-16 pb-2 pr-1">
+                <p className="text-[2rem] font-bold">일상속 인기주제</p>
+                <button>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/filter.svg`}
+                    alt="filter_button"
+                  />
+                </button>
               </div>
               <body className="flex flex-col">
-                <div className="flex justify-around  my-4">
+                <div className="flex justify-around my-4">
                   {categories?.map((tab, i) => (
                     <button
                       key={i}
@@ -210,9 +216,7 @@ function Club() {
                         />
                       )}
                       <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2px]">
-                       <img src={imageArr[i]}
-                       alt="club_category"
-                       />
+                        <img src={imageArr[i]} alt="club_category" />
                         {tab}
                       </span>
                     </button>
@@ -284,8 +288,8 @@ function Club() {
                   </div>
                 )}
               </body>
-            </BodyContainer>
-            <BodyContainer>
+            </div>
+            <div className="max-w-[1140px] mx-auto">
               <p className="text-3xl font-semibold py-4">일상속 추천주제</p>
 
               <div className="flex flex-col justify-between">
@@ -310,11 +314,10 @@ function Club() {
                   })}
                 </div>
               </div>
-            </BodyContainer>
+            </div>
           </section>
           <section>
-
-            <div className="min-w-[1920px] flex flex-col bg-[#FFDFC7] items-center gap-4 justify-center h-[300px]">
+            <div className="min-w-[1280px] flex flex-col bg-[#FFDFC7] items-center gap-4 justify-center h-[300px]">
               {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
               <p className="text-5xl font-sans font-semibold">
                 내가 찾는 일상속 이벤트가 없다면?
@@ -326,9 +329,9 @@ function Club() {
             </div>
           </section>
           <section className="h-auto "></section>
+      <Footer />
         </div>
       </div>
-      <Footer />
     </>
   );
 }

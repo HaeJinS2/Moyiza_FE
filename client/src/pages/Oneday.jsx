@@ -29,11 +29,10 @@ let imageArr = [
   `${process.env.PUBLIC_URL}/images/category/art.png`,
   `${process.env.PUBLIC_URL}/images/category/activity.png`,
   `${process.env.PUBLIC_URL}/images/category/food.png`,
-  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
   `${process.env.PUBLIC_URL}/images/category/book.png`,
   `${process.env.PUBLIC_URL}/images/category/hobby.png`,
   `${process.env.PUBLIC_URL}/images/category/love.png`,
-]
+];
 function Oneday() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[1]);
@@ -317,9 +316,9 @@ function Oneday() {
           </section>
         </div>
 
+      <Footer />
       </div>
 
-      <Footer />
     </>
   );
 }

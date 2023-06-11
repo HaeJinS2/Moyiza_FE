@@ -23,7 +23,7 @@ function Main() {
     <>
       {/* <Navbar /> */}
       <BodyContainer>
-        <section ref={divRef} className="px-10">
+        <section ref={divRef}>
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -31,7 +31,7 @@ function Main() {
             viewport={{ once: false, amount: 0.25 }}
             className={`mx-auto flex flex-col justify-between`}
           >
-            <div className="mt-40 flex">
+            <div className="mt-40 flex justify-center items-center ">
               <div className="flex flex-col h-[422px] rounded-lg text-black justify-center w-[541px]">
                 <div className="flex flex-col">
                   <Fade bottom delay={0}>
@@ -53,7 +53,7 @@ function Main() {
               {/* </motion.div> */}
             </div>
           </motion.div>
-          <div className="flex gap-x-4 h-[60px]">
+          <div className="flex gap-x-4 h-[60px] px-16">
             <img
               className="cursor-pointer"
               onClick={() => {
@@ -84,7 +84,7 @@ function Main() {
             게시글 생성 페이지
           </button> */}
         </section>
-        <div className="flex gap-10 mt-20 mb-12 justify-start px-10">
+        <div className="flex gap-10 mt-20 mb-12 justify-start px-20">
           {tabs.map((tab, i) => (
             <button
               key={i}

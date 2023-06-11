@@ -106,7 +106,7 @@ function Main() {
         </div>
         <section className="flex flex-col items-center">
           <div className="flex flex-col w-[1140px] justify-between">
-            <div className="flex flex-col mt-8 gap-x-2">
+            <div className="flex flex-col mt-8 gap-x-2 ">
               {activeTab === "일상속" ? (
                 <>
                   <Fade bottom>
@@ -128,15 +128,15 @@ function Main() {
                 <Fade bottom>
                   <MainCard
                     cardNum="oneday_1"
-                    image={`${process.env.PUBLIC_URL}/images/main/oneday_1.png`}
+                    image={`${process.env.PUBLIC_URL}/images/main/oneday_1.svg`}
                   />
                   <MainCard
                     cardNum="oneday_2"
-                    image={`${process.env.PUBLIC_URL}/images/main/oneday_2.png`}
+                    image={`${process.env.PUBLIC_URL}/images/main/oneday_2.svg`}
                   />
                   <MainCard
                     cardNum="oneday_3"
-                    image={`${process.env.PUBLIC_URL}/images/main/oneday_3.png`}
+                    image={`${process.env.PUBLIC_URL}/images/main/oneday_3.svg`}
                   />
                 </Fade>
               )}

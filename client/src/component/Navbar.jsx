@@ -122,7 +122,7 @@ function Navbar() {
       ${isScrolled ? " border-b-[1px] border-gray-300" : ""}`}
         >
           <div
-            className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? "h-[100px]" : "h-[120px]"
+            className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? "h-[70px]" : "h-[80px]"
               }`}
           >
             <div className="w-full flex justify-between items-center ">

@@ -4,7 +4,7 @@ function MainCard({ image, cardNum }) {
   return (
     <>
       {cardNum === "club_1" ? (
-        <div className="cursor-default flex h-[370px] gap-x-[130px] items-center mb-[136px] ">
+        <div className="cursor-default flex h-[370px] gap-x-[50px] items-center mb-[136px] ">
           <div className="flex gap-x-4">
             <div className="flex flex-col w-[500px] gap-y-[18px]">
               <div className="text-2xl text-orange-400 ">함께하는 즐거움</div>
@@ -67,8 +67,7 @@ function MainCard({ image, cardNum }) {
             </div>
           <img src={image} alt="service-description" />
         </div>
-        <img src={`${process.env.PUBLIC_URL}/images/main/club_bottom.svg`}
-        alt="service-description"/>
+
         </>
       ) : cardNum === "oneday_1" ? (
         <div className="cursor-default flex flex-col w-full h-auto justify-center items-center ">

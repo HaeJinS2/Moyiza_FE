@@ -23,7 +23,7 @@ function Main() {
     <>
       {/* <Navbar /> */}
       <BodyContainer>
-        <section ref={divRef}>
+        <section ref={divRef} className="px-10">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -31,8 +31,8 @@ function Main() {
             viewport={{ once: false, amount: 0.25 }}
             className={`mx-auto flex flex-col justify-between`}
           >
-            <div className="mt-40 grid grid-cols-2 gap-x-2">
-              <div className="flex flex-col h-[422px] rounded-lg text-black justify-center">
+            <div className="mt-40 flex">
+              <div className="flex flex-col h-[422px] rounded-lg text-black justify-center w-[541px]">
                 <div className="flex flex-col">
                   <Fade bottom delay={0}>
                     <p className="font-bold text-5xl mb-2">취미 공유할 사람</p>
@@ -84,49 +84,46 @@ function Main() {
             게시글 생성 페이지
           </button> */}
         </section>
-        <section>
-          <div>
-            <div className="flex gap-10 mt-20 mb-12">
-              {tabs.map((tab, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveTab(tab)}
-                  className={`${
-                    activeTab === tab ? "text-black" : "hover:opacity-50"
-                  } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
-                >
-                  {activeTab === tab && (
-                    <motion.div
-                      layoutId="active-pill"
-                      transition={{ type: "spring", duration: 0.5 }}
-                      className="border-b-[4px] border-black absolute inset-0"
-                    />
-                  )}
-                  <span className="relative text-2xl z-10 mix-blend">
-                    {tab}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between ">
+        <div className="flex gap-10 mt-20 mb-12 justify-start px-10">
+          {tabs.map((tab, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveTab(tab)}
+              className={`${
+                activeTab === tab ? "text-black" : "hover:opacity-50"
+              } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+            >
+              {activeTab === tab && (
+                <motion.div
+                  layoutId="active-pill"
+                  transition={{ type: "spring", duration: 0.5 }}
+                  className="border-b-[4px] border-black absolute inset-0"
+                />
+              )}
+              <span className="relative text-2xl z-10 mix-blend">{tab}</span>
+            </button>
+          ))}
+        </div>
+        <section className="flex flex-col items-center">
+          <div className="flex flex-col w-[1140px] justify-between">
             <div className="flex flex-col mt-8 gap-x-2">
               {activeTab === "일상속" ? (
-                <Fade bottom>
-                  <MainCard
-                    cardNum="club_1"
-                    image={`${process.env.PUBLIC_URL}/images/main/club_1.svg`}
-                  />
-                  <MainCard
-                    cardNum="club_2"
-                    image={`${process.env.PUBLIC_URL}/images/main/club_2.png`}
-                  />
-                  <MainCard
-                    cardNum="club_3"
-                    image={`${process.env.PUBLIC_URL}/images/main/club_3.svg`}
-                  />
-                </Fade>
+                <>
+                  <Fade bottom>
+                    <MainCard
+                      cardNum="club_1"
+                      image={`${process.env.PUBLIC_URL}/images/main/club_1.svg`}
+                    />
+                    <MainCard
+                      cardNum="club_2"
+                      image={`${process.env.PUBLIC_URL}/images/main/club_2.png`}
+                    />
+                    <MainCard
+                      cardNum="club_3"
+                      image={`${process.env.PUBLIC_URL}/images/main/club_3.svg`}
+                    />
+                  </Fade>
+                </>
               ) : (
                 <Fade bottom>
                   <MainCard
@@ -146,6 +143,11 @@ function Main() {
             </div>
           </div>
         </section>
+        <img
+          className="w-[1280px]"
+          src={`${process.env.PUBLIC_URL}/images/main/club_bottom.svg`}
+          alt="service-description"
+        />
         <Footer />
       </BodyContainer>
     </>

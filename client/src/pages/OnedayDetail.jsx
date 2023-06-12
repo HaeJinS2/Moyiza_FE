@@ -20,7 +20,7 @@ function OnedayDetail() {
   // eslint-disable-next-line
   const [isOwner, setIsOwner] = useState(false);
   const similarOneday = [1, 1, 1, 1, 1, 1];
-
+  const [filteredOnedayList, setFilteredOnedayList] = useState([]);
   // 멤버 페이지 관리
   const [memberPage, setMemberPage] = useState(0);
   const [memberTuple, setMemberTuple] = useState([null, memberPage]);
@@ -143,6 +143,27 @@ function OnedayDetail() {
       });
   };
 
+  useEffect(() => {
+    const fetchFilteredOnedayList = async () => {
+      if (!onedayDetail) return; // onedayDetail이 없는 경우 아무 것도 하지 않습니다.
+
+      try {
+        getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`).then(
+          (res) => {
+            setFilteredOnedayList(res.data.content);
+          }
+        );
+      } catch (err) {
+        setFilteredOnedayList([]);
+      }
+    };
+
+    // 비동기 함수를 실행합니다.
+    fetchFilteredOnedayList();
+  }, [onedayDetail]);
+
+  console.log(filteredOnedayList);
+
   return (
     <>
       <div ref={divRef} />
@@ -180,9 +201,10 @@ function OnedayDetail() {
           </div>
           <div className="self-end">
             {onEdit && (
-              <button 
-              onClick={handleDeleteOneday}
-              className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80">
+              <button
+                onClick={handleDeleteOneday}
+                className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80"
+              >
                 모임 삭제
               </button>
             )}
@@ -210,15 +232,11 @@ function OnedayDetail() {
             <div className="flex justify-center">
               {isMember ? (
                 <div className="flex  text-2xl  justify-center items-center mt-10 bg-green-500 text-white w-[224px] h-[60px]  py-2 rounded-full ">
-                  <button
-                  onClick={handleQuitOneday}
-                  >모임 탈퇴하기</button>
+                  <button onClick={handleQuitOneday}>모임 탈퇴하기</button>
                 </div>
               ) : (
                 <div className="flex text-2xl justify-center items-center mt-10 bg-green-500 text-white w-[224px] h-[60px] py-2 rounded-full">
-                  <button
-                  onClick={handleJoinOneday}
-                  >모임 가입하기</button>
+                  <button onClick={handleJoinOneday}>모임 가입하기</button>
                 </div>
               )}
             </div>
@@ -244,7 +262,9 @@ function OnedayDetail() {
                 src={`${process.env.PUBLIC_URL}/images/oneday/oneday_location.png`}
                 alt="oneday_location"
               />
-              {onedayDetail?.data.oneDayLocation.split(" ")[0] === '서울특별시' ? onedayDetail?.data.oneDayLocation.split(" ")[1] : onedayDetail?.data.oneDayLocation.split(" ")[0]}
+              {onedayDetail?.data.oneDayLocation.split(" ")[0] === "서울특별시"
+                ? onedayDetail?.data.oneDayLocation.split(" ")[1]
+                : onedayDetail?.data.oneDayLocation.split(" ")[0]}
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
               <div className="w-[36px] h-[36px]"></div>
@@ -326,17 +346,6 @@ function OnedayDetail() {
                                 />
                                 <div>{member.userNickName}</div>
                               </div>
-                              <div
-                                key={i + 1}
-                                className="flex justify-center items-center  gap-10"
-                              >
-                                <img
-                                  className="w-[90px] h-[90px] bg-rose-400 rounded-full "
-                                  src={member.userProfileImage}
-                                  alt="profile_image"
-                                />
-                                <div>{member.userNickName}</div>
-                              </div>
                             </>
                           );
                         })
@@ -348,7 +357,7 @@ function OnedayDetail() {
           </div>
 
           <div className="flex justify-between w-full">
-            <div className="font-sans text-2xl font-semibold">비슷한 하루</div>
+            <div className="font-sans text-2xl font-semibold">비슷한 하루속 이벤트</div>
             <div className="flex justify-center gap-10">
               {similarOnedayPage > 0 && (
                 <button
@@ -360,7 +369,8 @@ function OnedayDetail() {
                   />
                 </button>
               )}
-              {similarOnedayPage < Math.ceil(similarOneday.length / 2) - 1 && (
+              {similarOnedayPage <
+                Math.ceil(filteredOnedayList.length / 2) - 1 && (
                 <button
                   onClick={() => setSimilarOnedayPage(similarOnedayPage + 1)}
                 >
@@ -387,16 +397,22 @@ function OnedayDetail() {
                 >
                   <div
                     className={`${
-                      similarOneday.length === 0 ? "" : "grid grid-cols-2"
+                      filteredOnedayList.length === 0 ? "" : "grid grid-cols-2"
                     } w-full gap-4 `}
                   >
-                    {similarOneday.length === 0 ? (
+                    {filteredOnedayList.length === 0 ? (
                       <EmptyState page="onedayDetail" />
                     ) : (
-                      similarOneday
+                      filteredOnedayList
                         .slice(similarOnedayPage * 2, similarOnedayPage * 2 + 2)
                         .map((item, i) => {
-                          return <OnedayCard key={i} />;
+                          return <OnedayCard 
+                          key={i} 
+                          thumbnail={item.thumbnailUrl}
+                          title={item.onedayTitle}
+                          tag={item.onedayTag}
+                          
+                          />;
                         })
                     )}
                   </div>

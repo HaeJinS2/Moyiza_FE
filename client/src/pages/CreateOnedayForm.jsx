@@ -24,68 +24,201 @@ function CreateOnedayForm() {
   const [savedOnedayData, setSavedOnedayData] =
     useRecoilState(savedOnedayDataState);
 
+ 
+
+  useEffect(() => {
+    if (savedOnedayData.category === null) {
+      setOnedayStep(1);
+      return;
+    } else if (savedOnedayData.oneDayTag === null) {
+      setOnedayStep(2);
+      return;
+    } else if (savedOnedayData.oneDayTitle === null) {
+      setOnedayStep(3);
+      return;
+    } else if (savedOnedayData.oneDayContent === null) {
+      setOnedayStep(4);
+      return;
+    } else if (savedOnedayData.oneDayStartTime === null) {
+      setOnedayStep(5);
+      return;
+    } else if (
+      savedOnedayData.oneDayLocation === null &&
+      savedOnedayData.oneDayLatitude === null &&
+      savedOnedayData.oneDayLongitude === null
+    ) {
+      setOnedayStep(6);
+      return;
+    } else if (
+      savedOnedayData.age === null &&
+      savedOnedayData.gender === null
+    ) {
+      setOnedayStep(7);
+      return;
+    } else if (savedOnedayData.oneDayGroupSize === null) {
+      setOnedayStep(8);
+      return;
+    }
+  }, []);
+
   const handleOnedayStep = (e) => {
     if (e.target.name === "next") {
-      setOnedayStep(onedayStep + 1);
       switch (onedayStep) {
         case 1:
-          putAPI(`/oneday/create/${tmpOnedayId}/category`, {
-            oneDayCategory: savedOnedayData.oneDayCategory,
-          })
-            .then((res) => console.log(res.data.message))
-            .catch((error) => console.log(error));
+          if (
+            savedOnedayData.category === null ||
+            savedOnedayData.category === undefined
+          ) {
+            return swal("관심사를 선택해주세요!");
+          } else {
+            putAPI(`/oneday/create/${tmpOnedayId}/category`, {
+              oneDayCategory: savedOnedayData.category,
+            })
+              .then((res) => {
+                console.log(res.data.message);
+                setOnedayStep(2);
+              })
+              .catch((error) => console.log(error));
+          }
           break;
         case 2:
-          putAPI(`/oneday/create/${tmpOnedayId}/tag`, {
-            tag: savedOnedayData.oneDayTag,
-          })
-            .then((res) => console.log(res.data.message))
-            .catch((error) => console.log(error));
-          break;
+          if (
+            savedOnedayData.tag === null ||
+            savedOnedayData.tag.length === 0
+          ) {
+            return swal("태그를 한 가지 이상 선택해주세요!");
+          } else {
+            putAPI(`/oneday/create/${tmpOnedayId}/tag`, {
+              tag: savedOnedayData.tag,
+            })
+              .then((res) => {
+                console.log(res.data.message);
+                setOnedayStep(3);
+              })
+              .catch((error) => console.log(error));
+            break;
+          }
+
         case 3:
+          if (
+            savedOnedayData.oneDayTitle === null ||
+            savedOnedayData.oneDayTitle === undefined ||
+            savedOnedayData.oneDayTitle.length === 0
+          ) {
+            return swal("이벤트 이름을 입력해주세요!");
+          }
           putAPI(`/oneday/create/${tmpOnedayId}/title`, {
             oneDayTitle: savedOnedayData.oneDayTitle,
           })
-            .then((res) => console.log(res.data.message))
+            .then((res) => {
+              console.log(res.data.message);
+              setOnedayStep(4);
+            })
             .catch((error) => console.log(error));
           break;
         case 4:
-          putAPI(`/oneday/create/${tmpOnedayId}/content`, {
-            oneDayContent: savedOnedayData.oneDayContent,
-          })
-            .then((res) => console.log(res.data.message))
-            .catch((error) => console.log(error));
+          if (
+            savedOnedayData.oneDayContent === null ||
+            savedOnedayData.oneDayContent === undefined ||
+            savedOnedayData.oneDayContent.length === 0
+          ) {
+            swal("이벤트 내용을 입력해주세요!");
+          } else if (
+            savedOnedayData.oneDayImage === null ||
+            savedOnedayData.oneDayImage === undefined
+          ) {
+            swal("이벤트 이미지를 등록해주세요!");
+          } else {
+            putAPI(`/oneday/create/${tmpOnedayId}/content`, {
+              oneDayContent: savedOnedayData.oneDayContent,
+            })
+              .then((res) => {
+                console.log(res.data.message);
+                setOnedayStep(5);
+              })
+              .catch((error) => console.log(error));
+          }
           break;
         case 5:
-          putAPI(`/oneday/create/${tmpOnedayId}/time`, {
-            oneDayStartTime: savedOnedayData.oneDayStartTime,
-          })
-            .then((res) => console.log(res.data.message))
-            .catch((error) => console.log(error));
+          if (
+            savedOnedayData.oneDayStartTime === null ||
+            savedOnedayData.oneDayStartTime === undefined
+          ) {
+            swal("이벤트 시작 시간을 입력해주세요!");
+          } else {
+            putAPI(`/oneday/create/${tmpOnedayId}/time`, {
+              oneDayStartTime: savedOnedayData.oneDayStartTime,
+            })
+              .then((res) => {
+                console.log(res.data.message);
+                setOnedayStep(6);
+              })
+              .catch((error) => console.log(error));
+          }
           break;
         case 6:
-          putAPI(`/oneday/create/${tmpOnedayId}/location`, {
-            oneDayLocation: savedOnedayData.oneDayLocation,
-            oneDayLatitude: savedOnedayData.oneDayLatitude,
-            oneDayLongitude: savedOnedayData.oneDayLongitude,
-          })
-            .then((res) => console.log(res.data.message))
-            .catch((error) => console.log(error));
+          if (
+            savedOnedayData.oneDayLocation === null ||
+            savedOnedayData.oneDayLocation === undefined ||
+            savedOnedayData.oneDayLatitude === null ||
+            savedOnedayData.oneDayLatitude === undefined ||
+            savedOnedayData.oneDayLongitude === null ||
+            savedOnedayData.oneDayLongitude === undefined
+          ) {
+            swal("장소를 입력해주세요!");
+          } else {
+            putAPI(`/oneday/create/${tmpOnedayId}/location`, {
+              oneDayLocation: savedOnedayData.oneDayLocation,
+              oneDayLatitude: savedOnedayData.oneDayLatitude,
+              oneDayLongitude: savedOnedayData.oneDayLongitude,
+            })
+              .then((res) => {
+                console.log(res.data.message);
+                setOnedayStep(7);
+              })
+              .catch((error) => console.log(error));
+          }
+
           break;
         case 7:
-          putAPI(`/oneday/create/${tmpOnedayId}/policy`, {
-            genderPolicy: savedOnedayData.genderPolicy,
-            agePolicy: savedOnedayData.agePolicy,
-          })
-            .then((res) => console.log(res.data.message))
-            .catch((error) => console.log(error));
+          if (
+            savedOnedayData.genderPolicy === null ||
+            savedOnedayData.genderPolicy === undefined
+          ) {
+            swal("성별 제한을 입력해주세요!");
+          } else if (
+            savedOnedayData.agePolicy === null ||
+            savedOnedayData.agePolicy === undefined
+          ) {
+            swal("나이 제한을 입력해주세요!");
+          } else {
+            putAPI(`/oneday/create/${tmpOnedayId}/policy`, {
+              genderPolicy: savedOnedayData.genderPolicy,
+              agePolicy: savedOnedayData.agePolicy,
+            })
+              .then((res) => {
+                console.log(res.data.message);
+                setOnedayStep(8);
+              })
+              .catch((error) => console.log(error));
+          }
           break;
         case 8:
-          putAPI(`/oneday/create/${tmpOnedayId}/maxgroupsize`, {
-            size: savedOnedayData.oneDayGroupSize,
-          })
-            .then((res) => console.log(res.data.message))
-            .catch((error) => console.log(error));
+          if (
+            savedOnedayData.oneDayGroupSize === null ||
+            savedOnedayData.oneDayGroupSize === undefined
+          ) {
+            swal("쵀대 인원 수를 입력해주세요!");
+          } else {
+            putAPI(`/oneday/create/${tmpOnedayId}/maxgroupsize`, {
+              size: savedOnedayData.oneDayGroupSize,
+            })
+              .then((res) => {
+                console.log(res.data.message);
+                setOnedayStep(9);
+              })
+              .catch((error) => console.log(error));
+          }
           break;
         default:
           break;
@@ -118,11 +251,7 @@ function CreateOnedayForm() {
               <OnedayStep2
                 savedOnedayData={savedOnedayData}
                 setSavedOnedayData={setSavedOnedayData}
-                tag={
-                  onedayOptions.categoryAndTagList[
-                    savedOnedayData.oneDayCategory
-                  ]
-                }
+                tag={onedayOptions.categoryAndTagList[savedOnedayData.category]}
                 handleOnedayStep={handleOnedayStep}
                 onedayStep={onedayStep}
               />
@@ -225,18 +354,18 @@ function OnedayStep1({
         onedayStep={onedayStep}
       >
         <div className="grid grid-cols-3 gap-x-[122px] gap-y-[60px] justify-items-center w-full h-full">
-          {categoryList.map((category, i) => {
+          {categoryList?.map((category, i) => {
             return (
               <button
                 key={i}
                 onClick={() => {
                   setSavedOnedayData({
                     ...savedOnedayData,
-                    oneDayCategory: category,
+                    category: category,
                   });
                 }}
                 className={`${
-                  category === savedOnedayData.oneDayCategory
+                  category === savedOnedayData.category
                     ? "bg-neutral-400"
                     : "bg-white"
                 }  w-[180px] h-[60px]  rounded-full shadow-cms`}
@@ -266,33 +395,39 @@ function OnedayStep2({
         onedayStep={onedayStep}
       >
         <div className="grid grid-cols-3 gap-x-[122px] gap-y-[60px] justify-items-center w-full h-full">
-          {tag.map((tag, i) => {
+          {tag?.map((tag, i) => {
             return (
               <>
                 <button
                   key={i}
                   onClick={() => {
                     setSavedOnedayData(() => {
-                      if (savedOnedayData.oneDayTag.includes(tag)) {
-                        let deletedTagArr = [...savedOnedayData.oneDayTag];
+                      if (savedOnedayData?.tag?.includes(tag)) {
+                        let deletedTagArr = [...savedOnedayData.tag];
                         deletedTagArr.splice(deletedTagArr.indexOf(tag), 1);
-                        return { ...savedOnedayData, oneDayTag: deletedTagArr };
+                        return { ...savedOnedayData, tag: deletedTagArr };
                       } else {
-                        if (savedOnedayData.oneDayTag.length === 3) {
-                          let newTagArr = [...savedOnedayData.oneDayTag];
+                        if (savedOnedayData?.tag?.length === 3) {
+                          let newTagArr = [...savedOnedayData.tag];
                           newTagArr.shift();
                           newTagArr.push(tag);
-                          return { ...savedOnedayData, oneDayTag: newTagArr };
+                          return { ...savedOnedayData, tag: newTagArr };
                         } else {
-                          let addTagArr = [...savedOnedayData.oneDayTag];
-                          addTagArr.push(tag);
-                          return { ...savedOnedayData, oneDayTag: addTagArr };
+                          if (savedOnedayData?.tag) {
+                            let addTagArr = [...savedOnedayData?.tag];
+                            addTagArr.push(tag);
+                            return { ...savedOnedayData, tag: addTagArr };
+                          } else {
+                            let addTagArr = [];
+                            addTagArr.push(tag);
+                            return { ...savedOnedayData, tag: addTagArr };
+                          }
                         }
                       }
                     });
                   }}
                   className={`${
-                    savedOnedayData?.oneDayTag.includes(tag)
+                    savedOnedayData?.tag?.includes(tag)
                       ? "bg-neutral-400"
                       : "bg-white"
                   }  w-[180px] h-[60px]  rounded-full shadow-cms`}
@@ -751,7 +886,7 @@ function CreateOnedayFormLayout({
             {children}
           </div>
           <div className="py-16 flex gap-20">
-            {onedayStep > 1 && (
+            {onedayStep > 1 && onedayStep < 9 && (
               <button
                 onClick={handleOnedayStep}
                 className="w-[224px] h-[60px] bg-[#747474] text-white rounded-full"
@@ -760,13 +895,15 @@ function CreateOnedayFormLayout({
                 이전
               </button>
             )}
-            <button
-              onClick={handleOnedayStep}
-              className="w-[224px] h-[60px] bg-green-600 text-white rounded-full"
-              name="next"
-            >
-              다음
-            </button>
+            {onedayStep >= 1 && onedayStep < 9 && (
+              <button
+                onClick={handleOnedayStep}
+                className="w-[224px] h-[60px] bg-green-600 text-white rounded-full"
+                name="next"
+              >
+                다음
+              </button>
+            )}
           </div>
         </>
       </div>

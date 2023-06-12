@@ -4,7 +4,6 @@ import Fade from "react-reveal/Fade";
 
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
-import Navbar from "../component/Navbar";
 // import ReviewCard from "../component/ReviewCard";
 // import CreateClub from "./CreateClub";
 import { getAPI } from "../axios";

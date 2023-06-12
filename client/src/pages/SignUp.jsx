@@ -306,7 +306,7 @@ function SignUp() {
 
                 <div style={{ width: '36%' }} id="bir_dd">
                   {/* <span class="box"> */}
-                  <select style={{ width: '100%' }} value={userInput.day} type="text" id="dd" class="int h-12 rounded-lg px-3.5 py-2 shadow" maxlength="2" placeholder="일" name='day' onChange={handleInput} />
+                  <select style={{ width: '100%', color: '#9d9d9d' }} value={userInput.day} type="text" id="dd" class="int h-12 rounded-lg px-3.5 py-2 shadow" maxlength="2" placeholder="일" name='day' onChange={handleInput}>
                   <option>일</option>
                     <option value="01">1</option>
                     <option value="02">2</option>
@@ -339,6 +339,7 @@ function SignUp() {
                     <option value="29">29</option>
                     <option value="30">30</option>
                     <option value="31">31</option>
+                    </select>
                   {/* </span> */}
                 </div>
 

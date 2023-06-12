@@ -32,7 +32,7 @@ const Router = () => {
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/signup/social" element={<SignUpSocial />} />
+          <Route path="/social/signup" element={<SignUpSocial />} />
           <Route path="/user/mypage" element={<MyInfoClub />} />
           <Route path="/user/mypage/oneday" element={<MyInfoOneday />} />
           <Route path="/create-club-form" element={<CreateClubForm />} />

@@ -1,4 +1,4 @@
-import CreateClub from "../pages/CreateClub";
+// import CreateClub from "../pages/CreateClub";
 
 import Heading from "./Heading";
 
@@ -22,7 +22,7 @@ const EmptyState = ({
           )}
           {showReset && (
             <>
-              <CreateClub />
+              {/* <CreateClub /> */}
             </>
           )}
         </div>

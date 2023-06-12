@@ -22,13 +22,13 @@ export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput,
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] font-semibold items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-[100px] overflow-hidden">
                         <div className="flex w-[800px] py-[128px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
-                                <span className="text-[20px] text-left">1. 관심사를 선택하세요.</span>
+                                <span className="text-[30px] text-left">1. 관심사를 선택하세요.</span>
                             </div>
                             <div className="flex flex-1 items-center justify-center">
                                 <div className="grid grid-cols-3 gap-x-[120px] gap-y-[59px] w-auto h-auto mb-4">
@@ -40,8 +40,8 @@ export const Step1 = ({ nextStep, progress, handleCategoryChange, categoryInput,
                                         >
                                             <div className="flex items-center justify-center gap-x-2">
                                                 <img className="w-[23px] h-[23px]"
-                                                src={imgArr[index]}
-                                                alt="categoryIcon"
+                                                    src={imgArr[index]}
+                                                    alt="categoryIcon"
                                                 ></img>
                                                 <div>{category}</div>
                                             </div>
@@ -66,14 +66,14 @@ export const Step2 = ({ nextStep, prevStep, handleTagClick, progress, handleTagC
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] font-semibold items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                             <div className="flex w-[800px] py-[187px] justify-center items-center flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
-                                    <span className="text-[20px] text-left">2. 원하는 카테고리를 선택하세요.</span>
+                                    <span className="text-[30px] text-left">2. 원하는 카테고리를 선택하세요.</span>
                                 </div>
                                 <div className="grid grid-cols-3 gap-x-[120px] gap-y-[59px] w-auto h-auto mb-4">
                                     {selectedTags?.map((tag, index) => (
@@ -109,13 +109,13 @@ export const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleIn
             <Container>
                 <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                     <div className="flex flex-col">
-                        <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                        <div className="flex  w-full h-[300px] mt-[140px] font-semibold items-center justify-center ">
                             <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                         </div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                             <div className="flex w-[800px] py-[246px] flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
-                                    <span className="text-[20px] text-left">3. 원하는 일상속 이름을 작성해주세요.</span>
+                                    <span className="text-[30px] text-left">3. 원하는 일상속 이름을 작성해주세요.</span>
                                 </div>
                                 <input className='shadow-cms w-[788px] h-[60px] rounded-3xl mb-4 border-2 px-2'
                                     placeholder="이름을 입력하세요."
@@ -140,13 +140,13 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] font-semibold items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                         <div className="flex w-[800px] py-[79px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
-                                <span className="text-[20px] text-left">4. 일상속 정보를 입력하세요.</span>
+                                <span className="text-[30px] text-left">4. 일상속 정보를 입력하세요.</span>
                             </div>
 
                             <div className="flex flex-col justify-start w-[1200px] items-center gap-x-4 gap-y-2">
@@ -168,10 +168,12 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
                                 <div className="flex  justify-start items-start w-full">
                                     <span className="text-[20px] text-left">2) 일상속 소개 내용을 입력하세요.</span>
                                 </div>
-                                <input
-                                    className='shadow-cms w-[954px] h-[192px] rounded-3xl mb-4 border-2 px-2'
+                                <textarea
+                                    className='shadow-cms w-[954px] h-[192px] rounded-3xl mb-4 border-2 p-2'
                                     placeholder="우리 일상을 소개해주세요."
-                                    type="text" value={contentInput} onChange={handleContentChange} />
+                                    value={contentInput}
+                                    onChange={handleContentChange}
+                                />
                             </div>
 
                             <div className="flex items-center justify-center gap-x-4">
@@ -192,13 +194,13 @@ export const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setS
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] font-semibold items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                         <div className="flex w-[800px] py-[136px] flex-col gap-y-24 z-10">
                             <div className="flex justify-start items-start w-full">
-                                <span className="text-[20px] text-left">5. 함께할 일상속 멤버 조건을 설정하세요.</span>
+                                <span className="text-[30px] text-left">5. 함께할 일상속 멤버 조건을 설정하세요.</span>
                             </div>
                             <div className="flex flex-col gap-y-2">
                                 <div className="flex  justify-start items-start w-full">
@@ -270,14 +272,14 @@ export const Step6 = ({ nextStep, prevStep, progress, handleMaxGroupSizeChange, 
         <Container>
             <section className=" h-[calc(100vh-0px)] flex flex-col items-center ">
                 <div className="flex flex-col">
-                    <div className="flex  w-full h-[300px] mt-[140px] items-center justify-center ">
+                    <div className="flex  w-full h-[300px] mt-[140px] font-semibold items-center justify-center ">
                         <span className="text-[30px]">모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을 만들어보세요!</span>
                     </div>
                     <div>
                         <div className="flex flex-col items-center w-full md:w-[1920px] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                             <div className="flex w-[800px] py-[260px] flex-col gap-y-24 z-10">
                                 <div className="flex justify-start items-start w-full">
-                                    <span className="text-[20px] text-left">6. 몇명과 함께할까요?</span>
+                                    <span className="text-[30px] text-left">6. 몇명과 함께할까요?</span>
                                 </div>
                                 <div>
                                     {maxGroupSize && (
@@ -332,7 +334,7 @@ export const Step7 = ({ prevStep, progress, titleInput, handleSubmit }) => {
                 <div className="flex flex-col">
                     <div className="flex flex-col items-center w-full md:w-[1920px] h-[100vh] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                         <div className="flex w-[800px] h-[100vh] justify-center flex-col gap-y-24 z-10">
-                            <span className="text-[20px] text-center">"{titleInput}"의 정보를 다 입력했어요.
+                            <span className="text-[32px] text-center">"{titleInput}"의 정보를 다 입력했어요.
                                 <br />
                                 개설하여 일상을 진행할까요?</span>
                             <div className="flex items-center justify-center gap-4">
@@ -394,7 +396,7 @@ export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }
         }, 1000);
 
         const timeout = setTimeout(() => {
-            navigate(-1);
+            navigate(`/club`);
         }, 3000);
 
         return () => {
@@ -414,12 +416,12 @@ export const Step8 = ({ prevStep, progress, handleSubmit, titleInput, navigate }
                     <div className="flex flex-col items-center w-full md:w-[1920px] h-[100vh] shadow-cm  bg-[#FFFCF2] rounded-t-[100px]">
                         <div className="flex w-[800px] h-[100vh] justify-center flex-col gap-y-24 z-10">
                             <div className="flex flex-col justify-center items-center w-full">
-                                <span className="text-[20px] text-center">"{titleInput}"개설완료 <br /> 당신의 일상을 함께하세요!</span>
+                                <span className="text-[30px] text-center">"{titleInput}"개설완료 <br /> 당신의 일상을 함께하세요!</span>
                                 <br />
                                 <span className="text-[20px] text-center"> {counter}초뒤 이전 화면으로 넘어갑니다.</span>
                             </div>
                             <div className="flex items-center justify-center gap-4">
-                                <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={() => { navigate(`/`) }}>홈으로</button>
+                                <button className="w-[14rem] h-[3.8rem] bg-[#FF7F1E] text-white rounded-3xl" onClick={() => { navigate(`/club`) }}>이전으로</button>
                             </div>
                         </div>
                     </div>

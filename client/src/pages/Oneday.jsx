@@ -6,7 +6,7 @@ import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
 import Navbar from "../component/Navbar";
 // import ReviewCard from "../component/ReviewCard";
-import CreateClub from "./CreateClub";
+// import CreateClub from "./CreateClub";
 import { getAPI } from "../axios";
 import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
@@ -43,37 +43,39 @@ function Oneday() {
   // const [categories, setCategories] = useState(null);
   const [onedayData, setOnedayData] = useState([]);
 
-  const [queryResults1, queryResults2] = useQueries(
-    [
-      {
-        queryKey: "categories",
-        queryFn: () => getAPI("/enums"),
-      },
-      // {
-      //   queryKey: ['club', page],
-      //   queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
-      //   onSuccess: ((data) => {
-      //     setFilteredOnedayList(data?.data?.content)
-      //   })
-      // },
-      {
-        queryKey: ["oneday", onedayData],
-        // queryFn: () => getAPI(`/oneday`),
-        queryFn: () => getAPI(`/oneday?page=0&size=6&sort=createdAt,DESC`),
-        onSuccess: (data) => {
-          setFilteredOnedayList(data?.data?.content);
-          setOnedayData(data?.data?.content);
-        },
-      },
-    ],
+  const [queryResults1, queryResults2] = useQueries([
+    {
+      queryKey: 'categories',
+      queryFn: () => getAPI('/enums'),
+      refetchOnWindowFocus: false,
+    },
+    // {
+    //   queryKey: ['club', page],
+    //   queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
+    //   refetchOnWindowFocus: false,
+    //   onSuccess: ((data) => {
+    //     setFilteredOnedayList(data?.data?.content)
+    //   })
+    // },
+    {
+      queryKey: ['oneday', onedayData],
+      // queryFn: () => getAPI(`/oneday`),
+      queryFn: () => getAPI(`/oneday?page=0&size=6&sort=createdAt,DESC`),
+      refetchOnWindowFocus: false,
+      onSuccess: ((data) => {
+        setFilteredOnedayList(data?.data?.content)
+        setOnedayData(data?.data?.content)
+      })
+    }
+  ],
     {
       // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
-      waitFor: "all",
-    }
+      waitFor: 'all',
+    },
   );
 
-  console.log("onedayData", onedayData);
-  console.log(queryResults2);
+  console.log("onedayData", onedayData)
+  console.log(queryResults2)
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
   //   const res1 = queryResults[0];
   //   const res2 = queryResults[1];
@@ -177,6 +179,9 @@ function Oneday() {
                 backgroundPosition: "center",
               }}
             >
+
+              <p>당신의 특별한 하루</p>
+              <p>'하루속'에서 함께하세요!</p>
             </div>
           </section>
         </div>
@@ -267,6 +272,7 @@ function Oneday() {
                         );
                       })
                     )}
+
                   </div>
                 </div>
                 {filteredOnedayList.length >= 6 && totalPages > page + 1 && (
@@ -316,7 +322,16 @@ function Oneday() {
                   내가 찾는 하루속 이벤트가 없다면?
                 </p>
                 <div className="text-green-400 text-xl font-sans">
-                  <CreateClub />
+                  {/* <CreateClub /> */}
+                  <button
+                    className="flex gap-x-1 justify-center items-center"
+                    onClick={() => navigate(`/create-feed`)}
+                  >하루속 만들러가기
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/oneday/arrow_green.png`}
+                      alt="create-club"
+                    />
+                  </button>
                 </div>
                 {/* </div> */}
               </div>

@@ -6,7 +6,7 @@ import Fade from "react-reveal/Fade";
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
 // import ReviewCard from "../component/ReviewCard";
-import CreateClub from "./CreateClub";
+// import CreateClub from "./CreateClub";
 import { getAPI } from "../axios";
 import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
@@ -345,7 +345,16 @@ function Club() {
                 내가 찾는 일상속 이벤트가 없다면?
               </p>
               <div className="text-orange-400 text-xl font-sans">
-                <CreateClub />
+                {/* <CreateClub /> */}
+                <button
+                    className="flex gap-x-1 justify-center items-center"
+                    onClick={() => navigate(`/create-feed`)}
+                  >일상속 만들러가기
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/club/arrow_orange.png`}
+                      alt="create-club"
+                    />
+                  </button>
               </div>
               {/* </div> */}
             </div>

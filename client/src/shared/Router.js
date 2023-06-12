@@ -33,8 +33,8 @@ const Router = ({clientRef, testClient}) => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/user/signup" element={<SignUp />} />
-          <Route path="/user/social/signup" element={<SignUpSocial />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup/social" element={<SignUpSocial />} />
           <Route path="/user/mypage" element={<MyInfoClub />} />
           <Route path="/user/mypage/oneday" element={<MyInfoOneday />} />
           <Route path="/create-club-form" element={<CreateClubForm />} />

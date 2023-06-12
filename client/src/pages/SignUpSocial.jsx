@@ -97,7 +97,7 @@ function SignUpSocial() {
 
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_SERVER_URL}/user/social/signup`,
+                `${process.env.REACT_APP_SERVER_URL}/user/signup/social`,
                 data,
                 { headers: headers }
             )
@@ -287,7 +287,7 @@ function SignUpSocial() {
                     )}
                 </div>
                 <hr />
-                <button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-12 h-[60px]`} >
+                <button type='submit' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-12 h-[60px]`} >
                     가입하기
                 </button>
             </form>

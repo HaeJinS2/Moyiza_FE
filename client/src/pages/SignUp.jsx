@@ -162,9 +162,127 @@ function SignUp() {
   const colorBtn = isAllValid ? btn1 : btn2;
   //btn1은 아예 클릭이 안되게 수정해야 함
 
+
+
+  // const submitHandler = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  
+  //   const data = {
+  //     name: name,
+  //     email: email,
+  //     password: pw,
+  //     nickname: nickname,
+  //     gender: gender,
+  //     birth: birth,
+  //     phone: phoneNum,
+  //   };
+  
+  //   const serializedData = JSON.stringify(data);
+  //   const blobData = new Blob([serializedData], { type: 'application/json' });
+  
+  //   formData.append('data', blobData);
+  //   const base64ToBlob = (base64String, contentType = '') => {
+  //     const byteCharacters = atob(base64String);
+  //     const byteArrays = [];
+
+  //     for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+  //       const slice = byteCharacters.slice(offset, offset + 512);
+  //       const byteNumbers = new Array(slice.length);
+
+  //       for (let i = 0; i < slice.length; i++) {
+  //         byteNumbers[i] = slice.charCodeAt(i);
+  //       }
+
+  //       const byteArray = new Uint8Array(byteNumbers);
+  //       byteArrays.push(byteArray);
+  //     }
+
+  //     return new Blob(byteArrays, { type: contentType });
+  //   };
+  
+  //   if (imageFile) {
+  //     const base64Header = 'data:image/jpeg;base64,';
+  //     const base64String = imageFile.replace(base64Header, '');
+  //     const decodedImageFile = base64ToBlob(base64String, 'image/jpeg');
+  //     formData.append('imageFile', decodedImageFile);
+  //   }
+  
+  //   try {
+  //     const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData);
+  //     console.log(response.data);
+  //     alert('회원가입 성공!');
+  //     goLogin();
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert(error.request.response);
+  //   }
+  // };
+  
+    
+  // const submitHandler = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  
+  //   const data = {
+  //     name: name,
+  //     email: email,
+  //     password: pw,
+  //     nickname: nickname,
+  //     gender: gender,
+  //     birth: birth,
+  //     phone: phoneNum,
+  //   };
+  
+  //   const serializedData = JSON.stringify(data);
+  //   const blobData = new Blob([serializedData], { type: 'application/json' });
+  
+  //   formData.append('data', blobData);
+  //   const base64ToBlob = (base64String, contentType = '') => {
+  //     const byteCharacters = atob(base64String);
+  //     const byteArrays = [];
+
+  //     for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+  //       const slice = byteCharacters.slice(offset, offset + 512);
+  //       const byteNumbers = new Array(slice.length);
+
+  //       for (let i = 0; i < slice.length; i++) {
+  //         byteNumbers[i] = slice.charCodeAt(i);
+  //       }
+
+  //       const byteArray = new Uint8Array(byteNumbers);
+  //       byteArrays.push(byteArray);
+  //     }
+
+  //     return new Blob(byteArrays, { type: contentType });
+  //   };
+  //   if (imageFile) {
+  //     const base64Header = 'data:image/jpeg;base64,';
+  //     const base64String = imageFile.replace(base64Header, '');
+  //     const decodedImageFile = base64ToBlob(base64String, 'image/jpeg');
+  //     formData.append('imageFile', decodedImageFile);
+  //   }
+  
+  //   try {
+  //     const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     });
+  //     console.log(response.data);
+  //     alert('회원가입 성공!');
+  //     goLogin();
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert(error.request.response);
+  //   }
+  // };
+  
+    
   const submitHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+  
     const data = {
       name: name,
       email: email,
@@ -173,8 +291,12 @@ function SignUp() {
       gender: gender,
       birth: birth,
       phone: phoneNum,
-
-    }
+    };
+  
+    const jsonData = JSON.stringify(data);
+    const jsonDataBlob = new Blob([jsonData], { type: 'application/json' });
+  
+    formData.append('data', jsonDataBlob);
 
     const base64ToBlob = (base64String, contentType = '') => {
       const byteCharacters = atob(base64String);
@@ -194,33 +316,29 @@ function SignUp() {
 
       return new Blob(byteArrays, { type: contentType });
     };
-
-    // const json = JSON.stringify(data);
-    const blob = new Blob([JSON.stringify(data)], {
-      type: "application/json",
-    });
-    // const imgblob = new Blob([imageFile], { type: "image/jpeg" })
-
-    formData.append('data', blob);
+  
     if (imageFile) {
-      const blobImageFile = base64ToBlob(imageFile.replace(/^data:image\/[a-z]+;base64,/, ''), 'image/jpeg');
-      formData.append('imageFile', blobImageFile);
-    } else {
-
-      setImageFile(null);
-      formData.append('imageFile', imageFile);
+      const base64Header = 'data:image/jpeg;base64,';
+      const base64String = imageFile.replace(base64Header, '');
+      const decodedImageFile = base64ToBlob(base64String, 'image/jpeg');
+      formData.append('imageFile', decodedImageFile);
     }
+  
     try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData);
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       console.log(response.data);
       alert('회원가입 성공!');
       goLogin();
-
     } catch (error) {
       console.error(error);
       alert(error.request.response);
     }
   };
+  
 
   return (
     <>
@@ -390,7 +508,7 @@ function SignUp() {
                 autoComplete="username"
               />
               {/* 이메일 인증 */}
-              <button onClick={handleConfirmEmail} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 px-4 py-1 shadow hover:shadow-lg ">인증번호 전송</button>
+              <button type='button' onClick={handleConfirmEmail} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 px-4 py-1 shadow hover:shadow-lg ">인증번호 전송</button>
             </div>
             <div className='flex items-center'>
               <div style={{ width: '27%' }}></div>
@@ -411,8 +529,8 @@ function SignUp() {
               <input value={verificationCode}
                 onChange={handleVerificationCodeChange} 
                 style={{ width: '28%', marginRight: '3%' }} placeholder="인증번호" className="h-12 rounded-lg px-3.5 py-2 shadow" type="text" />
-              <button onClick={handleConfirm} style={{ width: '14%', marginRight: '3%', backgroundColor: '#FF7F1E', color: '#fff' }} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 hover:shadow-lg">확인</button>
-              <button onClick={handleFind} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">재전송</button>
+              <button type='button' onClick={handleConfirm} style={{ width: '14%', marginRight: '3%', backgroundColor: '#FF7F1E', color: '#fff' }} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 hover:shadow-lg">확인</button>
+              <button type='button' onClick={handleFind} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">재전송</button>
             </div>
 
             {/* 휴대폰 입력 */}
@@ -507,7 +625,7 @@ function SignUp() {
               </label>
             </div>
             <hr />
-            <button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-20`} >
+            <button type='submit' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-20`} >
               가입하기
             </button>
           </form>

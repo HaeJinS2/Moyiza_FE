@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
-
+import swal from 'sweetalert';
 
 function SignUpSocial() {
   //회원가입 성공 시, 로그인 페이지로 이동
@@ -44,19 +44,19 @@ function SignUpSocial() {
   const birth = `${year}-${month}-${day}`;
   // 닉네임 중복 검사
   const nicknameValidationPost = async ({ nickname }) => {
-    const response = await axios.post("http://13.125.51.14/user/check/nickname", { nickname });
+    const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}user/check/nickname`, { nickname });
     return response.data;
   };
 
   const validationMutation = useMutation(nicknameValidationPost, {
     onSuccess: (data) => {
       if (data.isDuplicatedNick === false) {
-        alert('사용가능한 아이디입니다.');
+        swal('사용가능한 아이디입니다.');
       }
     },
     onError: (data) => {
       if (data.response.data.message === "중복된 닉네임 사용") {
-        alert('이미 사용중인 아이디입니다.');
+        swal('이미 사용중인 아이디입니다.');
       }
     },
   });
@@ -83,33 +83,36 @@ function SignUpSocial() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
     const data = {
       name: name,
       nickname: nickname,
       gender: gender,
       birth: birth,
       phone: phoneNum,
-
-    }
-
-    const blob = new Blob([JSON.stringify(data)], {
-      type: "application/json",
-    });
-
-    formData.append('data', blob);
+    };
+  
+    const headers = {
+      "Content-Type": "application/json",
+    };
   
     try {
-      const response = await axios.post("http://13.125.51.14/user/signup", formData);
-      console.log(response.data);
-      alert('회원가입 성공!');
-      goLogin();
+      const response = await axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/user/social/signup`,
+        data, 
+        { headers: headers } 
+      );
 
+      
+      console.log(response.data);
+      swal("회원가입 성공!");
+      goLogin();
     } catch (error) {
+        console.log('data',data);
       console.error(error);
-      alert(error.request.response);
+      swal(error.request.response);
     }
   };
+  
 
   return (
     <>
@@ -195,7 +198,39 @@ function SignUpSocial() {
 
                 <div style={{ width: '36%' }} id="bir_dd">
                   {/* <span class="box"> */}
-                  <input style={{ width: '100%' }} value={userInput.day} type="text" id="dd" class="int h-12 rounded-lg px-3.5 py-2 shadow" maxlength="2" placeholder="일" name='day' onChange={handleInput} />
+                  <select style={{ width: '100%' }} value={userInput.day} type="text" id="dd" class="int h-12 rounded-lg px-3.5 py-2 shadow" maxlength="2" placeholder="일" name='day' onChange={handleInput} />
+                  <option>일</option>
+                    <option value="01">1</option>
+                    <option value="02">2</option>
+                    <option value="03">3</option>
+                    <option value="04">4</option>
+                    <option value="05">5</option>
+                    <option value="06">6</option>
+                    <option value="07">7</option>
+                    <option value="08">8</option>
+                    <option value="09">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
                   {/* </span> */}
                 </div>
 

@@ -15,8 +15,8 @@ function MyInfoOneday() {
 
     // const [activeTab, setActiveTab] = useState([pageTabs[0]]); // 배열로 초기화
     const navigate = useNavigate();
-    const goClub = () => {
-        navigate('/club');
+    const goOneday = () => {
+        navigate('/oneday');
     };
     const [nickname, setNickname] = useState(null);
     const [email, setEmail] = useState(null);
@@ -130,7 +130,7 @@ function MyInfoOneday() {
                                                         <div className='flex flex-col items-center justify-center w-[1200px]'>
                                                             <p className='text-[20px] mt-[109px]'>참여중인 하루속이 없어요.</p>
                                                             <p className='text-[20px] mt-[5px] mb-[18px]'>하루를 즐기러 가볼까요?</p>
-                                                            <button onClick={goClub} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#fff] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
+                                                            <button onClick={goOneday} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#fff] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
                                                                 +
                                                             </button>
                                                         </div>

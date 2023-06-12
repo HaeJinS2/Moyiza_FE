@@ -35,6 +35,7 @@ function Club() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[0]);
 
+  const [searchPage, setSearchPage] = useState(0);
   const [page, setPage] = useState(0);
   // const [pageChanged, setPageChanged] = useState(false);
 
@@ -119,14 +120,38 @@ function Club() {
   }, []);
 
   //카테고리에 따라 검색하는 코드
-  const handleClubCategory = (e) => {
+  const handleClubCategory = async (e) => {
     logEvent("Button Clicked", { name: "handleClubCategory", page: "Club" });
+    setActiveTab(e.currentTarget.textContent);
+    setSearchPage(0);
     if (e.currentTarget.textContent === "전체") {
       setFilteredClubList(club);
     } else {
-      getAPI(`/club/search?q=&category=${e.currentTarget.textContent}`)
-        .then((res) => setFilteredClubList(res.data.content.slice(0, 6)))
-        .catch((err) => setFilteredClubList([]));
+      try {
+        getAPI(
+          `/club/search?q=&category=${e.currentTarget.textContent}&page=0&size=6`
+        ).then((res) => {
+          setFilteredClubList([...res.data.content]);
+        });
+      } catch (err) {
+        setFilteredClubList([]);
+      }
+    }
+  };
+
+  const handleMore = async () => {
+    if (activeTab === "전체") {
+      setPage(page + 1);
+    } else {
+      try {
+        setSearchPage((prev) => prev + 1);
+        const res = await getAPI(
+          `/club/search?q=&category=${activeTab}&page=${searchPage + 1}&size=6`
+        );
+        setFilteredClubList((prev) => [...prev, ...res.data.content]);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -148,7 +173,7 @@ function Club() {
                 }}
                 className={`${
                   activePageTab === tab ? "text-black" : "hover:opacity-50"
-                } relative rounded-full px-3 py-1.5  text-black outline-2 transition focus-visible:outline`}
+                } relative rounded-full px-3 py-1.5 text-black outline-2 transition focus-visible:outline`}
               >
                 {activePageTab === tab && (
                   <motion.div
@@ -274,19 +299,16 @@ function Club() {
                     )}
                   </div>
                 </div>
-                {filteredClubList.length > 6 && totalPages > page + 1 && (
-                  <div className="flex justify-center  pb-12">
-                    <button
-                      onClick={() => {
-                        setPage(page + 1);
-                        // setPageChanged(true)
-                      }}
-                      className="bg-orange-400 text-white px-3 py-2 rounded-full"
-                    >
-                      더보기
-                    </button>
-                  </div>
-                )}
+                {/* {filteredClubList.length > 6 && totalPages > page + 1 && ( */}
+                <div className="flex justify-center  pb-12">
+                  <button
+                    onClick={handleMore}
+                    className="bg-orange-400 text-white px-3 py-2 rounded-full"
+                  >
+                    더보기
+                  </button>
+                </div>
+                {/* )} */}
               </body>
             </div>
             <div className="max-w-[1140px] mx-auto">
@@ -338,7 +360,7 @@ function Club() {
             </div>
           </section>
           <section className="h-auto "></section>
-      <Footer />
+          <Footer />
         </div>
       </div>
     </>

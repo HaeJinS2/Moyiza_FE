@@ -19,10 +19,13 @@ import CreateOnedayForm from "../pages/CreateOnedayForm";
 import MyInfoOneday from "../pages/MyInfoOneday";
 import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
+import SignUpSocial from "../pages/SignUpSocial";
 
-const Router = () => {
+const Router = ({clientRef, testClient}) => {
+  
   const roomIdState = useRecoilValue(roomIdStates);
   console.log(roomIdState)
+  console.log("testClient",testClient)
   return (
     <>
       <BrowserRouter>
@@ -30,7 +33,8 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/user/signup" element={<SignUp />} />
+          <Route path="/user/social/signup" element={<SignUpSocial />} />
           <Route path="/user/mypage" element={<MyInfoClub />} />
           <Route path="/user/mypage/oneday" element={<MyInfoOneday />} />
           <Route path="/create-club-form" element={<CreateClubForm />} />
@@ -49,7 +53,7 @@ const Router = () => {
         </Routes>
         {roomIdState ?
           roomIdState.map((item, index) =>
-            <ChatWindow style={{ right: `${index * 370}px` }} key={index} roomIdState={item} />)
+            <ChatWindow  clientRef={clientRef}  style={{ right: `${index * 370}px` }} key={index} roomIdState={item} />)
           : null}
         {/* <ChatWindow /> */}
       </BrowserRouter>

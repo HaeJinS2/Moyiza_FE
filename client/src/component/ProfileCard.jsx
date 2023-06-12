@@ -12,6 +12,8 @@ function ProfileCard({
 
 }) {
     const navigate = useNavigate();
+
+    
     return (
         <>
 
@@ -36,14 +38,16 @@ function ProfileCard({
                         </div>
                     </div>
 
-                    <div className="text-[16px] text-[#686868] mt-[16px] w-[450px] h-[77px]">
+                    <div className="truncate hover:text-clip text-[16px] text-[#686868] mt-[16px] w-[450px] h-[77px]">
                         {clubContent}
                         {/* 매주 수요일 7시 화곡역에 만나서 러닝해요! 운동목적모임입니다! */}
                     </div>
                     <div className="text-[16px] text-orange-400 mt-[20px] mb-[10px] w-[813px] h-[31px] flex">
                         {clubTag.map((tag) => {
                             return (
-                                <div className="rounded-full mr-2 b-1 border-2 px-2 py-1 border-orange-400 flex justify-start">
+                                <div
+                                    key={tag}
+                                    className="rounded-full mr-2 b-1 border-2 px-2 py-1 border-orange-400 flex justify-start">
                                     {tag}
                                 </div>
                             );

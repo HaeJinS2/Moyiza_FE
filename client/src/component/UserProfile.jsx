@@ -4,24 +4,17 @@ import Frame from '../component/img/Frame.png';
 
 
 function UserProfile({
-    userInfo
+    nickname,
+    email,
+    profileImage
 }) {
 
 
-    const { nickname, profileImage,email } = userInfo || '';
+    // const { nickname, profileImage, email } = UserInfoOnMyPage || '';
     console.log(nickname);
     console.log(profileImage);
+    console.log(email);
     // const [imageFile, setImageFile] = useState(null);
-    // 프로필 사진 입력
-    // const imgRef = useRef();
-    // const onChangeImage = () => {
-    //     let reader = new FileReader();
-    //     let file = imgRef.current.files[0];
-    //     reader.onloadend = () => {
-    //         setImageFile(reader.result);
-    //     }
-    //     reader.readAsDataURL(file);
-    // };
 
     // 모달 스타일 설정
     const modalStyles = {

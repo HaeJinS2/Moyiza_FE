@@ -18,7 +18,7 @@ axios.interceptors.request.use(
             } 
         } 
 
-        if (config.url.includes(`/user/signup`)){
+        if (config.url === '/user/signup'){
             config.headers["Content-Type"] = "multipart/form-data";
         } 
         else if(config.url.includes(`/user/mypage`)){

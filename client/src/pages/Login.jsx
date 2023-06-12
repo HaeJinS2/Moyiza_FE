@@ -12,6 +12,7 @@ import { parseJwt, setCookie } from '../utils/jwtUtils';
 import kakao from '../component/img/kakao.png';
 import naver from '../component/img/naver.png';
 import google from '../component/img/google.png'
+import swal from 'sweetalert';
 
 function Login() {
     // 소셜로그인   
@@ -82,9 +83,9 @@ function Login() {
     const goMain = () => {
         navigate('/');
     };
-
+    
     const handleFind = () => {
-        alert('준비 중입니다');
+        swal('준비 중입니다'); 
     };
 
     const [userloginInput, setUserloginInput] = useState({
@@ -128,11 +129,11 @@ function Login() {
             // 사용자를 로컬 스토리지에 저장
             localStorage.setItem('user', email);
             setIsLoggedIn2(true)
-            alert('로그인 성공');
+            swal('로그인 성공');
             goMain();
         } catch (error) {
             console.log(error);
-            alert('로그인 실패');
+            swal('로그인 실패');
             setUserloginInput({ email: '', password: '' });
         }
     };

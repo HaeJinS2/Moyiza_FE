@@ -19,7 +19,7 @@ import CreateOnedayForm from "../pages/CreateOnedayForm";
 import MyInfoOneday from "../pages/MyInfoOneday";
 import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
-import { useEffect } from "react";
+import SignUpSocial from "../pages/SignUpSocial";
 
 const Router = ({clientRef, testClient}) => {
   
@@ -33,7 +33,8 @@ const Router = ({clientRef, testClient}) => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/user/signup" element={<SignUp />} />
+          <Route path="/user/social/signup" element={<SignUpSocial />} />
           <Route path="/user/mypage" element={<MyInfoClub />} />
           <Route path="/user/mypage/oneday" element={<MyInfoOneday />} />
           <Route path="/create-club-form" element={<CreateClubForm />} />

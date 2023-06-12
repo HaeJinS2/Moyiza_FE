@@ -40,13 +40,14 @@ function Club() {
   // const [pageChanged, setPageChanged] = useState(false);
 
   const [club, setClub] = useState([]);
+
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
   const navigate = useNavigate();
-
+console.log(totalPages)
   //   const [club1, categories1] = useQueries(
   //     [
   //       {

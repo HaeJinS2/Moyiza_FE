@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import { getAPI } from '../axios';
 import { useRecoilState } from "recoil";
 import { userIdState } from "../states/userStateTmp";
-import { roomIdStates } from '../states/chatState';
+import { roomIdStates, roomMsgStates } from '../states/chatState';
 
 function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
     const [messages, setMessages] = useState([]);
@@ -20,6 +20,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
     const [input, setInput] = useState("");
     const [userId, setUserId] = useRecoilState(userIdState);
     const [roomIdList, setRoomIdList] = useRecoilState(roomIdStates);
+    const [roomMsgState, setRoomMsgState] = useRecoilState(roomMsgStates);
     const [headerState, setHeaderState] = useState({})
 
     const messagesEndRef = useRef(null);
@@ -28,11 +29,13 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
     const subscriptionRef = useRef(null);
     const isHandleGetAPIRunning = useRef(false);
 
+    console.log(roomMsgState)
+    
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-        
+
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
         console.log(token);
@@ -206,12 +209,23 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
         }
     };
 
-    const removeChatRoom = () => {
+    const removeChatRoom = (id) => {
         if (subscriptionRef.current) {
             const removeRoom = roomIdList.filter((item) => item !== roomIdState)
             setRoomIdList(removeRoom)
             console.log("subscriptionRef.current", subscriptionRef.current)
             subscriptionRef.current.unsubscribe();
+            if (subscriptionRefAlarm.current) {
+                subscriptionRefAlarm.current[id] = clientRef.current.subscribe(
+                    `/chatalarm/${id}`,
+                    (message) => {
+                        if (message.body) {
+                            let newMessage = JSON.parse(message.body);
+                            setRoomMsgState((prevMessages) => [...prevMessages, newMessage]);
+                        }
+                    }
+                );
+            }
         }
     }
 

@@ -170,14 +170,14 @@ function OnedayDetail() {
       <div ref={divRef} />
       <BodyContainer>
         <div className="flex pt-40 flex-col justify-center items-center gap-10 mb-10">
-          <div className="flex justify-between w-full items-center">
+          <div className="flex justify-between w-[1200px] items-center">
             <button onClick={() => navigate(-1)}>
               <img
                 src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
                 alt="previous_button"
               />
             </button>
-            <div className="font-bold text-2xl">
+            <div className="font-bold text-[2rem]">
               {onedayDetail?.data.oneDayTitle}
             </div>
             {isOwner ? (

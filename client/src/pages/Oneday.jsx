@@ -14,7 +14,7 @@ import Footer from "../component/Footer";
 import { logEvent } from "../utils/amplitude";
 import { useNavigate } from "react-router-dom";
 import RecommendCard from "../component/RecommendCard";
-import { useQueries } from "react-query";
+// import { useQueries } from "react-query";
 
 let pageTabs = ["일상속", "하루속"];
 let imageArr = [
@@ -33,48 +33,47 @@ let imageArr = [
 function Oneday() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[1]);
-
+  const [searchPage, setSearchPage] = useState(0);
   const [page, setPage] = useState(0);
   // const [club, setClub] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   // const [categories, setCategories] = useState(null);
   const [onedayData, setOnedayData] = useState([]);
+  const [categories, setCategories] = useState(null);
+  // const [queryResults1, queryResults2] = useQueries(
+  //   [
+  //     {
+  //       queryKey: "categories",
+  //       queryFn: () => getAPI("/enums"),
+  //       refetchOnWindowFocus: false,
+  //     },
+  //     // {
+  //     //   queryKey: ['club', page],
+  //     //   queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
+  //     //   refetchOnWindowFocus: false,
+  //     //   onSuccess: ((data) => {
+  //     //     setFilteredOnedayList(data?.data?.content)
+  //     //   })
+  //     // },
+  //     {
+  //       queryKey: ["oneday", onedayData],
+  //       // queryFn: () => getAPI(`/oneday`),
+  //       queryFn: () => getAPI(`/oneday?page=${page + 1}&size=6&sort=createdAt,DESC`),
+  //       refetchOnWindowFocus: false,
+  //       onSuccess: (data) => {
+  //         setFilteredOnedayList(data?.data?.content);
+  //         setOnedayData(data?.data?.content);
+  //       },
+  //     },
+  //   ],
+  //   {
+  //     // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
+  //     waitFor: "all",
+  //   }
+  // );
 
-  const [queryResults1, queryResults2] = useQueries(
-    [
-      {
-        queryKey: "categories",
-        queryFn: () => getAPI("/enums"),
-        refetchOnWindowFocus: false,
-      },
-      // {
-      //   queryKey: ['club', page],
-      //   queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
-      //   refetchOnWindowFocus: false,
-      //   onSuccess: ((data) => {
-      //     setFilteredOnedayList(data?.data?.content)
-      //   })
-      // },
-      {
-        queryKey: ["oneday", onedayData],
-        // queryFn: () => getAPI(`/oneday`),
-        queryFn: () => getAPI(`/oneday?page=0&size=6&sort=createdAt,DESC`),
-        refetchOnWindowFocus: false,
-        onSuccess: (data) => {
-          setFilteredOnedayList(data?.data?.content);
-          setOnedayData(data?.data?.content);
-        },
-      },
-    ],
-    {
-      // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
-      waitFor: "all",
-    }
-  );
 
-  console.log("onedayData", onedayData);
-  console.log(queryResults2);
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
   //   const res1 = queryResults[0];
   //   const res2 = queryResults[1];
@@ -98,7 +97,17 @@ function Oneday() {
     // });
 
     // 클럽 전체 페이지를 가져오는 코드
-    getAPI("/club").then((res) => setTotalPages(res.data.totalPages));
+    getAPI(`/oneday?page=${page}&size=6&sort=createdAt,DESC`)
+    .then((res) => {
+      const newContent = [...onedayData, ...res.data.content];
+      setOnedayData(newContent);
+      setFilteredOnedayList(newContent);
+    });
+
+    getAPI(`/oneday`)
+    .then((res) => {
+      setTotalPages(res.data.totalPages)
+    });
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
@@ -110,33 +119,84 @@ function Oneday() {
   //     setCategories(newCategorylist);
   //   });
   // }, []);
-
+  useEffect(() => {
+    // 클럽 카테고리를 가져오는 코드
+    getAPI(`/enums`)
+      .then((res) => {
+        const newCategorylist = ["전체", ...res.data.categoryList];
+        setCategories(newCategorylist);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   //카테고리에 따라 검색하는 코드
   const handleClubCategory = (e) => {
-    logEvent("Button Clicked", { name: "handleClubCategory", page: "Oneday" });
+    logEvent("Button Clicked", { name: "handleOnedayCategory", page: "Oneday" });
+    setActiveTab(e.currentTarget.textContent);
+    setSearchPage(0);
     if (e.currentTarget.textContent === "전체") {
       setFilteredOnedayList(onedayData);
     } else {
-      getAPI(`/oneday/search?q=&category=${e.currentTarget.textContent}`)
-        .then((res) => setFilteredOnedayList(res.data.content))
+      try{
+      getAPI(`/oneday/search?q=&category=${e.currentTarget.textContent}&size=6&page=0`)
+        .then((res) => setFilteredOnedayList([...res.data.content]))
         .catch((err) => setFilteredOnedayList([]));
+      } catch (err) {
+          setFilteredOnedayList([])
+        }
     }
   };
 
-  if (queryResults1.isLoading) return "Loading...";
+
+  // const handleMore = async () => {
+  //   if (activeTab === "전체") {
+  //     setPage(page + 1);
+      
+  //   } else {
+  //     try {
+  //       setSearchPage((prev) => prev + 1);
+  //       const res = await getAPI(
+  //         `/oneday/search?q=&category=${activeTab}&page=${searchPage + 1}&size=6`
+  //       );
+  //       setFilteredOnedayList((prev) => [...prev, ...res.data.content]);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // };
+
+  const handleMore = async () => {
+    try {
+      if (activeTab === "전체") {
+        setPage(page + 1);
+        const res = await getAPI(`/oneday?page=${page + 1}&size=6`);
+        setFilteredOnedayList((prev) => [...prev, ...res.data.content]);
+      } else {
+        setSearchPage((prev) => prev + 1);
+        const res = await getAPI(
+          `/oneday/search?q=&category=${activeTab}&page=${searchPage + 1}&size=6`
+        );
+        setFilteredOnedayList((prev) => [...prev, ...res.data.content]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  // if (queryResults1.isLoading) return "Loading...";
   // if (queryResults1.error || queryResults2.error) return 'An error has occurred: ' + (queryResults1.error?.message || queryResults2.error?.message);
 
-  const categories = [
-    "전체",
-    ...(queryResults1?.data?.data?.categoryList || []),
-  ];
+  // const categories = [
+  //   "전체",
+  //   ...(queryResults1?.data?.data?.categoryList || []),
+  // ];
   // const club = [...(queryResults2?.data?.data?.content || [])];
 
   //  const filteredOnedayList = [...res2?.data?.content];
   if (isLoading) {
     return <Loading />;
   }
-  console.log("이건 필터클럽", filteredOnedayList);
+  console.log("이건 필터원데이", filteredOnedayList);
   return (
     <>
       <div ref={divRef}>
@@ -277,7 +337,7 @@ function Oneday() {
                 {filteredOnedayList.length >= 6 && totalPages > page + 1 && (
                   <div className="flex justify-center mt-10">
                     <button
-                      onClick={() => setPage(page + 1)}
+                      onClick={handleMore}
                       className="bg-green-400 text-white px-3 py-2 rounded-full"
                     >
                       더보기

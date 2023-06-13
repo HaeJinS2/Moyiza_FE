@@ -13,7 +13,9 @@ import {
 import CreateClub from "./CreateClub";
 
 function CreateFeed() {
+  // eslint-disable-next-line
   const [onedayOptions, setOnedayOptions] = useRecoilState(onedayOptionState);
+  // eslint-disable-next-line
   const [tmpOnedayId, setTmpOnedayId] = useRecoilState(onedayTmpIdState);
   // eslint-disable-next-line
   const [savedOnedayData, setSavedOnedayData] =
@@ -32,28 +34,28 @@ function CreateFeed() {
   }
 
   const modalContent = () => {
-    if (savedOnedayData.category === null) {
+    if (savedOnedayData?.category === null) {
       return "아무것도 입력되지 않았습니다.";
-    } else if (savedOnedayData.oneDayTag === null) {
+    } else if (savedOnedayData?.oneDayTag === null) {
       return "관심사까지 입력하셨습니다.";
-    } else if (savedOnedayData.oneDayTitle === null) {
+    } else if (savedOnedayData?.oneDayTitle === null) {
       return "태그까지 입력하셨습니다.";
-    } else if (savedOnedayData.oneDayContent === null) {
+    } else if (savedOnedayData?.oneDayContent === null) {
       return "이벤트 제목까지 입력하셨습니다.";
-    } else if (savedOnedayData.oneDayStartTime === null) {
+    } else if (savedOnedayData?.oneDayStartTime === null) {
       return "이벤트 내용까지 입력하셨습니다.";
     } else if (
-      savedOnedayData.oneDayLocation === null ||
-      savedOnedayData.oneDayLatitude === null ||
-      savedOnedayData.oneDayLongitude === null
+      savedOnedayData?.oneDayLocation === null ||
+      savedOnedayData?.oneDayLatitude === null ||
+      savedOnedayData?.oneDayLongitude === null
     ) {
       return "이벤트 시간까지 입력하셨습니다.";
     } else if (
-      savedOnedayData.agePolicy === null ||
-      savedOnedayData.genderPolicy === null
+      savedOnedayData?.agePolicy === null ||
+      savedOnedayData?.genderPolicy === null
     ) {
       return "이벤트 장소까지 입력하셨습니다.";
-    } else if (savedOnedayData.oneDayGroupSize === null) {
+    } else if (savedOnedayData?.oneDayGroupSize === null) {
       return "성별, 나이 제한까지 입력하셨습니다.";
     }
   };

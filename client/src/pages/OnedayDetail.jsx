@@ -19,7 +19,6 @@ function OnedayDetail() {
   const [isMember, setIsMember] = useState(false);
   // eslint-disable-next-line
   const [isOwner, setIsOwner] = useState(false);
-  const similarOneday = [1, 1, 1, 1, 1, 1];
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
   // 멤버 페이지 관리
   const [memberPage, setMemberPage] = useState(0);

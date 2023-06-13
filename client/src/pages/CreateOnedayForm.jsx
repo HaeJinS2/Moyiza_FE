@@ -24,8 +24,6 @@ function CreateOnedayForm() {
   const [savedOnedayData, setSavedOnedayData] =
     useRecoilState(savedOnedayDataState);
 
- 
-
   useEffect(() => {
     if (savedOnedayData.category === null) {
       setOnedayStep(1);
@@ -59,6 +57,7 @@ function CreateOnedayForm() {
       setOnedayStep(8);
       return;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOnedayStep = (e) => {

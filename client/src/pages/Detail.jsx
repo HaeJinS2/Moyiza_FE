@@ -242,7 +242,7 @@ function Detail() {
                 alt="previous_button"
               />
             </button>
-            <div className="font-bold text-2xl">
+            <div className="font-bold text-[2rem]">
               {clubDetail?.data.clubTitle}
             </div>
             {isOwner ? (

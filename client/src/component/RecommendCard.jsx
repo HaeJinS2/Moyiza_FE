@@ -12,7 +12,7 @@ function RecommendCard({
   return (
     <>
      {page === 'club'?(<div className="relative flex flex-col justify-center">
-        <div className="absolute z-10 top-3 left-6 flex justify-between text-xs text-orange-400">
+        <div className="absolute z-10 top-3 left-10 flex justify-between text-xs text-orange-400">
           <div className="flex gap-2">
             {tag.map((tag) => {
               return (
@@ -23,9 +23,9 @@ function RecommendCard({
             })}
           </div>
         </div>
-        <div className="aspect-square flex-col flex w-full h-full items-center justify-center relative overflow-hidden rounded-xl">
+        <div className=" flex-col flex items-center justify-centeroverflow-hidden rounded-xl">
           <img
-            className="rounded-md w-[219px] h-[219px] object-cover"
+            className="aspect-square rounded-md w-[219px] h-[219px] object-cover"
             src={thumbnail}
             alt="clubThumbnail"
           />

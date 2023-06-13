@@ -47,7 +47,7 @@ function Club() {
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
   const navigate = useNavigate();
-console.log(totalPages)
+  console.log(totalPages);
   //   const [club1, categories1] = useQueries(
   //     [
   //       {
@@ -312,7 +312,7 @@ console.log(totalPages)
                 {/* )} */}
               </body>
             </div>
-            <div className="max-w-[1140px] mx-auto">
+            <div className="max-w-[1140px] mx-auto mb-80">
               <p className="text-[2rem] font-semibold py-4">일상속 추천주제</p>
 
               <div className="flex flex-col justify-between">
@@ -342,20 +342,23 @@ console.log(totalPages)
           <section>
             <div className="min-w-[1280px] flex flex-col bg-[#FFDFC7] items-center gap-4 justify-center h-[300px]">
               {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
-              <p className="text-5xl font-sans font-semibold">
+              <p className=" text-[1.75rem]  font-sans font-semibold">
                 내가 찾는 일상속 이벤트가 없다면?
               </p>
               <div className="text-orange-400 text-xl font-sans">
                 {/* <CreateClub /> */}
                 <button
-                    className="flex gap-x-1 justify-center items-center"
-                    onClick={() => navigate(`/create-feed`)}
-                  >일상속 만들러가기
-                    <img
-                      src={`${process.env.PUBLIC_URL}/images/club/arrow_orange.png`}
-                      alt="create-club"
-                    />
-                  </button>
+                  className="flex gap-x-2 justify-center items-center"
+                  onClick={() => navigate(`/create-feed`)}
+                >
+                  <span className="text-[1.25rem] mt-[5px]">
+                    일상속 만들러가기
+                  </span>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/club/arrow_orange.png`}
+                    alt="create-club"
+                  />
+                </button>
               </div>
               {/* </div> */}
             </div>

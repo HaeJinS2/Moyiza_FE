@@ -16,8 +16,10 @@ import ReactDatePicker from "react-datepicker";
 import { setHours, setMinutes } from "date-fns";
 import { postAPI, putAPI } from "../axios";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
 function CreateOnedayForm() {
+  const navigate = useNavigate()
   const [onedayStep, setOnedayStep] = useState(1);
   const onedayOptions = useRecoilValue(onedayOptionState);
   const tmpOnedayId = useRecoilValue(onedayTmpIdState);
@@ -25,35 +27,35 @@ function CreateOnedayForm() {
     useRecoilState(savedOnedayDataState);
 
   useEffect(() => {
-    if (savedOnedayData.category === null) {
+    if (savedOnedayData?.category === null) {
       setOnedayStep(1);
       return;
-    } else if (savedOnedayData.oneDayTag === null) {
+    } else if (savedOnedayData?.oneDayTag === null) {
       setOnedayStep(2);
       return;
-    } else if (savedOnedayData.oneDayTitle === null) {
+    } else if (savedOnedayData?.oneDayTitle === null) {
       setOnedayStep(3);
       return;
-    } else if (savedOnedayData.oneDayContent === null) {
+    } else if (savedOnedayData?.oneDayContent === null) {
       setOnedayStep(4);
       return;
-    } else if (savedOnedayData.oneDayStartTime === null) {
+    } else if (savedOnedayData?.oneDayStartTime === null) {
       setOnedayStep(5);
       return;
     } else if (
-      savedOnedayData.oneDayLocation === null &&
-      savedOnedayData.oneDayLatitude === null &&
-      savedOnedayData.oneDayLongitude === null
+      savedOnedayData?.oneDayLocation === null &&
+      savedOnedayData?.oneDayLatitude === null &&
+      savedOnedayData?.oneDayLongitude === null
     ) {
       setOnedayStep(6);
       return;
     } else if (
-      savedOnedayData.age === null &&
-      savedOnedayData.gender === null
+      savedOnedayData?.age === null &&
+      savedOnedayData?.gender === null
     ) {
       setOnedayStep(7);
       return;
-    } else if (savedOnedayData.oneDayGroupSize === null) {
+    } else if (savedOnedayData?.oneDayGroupSize === null) {
       setOnedayStep(8);
       return;
     }
@@ -214,7 +216,14 @@ function CreateOnedayForm() {
             })
               .then((res) => {
                 console.log(res.data.message);
-                setOnedayStep(9);
+                postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
+                .then((res) => {
+                  setOnedayStep(9);
+                  swal("하루속 이벤트 개설 완료!");
+                  navigate("/oneday")
+                  setSavedOnedayData({});
+                })
+                .catch((error) => error);
               })
               .catch((error) => console.log(error));
           }
@@ -364,7 +373,7 @@ function OnedayStep1({
                   });
                 }}
                 className={`${
-                  category === savedOnedayData.category
+                  category === savedOnedayData?.category
                     ? "bg-neutral-400"
                     : "bg-white"
                 }  w-[180px] h-[60px]  rounded-full shadow-cms`}
@@ -840,12 +849,6 @@ function OnedayStep9({
   setSavedOnedayData,
   savedOnedayData,
 }) {
-  postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
-    .then((res) => {
-      swal("하루속 이벤트 개설 완료!");
-      setSavedOnedayData({});
-    })
-    .catch((error) => error);
   return (
     <>
       <CreateOnedayFormLayout

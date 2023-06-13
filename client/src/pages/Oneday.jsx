@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import Fade from "react-reveal/Fade";
 
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
@@ -242,7 +241,6 @@ function Oneday() {
                     ) : filteredOnedayList ? (
                       filteredOnedayList?.map((item, i) => {
                         return (
-                          <Fade bottom>
                             <ClubCard
                               page="oneday"
                               key={i}
@@ -254,14 +252,12 @@ function Oneday() {
                               maxGroupSize={item.onedayGroupSize}
                               nowMemberCount={item.onedayAttendantsNum}
                             />
-                          </Fade>
                         );
                       })
                     ) : (
                       // : null
                       onedayData?.map((item, i) => {
                         return (
-                          <Fade bottom>
                             <ClubCard
                               page="oneday"
                               key={i}
@@ -273,7 +269,6 @@ function Oneday() {
                               maxGroupSize={item.onedayGroupSize}
                               nowMemberCount={item.onedayAttendantsNum}
                             />
-                          </Fade>
                         );
                       })
                     )}
@@ -300,7 +295,6 @@ function Oneday() {
                   <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
                     {onedayData?.map((item, i) => {
                       return (
-                        <Fade bottom>
                           <RecommendCard
                             page="oneday"
                             key={i}
@@ -312,7 +306,6 @@ function Oneday() {
                             maxGroupSize={item.onedayGroupSize}
                             nowMemberCount={item.onedayAttendantsNum}
                           />
-                        </Fade>
                       );
                     })}
                   </div>

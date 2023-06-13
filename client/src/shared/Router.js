@@ -21,7 +21,7 @@ import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
 import SignUpSocial from "../pages/SignUpSocial";
 
-const Router = ({clientRef, testClient}) => {
+const Router = ({clientRef, testClient, subscriptionRefAlarm}) => {
   
   const roomIdState = useRecoilValue(roomIdStates);
   console.log(roomIdState)
@@ -53,7 +53,7 @@ const Router = ({clientRef, testClient}) => {
         </Routes>
         {roomIdState ?
           roomIdState.map((item, index) =>
-            <ChatWindow  clientRef={clientRef}  style={{ right: `${index * 370}px` }} key={index} roomIdState={item} />)
+            <ChatWindow  clientRef={clientRef} subscriptionRefAlarm={subscriptionRefAlarm}  style={{ right: `${index * 370}px` }} key={index} roomIdState={item} />)
           : null}
         {/* <ChatWindow /> */}
       </BrowserRouter>

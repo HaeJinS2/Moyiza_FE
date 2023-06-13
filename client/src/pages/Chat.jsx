@@ -43,7 +43,7 @@ const Chat = () => {
 
 
   useEffect(() => {
-    getAPI(`/chat`)
+    getAPI(`/chat/clubchat`)
       .then((response) => {
         console.log(response.data);
         if (Array.isArray(response.data)) {

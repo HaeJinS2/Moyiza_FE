@@ -65,7 +65,7 @@ function OnedayDetail() {
   useEffect(() => {
     getOnedayMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userNickname]);
+  }, [userNickname, isMember]);
 
   const getOnedayMembers = () => {
     getAPI(`/oneday/${id}`).then((res) => {
@@ -123,7 +123,6 @@ function OnedayDetail() {
       .then((res) => {
         setIsMember(true);
         getAPI(`/oneday/${id}`).then((res) => {
-          console.log(res.data.message);
           swal("하루속 가입이 승인됐습니다!");
         });
       })
@@ -135,6 +134,7 @@ function OnedayDetail() {
   const handleQuitOneday = () => {
     deleteAPI(`/oneday/${id}/join`, {})
       .then((res) => {
+        setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
           console.log(res.data.message);
           swal("하루속 탈퇴가 승인됐습니다!");

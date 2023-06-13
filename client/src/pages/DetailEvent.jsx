@@ -21,6 +21,7 @@ function DetailEvent({
 }) {
   // const [modalIsOpen, setIsOpen] = useState(false);
   // const [inputValue, setInputValue] = useState("");
+  // eslint-disable-next-line
   const [map, setMap] = useState(null);
   // const [userLat, setUserLat] = useState(null);
   // const [userLng, setUserLng] = useState(null);
@@ -59,7 +60,7 @@ function DetailEvent({
       .catch((error) => {
         console.log(error);
       });
-  }, [clubId, eventId]);
+  }, [clubId, eventId, isNicknameExists]);
 
   useEffect(() => {
     const nicknameExists = content?.eventAttendantList?.some(
@@ -69,7 +70,7 @@ function DetailEvent({
   }, [content, nicknameState]);
 
   console.log(isNicknameExists);
-  console.log(content);
+  console.log("123", content);
   console.log(nicknameState.userNickname);
   // useEffect(() => {
   //     console.log(userLat, userLng)
@@ -95,29 +96,29 @@ function DetailEvent({
   //     }
   // }, [inputValue, map]);
 
-  useEffect(() => {
-    const initializeMap = () => {
-      if (modalIsOpen && window.kakao && window.kakao.maps) {
-        let mapContainer = document.getElementById("map");
-        let mapOption = {
-          center: new window.kakao.maps.LatLng(
-            content.eventLatitude,
-            content.eventLongitude
-          ),
-          level: 3,
-        };
+  // useEffect(() => {
+  //   const initializeMap = () => {
+  //     if (modalIsOpen && window.kakao && window.kakao.maps) {
+  //       let mapContainer = document.getElementById("map");
+  //       let mapOption = {
+  //         center: new window.kakao.maps.LatLng(
+  //           content.eventLatitude,
+  //           content.eventLongitude
+  //         ),
+  //         level: 3,
+  //       };
 
-        let mapInstance = new window.kakao.maps.Map(mapContainer, mapOption);
-        setMap(mapInstance);
-      }
-    };
+  //       let mapInstance = new window.kakao.maps.Map(mapContainer, mapOption);
+  //       setMap(mapInstance);
+  //     }
+  //   };
 
-    if (modalIsOpen) {
-      const delay = setTimeout(initializeMap, 100);
-      return () => clearTimeout(delay);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalIsOpen]);
+  //   if (modalIsOpen) {
+  //     const delay = setTimeout(initializeMap, 100);
+  //     return () => clearTimeout(delay);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [modalIsOpen]);
 
   useEffect(() => {
     if (map) {
@@ -182,6 +183,18 @@ function DetailEvent({
     setIsOpen(false);
   };
 
+  const eventStartTime = content?.eventStartTime;
+  const month = eventStartTime?.split("T")[0].split("-")[1];
+  const date = eventStartTime?.split("T")[0].split("-")[2];
+  const time = () => {
+    if (eventStartTime?.split("T")[1].split(":")[0] > 12) {
+      return `오후 ${eventStartTime?.split("T")[1].split(":")[0] - 12}시`;
+    } else {
+      return `오전 ${eventStartTime?.split("T")[1].split(":")[0]}시`;
+    }
+  };
+  const minute = eventStartTime?.split("T")[1].split(":")[1];
+
   return (
     <div>
       {/* <button 
@@ -199,8 +212,8 @@ function DetailEvent({
           },
           content: {
             color: "#000000",
-            width: "550px",
-            height: "870px",
+            width: "680px",
+            height: "526px",
             margin: "auto",
             display: "flex",
             flexDirection: "column",
@@ -210,8 +223,8 @@ function DetailEvent({
           },
         }}
       >
-        <div className="flex justify-between w-full">
-          {/* <div className="flex justify-end w-full gap-x-2">
+        {/* <div className="flex justify-between w-full"> */}
+        {/* <div className="flex justify-end w-full gap-x-2">
             <button className="w-[40px] h-[40px] bg-slate-400 rounded-full text-white">
               Join
             </button>
@@ -223,13 +236,13 @@ function DetailEvent({
               X
             </button>
           </div> */}
-        </div>
+        {/* </div> */}
         {/* <div className="flex justify-between">
           <span>{content.eventTitle}</span>
           <span>2/5</span>
         </div> */}
         {/* <div className="border w-full mb-4"></div> */}
-        <div className="flex justify-center flex-col items-center gap-[30px]">
+        {/* <div className="flex justify-center flex-col items-center gap-[30px]">
           <h3 className="text-2xl  px-3 ">
             {content.eventTitle ? content.eventTitle : "제목없음"}
           </h3>
@@ -249,35 +262,92 @@ function DetailEvent({
               <div className="w-[500px] h-[120px] bg-gray-200 rounded-[10px] p-5">
                 {content.eventContent ? content.eventContent : "내용없음"}
               </div>
-            </div>
-            {/* <input className='w-[500px] h-[50px] shadow-md'
+            </div> */}
+        {/* <input className='w-[500px] h-[50px] shadow-md'
                             placeholder='장소를 검색하세요 (예: xx동)'
                             type="text" onChange={handleInputChange} /> */}
-            <div id="map" style={{ width: "500px", height: "400px" }}></div>
+        {/* <div id="map" style={{ width: "500px", height: "400px" }}></div>
+          </div> */}
+        <div className="flex flex-col w-full h-full justify-between items-center">
+          <div className="flex text-2xl justify-center text-orange-400 font-semibold items-center">
+            <p>{content.eventTitle}</p>
           </div>
-          {isNicknameExists ? (
-            <button
-              onClick={() => handleLeaveEvent(clubId, eventId, () => setIsNicknameExists(false))}
-              className="w-[300px] h-[40px] bg-slate-400 text-white"
-            >
-              Leave
-            </button>
-          ) : (
-            <button
-              onClick={() => handleJoinEvent(clubId, eventId, () => setIsNicknameExists(true))}
-              className="w-[300px] h-[40px] bg-slate-400 text-white"
-            >
-              Join
-            </button>
-          )}
+          <div className="w-full h-[170px]">
+            <img src="" alt="empty" />
+          </div>
+          <div className="flex justify-between items-center w-[587px] h-[59px] bg-neutral-100 rounded-2xl p-4 pt-6">
+            <div className="flex flex-col justify-center items-center">
+              <img
+                src={`${process.env.PUBLIC_URL}/images/detail/detail_calender.svg`}
+                alt="detail_calender"
+              />
+              <div>
+                {month}.{date}
+              </div>
+            </div>
+            <div className="flex flex-col justify-center items-center">
+              <img
+                src={`${process.env.PUBLIC_URL}/images/detail/detail_clock.svg`}
+                alt="detail_clock"
+              />
+              <div>
+                {time()} {minute}분
+              </div>
+            </div>
+            <div className="flex flex-col justify-center items-center">
+              <img
+                src={`${process.env.PUBLIC_URL}/images/detail/detail_location.svg`}
+                alt="detail_location"
+              />
+              <div>{content.eventLocation}</div>
+            </div>
 
-          <button
-            onClick={closeModal}
-            className="bg-gray-300 rounded-full w-[40px] h-[40px] text-white"
-          >
-            X
-          </button>
+            <div className="flex flex-col justify-center items-center">
+              <img
+                src={`${process.env.PUBLIC_URL}/images/detail/detail_people.svg`}
+                alt="detail_people"
+              />
+              <div>
+                {content.eventAttendantListSize} / {content.eventGroupSize}
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center items-center w-[588px] h-[101px] rounded-2xl bg-neutral-100">
+            <p>{content.eventContent}</p>
+          </div>
+          <div className="flex justify-center gap-[30px] ">
+            <button
+              onClick={closeModal}
+              className="bg-gray-300 rounded-full font-semibold w-[200px] h-[60px] text-[1.25rem] text-white"
+            >
+              닫기
+            </button>
+            {isNicknameExists ? (
+              <button
+                onClick={() =>
+                  handleLeaveEvent(clubId, eventId, () =>
+                    setIsNicknameExists(false)
+                  )
+                }
+                className="w-[200px] h-[60px] rounded-full font-semibold bg-orange-400 text-[1.25rem] text-white"
+              >
+                탈퇴하기
+              </button>
+            ) : (
+              <button
+                onClick={() =>
+                  handleJoinEvent(clubId, eventId, () =>
+                    setIsNicknameExists(true)
+                  )
+                }
+                className="w-[200px] h-[60px rounded-full bg-orange-400 text-[1.25rem] text-white"
+              >
+                참여하기
+              </button>
+            )}
+          </div>
         </div>
+        {/* </div> */}
       </Modal>
     </div>
   );

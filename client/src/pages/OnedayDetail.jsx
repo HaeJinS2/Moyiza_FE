@@ -69,7 +69,7 @@ function OnedayDetail() {
 
   const getOnedayMembers = () => {
     getAPI(`/oneday/${id}`).then((res) => {
-      const onedayMember = res.data.oneDayAttendantList;
+      const onedayMember = res.data.oneDayMemberResponseList;
       setOnedayMember(onedayMember);
       setOnedayMemberNicknameArr(
         onedayMember?.map((member) => member.userNickName)
@@ -122,8 +122,10 @@ function OnedayDetail() {
     postAPI(`/oneday/${id}/join`, {})
       .then((res) => {
         setIsMember(true);
-        console.log(res.data.message);
-        swal("하루속 가입이 승인됐습니다!");
+        getAPI(`/oneday/${id}`).then((res) => {
+          console.log(res.data.message);
+          swal("하루속 가입이 승인됐습니다!");
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -133,9 +135,10 @@ function OnedayDetail() {
   const handleQuitOneday = () => {
     deleteAPI(`/oneday/${id}/join`, {})
       .then((res) => {
-        setIsMember(true);
-        console.log(res.data.message);
-        swal("하루속 가입이 취소되었습니다!");
+        getAPI(`/oneday/${id}`).then((res) => {
+          console.log(res.data.message);
+          swal("하루속 탈퇴가 승인됐습니다!");
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -239,17 +242,17 @@ function OnedayDetail() {
               )}
             </div>
           </div>
-          <div className="flex w-full  rounded-2xl h-[137px] bg-neutral-100 py-4 items-center justify-center">
+          <div className="flex w-[1080px] rounded-2xl h-[137px] bg-neutral-100 py-4 items-center justify-center">
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
               <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_calender.png`}
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_calender.svg`}
                 alt="oneday_start_time"
               />
               {month}.{date}
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
               <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_clock.png`}
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_clock.svg`}
                 alt="oneday_start_time"
               />
               {hours >= 12 ? "오후 " : "오전 "}
@@ -257,7 +260,7 @@ function OnedayDetail() {
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
               <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_location.png`}
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_location.svg`}
                 alt="oneday_location"
               />
               {onedayDetail?.data.oneDayLocation.split(" ")[0] === "서울특별시"
@@ -265,10 +268,13 @@ function OnedayDetail() {
                 : onedayDetail?.data.oneDayLocation.split(" ")[0]}
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
-              <div className="w-[36px] h-[36px]"></div>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_gender.svg`}
+                alt="oneday_location"
+              />
               남, 녀
             </div>
-            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-r-4 h-4/5">
+            <div className="w-1/6 flex flex-col justify-center items-center gap-1 font-sans text-xl border-r-4 h-4/5">
               <div className="w-[36px] h-[36px] flex justify-center items-center">
                 Age
               </div>
@@ -276,19 +282,19 @@ function OnedayDetail() {
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
               <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_attendant.png`}
+                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_people.svg`}
                 alt="oneday_attendant_state"
               />
               {onedayDetail?.data.oneDayAttendantListSize}/
               {onedayDetail?.data.oneDayGroupSize}
             </div>
           </div>
-          <div className="flex justify-center items-center w-full h-[237px] bg-neutral-100 rounded-2xl pr-10">
+          <div className="flex w-[1080px] justify-center items-center h-[237px] bg-neutral-100 rounded-2xl pr-10">
             <p className="text-black">{onedayDetail?.data.oneDayContent}</p>
           </div>
-          <div className="flex justify-between w-full">
+          <div className="flex justify-between w-[1140px]">
             <div className="font-sans text-2xl font-semibold">참여멤버</div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 ">
               {memberPage > 0 && (
                 <button onClick={() => setMemberPage(memberPage - 1)}>
                   <img
@@ -307,8 +313,8 @@ function OnedayDetail() {
               )}
             </div>
           </div>
-          <div className="flex h-full w-full justify-center items-center">
-            <div className="flex justify-center w-full h-[100px] text-black items-center overflow-hidden relative ">
+          <div className="flex h-full w-[1140px] justify-center items-center">
+            <div className="flex justify-center w-[1140px] h-[100px] text-black items-center overflow-hidden relative ">
               <AnimatePresence custom={memberDirection}>
                 <motion.div
                   key={memberPage}
@@ -318,7 +324,7 @@ function OnedayDetail() {
                   exit="exit"
                   custom={memberDirection}
                   transition={{ duration: 0.5 }}
-                  className={`h-[90px] flex absolute justify-center items-center w-full `}
+                  className={`h-[90px] flex absolute justify-center items-center w-[1140px] `}
                 >
                   <div
                     className={`${
@@ -335,14 +341,14 @@ function OnedayDetail() {
                             <>
                               <div
                                 key={i}
-                                className="flex justify-center items-center gap-10"
+                                className="flex justify-center items-center gap-5"
                               >
                                 <img
-                                  className="w-[90px] h-[90px] bg-rose-400 rounded-full "
-                                  src={member.userProfileImage}
+                                  className="w-[80px] h-[80px] bg-rose-400 rounded-full "
+                                  src={member.profilePictureUrl}
                                   alt="profile_image"
                                 />
-                                <div>{member.userNickName}</div>
+                                <div className="]">{member.userNickname}</div>
                               </div>
                             </>
                           );
@@ -354,8 +360,10 @@ function OnedayDetail() {
             </div>
           </div>
 
-          <div className="flex justify-between w-full">
-            <div className="font-sans text-2xl font-semibold">비슷한 하루속 이벤트</div>
+          <div className="flex justify-between items-center w-[1140px]">
+            <div className="font-sans text-2xl font-semibold">
+              비슷한 하루속 이벤트
+            </div>
             <div className="flex justify-center gap-10">
               {similarOnedayPage > 0 && (
                 <button
@@ -381,7 +389,7 @@ function OnedayDetail() {
             </div>
           </div>
           <div className="flex w-full h-full justify-center items-center">
-            <div className="flex justify-center w-full h-[300px] text-black items-center overflow-hidden relative ">
+            <div className="flex justify-center w-[1140px] h-[300px] text-black items-center overflow-hidden relative ">
               <AnimatePresence custom={similarOnedayDirection}>
                 <motion.div
                   key={similarOnedayPage}
@@ -402,15 +410,22 @@ function OnedayDetail() {
                       <EmptyState page="onedayDetail" />
                     ) : (
                       filteredOnedayList
-                        ?.slice(similarOnedayPage * 2, similarOnedayPage * 2 + 2)
+                        ?.slice(
+                          similarOnedayPage * 2,
+                          similarOnedayPage * 2 + 2
+                        )
                         .map((item, i) => {
-                          return <OnedayCard 
-                          key={i} 
-                          thumbnail={item.thumbnailUrl}
-                          title={item.onedayTitle}
-                          tag={item.onedayTag}
-                          
-                          />;
+                          return (
+                            <OnedayCard
+                              key={i}
+                              id={item.onedayId}
+                              thumbnail={item.thumbnailUrl}
+                              title={item.onedayTitle}
+                              tag={item.onedayTag}
+                              size={item.onedayGroupSize}
+                              attendantsNum={item.onedayAttendantsNum}
+                            />
+                          );
                         })
                     )}
                   </div>

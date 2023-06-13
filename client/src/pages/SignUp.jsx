@@ -152,8 +152,8 @@ function SignUp() {
     nickname &&
     gender &&
     birth &&
-    phoneNum &&
-    imageFile;
+    phoneNum 
+;
 
   const btn1 = `bg-yellow-300 rounded-xl w-64 h-12 px-4 py-1 shadow hover:shadow-lg`
   const btn2 = `bg-gray-100 text-gray-400 rounded-xl w-64 h-12 px-4 py-1 `
@@ -162,182 +162,39 @@ function SignUp() {
   const colorBtn = isAllValid ? btn1 : btn2;
   //btn1은 아예 클릭이 안되게 수정해야 함
 
-
-
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData();
-  
-  //   const data = {
-  //     name: name,
-  //     email: email,
-  //     password: pw,
-  //     nickname: nickname,
-  //     gender: gender,
-  //     birth: birth,
-  //     phone: phoneNum,
-  //   };
-  
-  //   const serializedData = JSON.stringify(data);
-  //   const blobData = new Blob([serializedData], { type: 'application/json' });
-  
-  //   formData.append('data', blobData);
-  //   const base64ToBlob = (base64String, contentType = '') => {
-  //     const byteCharacters = atob(base64String);
-  //     const byteArrays = [];
-
-  //     for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-  //       const slice = byteCharacters.slice(offset, offset + 512);
-  //       const byteNumbers = new Array(slice.length);
-
-  //       for (let i = 0; i < slice.length; i++) {
-  //         byteNumbers[i] = slice.charCodeAt(i);
-  //       }
-
-  //       const byteArray = new Uint8Array(byteNumbers);
-  //       byteArrays.push(byteArray);
-  //     }
-
-  //     return new Blob(byteArrays, { type: contentType });
-  //   };
-  
-  //   if (imageFile) {
-  //     const base64Header = 'data:image/jpeg;base64,';
-  //     const base64String = imageFile.replace(base64Header, '');
-  //     const decodedImageFile = base64ToBlob(base64String, 'image/jpeg');
-  //     formData.append('imageFile', decodedImageFile);
-  //   }
-  
-  //   try {
-  //     const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData);
-  //     console.log(response.data);
-  //     alert('회원가입 성공!');
-  //     goLogin();
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert(error.request.response);
-  //   }
-  // };
-  
-    
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData();
-  
-  //   const data = {
-  //     name: name,
-  //     email: email,
-  //     password: pw,
-  //     nickname: nickname,
-  //     gender: gender,
-  //     birth: birth,
-  //     phone: phoneNum,
-  //   };
-  
-  //   const serializedData = JSON.stringify(data);
-  //   const blobData = new Blob([serializedData], { type: 'application/json' });
-  
-  //   formData.append('data', blobData);
-  //   const base64ToBlob = (base64String, contentType = '') => {
-  //     const byteCharacters = atob(base64String);
-  //     const byteArrays = [];
-
-  //     for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-  //       const slice = byteCharacters.slice(offset, offset + 512);
-  //       const byteNumbers = new Array(slice.length);
-
-  //       for (let i = 0; i < slice.length; i++) {
-  //         byteNumbers[i] = slice.charCodeAt(i);
-  //       }
-
-  //       const byteArray = new Uint8Array(byteNumbers);
-  //       byteArrays.push(byteArray);
-  //     }
-
-  //     return new Blob(byteArrays, { type: contentType });
-  //   };
-  //   if (imageFile) {
-  //     const base64Header = 'data:image/jpeg;base64,';
-  //     const base64String = imageFile.replace(base64Header, '');
-  //     const decodedImageFile = base64ToBlob(base64String, 'image/jpeg');
-  //     formData.append('imageFile', decodedImageFile);
-  //   }
-  
-  //   try {
-  //     const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-  //     console.log(response.data);
-  //     alert('회원가입 성공!');
-  //     goLogin();
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert(error.request.response);
-  //   }
-  // };
   
     
   const submitHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-  
-    const data = {
-      name: name,
-      email: email,
-      password: pw,
-      nickname: nickname,
-      gender: gender,
-      birth: birth,
-      phone: phoneNum,
-    };
-  
-    const jsonData = JSON.stringify(data);
-    const jsonDataBlob = new Blob([jsonData], { type: 'application/json' });
-  
-    formData.append('data', jsonDataBlob);
+formData.append('image', imageFile);
 
-    const base64ToBlob = (base64String, contentType = '') => {
-      const byteCharacters = atob(base64String);
-      const byteArrays = [];
+try {
+  // const uploadResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/test/upload`, formData);
+  const imageUrl = "";
 
-      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-        const slice = byteCharacters.slice(offset, offset + 512);
-        const byteNumbers = new Array(slice.length);
-
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
-
-      return new Blob(byteArrays, { type: contentType });
-    };
-  
-    if (imageFile) {
-      const base64Header = 'data:image/jpeg;base64,';
-      const base64String = imageFile.replace(base64Header, '');
-      const decodedImageFile = base64ToBlob(base64String, 'image/jpeg');
-      formData.append('imageFile', decodedImageFile);
-    }
-  
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log(response.data);
-      alert('회원가입 성공!');
-      goLogin();
-    } catch (error) {
-      console.error(error);
-      alert(error.request.response);
-    }
+  const data = {
+    name: name,
+    email: email,
+    password: pw,
+    nickname: nickname,
+    gender: gender,
+    birth: birth,
+    phone: phoneNum,
+    imageUrl: imageUrl,
   };
+
+  const signupResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/test/signup`, data);
+  console.log(signupResponse.data);
+  alert('회원가입 성공!');
+  goLogin();
+} catch (error) {
+  console.error(error);
+  alert(error.request.response);
+}
+
+  };
+
   
 
   return (
@@ -389,7 +246,7 @@ function SignUp() {
                 autoComplete="username"
               />
               {/* 닉네임 중복 검사 */}
-              <button style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 w-30 h-12 px-4 py-1 shadow hover:shadow-lg" onClick={nicknameValidationHandler}>중복확인</button>
+              <button type='button' style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 w-30 h-12 px-4 py-1 shadow hover:shadow-lg" onClick={nicknameValidationHandler}>중복확인</button>
             </div>
             {/* 생년월일 */}
             <div style={{ width: '100%' }} class="flex items-center mb-5">

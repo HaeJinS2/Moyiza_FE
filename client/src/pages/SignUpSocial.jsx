@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
 import swal from 'sweetalert';
+import { parseJwt, setCookie } from '../utils/jwtUtils';
 
 function SignUpSocial() {
     //회원가입 성공 시, 로그인 페이지로 이동
@@ -83,6 +84,7 @@ function SignUpSocial() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
+        const url = `${process.env.REACT_APP_SERVER_URL}/user/signup/social`;
         const data = {
             name: name,
             nickname: nickname,
@@ -91,26 +93,23 @@ function SignUpSocial() {
             phone: phoneNum,
         };
 
-        const headers = {
-            "Content-Type": "application/json",
-        };
-
         try {
-            const response = await axios.put(
-                `${process.env.REACT_APP_SERVER_URL}/user/signup/social`,
-                data,
-                { headers: headers }
-            )
-            console.log(response.data);
-            swal("회원가입 성공!");
+            const response = await axios.put(url, data);
+
+            const accessTokenHeader = response.headers['kakao?code='];
+            const accessToken = accessTokenHeader.access_token;
+
+            const jwt1 = accessToken.replace('Bearer ', '');
+            setCookie('ACCESS_TOKEN', jwt1, 1);
+            
+            swal('회원가입 성공');
             goLogin();
         } catch (error) {
-            console.log('data', data);
-            console.error(error);
-            swal(error.request.response);
+            console.log(error);
+            swal('회원가입 실패');
+            // setUserloginInput({ email: '', password: '' });
         }
     };
-
 
     return (
         <>
@@ -194,106 +193,106 @@ function SignUpSocial() {
 
                                 <div style={{ width: '36%' }} id="bir_dd">
                                     {/* <span class="box"> */}
-                                    <select style={{ width: '100%' , color: '#9d9d9d'}} value={userInput.day} type="text" id="dd" class="int h-12 rounded-lg px-3.5 py-2 shadow" placeholder="일" name='day' onChange={handleInput}>
-                                    <option>일</option>
-                                    <option value="01">1</option>
-                                    <option value="02">2</option>
-                                    <option value="03">3</option>
-                                    <option value="04">4</option>
-                                    <option value="05">5</option>
-                                    <option value="06">6</option>
-                                    <option value="07">7</option>
-                                    <option value="08">8</option>
-                                    <option value="09">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="19">19</option>
-                                    <option value="20">20</option>
-                                    <option value="21">21</option>
-                                    <option value="22">22</option>
-                                    <option value="23">23</option>
-                                    <option value="24">24</option>
-                                    <option value="25">25</option>
-                                    <option value="26">26</option>
-                                    <option value="27">27</option>
-                                    <option value="28">28</option>
-                                    <option value="29">29</option>
-                                    <option value="30">30</option>
-                                    <option value="31">31</option>
-                                </select>
-                                {/* </span> */}
-                            </div>
+                                    <select style={{ width: '100%', color: '#9d9d9d' }} value={userInput.day} type="text" id="dd" class="int h-12 rounded-lg px-3.5 py-2 shadow" placeholder="일" name='day' onChange={handleInput}>
+                                        <option>일</option>
+                                        <option value="01">1</option>
+                                        <option value="02">2</option>
+                                        <option value="03">3</option>
+                                        <option value="04">4</option>
+                                        <option value="05">5</option>
+                                        <option value="06">6</option>
+                                        <option value="07">7</option>
+                                        <option value="08">8</option>
+                                        <option value="09">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="29">29</option>
+                                        <option value="30">30</option>
+                                        <option value="31">31</option>
+                                    </select>
+                                    {/* </span> */}
+                                </div>
 
+                            </div>
+                            {/* <span class="error_next_box"></span> */}
                         </div>
-                        {/* <span class="error_next_box"></span> */}
-                </div>
-                {/* 성별 입력 */}
-                <div className='flex items-center mb-5'>
-                    <div style={{ width: '27%' }}>
-                        <p className="userGender title mustInput">성별</p>
-                    </div>
-                    <label className="userMale label">
-                        <input
-                            onChange={handleInput}
-                            className="radio min-w-24 min-h-24 mr-2"
-                            name="gender"
-                            type="radio"
-                            value="0"
-                        />
-                        <span className="text mr-5">남자</span>
-                    </label>
-                    <label className="userFemale label">
-                        <input
-                            onChange={handleInput}
-                            className="radio mr-2"
-                            name="gender"
-                            type="radio"
-                            value="1"
-                        />
-                        <span className="text">여자</span>
-                    </label>
-                </div>
-                {/* 휴대폰 입력 */}
-                <div className='flex items-center mb-5'>
-                    <div style={{ width: '27%' }}>
-                        <p className="userPhoneNum title mustInput">휴대폰</p>
-                    </div>
-                    <input
-                        style={{ width: '73%' }}
-                        onChange={handleInput}
-                        className="userInputNumber input w-80 h-12 rounded-lg px-3.5 py-2 shadow"
-                        name="phoneNum"
-                        type="text"
-                        placeholder="숫자를 입력하세요"
-                        autoComplete="username"
-                    />
-                </div>
-                <div className='flex items-center mb-12'>
-                    <div style={{ width: '27%' }}></div>
-                    {!isPhoneNumValid && (
-                        <p
-                            className="inputCheck text-xs mb-5"
-                            style={{ display: phoneNum.length > 0 ? 'block' : 'none', color: '#FF7F1E' }}
-                        >
-                            * 하이픈(-)없이 숫자만 입력해주세요.
-                        </p>
-                    )}
-                </div>
-                <hr />
-                <button type='submit' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-12 h-[60px]`} >
-                    가입하기
-                </button>
-            </form>
-        </div >
-      </div >
-    </>
-  );
+                        {/* 성별 입력 */}
+                        <div className='flex items-center mb-5'>
+                            <div style={{ width: '27%' }}>
+                                <p className="userGender title mustInput">성별</p>
+                            </div>
+                            <label className="userMale label">
+                                <input
+                                    onChange={handleInput}
+                                    className="radio min-w-24 min-h-24 mr-2"
+                                    name="gender"
+                                    type="radio"
+                                    value="0"
+                                />
+                                <span className="text mr-5">남자</span>
+                            </label>
+                            <label className="userFemale label">
+                                <input
+                                    onChange={handleInput}
+                                    className="radio mr-2"
+                                    name="gender"
+                                    type="radio"
+                                    value="1"
+                                />
+                                <span className="text">여자</span>
+                            </label>
+                        </div>
+                        {/* 휴대폰 입력 */}
+                        <div className='flex items-center mb-5'>
+                            <div style={{ width: '27%' }}>
+                                <p className="userPhoneNum title mustInput">휴대폰</p>
+                            </div>
+                            <input
+                                style={{ width: '73%' }}
+                                onChange={handleInput}
+                                className="userInputNumber input w-80 h-12 rounded-lg px-3.5 py-2 shadow"
+                                name="phoneNum"
+                                type="text"
+                                placeholder="숫자를 입력하세요"
+                                autoComplete="username"
+                            />
+                        </div>
+                        <div className='flex items-center mb-12'>
+                            <div style={{ width: '27%' }}></div>
+                            {!isPhoneNumValid && (
+                                <p
+                                    className="inputCheck text-xs mb-5"
+                                    style={{ display: phoneNum.length > 0 ? 'block' : 'none', color: '#FF7F1E' }}
+                                >
+                                    * 하이픈(-)없이 숫자만 입력해주세요.
+                                </p>
+                            )}
+                        </div>
+                        <hr />
+                        <button type='submit' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-12 h-[60px]`} >
+                            가입하기
+                        </button>
+                    </form>
+                </div >
+            </div >
+        </>
+    );
 }
 export default SignUpSocial;

@@ -3,9 +3,10 @@ import Navbar from '../component/Navbar';
 import UserProfile from '../component/UserProfile';
 import Container from '../component/Container';
 import { motion } from 'framer-motion';
-import ProfileCard from '../component/ProfileCard';
+// import ProfileCardOne from '../component/ProfileCard';
 import { useNavigate } from 'react-router-dom';
 import { getAPI } from '../axios';
+import ProfileCardOneday from '../component/ProfileCardOneday';
 // import BodyContainer from '../component/BodyContainer';
 
 function MyInfoOneday() {
@@ -113,10 +114,10 @@ function MyInfoOneday() {
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
                                                     // className="border-black inset-0"
                                                     >
-                                                        <div className="text-[36px] mt-[53px] flex flex-col justify-between align-center w-full">
+                                                        <div className="text-[32px] mt-[53px] flex flex-col justify-between align-center w-full">
                                                             <div className='flex justify-between align-center'>
                                                                 <div className="text-[36px]">{nickname ? `${nickname}님의 운영중인 하루속` : null}</div>
-                                                                <div className='text-[28px]'>총 0개</div>
+                                                                <div className='text-[20px]'>총 0개</div>
                                                             </div>
                                                         </div>
 
@@ -124,7 +125,7 @@ function MyInfoOneday() {
                                                             <p className='text-[20px] mt-[109px] mb-[109px]'>운영중인 하루가 없어요.</p>
                                                         </div>
                                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
-                                                            <div className="text-[36px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
+                                                            <div className="text-[32px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
                                                             <div> 총 {oneDaysInParticipatingInfo.length}개</div>
                                                         </div>
                                                         <div className='flex flex-col items-center justify-center w-[1200px]'>
@@ -141,54 +142,56 @@ function MyInfoOneday() {
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
                                                     // className="border-black inset-0"
                                                     >
-                                                        <div className="text-[36px] mt-[53px] flex flex-col justify-between align-center w-full">
-                                                            <div className='flex justify-between align-center'>
+                                                        <div className="text-[32px] mb-[57px] flex flex-col justify-between align-center w-full">
+                                                            <div className='flex justify-between align-center mb-[57px]'>
                                                                 <div>{nickname ? `${nickname}님의 운영중인 하루속` : ''}</div>
                                                                 {oneDaysInOperationInfo.length > 0 && (
-                                                                    <div className='text-[28px] '>총 {oneDaysInOperationInfo.length}개</div>
+                                                                    <div className='text-[20px] '>총 {oneDaysInOperationInfo.length}개</div>
                                                                 )}
                                                             </div>
-                                                            {oneDaysInOperationInfo.map((club, i) => {
-                                                                return (
-                                                                    <ProfileCard
-                                                                        className="mb-[30px]"
-                                                                        key={club.club_id}
-                                                                        clubTitle={club.clubTitle}
-                                                                        thumbnailUrl={club.thumbnailUrl}
-                                                                        club_id={club.club_id}
-                                                                        maxGroupSize={club.maxGroupSize}
-                                                                        nowMemberCount={club.nowMemberCount}
-                                                                        clubContent={club.clubContent}
-                                                                        clubTag={club.clubTag}
-                                                                    />
-                                                                );
-                                                            })}
-                                                            <div className='flex justify-between align-center mt-[90px] text-[28px]'>
-                                                                <div className="text-[36px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
-                                                                <div> 총 {oneDaysInParticipatingInfo.length}개</div>
+                                                            <div className='w-[1130px] flex flex-wrap justify-between'>
+                                                                {oneDaysInOperationInfo.map((club, i) => {
+                                                                    return (
+                                                                        <ProfileCardOneday
+                                                                            className="mb-[30px] mr-[20px]"
+                                                                            key={club.oneDayId}
+                                                                            oneDayTitle={club.oneDayTitle}
+                                                                            oneDayImage={club.oneDayImage}
+                                                                            oneDayId={club.oneDayId}
+                                                                            oneDayGroupSize={club.oneDayGroupSize}
+                                                                            oneDayAttendantListSize={club.oneDayAttendantListSize}
+                                                                            oneDayContent={club.oneDayContent}
+                                                                            tagString={club.tagString}
+                                                                        />
+                                                                    );
+                                                                })}
                                                             </div>
-                                                            {oneDaysInParticipatingInfo.map((club, i) => {
-                                                                return (
-                                                                    <ProfileCard
-                                                                        className="mb-[30px]"
-                                                                        key={club.club_id}
-                                                                        clubTitle={club.clubTitle}
-                                                                        thumbnailUrl={club.thumbnailUrl}
-                                                                        club_id={club.club_id}
-                                                                        maxGroupSize={club.maxGroupSize}
-                                                                        nowMemberCount={club.nowMemberCount}
-                                                                        clubContent={club.clubContent}
-                                                                        clubTag={club.clubTag}
-                                                                    />
-                                                                );
-                                                            })}
+                                                            <div className='flex justify-between align-center mt-[90px] text-[28px]'>
+                                                                <div className="text-[32px] mb-[57px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
+                                                                <div className='text-[20px] '> 총 {oneDaysInParticipatingInfo.length}개</div>
+                                                            </div>
+                                                            <div className='w-[1130px] flex flex-wrap justify-between'>
+                                                                {oneDaysInParticipatingInfo.map((club, i) => {
+                                                                    return (
+                                                                        <ProfileCardOneday
+                                                                            className="mb-[30px] mr-[20px]"
+                                                                            key={club.oneDayId}
+                                                                            oneDayTitle={club.oneDayTitle}
+                                                                            oneDayImage={club.oneDayImage}
+                                                                            oneDayId={club.oneDayId}
+                                                                            oneDayGroupSize={club.oneDayGroupSize}
+                                                                            oneDayAttendantListSize={club.oneDayAttendantListSize}
+                                                                            oneDayContent={club.oneDayContent}
+                                                                            tagString={club.tagString}
+                                                                        />
+                                                                    );
+                                                                })}
+                                                            </div>
                                                         </div>
                                                     </motion.div>
                                                 )}
                                             </div>
-
                                         </div>
-
                                     </span>
                                 </div>
                             </div>

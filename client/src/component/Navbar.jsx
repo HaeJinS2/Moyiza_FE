@@ -69,8 +69,12 @@ function Navbar() {
     navigate("/user/mypage");
   };
 
-  const [isScrolled, setIsScrolled] = useState(false);
+// useEffect(() => {
+//   console.log("roomMsgState",roomMsgState)
+// }, [roomMsgState])
 
+  const [isScrolled, setIsScrolled] = useState(false);
+ 
   const checkScroll = () => {
     if (window.scrollY > 0) {
       setIsScrolled(true);
@@ -182,8 +186,8 @@ function Navbar() {
                             </div>
                             <div className="w-[370px] h-[400px]  overflow-auto">
                               {data?.map((item, i) => {
-                                const matchingState = roomMsgState.slice().reverse().find(state => state.roomId === item);
-                                const contentToDisplay = matchingState ? matchingState : item;
+                                const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
+                                const contentToDisplay = matchingState ? matchingState : item.lastMessage;
 
                                 return (
                                   <>
@@ -211,7 +215,7 @@ function Navbar() {
                                           </div>
                                         </div>
                                         <div className="flex flex-col items-start">
-                                          <div>{contentToDisplay?.roomName}</div>
+                                          <div>{item?.roomName}</div>
                                           <div className="font-normal">{contentToDisplay?.content}</div>
                                         </div>
                                       </div>

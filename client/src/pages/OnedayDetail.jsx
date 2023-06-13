@@ -368,7 +368,7 @@ function OnedayDetail() {
                 </button>
               )}
               {similarOnedayPage <
-                Math.ceil(filteredOnedayList.length / 2) - 1 && (
+                Math.ceil(filteredOnedayList?.length / 2) - 1 && (
                 <button
                   onClick={() => setSimilarOnedayPage(similarOnedayPage + 1)}
                 >
@@ -395,14 +395,14 @@ function OnedayDetail() {
                 >
                   <div
                     className={`${
-                      filteredOnedayList.length === 0 ? "" : "grid grid-cols-2"
+                      filteredOnedayList?.length === 0 ? "" : "grid grid-cols-2"
                     } w-full gap-4 `}
                   >
                     {filteredOnedayList.length === 0 ? (
                       <EmptyState page="onedayDetail" />
                     ) : (
                       filteredOnedayList
-                        .slice(similarOnedayPage * 2, similarOnedayPage * 2 + 2)
+                        ?.slice(similarOnedayPage * 2, similarOnedayPage * 2 + 2)
                         .map((item, i) => {
                           return <OnedayCard 
                           key={i} 

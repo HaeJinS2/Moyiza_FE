@@ -73,11 +73,11 @@ function OnedayDetail() {
       const onedayMember = res.data.oneDayAttendantList;
       setOnedayMember(onedayMember);
       setOnedayMemberNicknameArr(
-        onedayMember.map((member) => member.userNickName)
+        onedayMember?.map((member) => member.userNickName)
       );
       if (
         onedayMember
-          .map((member) => member.userNickname)
+          ?.map((member) => member.userNickname)
           .includes(userNickname.userNickname)
       ) {
         setIsMember(true);
@@ -158,7 +158,6 @@ function OnedayDetail() {
       }
     };
 
-    // 비동기 함수를 실행합니다.
     fetchFilteredOnedayList();
   }, [onedayDetail]);
 
@@ -299,7 +298,7 @@ function OnedayDetail() {
                   />
                 </button>
               )}
-              {memberPage < Math.ceil(onedayMember.length / 5) - 1 && (
+              {memberPage < Math.ceil(onedayMember?.length / 5) - 1 && (
                 <button onClick={() => setMemberPage(memberPage + 1)}>
                   <img
                     alt="next_button"
@@ -324,14 +323,14 @@ function OnedayDetail() {
                 >
                   <div
                     className={`${
-                      onedayMember.length === 0 ? "" : "grid grid-cols-5"
+                      onedayMember?.length === 0 ? "" : "grid grid-cols-5"
                     } w-full gap-16`}
                   >
-                    {onedayMember.length === 0 ? (
+                    {onedayMember?.length === 0 ? (
                       <EmptyState page="onedayDetail" />
                     ) : (
                       onedayMember
-                        .slice(memberPage * 5, memberPage * 5 + 5)
+                        ?.slice(memberPage * 5, memberPage * 5 + 5)
                         .map((member, i) => {
                           return (
                             <>

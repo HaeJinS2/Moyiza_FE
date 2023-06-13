@@ -156,7 +156,7 @@ function NearbyEvents() {
                                             const formattedDate = formatDate(d.oneDayStartTime);
                                             return (
                                                 <button onClick={() => navigate(`/oneday/${d.oneDayId}`)}>
-                                                    <div className='w-[470px] h-[114px] bg-white rounded-[20px] gap-x-4 gap-y-2 flex justify-center items-center'>
+                                                    <div className='w-[470px] h-[114px] bg-white rounded-[20px] gap-x-4 my-2 flex justify-center items-center'>
                                                         <div className='w-[80px] h-[80px] bg-[#797979] rounded-[20px]'>
                                                             <img src={d?.oneDayImage} alt="onedayImg">
                                                             </img>

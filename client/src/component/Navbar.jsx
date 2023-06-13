@@ -172,7 +172,7 @@ function Navbar() {
                               {roomId?.map((id, i) => (
                                 <>
                                   <button
-                                    className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
+                                    className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2 bg-white
                                   ${
                                       // id === currentRoom
                                       // ? "bg-slate-400"

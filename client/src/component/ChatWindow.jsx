@@ -32,6 +32,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+        
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
         console.log(token);
@@ -71,7 +72,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
         if (!roomIdState) { return; }
         // if (roomIdState === prevRoomIdStateRef.current) { return; }
 
-        
+
         const handleGetAPI = async () => {
 
             if (isHandleGetAPIRunning.current) { return; }
@@ -84,7 +85,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
                 setTmpMessage([...tmpMessage, res.data.content]);
 
                 if (clientRef.current.connected) {
-                    subscriptionRefAlarm?.current[roomIdState].unsubscribe();
+
                     subscriptionRef.current = clientRef.current.subscribe(
                         `/chat/${roomIdState}`,
                         (message) => {
@@ -96,8 +97,8 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
                                 setMessages((prevMessages) => [...prevMessages, newMessage]);
                             }
                         }
-                        );
-                      
+                    );
+                    subscriptionRefAlarm?.current[roomIdState].unsubscribe();
                 }
 
 
@@ -117,7 +118,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
             //     subscriptionRef.current.unsubscribe();
             // }
             handleGetAPI();
-           
+
 
 
         }
@@ -191,18 +192,18 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
         console.log(msg);
         console.log(clientRef);
         if (clientRef.current.connected) {
-        if (input && clientRef.current) {
-            clientRef.current.publish({
-                destination: `/app/chat/${roomIdState}`,
-                headers: { ACCESS_TOKEN: `Bearer ${token}` },
-                body: JSON.stringify(msg),
-            });
-        } 
-        setInput("");
-    } else {
-        // If not connected, show an error message
-        console.error('Unable to send message. Client is not connected.');
-      }
+            if (input && clientRef.current) {
+                clientRef.current.publish({
+                    destination: `/app/chat/${roomIdState}`,
+                    headers: { ACCESS_TOKEN: `Bearer ${token}` },
+                    body: JSON.stringify(msg),
+                });
+            }
+            setInput("");
+        } else {
+            // If not connected, show an error message
+            console.error('Unable to send message. Client is not connected.');
+        }
     };
 
     const removeChatRoom = () => {

@@ -20,7 +20,7 @@ function AppContent() {
   const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
   const clientRef = useRef(null); // client를 useRef로 설정
   const subscriptionRef = useRef({});
-console.log(isLoggedIn)
+  console.log(isLoggedIn)
 
   useEffect(() => {
     const token = Cookies.get('ACCESS_TOKEN');
@@ -39,36 +39,29 @@ console.log(isLoggedIn)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
+
+
   useEffect(() => {
 
+
     const handleSub = () => {
-      if (clientRef.current && clientRef.current.connected) {
-        roomIdListState.forEach((id) => {
-          if (subscriptionRef.current) {
-            subscriptionRef.current[id] = clientRef.current.subscribe(
-              `/chatalarm/${id}`,
-              (message) => {
-                if (message.body) {
-                  let newMessage = JSON.parse(message.body);
-                  setRoomMsgState((prevMessages) => [...prevMessages, newMessage]);
-                }
+      // if (clientRef.current && clientRef.current.connected) {
+      roomIdListState.forEach((id) => {
+        if (subscriptionRef.current) {
+          subscriptionRef.current[id] = clientRef.current.subscribe(
+            `/chatalarm/${id}`,
+            (message) => {
+              if (message.body) {
+                let newMessage = JSON.parse(message.body);
+                setRoomMsgState((prevMessages) => [...prevMessages, newMessage]);
               }
-            );
-          }
-        });
-      }
-    }
-
-    if (clientRef.current) {
-      if (!clientRef.current.connected) {
-        console.log("No underlying STOMP connection.");
-        return;
-      }
-
-      // if (subscriptionRef.current) {
-      //   subscriptionRef.current.unsubscribe();
+            }
+          );
+        }
+      });
       // }
-
+    }
+    if (clientRef.current && clientRef.current.connected) {
       handleSub();
     } else {
       const newClient = new Client({

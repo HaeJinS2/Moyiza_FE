@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
 import swal from 'sweetalert';
-import { parseJwt, setCookie } from '../utils/jwtUtils';
+import { setCookie } from '../utils/jwtUtils';
 
 function SignUpSocial() {
     //회원가입 성공 시, 로그인 페이지로 이동

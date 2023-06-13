@@ -116,7 +116,7 @@ function MyInfoOneday() {
                                                     >
                                                         <div className="text-[32px] mt-[53px] flex flex-col justify-between align-center w-full">
                                                             <div className='flex justify-between align-center'>
-                                                                <div className="text-[36px]">{nickname ? `${nickname}님의 운영중인 하루속` : null}</div>
+                                                                <div className="text-[32px]">{nickname ? `${nickname}님의 운영중인 하루속` : null}</div>
                                                                 <div className='text-[20px]'>총 0개</div>
                                                             </div>
                                                         </div>
@@ -126,10 +126,10 @@ function MyInfoOneday() {
                                                         </div>
                                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
                                                             <div className="text-[32px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
-                                                            <div> 총 {oneDaysInParticipatingInfo.length}개</div>
+                                                            <div className='text-[20px]'> 총 {oneDaysInParticipatingInfo.length}개</div>
                                                         </div>
                                                         <div className='flex flex-col items-center justify-center w-[1200px]'>
-                                                            <p className='text-[20px] mt-[109px]'>참여중인 하루속이 없어요.</p>
+                                                            <p className='text-[20px] mt-[109px]'>참여중인 하루가 없어요.</p>
                                                             <p className='text-[20px] mt-[5px] mb-[18px]'>하루를 즐기러 가볼까요?</p>
                                                             <button onClick={goOneday} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#fff] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
                                                                 +

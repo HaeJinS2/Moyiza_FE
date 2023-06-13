@@ -58,7 +58,7 @@ function Navbar() {
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
     navigate("/");
-    alert("로그아웃 되었습니다.");
+    swal("로그아웃 되었습니다.");
   };
 
   // const goHome = () => {

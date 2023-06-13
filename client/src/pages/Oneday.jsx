@@ -42,39 +42,40 @@ function Oneday() {
   // const [categories, setCategories] = useState(null);
   const [onedayData, setOnedayData] = useState([]);
 
-  const [queryResults1, queryResults2] = useQueries([
-    {
-      queryKey: 'categories',
-      queryFn: () => getAPI('/enums'),
-      refetchOnWindowFocus: false,
-    },
-    // {
-    //   queryKey: ['club', page],
-    //   queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
-    //   refetchOnWindowFocus: false,
-    //   onSuccess: ((data) => {
-    //     setFilteredOnedayList(data?.data?.content)
-    //   })
-    // },
-    {
-      queryKey: ['oneday', onedayData],
-      // queryFn: () => getAPI(`/oneday`),
-      queryFn: () => getAPI(`/oneday?page=0&size=6&sort=createdAt,DESC`),
-      refetchOnWindowFocus: false,
-      onSuccess: ((data) => {
-        setFilteredOnedayList(data?.data?.content)
-        setOnedayData(data?.data?.content)
-      })
-    }
-  ],
+  const [queryResults1, queryResults2] = useQueries(
+    [
+      {
+        queryKey: "categories",
+        queryFn: () => getAPI("/enums"),
+        refetchOnWindowFocus: false,
+      },
+      // {
+      //   queryKey: ['club', page],
+      //   queryFn: () => getAPI(`/club?page=0&size=8&sort=createdAt,DESC`),
+      //   refetchOnWindowFocus: false,
+      //   onSuccess: ((data) => {
+      //     setFilteredOnedayList(data?.data?.content)
+      //   })
+      // },
+      {
+        queryKey: ["oneday", onedayData],
+        // queryFn: () => getAPI(`/oneday`),
+        queryFn: () => getAPI(`/oneday?page=0&size=6&sort=createdAt,DESC`),
+        refetchOnWindowFocus: false,
+        onSuccess: (data) => {
+          setFilteredOnedayList(data?.data?.content);
+          setOnedayData(data?.data?.content);
+        },
+      },
+    ],
     {
       // waitFor 옵션을 사용하여 모든 쿼리가 로딩될 때까지 기다림
-      waitFor: 'all',
-    },
+      waitFor: "all",
+    }
   );
 
-  console.log("onedayData", onedayData)
-  console.log(queryResults2)
+  console.log("onedayData", onedayData);
+  console.log(queryResults2);
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
   //   const res1 = queryResults[0];
   //   const res2 = queryResults[1];
@@ -142,7 +143,7 @@ function Oneday() {
       <div ref={divRef}>
         <BodyContainer>
           <div className="flex gap-10 pt-28 px-12">
-          {pageTabs.map((tab, i) => (
+            {pageTabs.map((tab, i) => (
               <button
                 key={i}
                 onClick={() => {
@@ -168,7 +169,7 @@ function Oneday() {
           </div>
         </BodyContainer>
         <div className="flex justify-center items-center">
-          <section className="absolute top-52 h-auto min-w-[1280px]">
+          <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
               className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
@@ -178,18 +179,23 @@ function Oneday() {
                 backgroundPosition: "center",
               }}
             >
-
+              {/* 
               <p>당신의 특별한 하루</p>
-              <p>'하루속'에서 함께하세요!</p>
+              <p>'하루속'에서 함께하세요!</p> */}
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cm bg-[#F9FFF8] rounded-t-[90px] mt-[524px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cm bg-[#F9FFF8] rounded-t-[90px] mt-[477px] z-10">
             <div className="max-w-[1140px] mx-auto">
-              <div className="flex justify-between items-center my-10">
-                <p className="text-3xl font-semibold">하루속 인기주제</p>
-                <button>필터</button>
+              <div className="flex justify-between items-center pt-16 pb-2 pr-1">
+                <p className="text-[2rem] font-semibold">하루속 인기주제</p>
+                <button>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/filter.svg`}
+                    alt="filter_button"
+                  />
+                </button>
               </div>
               <body className="flex flex-col">
                 <div className="flex justify-around  my-4">
@@ -214,7 +220,7 @@ function Oneday() {
                           }}
                         />
                       )}
-                      <span className="relative text-base z-10 mix-blend flex gap-2 items-center">
+                      <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2px]">
                         <img src={imageArr[i]} alt="club_category" />
                         {tab}
                       </span>
@@ -271,7 +277,6 @@ function Oneday() {
                         );
                       })
                     )}
-
                   </div>
                 </div>
                 {filteredOnedayList.length >= 6 && totalPages > page + 1 && (
@@ -288,11 +293,11 @@ function Oneday() {
             </div>
 
             <section>
-            <div className="max-w-[1140px] mx-auto">
+              <div className="max-w-[1140px] mx-auto">
                 <p className="text-3xl font-semibold py-4">하루속 추천주제</p>
 
-              <div className="flex flex-col justify-between">
-                <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
+                <div className="flex flex-col justify-between mb-80">
+                  <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
                     {onedayData?.map((item, i) => {
                       return (
                         <Fade bottom>
@@ -315,17 +320,20 @@ function Oneday() {
               </div>
             </section>
             <section className="h-auto">
-              <div className="flex flex-col w-full bg-neutral-100 items-center gap-4 justify-center h-[228px]">
+              <div className="flex flex-col w-full bg-[#E4FFE0] items-center gap-4 justify-center h-[228px]">
                 {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
-                <p className=" text-5xl font-sans font-semibold">
+                <p className=" text-[1.75rem] font-sans font-semibold">
                   내가 찾는 하루속 이벤트가 없다면?
                 </p>
-                <div className="text-green-400 text-xl font-sans">
+                <div className="text-green-400">
                   {/* <CreateClub /> */}
                   <button
-                    className="flex gap-x-1 justify-center items-center"
+                    className="flex gap-x-2 justify-center items-center"
                     onClick={() => navigate(`/create-feed`)}
-                  >하루속 만들러가기
+                  >
+                    <span className="text-[1.25rem] mt-[4px]">
+                      일상속 만들러가기
+                    </span>
                     <img
                       src={`${process.env.PUBLIC_URL}/images/oneday/arrow_green.png`}
                       alt="create-club"
@@ -336,9 +344,8 @@ function Oneday() {
               </div>
             </section>
           </section>
-        <Footer />
+          <Footer />
         </div>
-
       </div>
     </>
   );

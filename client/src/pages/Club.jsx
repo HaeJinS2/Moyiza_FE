@@ -47,7 +47,7 @@ function Club() {
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
   const navigate = useNavigate();
-console.log(totalPages)
+  console.log(totalPages);
   //   const [club1, categories1] = useQueries(
   //     [
   //       {
@@ -191,9 +191,9 @@ console.log(totalPages)
           </div>
         </BodyContainer>
         <div className="flex justify-center items-center">
-          <section className="absolute top-52 h-auto min-w-[1280px]">
+          <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/club/club_main.png)`,
                 backgroundSize: "cover",
@@ -207,7 +207,7 @@ console.log(totalPages)
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cm bg-[#FFFBF8] rounded-t-[90px] mt-[524px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cm bg-[#FFFBF8] rounded-t-[90px] mt-[487px] z-10">
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">일상속 인기주제</p>
@@ -219,7 +219,7 @@ console.log(totalPages)
                 </button>
               </div>
               <body className="flex flex-col">
-                <div className="flex justify-around my-4">
+                <div className="flex justify-around mt-4 mb-6">
                   {categories?.map((tab, i) => (
                     <button
                       key={i}
@@ -312,8 +312,8 @@ console.log(totalPages)
                 {/* )} */}
               </body>
             </div>
-            <div className="max-w-[1140px] mx-auto">
-              <p className="text-3xl font-semibold py-4">일상속 추천주제</p>
+            <div className="max-w-[1140px] mx-auto mb-80">
+              <p className="text-[2rem] font-semibold py-4">일상속 추천주제</p>
 
               <div className="flex flex-col justify-between">
                 <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
@@ -342,20 +342,23 @@ console.log(totalPages)
           <section>
             <div className="min-w-[1280px] flex flex-col bg-[#FFDFC7] items-center gap-4 justify-center h-[300px]">
               {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}
-              <p className="text-5xl font-sans font-semibold">
+              <p className=" text-[1.75rem]  font-sans font-semibold">
                 내가 찾는 일상속 이벤트가 없다면?
               </p>
               <div className="text-orange-400 text-xl font-sans">
                 {/* <CreateClub /> */}
                 <button
-                    className="flex gap-x-1 justify-center items-center"
-                    onClick={() => navigate(`/create-feed`)}
-                  >일상속 만들러가기
-                    <img
-                      src={`${process.env.PUBLIC_URL}/images/club/arrow_orange.png`}
-                      alt="create-club"
-                    />
-                  </button>
+                  className="flex gap-x-2 justify-center items-center"
+                  onClick={() => navigate(`/create-feed`)}
+                >
+                  <span className="text-[1.25rem] mt-[5px]">
+                    일상속 만들러가기
+                  </span>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/club/arrow_orange.png`}
+                    alt="create-club"
+                  />
+                </button>
               </div>
               {/* </div> */}
             </div>

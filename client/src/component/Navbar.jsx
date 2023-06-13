@@ -4,12 +4,13 @@ import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState } from "recoil";
-import { roomIdStates } from "../states/chatState";
+import { roomIdListStates, roomIdStates } from "../states/chatState";
 import { isLoggedInState } from '../states/userStateTmp';
 import swal from 'sweetalert';
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 // import { userState } from "../states/userState";
+
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
@@ -19,10 +20,12 @@ function Navbar() {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
+  const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
   const [data, setData] = useState([]);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
 
+  console.log("roomIdListState",roomIdListState)
   useEffect(() => {
     if(Cookies.get("ACCESS_TOKEN")) {
       getAPI(`/chat/clubchat`)
@@ -31,6 +34,7 @@ function Navbar() {
         if (Array.isArray(response.data)) {
           const chatIds = response.data.map((item) => item.chatId);
           setRoomId(chatIds);
+          setRoomIdListState(chatIds)
           setData(response.data)
         }
       })

@@ -8,8 +8,7 @@ import { useRecoilState } from "recoil";
 import { userIdState } from "../states/userStateTmp";
 import { roomIdStates } from '../states/chatState';
 
-
-function ChatWindow({ roomIdState, style, clientRef }) {
+function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
     const [messages, setMessages] = useState([]);
     const [tmpMessage, setTmpMessage] = useState([{ userId: "dd", senderId: "xx", content: "내용1" },
     { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" },
@@ -59,7 +58,7 @@ function ChatWindow({ roomIdState, style, clientRef }) {
 
     console.log("messages~", messages)
 
-
+    console.log("subscriptionRefAlarm", subscriptionRefAlarm)
 
     // 수정 후 코드
     // 1. 이미 구독이 있으면 구독취소
@@ -72,7 +71,9 @@ function ChatWindow({ roomIdState, style, clientRef }) {
         if (!roomIdState) { return; }
         // if (roomIdState === prevRoomIdStateRef.current) { return; }
 
+        
         const handleGetAPI = async () => {
+
             if (isHandleGetAPIRunning.current) { return; }
             isHandleGetAPIRunning.current = true;
             try {
@@ -82,7 +83,8 @@ function ChatWindow({ roomIdState, style, clientRef }) {
                 setMessages(res.data.content.reverse());
                 setTmpMessage([...tmpMessage, res.data.content]);
 
-                if (clientRef.current && clientRef.current.connected) {
+                if (clientRef.current.connected) {
+                    subscriptionRefAlarm?.current[roomIdState].unsubscribe();
                     subscriptionRef.current = clientRef.current.subscribe(
                         `/chat/${roomIdState}`,
                         (message) => {
@@ -94,26 +96,31 @@ function ChatWindow({ roomIdState, style, clientRef }) {
                                 setMessages((prevMessages) => [...prevMessages, newMessage]);
                             }
                         }
-                    );
+                        );
+                      
                 }
+
+
             } catch (error) {
                 console.error(error);
             } finally {
                 isHandleGetAPIRunning.current = false; // <--- 실행 완료로 표시
             }
         };
-        if (clientRef.current.connected) {
+        if (clientRef.current && clientRef.current.connected && subscriptionRefAlarm.current) {
             // if (!clientRef.current.connected) {
             //     console.log("No underlying STOMP connection.");
             //     return;
             // }
-            if (subscriptionRef.current) {
-                console.log(123)
-                subscriptionRef.current.unsubscribe();
-            }
+            // if (subscriptionRef.current) {
+            //     console.log(123)
+            //     subscriptionRef.current.unsubscribe();
+            // }
             handleGetAPI();
-        }
+           
 
+
+        }
         else {
             const newClient = new Client({
                 webSocketFactory: () =>
@@ -147,7 +154,7 @@ function ChatWindow({ roomIdState, style, clientRef }) {
                     errorCount.current = 0;
                     return;
                 }
-
+                newClient.activate();
                 originalOnWebSocketClose(evt);
             };
 
@@ -155,10 +162,10 @@ function ChatWindow({ roomIdState, style, clientRef }) {
             clientRef.current = newClient;
         }
 
-
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [roomIdState]);
+    }, [roomIdState, subscriptionRefAlarm, clientRef]);
+
+
 
 
     useEffect(() => {
@@ -183,14 +190,19 @@ function ChatWindow({ roomIdState, style, clientRef }) {
         console.log(roomIdState);
         console.log(msg);
         console.log(clientRef);
+        if (clientRef.current.connected) {
         if (input && clientRef.current) {
             clientRef.current.publish({
                 destination: `/app/chat/${roomIdState}`,
                 headers: { ACCESS_TOKEN: `Bearer ${token}` },
                 body: JSON.stringify(msg),
             });
-        }
+        } 
         setInput("");
+    } else {
+        // If not connected, show an error message
+        console.error('Unable to send message. Client is not connected.');
+      }
     };
 
     const removeChatRoom = () => {

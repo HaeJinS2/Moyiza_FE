@@ -160,10 +160,13 @@ function Navbar() {
                       className="cursor-pointer relative "
                     >
                       <img
-                        className="w-[60px] h-[60px]"
+                        className="w-[60px] h-[60px] relative"
                         src={`${process.env.PUBLIC_URL}/images/chat_icon.svg`}
                         alt="chat_icon"
                       />
+                      <div className="absolute left-5 top-9 flex bg-red-500 text-white text-xs h-[20px] w-[30px] items-center justify-center
+                      rounded-[10px]
+                      ">{roomMsgState.length}</div>
                       {chatModalOpen && (
                         <>
                           <div className="absolute top-[70px] right-[-110px] shadow-cm rounded-[25px]">

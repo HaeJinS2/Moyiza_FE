@@ -114,8 +114,10 @@ function NearbyEvents() {
                     content: {
                         color: "#000000",
                         background: "#08B159",
-                        width: "642px",
-                        maxHeight: "815px",
+                        width: "700px",
+                        height: "815px",
+                        // maxHeight: "815px",
+                        // minHeight: "815px",
                         margin: "auto",
                         display: "flex",
                         flexDirection: "column",
@@ -123,7 +125,7 @@ function NearbyEvents() {
                         // gap: "10px",
                         justifyContent: 'center',
                         alignItems: 'center',
-                        overflow: 'hidden',
+                        overflow: 'auto',
                     },
                 }}
             >
@@ -133,8 +135,8 @@ function NearbyEvents() {
                             <>
                                 <div>
                                     {/* {location.latitude} {location.longitude} */}
-                                    <div className='overflow-auto h-[815px] w-[642px] py-6 flex flex-col justify-center items-center '>
-                                        <div className='flex flex-col justify-center items-center gap-y-4'>
+                                    <div className='flex flex-col justify-center items-center '>
+                                        <div className='flex flex-col justify-center items-center '>
                                             <div className='text-white font-semibold text-[30px] flex flex-col items-center '>
                                                 {data.length !== 0 ?
                                                     <>

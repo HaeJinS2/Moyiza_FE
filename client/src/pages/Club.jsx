@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import Fade from "react-reveal/Fade";
 // import { useQueries } from "react-query";
 
 import BodyContainer from "../component/BodyContainer";
 import ClubCard from "../component/ClubCard";
-// import ReviewCard from "../component/ReviewCard";
-// import CreateClub from "./CreateClub";
 import { getAPI } from "../axios";
 import { useRecoilState } from "recoil";
 import Loading from "../component/Loading";
@@ -263,7 +260,6 @@ function Club() {
                     ) : filteredClubList ? (
                       filteredClubList?.map((item, i) => {
                         return (
-                          <Fade bottom>
                             <ClubCard
                               page="club"
                               key={i}
@@ -275,13 +271,11 @@ function Club() {
                               maxGroupSize={item.maxGroupSize}
                               nowMemberCount={item.nowMemberCount}
                             />
-                          </Fade>
                         );
                       })
                     ) : (
                       club?.map((item, i) => {
                         return (
-                          <Fade bottom>
                             <ClubCard
                               page="club"
                               key={i}
@@ -294,7 +288,6 @@ function Club() {
                               maxGroupSize={item.maxGroupSize}
                               nowMemberCount={item.nowMemberCount}
                             />
-                          </Fade>
                         );
                       })
                     )}
@@ -319,7 +312,6 @@ function Club() {
                 <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
                   {club?.map((item, i) => {
                     return (
-                      <Fade bottom>
                         <RecommendCard
                           page="club"
                           key={i}
@@ -332,7 +324,6 @@ function Club() {
                           maxGroupSize={item.maxGroupSize}
                           nowMemberCount={item.nowMemberCount}
                         />
-                      </Fade>
                     );
                   })}
                 </div>

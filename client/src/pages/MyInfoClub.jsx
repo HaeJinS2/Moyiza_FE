@@ -115,7 +115,7 @@ function MyInfoClub() {
                                                     >
                                                         <div className="text-[32px] mt-[53px] flex flex-col justify-between align-center w-full">
                                                             <div className='flex justify-between align-center'>
-                                                                <div className="text-[36px]">{nickname ? `${nickname}님의 운영중인 일상속` : null}</div>
+                                                                <div className="text-[32px]">{nickname ? `${nickname}님의 운영중인 일상속` : null}</div>
                                                                 <div className='text-[20px]'>총 0개</div>
                                                             </div>
                                                         </div>
@@ -125,7 +125,7 @@ function MyInfoClub() {
                                                         </div>
                                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
                                                             <div className="text-[32px]">{nickname ? `${nickname}님의 참여중인 일상속` : null}</div>
-                                                            <div> 총 {clubsInParticipatingInfo.length}개</div>
+                                                            <div className='text-[20px]'> 총 {clubsInParticipatingInfo.length}개</div>
                                                         </div>
                                                         <div className='flex flex-col items-center justify-center w-[1200px]'>
                                                             <p className='text-[20px] mt-[109px]'>참여중인 일상이 없어요.</p>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
 import { postAPI } from '../axios';
+import swal from 'sweetalert';
 // import { styled } from 'styled-components';
 
 
@@ -14,7 +15,7 @@ function SignUp() {
     navigate('/login');
   }
   const handleFind = () => {
-    alert('준비 중입니다');
+    swal('준비 중입니다');
   };
 
   const [imageFile, setImageFile] = useState(null);
@@ -44,14 +45,14 @@ function SignUp() {
     postAPI("/user/signup/confirmEmail", requestData)
       .then((response) => {
         if (response.status === 200) {
-          alert("인증번호가 이메일로 전송되었습니다.");
+          swal("인증번호가 이메일로 전송되었습니다.");
         } else {
-          alert("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+          swal("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
         }
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+        swal("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
       });
   };
 
@@ -61,15 +62,15 @@ function SignUp() {
     postAPI("/user/signup/confirmEmail", requestData)
       .then((response) => {
         if (response.status === 200) {
-          alert("이메일 인증이 성공하였습니다.");
+          swal("이메일 인증이 성공하였습니다.");
           // 회원가입 등록 등 추가 동작 수행
         } else {
-          alert("이메일 인증에 실패했습니다. 인증번호를 확인해주세요.");
+          swal("이메일 인증에 실패했습니다. 인증번호를 확인해주세요.");
         }
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("이메일 인증에 실패했습니다. 인증번호를 확인해주세요.");
+        swal("이메일 인증에 실패했습니다. 인증번호를 확인해주세요.");
       });
   };
 
@@ -125,12 +126,12 @@ function SignUp() {
   const validationMutation = useMutation(nicknameValidationPost, {
     onSuccess: (data) => {
       if (data.isDuplicatedNick === false) {
-        alert('사용가능한 아이디입니다.');
+        swal('사용가능한 아이디입니다.');
       }
     },
     onError: (data) => {
       if (data.response.data.message === "중복된 닉네임 사용") {
-        alert('이미 사용중인 아이디입니다.');
+        swal('이미 사용중인 아이디입니다.');
       }
     },
   });
@@ -186,11 +187,11 @@ try {
 
   const signupResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/test/signup`, data);
   console.log(signupResponse.data);
-  alert('회원가입 성공!');
+  swal('회원가입 성공!');
   goLogin();
 } catch (error) {
   console.error(error);
-  alert(error.request.response);
+  swal(error.request.response);
 }
 
   };

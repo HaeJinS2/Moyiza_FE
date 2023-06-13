@@ -111,8 +111,7 @@ function Detail() {
       .then((res) => {
         setIsMember(true);
         console.log(res.data.message);
-
-        swal("가입이 승인됐습니다!");
+        getAPI(`/club/${id}`).then((res) => swal("가입이 승인됐습니다!"));
       })
       .catch((err) => {
         console.log(err);
@@ -124,7 +123,7 @@ function Detail() {
       .then((res) => {
         setIsMember(false);
         console.log(res.data.message);
-        swal("클럽 탈퇴 완료");
+        getAPI(`/club/${id}`).then((res) => swal("클럽 탈퇴 완료"));
       })
       .catch((err) => {
         console.log(err);
@@ -135,6 +134,7 @@ function Detail() {
     deleteAPI(`/club/${id}/delete`)
       .then((res) => {
         console.log(res.data.message);
+        navigate("/club");
         swal("클럽 삭제 완료");
       })
       .catch((err) => {
@@ -197,7 +197,12 @@ function Detail() {
     postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
       console.log(res);
       onJoinSuccess && onJoinSuccess();
-      swal("이벤트 참가 신청이 완료되었습니다!");
+      getAPI(`/club/${id}/eventlist`)
+      .then((res) => {
+        console.log(res);
+        setEventLists(res.data);
+        swal("이벤트 참가 신청이 완료되었습니다!");
+      })
     });
   };
 
@@ -205,16 +210,21 @@ function Detail() {
     deleteAPI(`/club/${clubId}/event/join/${eventId}`).then((res) => {
       console.log(res);
       onLeaveSuccess && onLeaveSuccess();
-      swal("이벤트 참가 신청이 취소됐습니다!");
+      getAPI(`/club/${id}/eventlist`)
+      .then((res) => {
+        console.log(res);
+        setEventLists(res.data);
+        swal("이벤트 참가 신청이 취소됐습니다!");
+      })
     });
   };
 
   const handleDeleteEvent = (clubId, eventId) => {
     deleteAPI(`/club/${clubId}/event/${eventId}`)
       .then((res) => {
-        swal("이벤트 삭제 완료!") 
-        getClubEventLists()
-      } )
+        swal("이벤트 삭제 완료!");
+        getClubEventLists();
+      })
       .catch((error) => swal("이벤트 삭제 요청이 거절됐습니다."));
   };
   console.log(clubMemberNicknameArr);
@@ -288,7 +298,9 @@ function Detail() {
             </div>
           </div>
           <div className="flex justify-between items-center w-full h-[237px] bg-neutral-200 rounded-2xl pr-10">
-            <p className="text-black text-2xl px-4">{clubDetail?.data.clubContent}</p>
+            <p className="text-black text-2xl px-4">
+              {clubDetail?.data.clubContent}
+            </p>
             {isOwner ? (
               onEdit ? (
                 <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">
@@ -390,7 +402,9 @@ function Detail() {
                                     </button>
                                     <button
                                       className="w-[126px] h-[30px] rounded-full border-2 border-orange-400 bg-white text-orange-400 text-lg"
-                                      onClick={() => handleDeleteEvent(id,item.id)}
+                                      onClick={() =>
+                                        handleDeleteEvent(id, item.id)
+                                      }
                                     >
                                       삭제하기
                                     </button>

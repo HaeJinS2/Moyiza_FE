@@ -168,7 +168,7 @@ function Oneday() {
           </div>
         </BodyContainer>
         <div className="flex justify-center items-center">
-          <section className="absolute top-52 h-auto min-w-[1280px]">
+          <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
               className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
@@ -178,18 +178,23 @@ function Oneday() {
                 backgroundPosition: "center",
               }}
             >
-
+{/* 
               <p>당신의 특별한 하루</p>
-              <p>'하루속'에서 함께하세요!</p>
+              <p>'하루속'에서 함께하세요!</p> */}
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cm bg-[#F9FFF8] rounded-t-[90px] mt-[524px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cm bg-[#F9FFF8] rounded-t-[90px] mt-[477px] z-10">
             <div className="max-w-[1140px] mx-auto">
-              <div className="flex justify-between items-center my-10">
-                <p className="text-3xl font-semibold">하루속 인기주제</p>
-                <button>필터</button>
+            <div className="flex justify-between items-center pt-16 pb-2 pr-1">
+                <p className="text-[2rem] font-semibold">하루속 인기주제</p>
+                <button>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/filter.svg`}
+                    alt="filter_button"
+                  />
+                </button>
               </div>
               <body className="flex flex-col">
                 <div className="flex justify-around  my-4">
@@ -214,7 +219,7 @@ function Oneday() {
                           }}
                         />
                       )}
-                      <span className="relative text-base z-10 mix-blend flex gap-2 items-center">
+                      <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2px]">
                         <img src={imageArr[i]} alt="club_category" />
                         {tab}
                       </span>

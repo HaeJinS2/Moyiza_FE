@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
-import { useRecoilState } from "recoil";
-import { roomIdListStates, roomIdStates } from "../states/chatState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { roomIdListStates, roomIdStates, roomMsgStates } from "../states/chatState";
 import { isLoggedInState } from '../states/userStateTmp';
 import swal from 'sweetalert';
 // import { Client } from "@stomp/stompjs";
@@ -21,24 +21,26 @@ function Navbar() {
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
   const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
+  const roomMsgState = useRecoilValue(roomMsgStates);
+
   const [data, setData] = useState([]);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
 
-  console.log("roomIdListState",roomIdListState)
+  console.log("roomIdListState", roomIdListState)
   useEffect(() => {
-    if(Cookies.get("ACCESS_TOKEN")) {
+    if (Cookies.get("ACCESS_TOKEN")) {
       getAPI(`/chat/clubchat`)
-      .then((response) => {
-        console.log("dataa",response.data)
-        if (Array.isArray(response.data)) {
-          const chatIds = response.data.map((item) => item.chatId);
-          setRoomId(chatIds);
-          setRoomIdListState(chatIds)
-          setData(response.data)
-        }
-      })
-      .catch((error) => console.log(error));
+        .then((response) => {
+          console.log("dataa", response.data)
+          if (Array.isArray(response.data)) {
+            const chatIds = response.data.map((item) => item.chatId);
+            setRoomId(chatIds);
+            setRoomIdListState(chatIds)
+            setData(response.data)
+          }
+        })
+        .catch((error) => console.log(error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn2]);
@@ -92,6 +94,9 @@ function Navbar() {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("data", data)
+  }, [data])
   // chatModal 또는 profileModal이 켜져있을때 모달의 외부를 클릭하면 모달이 닫히도록 하는 함수
   useEffect(() => {
     function handleClickOutside(event) {
@@ -167,45 +172,51 @@ function Navbar() {
                               <div className="text-3xl px-4">채팅</div>
 
                               <button
-                              className="px-4"
-                              onClick={() => setChatModalOpen(false)}>
+                                className="px-4"
+                                onClick={() => setChatModalOpen(false)}>
                                 X
                               </button>
                             </div>
                             <div className="w-[370px] h-[400px]  overflow-auto">
-                              {roomId?.map((id, i) => (
-                                <>
-                                  <button
-                                    className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2 bg-white
-                                  ${
-                                      // id === currentRoom
-                                      // ? "bg-slate-400"
-                                      // :
-                                      "bg-white"
-                                      }`}
-                                    key={id}
-                                    onClick={
-                                      () => {
-                                        handleRoomIdState(id)
-                                        setChatModalOpen(false);
+                              {data?.map((item, i) => {
+                                const matchingState = roomMsgState.slice().reverse().find(state => state.roomId === item);
+                                const contentToDisplay = matchingState ? matchingState : item;
+
+                                return (
+                                  <>
+                                    <button
+                                      className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
+                                      ${
+                                        // id === currentRoom
+                                        // ? "bg-slate-400"
+                                        // :
+                                        "bg-white"
+                                        }`}
+                                      key={roomId[i]}
+                                      onClick={
+                                        () => {
+                                          handleRoomIdState(roomId[i])
+                                          setChatModalOpen(false);
+                                        }
+                                        // connectToRoom(id)
                                       }
-                                      // connectToRoom(id)
-                                    }
-                                  >
-                                    <div className="flex items-center justify-center gap-x-4 px-4 py-1">
-                                      <div>
-                                        <div className="w-[52px] h-[52px] rounded-full">
-                                          <img src={`${data[i]?.chatThumbnail}`} alt="club_thumbnail"/>
+                                    >
+                                      <div className="flex items-center justify-center gap-x-4 px-4 py-1">
+                                        <div>
+                                          <div className="w-[52px] h-[52px] rounded-full">
+                                            <img src={`${data[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                          </div>
+                                        </div>
+                                        <div className="flex flex-col items-start">
+                                          <div>{contentToDisplay?.roomName}</div>
+                                          <div className="font-normal">{contentToDisplay?.content}</div>
                                         </div>
                                       </div>
-                                      <div className="flex flex-col items-start">
-                                        <div>{data[i]?.roomName ? data[i]?.roomName : "이름 없는 채팅방"}</div>
-                                        <div className="font-normal">미리볼내용</div>
-                                      </div>
-                                    </div>
-                                  </button>
-                                </>
-                              ))}
+                                    </button>
+                                  </>
+                                )
+                              }
+                              )}
                             </div>
                           </div>
                         </>
@@ -222,7 +233,7 @@ function Navbar() {
                       />
                     </div>
                     <div
-                      ref={profileModalRef} 
+                      ref={profileModalRef}
                       onClick={() => {
                         profileModalOpen
                           ? setProfileModalOpen(false)

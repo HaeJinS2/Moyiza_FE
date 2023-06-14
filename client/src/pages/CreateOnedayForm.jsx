@@ -14,7 +14,7 @@ import {
 import Slider from "react-input-slider";
 import ReactDatePicker from "react-datepicker";
 import { setHours, setMinutes } from "date-fns";
-import { postAPI, putAPI } from "../axios";
+import { filePutAPI, postAPI, putAPI } from "../axios";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 
@@ -27,25 +27,43 @@ function CreateOnedayForm() {
     useRecoilState(savedOnedayDataState);
 
   useEffect(() => {
-    if (savedOnedayData?.category === null) {
+    if (
+      savedOnedayData?.category === null &&
+      savedOnedayData?.category === undefined
+    ) {
       setOnedayStep(1);
       return;
-    } else if (savedOnedayData?.oneDayTag === null) {
+    } else if (
+      savedOnedayData?.oneDayTag === null &&
+      savedOnedayData?.oneDayTag === undefined
+    ) {
       setOnedayStep(2);
       return;
-    } else if (savedOnedayData?.oneDayTitle === null) {
+    } else if (
+      savedOnedayData?.oneDayTitle === null &&
+      savedOnedayData?.oneDayTitle === undefined
+    ) {
       setOnedayStep(3);
       return;
-    } else if (savedOnedayData?.oneDayContent === null) {
+    } else if (
+      savedOnedayData?.oneDayContent === null &&
+      savedOnedayData?.oneDayContent === undefined
+    ) {
       setOnedayStep(4);
       return;
-    } else if (savedOnedayData?.oneDayStartTime === null) {
+    } else if (
+      savedOnedayData?.oneDayStartTime === null &&
+      savedOnedayData?.oneDayStartTime === undefined
+    ) {
       setOnedayStep(5);
       return;
     } else if (
       savedOnedayData?.oneDayLocation === null &&
       savedOnedayData?.oneDayLatitude === null &&
-      savedOnedayData?.oneDayLongitude === null
+      savedOnedayData?.oneDayLongitude === null &&
+      savedOnedayData?.oneDayLocation === 0 &&
+      savedOnedayData?.oneDayLatitude === undefined &&
+      savedOnedayData?.oneDayLongitude === 0
     ) {
       setOnedayStep(6);
       return;
@@ -57,6 +75,8 @@ function CreateOnedayForm() {
       return;
     } else if (savedOnedayData?.oneDayGroupSize === null) {
       setOnedayStep(8);
+      return;
+    } else {
       return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -533,7 +553,16 @@ function OnedayStep4({
         setSavedOnedayData({ ...savedOnedayData, oneDayImage: compressedFile });
       });
 
-      putAPI(`/oneday/create/${tmpOnedayId}/images`, formData)
+      filePutAPI(`/oneday/create/${tmpOnedayId}/images`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+        transformRequest: [
+            function () {
+                return formData;
+            },
+        ],
+    })
         .then((res) => console.log(res))
         .catch((error) => console.log(error));
     } catch (error) {
@@ -672,8 +701,8 @@ function OnedayStep6({
             function (result, status) {
               console.log(locationInput);
               if (status === window.kakao.maps.services.Status.OK) {
-                let detailAddr = !!result[0].road_address
-                  ? result[0].road_address.address_name
+                let detailAddr = !!result[0].address
+                  ? result[0].address.address_name
                   : locationInput;
 
                 if (!detailAddr) {

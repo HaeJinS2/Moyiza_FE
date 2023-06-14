@@ -436,7 +436,7 @@ function Detail() {
                   exit="exit"
                   custom={endedDirection}
                   transition={{ duration: 0.5 }}
-                  className={`h-full absolute flex justify-center items-center w-full `}
+                  className={`h-full absolute flex  w-full `}
                 >
                   <div
                     className={`${

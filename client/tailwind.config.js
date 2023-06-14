@@ -10,7 +10,7 @@ module.exports = {
         'cms': '0px 0px 5px 0px rgba(0, 0, 0, 0.15)',
       },
       fontFamily: {
-        'sans': ['Pretendard'],
+        'sans': ['Pretendard', 'Apple SD Gothic Neo'],
       },
       fontWeight: {
         'regular': '500'

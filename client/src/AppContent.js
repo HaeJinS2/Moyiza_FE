@@ -61,6 +61,8 @@ function AppContent() {
       });
       // }
     }
+
+    if(isLoggedIn) {
     if (clientRef.current && clientRef.current.connected) {
       handleSub();
     } else {
@@ -103,9 +105,10 @@ function AppContent() {
       newClient.activate();
       clientRef.current = newClient;
     }
+  }
     // setClient(clientRef)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomIdListState]);
+  }, [roomIdListState, isLoggedIn]);
 
   useEffect(() => {
     console.log("roomMsgState?????", roomMsgState)

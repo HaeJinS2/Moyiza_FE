@@ -245,10 +245,10 @@ function Oneday() {
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cm bg-[#F9FFF8] rounded-t-[90px] mt-[477px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cms bg-[#F9FFF8] rounded-t-[90px] mt-[477px] z-10">
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
-                <p className="text-[2rem] font-semibold">하루속 인기주제</p>
+                <p className="text-[2rem] font-bold">하루속 인기주제</p>
                 <button>
                   <img
                     src={`${process.env.PUBLIC_URL}/images/filter.svg`}
@@ -257,7 +257,7 @@ function Oneday() {
                 </button>
               </div>
               <body className="flex flex-col">
-                <div className="flex justify-around  my-4">
+                <div className="flex justify-around mt-4 mb-6">
                   {categories?.map((tab, i) => (
                     <button
                       key={i}
@@ -273,14 +273,16 @@ function Oneday() {
                         <motion.div
                           layoutId="active-pill-2"
                           transition={{ type: "spring", duration: 0.5 }}
-                          className="bg-transparent border-2 border-green-400 absolute inset-0"
+                          className="bg-transparent border-2 border-[#0BB159] absolute inset-0"
                           style={{
                             borderRadius: 9999,
                           }}
                         />
                       )}
-                      <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2px]">
-                        <img src={imageArr[i]} alt="club_category" />
+                      <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2.3px]">
+                        <img 
+                        className="w-[20px] h-[20px]"
+                        src={imageArr[i]} alt="club_category" />
                         {tab}
                       </span>
                     </button>
@@ -288,9 +290,9 @@ function Oneday() {
                 </div>
                 <div className="flex flex-col justify-between">
                   <div
-                    className={`grid ${
+                    className={`grid justify-items-center ${
                       filteredOnedayList.length === 0 ? "" : "grid-cols-2"
-                    }  gap-x-4 gap-y-4`}
+                    }  gap-x-4 gap-y-5`}
                   >
                     {filteredOnedayList.length === 0 ? (
                       <EmptyState
@@ -338,7 +340,7 @@ function Oneday() {
                   <div className="flex justify-center mt-10">
                     <button
                       onClick={handleMore}
-                      className="bg-green-400 text-white px-3 py-2 rounded-full"
+                      className="bg-[#0BB159] text-white px-7 py-2 rounded-full"
                     >
                       더보기
                     </button>
@@ -349,7 +351,7 @@ function Oneday() {
 
             <section>
               <div className="max-w-[1140px] mx-auto">
-                <p className="text-3xl font-semibold py-4">하루속 추천주제</p>
+                <p className="text-3xl font-bold py-4">하루속 추천주제</p>
 
                 <div className="flex flex-col justify-between mb-80">
                   <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>

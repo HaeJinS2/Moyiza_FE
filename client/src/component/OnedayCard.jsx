@@ -17,10 +17,10 @@ function OnedayCard({
         onClick={() => {
           navigate(`/oneday/${id}`);
         }}
-        className="cursor-pointer flex shadow-cms bg-white p-6 rounded-xl h-full"
+        className="cursor-pointer flex items-center border bg-white p-6 rounded-2xl w-[546px] h-[222px]"
       >
         <img
-          className="aspect-square rounded-md w-[219px] h-[219px] object-cover mr-6"
+          className="aspect-square rounded-2xl w-[180px] h-[180px] object-cover mr-6"
           src={thumbnail}
           alt="clubThumbnail"
         />
@@ -29,7 +29,7 @@ function OnedayCard({
             <div className="flex gap-2">
               {tag.map((tag) => {
                 return (
-                  <div className="rounded-full border-2 px-2 py-1 border-green-500">
+                  <div className="rounded-full border-[1px] px-2 py-1 border-green-500">
                     {tag}
                   </div>
                 );

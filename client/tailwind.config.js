@@ -13,7 +13,9 @@ module.exports = {
         'sans': ['Pretendard', 'Apple SD Gothic Neo'],
       },
       fontWeight: {
-        'regular': '500'
+        'regular': '450',
+        'semibold' : '550',
+        'bold' : '650',
       },
     },
   },

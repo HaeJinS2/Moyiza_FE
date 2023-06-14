@@ -266,10 +266,10 @@ function Detail() {
             )}
           </div>
 
-          <div>
-            <div className="aspect-square flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl my-4">
+          <div className="flex flex-col gap-y-[40px]">
+            <div className="flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl">
               <img
-                className="rounded-md w-[219px] h-[219px] object-fill"
+                className="rounded-2xl aspect-square  w-[246px] h-[246px] object-fill"
                 src={clubDetail?.data.thumbnailUrl}
                 alt="clubThumbnail"
               />
@@ -278,7 +278,7 @@ function Detail() {
               {clubDetail?.data.clubTag.map((item) => {
                 return (
                   <>
-                    <div className="flex font-semibold  cursor-default items-center justify-center text-orange-400 text-xl border-orange-400 border-2 px-2 pt-[4px] rounded-full h-[35px]">
+                    <div className="flex cursor-default items-center justify-center text-orange-400 text-xl border-orange-400 border-[1px] px-2 pt-[2px] w-[110px] rounded-full h-[35px]">
                       {item}
                     </div>
                   </>
@@ -287,11 +287,11 @@ function Detail() {
             </div>
             <div className="flex justify-center">
               {isMember ? (
-                <div className="flex  text-2xl  justify-center items-center mt-10 bg-orange-400 text-white w-[224px] h-[60px]  py-2 rounded-full ">
+                <div className="flex  text-2xl  justify-center items-center bg-orange-400 text-white w-[224px] h-[60px]  py-2 rounded-full ">
                   <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
                 </div>
               ) : (
-                <div className="flex text-2xl justify-center items-center mt-10 bg-orange-400 text-white w-[224px] h-[60px] py-2 rounded-full">
+                <div className="flex text-2xl justify-center items-center bg-orange-400 text-white w-[224px] h-[60px] py-2 rounded-full">
                   <button onClick={handleJoinClub}>모임 가입하기</button>
                 </div>
               )}

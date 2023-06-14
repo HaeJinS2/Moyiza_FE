@@ -20,7 +20,6 @@ function CreateFeed() {
   // eslint-disable-next-line
   const [savedOnedayData, setSavedOnedayData] =
     useRecoilState(savedOnedayDataState);
-  const [getSavedData, setGetSavedData] = useState(null);
   const navigate = useNavigate();
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -36,23 +35,22 @@ function CreateFeed() {
   const modalContent = () => {
     if (savedOnedayData?.category === null) {
       return "아무것도 입력되지 않았습니다.";
-    } else if (savedOnedayData?.oneDayTag === null) {
+    } else if (savedOnedayData?.tag === null) {
       return "관심사까지 입력하셨습니다.";
     } else if (savedOnedayData?.oneDayTitle === null) {
       return "태그까지 입력하셨습니다.";
     } else if (savedOnedayData?.oneDayContent === null) {
       return "이벤트 제목까지 입력하셨습니다.";
-    } else if (savedOnedayData?.oneDayStartTime === null) {
-      return "이벤트 내용까지 입력하셨습니다.";
     } else if (
-      savedOnedayData?.oneDayLocation === null ||
-      savedOnedayData?.oneDayLatitude === null ||
-      savedOnedayData?.oneDayLongitude === null
+      savedOnedayData?.oneDayStartTime === null &&
+      savedOnedayData?.image === null
     ) {
-      return "이벤트 시간까지 입력하셨습니다.";
+      return "이벤트 내용까지 입력하셨습니다.";
+    } else if (savedOnedayData?.oneDayLocation === null) {
+      return "이벤트 시작시간까지 입력하셨습니다.";
     } else if (
-      savedOnedayData?.agePolicy === null ||
-      savedOnedayData?.genderPolicy === null
+      savedOnedayData?.age === null &&
+      savedOnedayData?.gender === null
     ) {
       return "이벤트 장소까지 입력하셨습니다.";
     } else if (savedOnedayData?.oneDayGroupSize === null) {
@@ -80,11 +78,24 @@ function CreateFeed() {
     });
   };
 
-  const handleGetSavedData = () => {
+  const handleGetSavedData = (getSavedData) => {
     if (getSavedData) {
       navigate("/create-oneday-form");
     } else {
-      setSavedOnedayData({});
+      setSavedOnedayData({
+        age: null,
+        category: null,
+        gender: null,
+        image: null,
+        oneDayContent: null,
+        oneDayGroupSize: null,
+        oneDayLatitude: null,
+        oneDayLocation: null,
+        oneDayLocation: null,
+        oneDayStartTime: null,
+        oneDayTitle: null,
+        tag: null,
+      });
       navigate("/create-oneday-form");
     }
   };
@@ -135,8 +146,7 @@ function CreateFeed() {
             <div className="flex justify-center gap-10">
               <button
                 onClick={() => {
-                  setGetSavedData(true);
-                  handleGetSavedData();
+                  handleGetSavedData(true);
                   closeModal();
                 }}
               >
@@ -144,8 +154,7 @@ function CreateFeed() {
               </button>
               <button
                 onClick={() => {
-                  setGetSavedData(false);
-                  handleGetSavedData();
+                  handleGetSavedData(false);
                   closeModal();
                 }}
               >

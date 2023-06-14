@@ -26,57 +26,112 @@ function CreateOnedayForm() {
   const [savedOnedayData, setSavedOnedayData] =
     useRecoilState(savedOnedayDataState);
 
+  // useEffect(() => {
+  //   if (
+  //     savedOnedayData?.category === null &&
+  //     savedOnedayData?.category === undefined
+  //   ) {
+  //     setOnedayStep(1);
+  //     return;
+  //   } else if (
+  //     savedOnedayData?.oneDayTag === null &&
+  //     savedOnedayData?.oneDayTag === undefined
+  //   ) {
+  //     setOnedayStep(2);
+  //     return;
+  //   } else if (
+  //     savedOnedayData?.oneDayTitle === null &&
+  //     savedOnedayData?.oneDayTitle === undefined
+  //   ) {
+  //     setOnedayStep(3);
+  //     return;
+  //   } else if (
+  //     savedOnedayData?.oneDayContent === null &&
+  //     savedOnedayData?.oneDayContent === undefined
+  //   ) {
+  //     setOnedayStep(4);
+  //     return;
+  //   } else if (
+  //     savedOnedayData?.oneDayStartTime === null &&
+  //     savedOnedayData?.oneDayStartTime === undefined
+  //   ) {
+  //     setOnedayStep(5);
+  //     return;
+  //   } else if (
+  //     savedOnedayData?.oneDayLocation === null &&
+  //     savedOnedayData?.oneDayLatitude === null &&
+  //     savedOnedayData?.oneDayLongitude === null &&
+  //     savedOnedayData?.oneDayLocation === 0 &&
+  //     savedOnedayData?.oneDayLatitude === undefined &&
+  //     savedOnedayData?.oneDayLongitude === 0
+  //   ) {
+  //     setOnedayStep(6);
+  //     return;
+  //   } else if (
+  //     savedOnedayData?.age === null &&
+  //     savedOnedayData?.gender === null
+  //   ) {
+  //     setOnedayStep(7);
+  //     return;
+  //   } else if (savedOnedayData?.oneDayGroupSize === null) {
+  //     setOnedayStep(8);
+  //     return;
+  //   } else {
+  //     return;
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   useEffect(() => {
-    if (
-      savedOnedayData?.category === null &&
-      savedOnedayData?.category === undefined
-    ) {
+    if (savedOnedayData?.category) {
+      setOnedayStep(2);
+    } else {
       setOnedayStep(1);
       return;
-    } else if (
-      savedOnedayData?.oneDayTag === null &&
-      savedOnedayData?.oneDayTag === undefined
-    ) {
+    }
+    if (savedOnedayData?.tag) {
+      setOnedayStep(3);
+    } else {
       setOnedayStep(2);
       return;
-    } else if (
-      savedOnedayData?.oneDayTitle === null &&
-      savedOnedayData?.oneDayTitle === undefined
-    ) {
+    }
+    if (savedOnedayData?.oneDayTitle) {
+      setOnedayStep(4);
+    } else {
       setOnedayStep(3);
       return;
-    } else if (
-      savedOnedayData?.oneDayContent === null &&
-      savedOnedayData?.oneDayContent === undefined
-    ) {
+    }
+    if (savedOnedayData?.oneDayContent) {
+      setOnedayStep(5);
+    } else {
       setOnedayStep(4);
       return;
-    } else if (
-      savedOnedayData?.oneDayStartTime === null &&
-      savedOnedayData?.oneDayStartTime === undefined
-    ) {
+    }
+
+    if (savedOnedayData?.oneDayStartTime) {
+      setOnedayStep(6);
+    } else {
       setOnedayStep(5);
       return;
-    } else if (
-      savedOnedayData?.oneDayLocation === null &&
-      savedOnedayData?.oneDayLatitude === null &&
-      savedOnedayData?.oneDayLongitude === null &&
-      savedOnedayData?.oneDayLocation === 0 &&
-      savedOnedayData?.oneDayLatitude === undefined &&
-      savedOnedayData?.oneDayLongitude === 0
-    ) {
+    }
+    if (savedOnedayData?.oneDayLocation) {
+      setOnedayStep(7);
+    } else {
       setOnedayStep(6);
       return;
-    } else if (
-      savedOnedayData?.age === null &&
-      savedOnedayData?.gender === null
-    ) {
+    }
+
+    if (savedOnedayData?.age && savedOnedayData?.gender ) {
+      setOnedayStep(8);
+    } else {
       setOnedayStep(7);
       return;
-    } else if (savedOnedayData?.oneDayGroupSize === null) {
-      setOnedayStep(8);
-      return;
+    }
+
+    if (savedOnedayData?.oneDayGroupSize) {
+      setOnedayStep(9);
     } else {
+      setOnedayStep(8);
       return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -701,6 +756,7 @@ function OnedayStep6({
             function (result, status) {
               console.log(locationInput);
               if (status === window.kakao.maps.services.Status.OK) {
+                console.log("이거찍어줘", result);
                 let detailAddr = !!result[0].address
                   ? result[0].address.address_name
                   : locationInput;

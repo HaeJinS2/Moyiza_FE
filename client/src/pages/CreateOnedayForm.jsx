@@ -19,7 +19,7 @@ import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 
 function CreateOnedayForm() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [onedayStep, setOnedayStep] = useState(1);
   const onedayOptions = useRecoilValue(onedayOptionState);
   const tmpOnedayId = useRecoilValue(onedayTmpIdState);
@@ -141,26 +141,38 @@ function CreateOnedayForm() {
           }
           break;
         case 5:
+          let date = new Date();
+          let localISOString = new Date(
+            date.getTime() - date.getTimezoneOffset() * 60000
+          )
+            .toISOString()
+            .slice(0, 19);
+          console.log(localISOString);
           if (
             savedOnedayData.oneDayStartTime === null ||
             savedOnedayData.oneDayStartTime === undefined
           ) {
-            swal("이벤트 시작 시간을 입력해주세요!");
-          } else {
-            putAPI(`/oneday/create/${tmpOnedayId}/time`, {
-              oneDayStartTime: savedOnedayData.oneDayStartTime,
-            })
-              .then((res) => {
-                console.log(res.data.message);
-                setOnedayStep(6);
-              })
-              .catch((error) => console.log(error));
+            setSavedOnedayData({
+              ...savedOnedayData,
+              oneDayStartTime: localISOString,
+            });
+            swal("이벤트 시작 시간이 없어서 현재 시간으로 설정되었습니다.");
           }
+          putAPI(`/oneday/create/${tmpOnedayId}/time`, {
+            oneDayStartTime: savedOnedayData.oneDayStartTime,
+          })
+            .then((res) => {
+              console.log(res.data.message);
+              setOnedayStep(6);
+            })
+            .catch((error) => console.log(error));
+
           break;
         case 6:
           if (
             savedOnedayData.oneDayLocation === null ||
             savedOnedayData.oneDayLocation === undefined ||
+            savedOnedayData.oneDayLocation.length === 0 ||
             savedOnedayData.oneDayLatitude === null ||
             savedOnedayData.oneDayLatitude === undefined ||
             savedOnedayData.oneDayLongitude === null ||
@@ -209,7 +221,7 @@ function CreateOnedayForm() {
             savedOnedayData.oneDayGroupSize === null ||
             savedOnedayData.oneDayGroupSize === undefined
           ) {
-            swal("쵀대 인원 수를 입력해주세요!");
+            swal("최대 인원 수를 입력해주세요!");
           } else {
             putAPI(`/oneday/create/${tmpOnedayId}/maxgroupsize`, {
               size: savedOnedayData.oneDayGroupSize,
@@ -217,13 +229,13 @@ function CreateOnedayForm() {
               .then((res) => {
                 console.log(res.data.message);
                 postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
-                .then((res) => {
-                  setOnedayStep(9);
-                  swal("하루속 이벤트 개설 완료!");
-                  navigate("/oneday")
-                  setSavedOnedayData({});
-                })
-                .catch((error) => error);
+                  .then((res) => {
+                    setOnedayStep(9);
+                    swal("하루속 이벤트 개설 완료!");
+                    navigate("/oneday");
+                    setSavedOnedayData({});
+                  })
+                  .catch((error) => error);
               })
               .catch((error) => console.log(error));
           }
@@ -518,7 +530,7 @@ function OnedayStep4({
       const promise = imageCompression.getDataUrlFromFile(compressedFile);
       promise.then((result) => {
         setFileUrl(result);
-        setSavedOnedayData({ ...savedOnedayData, oneDayImage: result });
+        setSavedOnedayData({ ...savedOnedayData, oneDayImage: compressedFile });
       });
 
       putAPI(`/oneday/create/${tmpOnedayId}/images`, formData)
@@ -575,8 +587,12 @@ function OnedayStep5({
   const [startDate, setStartDate] = useState(
     setHours(setMinutes(new Date(), 0), 9)
   );
-  const allTime = new Date(startDate).toISOString().split(".")[0];
-  console.log(allTime);
+  let date = new Date();
+  let localISOString = new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000
+  )
+    .toISOString()
+    .slice(0, 19);
 
   return (
     <>
@@ -596,7 +612,7 @@ function OnedayStep5({
                   setStartDate(date);
                   setSavedOnedayData({
                     ...savedOnedayData,
-                    oneDayStartTime: allTime,
+                    oneDayStartTime: localISOString,
                   });
                 }}
                 showTimeSelect
@@ -654,10 +670,11 @@ function OnedayStep6({
             latlng.getLng(),
             latlng.getLat(),
             function (result, status) {
+              console.log(locationInput);
               if (status === window.kakao.maps.services.Status.OK) {
                 let detailAddr = !!result[0].road_address
                   ? result[0].road_address.address_name
-                  : "";
+                  : locationInput;
 
                 if (!detailAddr) {
                   detailAddr = locationInput;
@@ -727,7 +744,9 @@ function OnedayStep7({
   genderPolicyList,
 }) {
   const [agePolicy, setAgePolicy] = useState(20);
-
+  useEffect(() => {
+    setSavedOnedayData({ ...savedOnedayData, genderPolicy: agePolicy });
+  }, []);
   return (
     <>
       <CreateOnedayFormLayout
@@ -803,7 +822,9 @@ function OnedayStep8({
   savedOnedayData,
 }) {
   const [groupSize, setGroupSize] = useState(5);
-
+  useEffect(() => {
+    setSavedOnedayData({ ...savedOnedayData, oneDayGroupSize: groupSize });
+  }, []);
   return (
     <>
       <CreateOnedayFormLayout

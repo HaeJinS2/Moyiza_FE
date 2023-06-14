@@ -56,8 +56,8 @@ function OnedayDetail() {
 
   useEffect(() => {
     queryClient.refetchQueries("getOnedayDetail");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMember]);
-  
 
   // isOwner의 상태 관리
   // useEffect(() => {

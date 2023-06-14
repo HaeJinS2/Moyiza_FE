@@ -746,6 +746,7 @@ function OnedayStep7({
   const [agePolicy, setAgePolicy] = useState(20);
   useEffect(() => {
     setSavedOnedayData({ ...savedOnedayData, genderPolicy: agePolicy });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
@@ -824,6 +825,7 @@ function OnedayStep8({
   const [groupSize, setGroupSize] = useState(5);
   useEffect(() => {
     setSavedOnedayData({ ...savedOnedayData, oneDayGroupSize: groupSize });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

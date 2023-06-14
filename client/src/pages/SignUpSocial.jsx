@@ -4,13 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
 import swal from 'sweetalert';
-import { setCookie } from '../utils/jwtUtils';
+// import { setCookie } from '../utils/jwtUtils';
 
 function SignUpSocial() {
+    window.addEventListener('load', () => {
+        swal('환영합니다! 회원가입을 완료해주세요.');
+    });
     //회원가입 성공 시, 로그인 페이지로 이동
     const navigate = useNavigate();
-    const goLogin = () => {
-        navigate('/login');
+    const goMain = () => {
+        navigate('/');
     }
     const [userInput, setUserInput] = useState({
         email: '',
@@ -52,12 +55,12 @@ function SignUpSocial() {
     const validationMutation = useMutation(nicknameValidationPost, {
         onSuccess: (data) => {
             if (data.isDuplicatedNick === false) {
-                swal('사용가능한 아이디입니다.');
+                swal('사용가능한 닉네임입니다.');
             }
         },
         onError: (data) => {
             if (data.response.data.message === "중복된 닉네임 사용") {
-                swal('이미 사용중인 아이디입니다.');
+                swal('이미 사용중인 닉네임입니다.');
             }
         },
     });
@@ -84,32 +87,26 @@ function SignUpSocial() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const url = `${process.env.REACT_APP_SERVER_URL}/user/signup/social`;
-        const data = {
-            name: name,
-            nickname: nickname,
-            gender: gender,
-            birth: birth,
-            phone: phoneNum,
-        };
-
         try {
-            const response = await axios.put(url, data);
+            const data = {
+                name: name,
+                nickname: nickname,
+                gender: gender,
+                birth: birth,
+                phone: phoneNum,
+            };
+            const url = `${process.env.REACT_APP_SERVER_URL}/user/signup/social`;
+            const socialSignupResponse = await axios.put(url, data);
 
-            const accessTokenHeader = response.headers['kakao?code='];
-            const accessToken = accessTokenHeader.access_token;
 
-            const jwt1 = accessToken.replace('Bearer ', '');
-            setCookie('ACCESS_TOKEN', jwt1, 1);
-            
+            console.log(socialSignupResponse);
+            goMain();
             swal('회원가입 성공');
-            goLogin();
         } catch (error) {
-            console.log(error);
-            swal('회원가입 실패');
-            // setUserloginInput({ email: '', password: '' });
+            swal('회원가입 실패!')
         }
     };
+
 
     return (
         <>
@@ -158,7 +155,7 @@ function SignUpSocial() {
                                 autoComplete="username"
                             />
                             {/* 닉네임 중복 검사 */}
-                            <button style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 w-30 h-12 px-4 py-1 shadow hover:shadow-lg" onClick={nicknameValidationHandler}>중복확인</button>
+                            <button type='button' style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 w-30 h-12 px-4 py-1 shadow hover:shadow-lg" onClick={nicknameValidationHandler}>중복확인</button>
                         </div>
                         {/* 생년월일 */}
                         <div style={{ width: '100%' }} class="flex items-center mb-5">

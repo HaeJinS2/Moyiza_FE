@@ -1,37 +1,58 @@
 
 
-// import axios from 'axios';
-// import React, { useEffect } from 'react'
-// import { useNavigate } from 'react-router-dom';
 
-// function Redirection() {
-//     const code = window.location.search;
-//     const navigate = useNavigate();
+import React, { useEffect } from 'react'
+import { setCookie } from '../utils/jwtUtils';
+import swal from 'sweetalert';
+import { useNavigate } from 'react-router-dom';
 
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 console.log(process.env.REACT_APP_URL);
-//                 const response = await axios.post(`${process.env.REACT_APP_URL}/login/oauth2/code/kakao${code}`);
-//                 console.log(response.data);
+function Redirection() {
+    const navigate = useNavigate();
+	const goLogin = () => {
+		navigate('/login');
+	}
+   
 
-//                 // 토큰을 받아서 localStorage 같은 곳에 저장하는 코드를 여기에 쓴다.
-//                 localStorage.setItem('name', response.data.user_name);
 
-//                 navigate('/login');
-//             } catch (error) {
-//                 console.error(error);
-//             }
-//         };
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        const getToken = url.searchParams.get('token');
+        const confirmToken = url.searchParams.get('confirm');
+        const error = url.searchParams.get('error');
+       
+        console.log('error')
+        if (getToken) {
+            setCookie('ACCESS_TOKEN', getToken);
+            // goSignup();
+            window.location.href = `${process.env.REACT_APP_SERVER_URL}/signup/social`
+            // swal('환영합니다! 회원가입을 완료해주세요');
+        } else if (confirmToken) {
+            setCookie('ACCESS_TOKEN', confirmToken);
+            // goMain();
+            window.location.href =`${process.env.REACT_APP_SERVER_URL}/`
+            swal('로그인 성공!')
+        } else if (error) {
+            // goLogin();
+            window.location.href = `${process.env.REACT_APP_SERVER_URL}/login`
+            swal(error);
+            goLogin();
+        }
+        else {
+            // goLogin();
+            window.location.href = `${process.env.REACT_APP_SERVER_URL}/login`
+            swal('잘못된 접근입니다')
+        }
 
-//         fetchData();
-//     }, [code, navigate]);
+    });
 
-//     return (
-//         <>
-//         <div>로그인 중입니다.</div>
-//         </>
-//     )
-// }
 
-// export default Redirection;
+
+
+    return (
+        <>
+
+        </>
+    )
+}
+
+export default Redirection

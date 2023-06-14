@@ -16,10 +16,10 @@ import swal from 'sweetalert';
 
 function Login() {
     // 소셜로그인   
-    const KAKAO_AUTH_URL = `http://13.125.51.14/oauth2/authorization/kakao`;
-    // const NAVER_AUTH_URL = `http://43.201.150.14/oauth2/authorization/naver`;
-    const NAVER_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver`;
-    const GOOGLE_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google`;
+
+    const KAKAO_AUTH_URL = `http://13.125.51.14/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect`;
+    const NAVER_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver?redirect_uri=http://localhost:3000/oauth/redirect`;
+    const GOOGLE_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google?redirect_uri=http://localhost:3000/oauth/redirect`;
     
     const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
     console.log(isLoggedIn2)
@@ -33,43 +33,43 @@ function Login() {
         window.location.href = GOOGLE_AUTH_URL;
     }
 
-    const handleAuthorizationCode = async () => {
-        const url = new URL(window.location.href);
-        const code = url.searchParams.get('code');
-        const currentUrl = window.location.href;
-        console.log('code', code);
+    // const handleAuthorizationCode = async () => {
+    //     const url = new URL(window.location.href);
+    //     const code = url.searchParams.get('code');
+    //     const currentUrl = window.location.href;
+    //     console.log('code', code);
 
-        if (code) {
-            try {
-                let apiUrl = '';
+    //     if (code) {
+    //         try {
+    //             let apiUrl = '';
 
-                if (currentUrl.includes('/oauth2/code/kakao')) {
-                    apiUrl = `http://13.125.51.14/login/oauth2/code/kakao`;
-                    console.log('code', code);
-                } else if (currentUrl.includes('/oauth2/code/naver')) {
-                    console.log('code', code);
-                    apiUrl = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/naver`;
-                } else if (currentUrl.includes('/oauth2/code/google')) {
-                    apiUrl = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/google`;
-                    console.log('code', code);
-                }
+    //             if (currentUrl.includes('/oauth2/code/kakao')) {
+    //                 apiUrl = `http://13.125.51.14/login/oauth2/code/kakao`;
+    //                 console.log('code', code);
+    //             } else if (currentUrl.includes('/oauth2/code/naver')) {
+    //                 console.log('code', code);
+    //                 apiUrl = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/naver`;
+    //             } else if (currentUrl.includes('/oauth2/code/google')) {
+    //                 apiUrl = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/google`;
+    //                 console.log('code', code);
+    //             }
 
-                const response = await axios.post(apiUrl, { code });
-                console.log(response.data); // 백엔드로부터 받은 응답 데이터 출력
+    //             const response = await axios.post(apiUrl, { code });
+    //             console.log(response.data); // 백엔드로부터 받은 응답 데이터 출력
 
-            } catch (error) {
-                console.error(error);
-                // 오류 처리
-            }
-        } else {
-            console.log('인가 코드가 없습니다.');
-        }
-    };
+    //         } catch (error) {
+    //             console.error(error);
+    //             // 오류 처리
+    //         }
+    //     } else {
+    //         console.log('인가 코드가 없습니다.');
+    //     }
+    // };
 
     // 페이지 로드 시 인가 코드 처리
-    useEffect(() => {
-        handleAuthorizationCode();
-    }, []);
+    // useEffect(() => {
+    //     handleAuthorizationCode();
+    // }, []);
     //--------------------------------------------------------------------
     const [user, setUser] = useRecoilState(userState);
     const navigate = useNavigate();
@@ -117,6 +117,7 @@ function Login() {
             const response = await axios.post(url, data);
 
             const accessToken = response.headers.access_token;
+        
             // const refreshToken = response.headers.refresh_token;
 
             const jwt1 = accessToken.replace('Bearer ', '');
@@ -131,6 +132,7 @@ function Login() {
             setIsLoggedIn2(true)
             swal('로그인 성공');
             goMain();
+            
         } catch (error) {
             console.log(error);
             swal('로그인 실패');

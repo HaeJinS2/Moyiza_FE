@@ -20,6 +20,7 @@ import MyInfoOneday from "../pages/MyInfoOneday";
 import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
 import SignUpSocial from "../pages/SignUpSocial";
+import Redirection from "../pages/Redirection";
 
 const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
 
@@ -41,6 +42,7 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/oauth/redirect" element={<Redirection />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signup/social" element={<SignUpSocial />} />
           <Route path="/user/mypage" element={<MyInfoClub />} />

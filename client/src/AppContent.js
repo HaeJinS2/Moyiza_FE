@@ -48,6 +48,9 @@ function AppContent() {
       // if (clientRef.current && clientRef.current.connected) {
       roomIdListState.forEach((id) => {
         if (subscriptionRef.current) {
+          if (subscriptionRef.current[id]) {
+            console.log(`${id}방은 이미 구독한 방`);
+          } else {
           subscriptionRef.current[id] = clientRef.current.subscribe(
             `/chatalarm/${id}`,
             (message) => {
@@ -57,9 +60,10 @@ function AppContent() {
               }
             }
           );
-        }
+        }}
       });
       // }
+
     }
 
     if(isLoggedIn) {

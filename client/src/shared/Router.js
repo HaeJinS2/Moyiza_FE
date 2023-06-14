@@ -14,7 +14,7 @@ import CreateFeed from "../pages/CreateFeed";
 import Navbar from "../component/Navbar";
 import ChatWindow from "../component/ChatWindow";
 import { useRecoilValue } from "recoil";
-import { roomIdStates } from "../states/chatState";
+import { roomIdStates, roomInfoStates } from "../states/chatState";
 import CreateOnedayForm from "../pages/CreateOnedayForm";
 import MyInfoOneday from "../pages/MyInfoOneday";
 import OnedayDetail from "../pages/OnedayDetail";
@@ -24,6 +24,8 @@ import SignUpSocial from "../pages/SignUpSocial";
 const Router = ({clientRef, testClient, subscriptionRefAlarm}) => {
   
   const roomIdState = useRecoilValue(roomIdStates);
+  const roomInfoState = useRecoilValue(roomInfoStates);
+
   console.log(roomIdState)
   console.log("testClient",testClient)
   return (
@@ -53,7 +55,7 @@ const Router = ({clientRef, testClient, subscriptionRefAlarm}) => {
         </Routes>
         {roomIdState ?
           roomIdState.map((item, index) =>
-            <ChatWindow  clientRef={clientRef} subscriptionRefAlarm={subscriptionRefAlarm}  style={{ right: `${index * 370}px` }} key={index} roomIdState={item} />)
+            <ChatWindow  roomInfo={roomInfoState[index]} clientRef={clientRef} subscriptionRefAlarm={subscriptionRefAlarm}  style={{ right: `${index * 370}px` }} key={index} roomIdState={item} />)
           : null}
         {/* <ChatWindow /> */}
       </BrowserRouter>

@@ -31,7 +31,7 @@ function Redirection() {
             setCookie('ACCESS_TOKEN', getToken);
             // goSignup();
             // window.location.href = `${process.env.REACT_DEV_URL}/signup/social`
-            // swal('환영합니다! 회원가입을 완료해주세요');
+            swal('환영합니다! 회원가입을 완료해주세요');
         } else if (confirmToken) {
             setCookie('ACCESS_TOKEN', confirmToken);
             goMain();

@@ -15,7 +15,7 @@ import swal from 'sweetalert';
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
   const navigate = useNavigate();
-  const [roomId, setRoomId] = useState([]);
+  // const [roomId, setRoomId] = useState([]);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
@@ -23,8 +23,9 @@ function Navbar() {
   const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
   const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
   const [currentChatType, setCurrentChatType] = useState('CLUB');
-
+  const [filteredRoomId, setFilteredRoomId] = useState([]);
   const roomMsgState = useRecoilValue(roomMsgStates);
+  const [filteredData, setFilteredData] = useState([]);
 
   const [data, setData] = useState([]);
   const chatModalRef = useRef();
@@ -40,10 +41,20 @@ function Navbar() {
           console.log("dataa", response.data)
           if (Array.isArray(response.data)) {
             const chatIds = response.data.map((item) => item.chatId);
-            setRoomId((pre) => [...pre, ...chatIds]);
-            setRoomIdListState((pre) => [...pre, ...chatIds])
-            setData((pre) => [...pre, ...response.data])
-            setRoomInfoState((pre) => [...pre, ...response.data])
+            // 기존 데이터와 새로운 데이터를 병합
+            const mergedData = [...data, ...response.data];
+
+            // 중복을 제거한 데이터를 생성
+            const uniqueData = mergedData.filter((item, index, self) =>
+              index === self.findIndex((t) => (
+                t.chatId === item.chatId
+              ))
+            );
+
+            // setRoomId((pre) => [...pre, ...chatIds]);
+            setRoomIdListState((pre) => [...pre, ...chatIds]);
+            setData((pre) => [...pre, ...uniqueData]);
+            setRoomInfoState((pre) => [...pre, ...response.data]);
           }
         })
         .catch((error) => console.log(error));
@@ -53,10 +64,20 @@ function Navbar() {
           console.log("onedaychat", response.data)
           if (Array.isArray(response.data)) {
             const chatIds = response.data.map((item) => item.chatId);
-            setRoomId((pre) => [...pre, ...chatIds]);
-            setRoomIdListState((pre) => [...pre, ...chatIds])
-            setData((pre) => [...pre, ...response.data])
-            setRoomInfoState((pre) => [...pre, ...response.data])
+           // 기존 데이터와 새로운 데이터를 병합
+           const mergedData = [...data, ...response.data];
+
+           // 중복을 제거한 데이터를 생성
+           const uniqueData = mergedData.filter((item, index, self) =>
+             index === self.findIndex((t) => (
+               t.chatId === item.chatId
+             ))
+           );
+
+          //  setRoomId((pre) => [...pre, ...chatIds]);
+           setRoomIdListState((pre) => [...pre, ...chatIds]);
+           setData((pre) => [...pre, ...uniqueData]);
+           setRoomInfoState((pre) => [...pre, ...response.data]);
           }
         })
         .catch((error) => console.log(error));
@@ -145,21 +166,28 @@ function Navbar() {
     };
   }, [chatModalOpen, profileModalOpen]);
 
-  const getFilteredData = () => {
+  useEffect(() => {
     if (currentChatType === null) {
-      return data;
+      setFilteredData(data);
     } else {
-      return data.filter(item => item.chatType === currentChatType);
+      const tmp = data.filter(item => item.chatType === currentChatType);
+      const roomIdArr = tmp.map((item) => {
+        return item.chatId
+      })
+      console.log("tmp", tmp)
+      setFilteredRoomId(roomIdArr)
+      setFilteredData(tmp);
     }
-  }
+  }, [data, currentChatType]);
+
 
   const handleButtonClick = (e, chatType) => {
     e.stopPropagation(); // 이벤트 전파를 막습니다.
     setCurrentChatType(chatType);
   }
 
-  const filteredData = getFilteredData();
-
+  //   const filteredData = getFilteredData();
+  // console.log("filteredData", filteredData)
   return (
     <>
       <div className="fixed z-20">
@@ -219,12 +247,12 @@ function Navbar() {
                             </div>
                             <div className="w-[370px] h-[400px]  overflow-auto">
                               <div className="flex py-4 px-8  gap-4">
-                              <button 
-                              className={`${currentChatType === 'CLUB' ? "font-bold border-b-[3px] border-black" : ""}`}
-                              onClick={(e) => handleButtonClick(e, 'CLUB')}>CLUB</button>
-                              <button 
-                              className={`${currentChatType === 'ONEDAY' ? "font-bold border-b-[3px] border-black" : ""}`}
-                              onClick={(e) => handleButtonClick(e, 'ONEDAY')}>ONEDAY</button>
+                                <button
+                                  className={`${currentChatType === 'CLUB' ? "font-bold border-b-[3px] border-black" : ""}`}
+                                  onClick={(e) => handleButtonClick(e, 'CLUB')}>CLUB</button>
+                                <button
+                                  className={`${currentChatType === 'ONEDAY' ? "font-bold border-b-[3px] border-black" : ""}`}
+                                  onClick={(e) => handleButtonClick(e, 'ONEDAY')}>ONEDAY</button>
                               </div>
                               {filteredData?.map((item, i) => {
                                 const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
@@ -240,10 +268,10 @@ function Navbar() {
                                         // :
                                         "bg-white"
                                         }`}
-                                      key={roomId[i]}
+                                      key={filteredRoomId[i]}
                                       onClick={
                                         () => {
-                                          handleRoomIdState(roomId[i])
+                                          handleRoomIdState(filteredRoomId[i])
                                           setChatModalOpen(false);
                                         }
                                         // connectToRoom(id)
@@ -254,7 +282,7 @@ function Navbar() {
                                           <div className="w-[52px] h-[52px] rounded-full">
                                             <img
                                               className=" aspect-square  rounded-full object-cover"
-                                              src={`${data[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                              src={`${filteredData[i]?.chatThumbnail}`} alt="club_thumbnail" />
                                           </div>
                                         </div>
                                         <div className="flex flex-col items-start">

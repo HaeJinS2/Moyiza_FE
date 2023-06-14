@@ -8,7 +8,7 @@ import { useRecoilState } from "recoil";
 import { userIdState } from "../states/userStateTmp";
 import { roomIdStates, roomMsgStates } from '../states/chatState';
 
-function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
+function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomInfo }) {
     const [messages, setMessages] = useState([]);
     const [tmpMessage, setTmpMessage] = useState([{ userId: "dd", senderId: "xx", content: "내용1" },
     { userId: "xx@xx.xx", senderId: "xx@xx.xx", content: "내용2" },
@@ -30,7 +30,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
     const isHandleGetAPIRunning = useRef(false);
 
     console.log(roomMsgState)
-    
+
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
@@ -236,9 +236,13 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm }) {
             >
                 <div className=''>
                     <div className='flex h-[55px] px-4 justify-between items-center gap-x-[10px]'>
-                        <div className='flex gap-x-2'>
-                            <div>이미지</div>
-                            <span>클럽명</span>
+                        <div className='flex gap-x-2 items-center'>
+                            <img
+                            className='aspect-square object-cover h-[36px] w-[36px] rounded-full'
+                            src={roomInfo?.chatThumbnail}
+                            alt="chat_thumbnail"
+                            />
+                            <span className='text-[24px]'>{roomInfo?.roomName}</span>
                         </div>
                         <div>
                             <button

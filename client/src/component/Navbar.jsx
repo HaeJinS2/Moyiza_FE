@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { roomIdListStates, roomIdStates, roomMsgStates } from "../states/chatState";
+import { roomIdListStates, roomIdStates, roomMsgStates, roomInfoStates } from "../states/chatState";
 import { isLoggedInState } from '../states/userStateTmp';
 import swal from 'sweetalert';
 // import { Client } from "@stomp/stompjs";
@@ -21,6 +21,7 @@ function Navbar() {
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
   const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
+  const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
   const roomMsgState = useRecoilValue(roomMsgStates);
 
   const [data, setData] = useState([]);
@@ -28,6 +29,7 @@ function Navbar() {
   const profileModalRef = useRef();
 
   console.log("roomIdListState", roomIdListState)
+  console.log("roomInfoState", roomInfoState)
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
       getAPI(`/chat/clubchat`)
@@ -38,6 +40,7 @@ function Navbar() {
             setRoomId(chatIds);
             setRoomIdListState(chatIds)
             setData(response.data)
+            setRoomInfoState(response.data)
           }
         })
         .catch((error) => console.log(error));

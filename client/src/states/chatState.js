@@ -14,3 +14,8 @@ export const roomMsgStates = atom({
     key: 'roomMsgStates',
     default: [],
 });
+
+export const roomInfoStates = atom({
+    key: 'roomInfoStates',
+    default: [],
+});

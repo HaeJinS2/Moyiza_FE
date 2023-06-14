@@ -176,6 +176,11 @@ function CreateClubForm() {
     const handleCategory = () => {
         const url = `/club/create/${club.createclub_id}/category`;
         const data = selectedCategory;
+        
+        if (!selectedCategory) {
+            swal("관심사를 선택해주세요!")
+            return;
+        }
 
         putAPI(url, { category: data })
             .then(response => {
@@ -198,6 +203,11 @@ function CreateClubForm() {
         const url = `/club/create/${club.createclub_id}/tag`;
         const tagsArray = selectedTag;
 
+        if (selectedTag.length === 0) {
+            swal("카테고리를 하나 이상 선택해주세요!(최대 3개)")
+            return;
+        }
+
         putAPI(url, {
             tag: tagsArray,
         })
@@ -215,6 +225,11 @@ function CreateClubForm() {
     const handleTitle = () => {
         const url = `/club/create/${club.createclub_id}/title`;
         const data = titleInput;
+
+        if (!titleInput) {
+            swal("제목을 입력해주세요!")
+            return;
+        }
 
         putAPI(url, {
             title: data,
@@ -234,6 +249,15 @@ function CreateClubForm() {
     const handleContent = () => {
         const url = `/club/create/${club.createclub_id}/content`;
         const data = contentInput;
+
+        if (!contentInput) {
+            swal("내용을 입력해주세요!")
+            return; 
+        }
+        if (!selectedFile) {
+            swal("사진을 등록해주세요!")
+            return; 
+        }
 
         putAPI(url, {
             content: data,
@@ -255,6 +279,15 @@ function CreateClubForm() {
         // const data = restrictionInput;
         const restrictionObj = { genderPolicy: selectedGenderPolicy, agePolicy: Number(agePolicy.x) };
 
+        if (!selectedGenderPolicy) {
+            swal("성별을 입력해주세요!")
+            return; 
+        }
+        if (!agePolicy.x) {
+            swal("나이를 입력해주세요!")
+            return; 
+        }
+
         putAPI(url,
             restrictionObj
         )
@@ -275,6 +308,11 @@ function CreateClubForm() {
         // const data = restrictionInput;
         const data = { maxGroupSize: Number(maxGroupSize.x) }
 
+        if (!maxGroupSize.x) {
+            swal("최대인원을 입력해주세요!")
+            return; 
+        }
+        
         putAPI(url,
             data
         )
@@ -306,6 +344,8 @@ function CreateClubForm() {
         setSelectedFileName(file.name);
         setSelectedFile(file);
 
+
+
         const options = {
             maxSizeMB: 1,
             maxWidthOrHeight: 300,
@@ -332,8 +372,6 @@ function CreateClubForm() {
                 formData.append("image", resizingFile);
 
             }
-
-
 
             filePutAPI(`/club/create/${club.createclub_id}/images`, formData, {
                 headers: {

@@ -20,7 +20,6 @@ import MyInfoOneday from "../pages/MyInfoOneday";
 import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
 import SignUpSocial from "../pages/SignUpSocial";
-import { useEffect } from "react";
 
 const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
 

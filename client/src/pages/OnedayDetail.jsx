@@ -8,8 +8,12 @@ import OnedayCard from "../component/OnedayCard";
 import { userNicknameState } from "../states/userStateTmp";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
+import { useQueryClient } from "react-query";
+
 import swal from "sweetalert";
 function OnedayDetail() {
+  const queryClient = useQueryClient();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
@@ -49,6 +53,11 @@ function OnedayDetail() {
   } = useQuery("getOnedayDetail", () => getAPI(`/oneday/${id}`), {
     refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
   });
+
+  useEffect(() => {
+    queryClient.refetchQueries("getOnedayDetail");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMember]);
 
   // isOwner의 상태 관리
   // useEffect(() => {
@@ -147,7 +156,7 @@ function OnedayDetail() {
 
   useEffect(() => {
     const fetchFilteredOnedayList = async () => {
-      if (!onedayDetail) return; // onedayDetail이 없는 경우 아무 것도 하지 않습니다.
+      if (!onedayDetail) return;
 
       try {
         getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`).then(
@@ -272,13 +281,13 @@ function OnedayDetail() {
                 src={`${process.env.PUBLIC_URL}/images/oneday/oneday_gender.svg`}
                 alt="oneday_location"
               />
-              남, 녀
+              {onedayDetail?.data.genderPolicy}
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-1 font-sans text-xl border-r-4 h-4/5">
               <div className="w-[36px] h-[36px] flex justify-center items-center">
                 Age
               </div>
-              <div> 30세 이상</div>
+              <div> {onedayDetail?.data.agePolicy}세 이상</div>
             </div>
             <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
               <img

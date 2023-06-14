@@ -18,6 +18,7 @@ function DetailEvent({
   modalIsOpen,
   setIsOpen,
   handleLeaveEvent,
+  image
 }) {
   // const [modalIsOpen, setIsOpen] = useState(false);
   // const [inputValue, setInputValue] = useState("");
@@ -213,7 +214,7 @@ function DetailEvent({
           content: {
             color: "#000000",
             width: "680px",
-            height: "526px",
+            height: "600px",
             margin: "auto",
             display: "flex",
             flexDirection: "column",
@@ -268,16 +269,17 @@ function DetailEvent({
                             type="text" onChange={handleInputChange} /> */}
         {/* <div id="map" style={{ width: "500px", height: "400px" }}></div>
           </div> */}
-        <div className="flex flex-col w-full h-full justify-between items-center">
+        <div className="flex flex-col w-full h-full gap-[15px] items-center">
           <div className="flex text-2xl justify-center text-orange-400 font-semibold items-center">
             <p>{content.eventTitle}</p>
           </div>
-          <div className="w-full h-[170px]">
-            <img src="" alt="empty" />
+          <div>
+            <img className=" object-cover" src={image} alt="empty" />
           </div>
           <div className="flex justify-between items-center w-[587px] h-[59px] bg-neutral-100 rounded-2xl p-4 pt-6">
             <div className="flex flex-col justify-center items-center">
               <img
+              
                 src={`${process.env.PUBLIC_URL}/images/detail/detail_calender.svg`}
                 alt="detail_calender"
               />

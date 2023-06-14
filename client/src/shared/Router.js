@@ -21,13 +21,19 @@ import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
 import SignUpSocial from "../pages/SignUpSocial";
 
-const Router = ({clientRef, testClient, subscriptionRefAlarm}) => {
-  
+const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
+
   const roomIdState = useRecoilValue(roomIdStates);
   const roomInfoState = useRecoilValue(roomInfoStates);
 
+  // useEffect(() => {
+  //   console.log("roomIdState:", roomIdState)
+  //   console.log("roomInfoState:", roomInfoState)
+  // }, [roomInfoState])
+
   console.log(roomIdState)
-  console.log("testClient",testClient)
+  console.log("testClient", testClient)
+
   return (
     <>
       <BrowserRouter>
@@ -53,10 +59,23 @@ const Router = ({clientRef, testClient, subscriptionRefAlarm}) => {
 
           {/* <Route path="/404" element={<NotFound />} /> */}
         </Routes>
-        {roomIdState ?
-          roomIdState.map((item, index) =>
-            <ChatWindow  roomInfo={roomInfoState[index]} clientRef={clientRef} subscriptionRefAlarm={subscriptionRefAlarm}  style={{ right: `${index * 370}px` }} key={index} roomIdState={item} />)
-          : null}
+        {
+          roomIdState ?
+            roomIdState.map((item, index) => {
+              const roomInfo = roomInfoState.find((x) => x.chatId === item);
+              return (
+                <ChatWindow
+                  roomInfo={roomInfo}
+                  clientRef={clientRef}
+                  subscriptionRefAlarm={subscriptionRefAlarm}
+                  style={{ right: `${index * 370}px` }}
+                  key={index}
+                  roomIdState={item}
+                />
+              );
+            })
+            : null
+        }
         {/* <ChatWindow /> */}
       </BrowserRouter>
     </>

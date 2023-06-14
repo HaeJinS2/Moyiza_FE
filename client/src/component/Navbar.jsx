@@ -34,55 +34,32 @@ function Navbar() {
   console.log("roomIdListState", roomIdListState)
   console.log("roomInfoState", roomInfoState)
   console.log("채팅방 목록 data", data)
+
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
-      getAPI(`/chat/clubchat`)
-        .then((response) => {
-          console.log("dataa", response.data)
-          if (Array.isArray(response.data)) {
-            const chatIds = response.data.map((item) => item.chatId);
-            // 기존 데이터와 새로운 데이터를 병합
-            const mergedData = [...data, ...response.data];
-
-            // 중복을 제거한 데이터를 생성
-            const uniqueData = mergedData.filter((item, index, self) =>
-              index === self.findIndex((t) => (
-                t.chatId === item.chatId
-              ))
-            );
-
-            // setRoomId((pre) => [...pre, ...chatIds]);
-            setRoomIdListState((pre) => [...pre, ...chatIds]);
-            setData((pre) => [...pre, ...uniqueData]);
-            setRoomInfoState((pre) => [...pre, ...response.data]);
-          }
-        })
-        .catch((error) => console.log(error));
-
-      getAPI(`/chat/onedaychat`)
-        .then((response) => {
-          console.log("onedaychat", response.data)
-          if (Array.isArray(response.data)) {
-            const chatIds = response.data.map((item) => item.chatId);
-           // 기존 데이터와 새로운 데이터를 병합
-           const mergedData = [...data, ...response.data];
-
-           // 중복을 제거한 데이터를 생성
-           const uniqueData = mergedData.filter((item, index, self) =>
-             index === self.findIndex((t) => (
-               t.chatId === item.chatId
-             ))
-           );
-
-          //  setRoomId((pre) => [...pre, ...chatIds]);
-           setRoomIdListState((pre) => [...pre, ...chatIds]);
-           setData((pre) => [...pre, ...uniqueData]);
-           setRoomInfoState((pre) => [...pre, ...response.data]);
-          }
-        })
-        .catch((error) => console.log(error));
+      const fetchClubChat = getAPI(`/chat/clubchat`);
+      const fetchOneDayChat = getAPI(`/chat/onedaychat`);
+  
+      Promise.all([fetchClubChat, fetchOneDayChat]).then((responses) => {
+        const clubChatData = responses[0].data;
+        const oneDayChatData = responses[1].data;
+  
+        if (Array.isArray(clubChatData) && Array.isArray(oneDayChatData)) {
+          const mergedData = [...clubChatData, ...oneDayChatData];
+  
+          const uniqueData = mergedData.filter((item, index, self) =>
+            index === self.findIndex((t) => t.chatId === item.chatId)
+          );
+  
+          const allChatIds = uniqueData.map((item) => item.chatId);
+  
+          setRoomIdListState(allChatIds);
+          setData(uniqueData);
+          setRoomInfoState(uniqueData);
+        }
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn2]);
 
   useEffect(() => {

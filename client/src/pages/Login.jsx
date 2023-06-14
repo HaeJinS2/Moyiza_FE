@@ -17,9 +17,9 @@ import swal from 'sweetalert';
 function Login() {
     // 소셜로그인   
 
-    const KAKAO_AUTH_URL = `http://13.125.51.14/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect`;
-    const NAVER_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver?redirect_uri=http://localhost:3000/oauth/redirect`;
-    const GOOGLE_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google?redirect_uri=http://localhost:3000/oauth/redirect`;
+    const KAKAO_AUTH_URL = `http://13.125.51.14/oauth2/authorization/kakao?redirect_uri=${process.env.REACT_DEV_URL}/oauth/redirect`;
+    const NAVER_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver?redirect_uri=${process.env.REACT_DEV_URL}/oauth/redirect`;
+    const GOOGLE_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google?redirect_uri=${process.env.REACT_DEV_URL}/oauth/redirect`;
     
     const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
     console.log(isLoggedIn2)

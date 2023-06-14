@@ -8,8 +8,12 @@ import OnedayCard from "../component/OnedayCard";
 import { userNicknameState } from "../states/userStateTmp";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
+import { useQueryClient } from "react-query";
+
 import swal from "sweetalert";
 function OnedayDetail() {
+  const queryClient = useQueryClient();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
@@ -49,6 +53,11 @@ function OnedayDetail() {
   } = useQuery("getOnedayDetail", () => getAPI(`/oneday/${id}`), {
     refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
   });
+
+  useEffect(() => {
+    queryClient.refetchQueries("getOnedayDetail");
+  }, [isMember]);
+  
 
   // isOwner의 상태 관리
   // useEffect(() => {
@@ -147,7 +156,7 @@ function OnedayDetail() {
 
   useEffect(() => {
     const fetchFilteredOnedayList = async () => {
-      if (!onedayDetail) return; // onedayDetail이 없는 경우 아무 것도 하지 않습니다.
+      if (!onedayDetail) return;
 
       try {
         getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`).then(

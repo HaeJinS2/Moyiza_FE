@@ -18,7 +18,8 @@ function DetailEvent({
   modalIsOpen,
   setIsOpen,
   handleLeaveEvent,
-  image
+  image,
+  page
 }) {
   // const [modalIsOpen, setIsOpen] = useState(false);
   // const [inputValue, setInputValue] = useState("");
@@ -324,7 +325,7 @@ function DetailEvent({
             >
               닫기
             </button>
-            {isNicknameExists ? (
+            {isNicknameExists ? page !== 'endedEvent' && (
               <button
                 onClick={() =>
                   handleLeaveEvent(clubId, eventId, () =>
@@ -335,7 +336,7 @@ function DetailEvent({
               >
                 탈퇴하기
               </button>
-            ) : (
+            ) : page !== 'endedEvent' && (
               <button
                 onClick={() =>
                   handleJoinEvent(clubId, eventId, () =>

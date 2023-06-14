@@ -60,6 +60,7 @@ function EndedClubEventCard({
         </div>
       </div>
         <DetailEvent
+        page='endedEvent'
         image={image}
         clubId={clubId}
         eventId={eventId}

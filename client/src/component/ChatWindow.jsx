@@ -22,7 +22,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
     const [roomIdList, setRoomIdList] = useRecoilState(roomIdStates);
     const [roomMsgState, setRoomMsgState] = useRecoilState(roomMsgStates);
     const [headerState, setHeaderState] = useState({})
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(2);
     
     const messagesEndRef = useRef(null);
     const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
@@ -73,7 +73,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
   // Fetches new data
   const fetchMoreData = async () => {
     const nextPage = page + 1;
-    const res = await getAPI(`/chat/${roomIdState}?size=8&page=${nextPage}`);
+    const res = await getAPI(`/chat/${roomIdState}?size=17&page=${nextPage}`);
     const reversedContent = [...res.data.content].reverse();
     setMessages((prevMessages) => [...reversedContent, ...prevMessages]);
     console.log("...res.data.content", ...res.data.content)
@@ -108,8 +108,8 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
             if (isHandleGetAPIRunning.current) { return; }
             isHandleGetAPIRunning.current = true;
             try {
-                const res = await getAPI(`/chat/${roomIdState}?size=8&page=1`);
-                console.log(res);
+                const res = await getAPI(`/chat/${roomIdState}?size=8&page=0`);
+                console.log("res",res);
                 console.log('API fetch complete');
                 setMessages(res.data.content.reverse());
                 setTmpMessage([...tmpMessage, res.data.content]);

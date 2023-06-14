@@ -14,7 +14,7 @@ import {
 import Slider from "react-input-slider";
 import ReactDatePicker from "react-datepicker";
 import { setHours, setMinutes } from "date-fns";
-import { postAPI, putAPI } from "../axios";
+import { filePutAPI, postAPI, putAPI } from "../axios";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 
@@ -553,7 +553,16 @@ function OnedayStep4({
         setSavedOnedayData({ ...savedOnedayData, oneDayImage: compressedFile });
       });
 
-      putAPI(`/oneday/create/${tmpOnedayId}/images`, formData)
+      filePutAPI(`/oneday/create/${tmpOnedayId}/images`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+        transformRequest: [
+            function () {
+                return formData;
+            },
+        ],
+    })
         .then((res) => console.log(res))
         .catch((error) => console.log(error));
     } catch (error) {

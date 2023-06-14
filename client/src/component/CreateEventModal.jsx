@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getHeaderAPI } from "../axios";
 import DatePicker from "react-datepicker";
 import styled, { createGlobalStyle } from "styled-components";
-import { FiCalendar } from "react-icons/fi";
+// import { FiCalendar } from "react-icons/fi";
 import { format } from "date-fns";
 import imageCompression from "browser-image-compression";
 import { filePostAPI } from "../axios";
@@ -27,6 +27,7 @@ function CreateEventModal({ id, getClubEventLists }) {
   const [marker, setMarker] = useState(null);
 
   const [selectedFile, setSelectedFile] = useState("");
+  // eslint-disable-next-line
   const [preview, setPreview] = useState(null);
 
   // console.log(startDate, dateString)
@@ -207,7 +208,7 @@ function CreateEventModal({ id, getClubEventLists }) {
       {value || "언제?"}
     </button>
   ));
-
+  // eslint-disable-next-line
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
@@ -293,16 +294,6 @@ function CreateEventModal({ id, getClubEventLists }) {
         }}
       >
         <div className="h-[526px] mt-6 ">
-          {/* <div className="flex justify-start items-center gap-x-2 w-full">
-                                {preview && (
-                                    <img className="w-[70px] h-[70px]" src={preview} alt="preview" />
-                                )}
-                                <input
-                                    type="file"
-                                    id="fileInput"
-                                    onChange={handleFileChange}
-                                />
-                            </div> */}
           <div className="flex flex-col items-center w-full h-full">
             <div className="flex w-full items-center gap-2 mb-[15px]">
               <span className="w-[59px]  text-[16px]">이벤트명</span>
@@ -384,6 +375,16 @@ function CreateEventModal({ id, getClubEventLists }) {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
+            </div>
+            <div className="flex justify-start items-center gap-x-2 w-full">
+              {preview && (
+                <img
+                  className="w-[70px] h-[70px]"
+                  src={preview}
+                  alt="preview"
+                />
+              )}
+              <input type="file" id="fileInput" onChange={handleFileChange} />
             </div>
             <div className="flex gap-x-4">
               <button

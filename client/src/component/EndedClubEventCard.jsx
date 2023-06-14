@@ -22,12 +22,14 @@ function EndedClubEventCard({
     <>
       <div
         onClick={handleDetailClubButton}
-        className="flex items-center w-[360px] h-[96px] shadow-cms rounded-xl"
+        className="flex items-center justify-center w-[350px] h-[96px] border-[1px] gap-x-2 rounded-2xl"
       >
         <div className="w-[60px] h-[60px] flex justify-center">
-          <img src={image} alt="event_image" />
+          <img 
+          className="rounded-2xl"
+          src={image} alt="event_image" />
         </div>
-        <div className="flex justify-center w-[300px] flex-col gap-3 px-2">
+        <div className="flex justify-center w-[255px] flex-col gap-3">
           <div>{title}</div>
           <div className="flex w-full justify-between">
             <div className="flex items-center">

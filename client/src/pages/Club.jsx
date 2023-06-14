@@ -169,9 +169,8 @@ function Club() {
                   setActivePageTab(tab);
                   i === 0 ? navigate("/club") : navigate("/oneday");
                 }}
-                className={`${
-                  activePageTab === tab ? "text-black" : "hover:opacity-50"
-                } relative rounded-full px-3 py-1.5 text-black outline-2 transition focus-visible:outline`}
+                className={`${activePageTab === tab ? "text-black" : "hover:opacity-50"
+                  } relative rounded-full px-3 py-1.5 text-black outline-2 transition focus-visible:outline`}
               >
                 {activePageTab === tab && (
                   <motion.div
@@ -204,7 +203,7 @@ function Club() {
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cm bg-[#FFFBF8] rounded-t-[90px] mt-[487px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cms bg-[#FFFBF8] rounded-t-[90px] mt-[477px] z-10">
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">일상속 인기주제</p>
@@ -224,9 +223,8 @@ function Club() {
                         setActiveTab(tab);
                         handleClubCategory(e);
                       }}
-                      className={`${
-                        activeTab === tab ? "text-black" : "hover:opacity-50"
-                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                      className={`${activeTab === tab ? "text-black" : "hover:opacity-50"
+                        } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                     >
                       {activeTab === tab && (
                         <motion.div
@@ -238,8 +236,10 @@ function Club() {
                           }}
                         />
                       )}
-                      <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2px]">
-                        <img src={imageArr[i]} alt="club_category" />
+                      <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2.3px]">
+                        <img
+                          className="w-[20px] h-[20px] "
+                          src={imageArr[i]} alt="club_category" />
                         {tab}
                       </span>
                     </button>
@@ -247,9 +247,8 @@ function Club() {
                 </div>
                 <div className="flex flex-col justify-between">
                   <div
-                    className={`grid ${
-                      filteredClubList.length === 0 ? "" : "grid-cols-2"
-                    }  gap-x-4 gap-y-4 pb-20 `}
+                    className={`grid justify-items-center ${filteredClubList.length === 0 ? "" : "grid-cols-2"
+                      }  gap-x-4 gap-y-5 pb-20 `}
                   >
                     {filteredClubList.length === 0 ? (
                       <EmptyState
@@ -260,34 +259,34 @@ function Club() {
                     ) : filteredClubList ? (
                       filteredClubList?.map((item, i) => {
                         return (
-                            <ClubCard
-                              page="club"
-                              key={i}
-                              title={item.clubTitle}
-                              content={item.clubContent}
-                              tag={item.clubTag}
-                              thumbnail={item.thumbnailUrl}
-                              id={item.club_id}
-                              maxGroupSize={item.maxGroupSize}
-                              nowMemberCount={item.nowMemberCount}
-                            />
+                          <ClubCard
+                            page="club"
+                            key={i}
+                            title={item.clubTitle}
+                            content={item.clubContent}
+                            tag={item.clubTag}
+                            thumbnail={item.thumbnailUrl}
+                            id={item.club_id}
+                            maxGroupSize={item.maxGroupSize}
+                            nowMemberCount={item.nowMemberCount}
+                          />
                         );
                       })
                     ) : (
                       club?.map((item, i) => {
                         return (
-                            <ClubCard
-                              page="club"
-                              key={i}
-                              title={item.clubTitle}
-                              content={item.clubContent}
-                              tag={item.clubTag}
-                              thumbnail={item.thumbnailUrl}
-                              id={item.club_id}
-                              eventId={item.id}
-                              maxGroupSize={item.maxGroupSize}
-                              nowMemberCount={item.nowMemberCount}
-                            />
+                          <ClubCard
+                            page="club"
+                            key={i}
+                            title={item.clubTitle}
+                            content={item.clubContent}
+                            tag={item.clubTag}
+                            thumbnail={item.thumbnailUrl}
+                            id={item.club_id}
+                            eventId={item.id}
+                            maxGroupSize={item.maxGroupSize}
+                            nowMemberCount={item.nowMemberCount}
+                          />
                         );
                       })
                     )}
@@ -297,7 +296,7 @@ function Club() {
                 <div className="flex justify-center  pb-12">
                   <button
                     onClick={handleMore}
-                    className="bg-orange-400 text-white px-3 py-2 rounded-full"
+                    className="bg-orange-400 text-white px-7 py-2 rounded-full"
                   >
                     더보기
                   </button>
@@ -306,24 +305,24 @@ function Club() {
               </body>
             </div>
             <div className="max-w-[1140px] mx-auto mb-80">
-              <p className="text-[2rem] font-semibold py-4">일상속 추천주제</p>
+              <p className="text-[2rem] font-bold py-4">일상속 추천주제</p>
 
               <div className="flex flex-col justify-between">
                 <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
                   {club?.map((item, i) => {
                     return (
-                        <RecommendCard
-                          page="club"
-                          key={i}
-                          title={item.clubTitle}
-                          content={item.clubContent}
-                          tag={item.clubTag}
-                          thumbnail={item.thumbnailUrl}
-                          id={item.club_id}
-                          eventId={item.id}
-                          maxGroupSize={item.maxGroupSize}
-                          nowMemberCount={item.nowMemberCount}
-                        />
+                      <RecommendCard
+                        page="club"
+                        key={i}
+                        title={item.clubTitle}
+                        content={item.clubContent}
+                        tag={item.clubTag}
+                        thumbnail={item.thumbnailUrl}
+                        id={item.club_id}
+                        eventId={item.id}
+                        maxGroupSize={item.maxGroupSize}
+                        nowMemberCount={item.nowMemberCount}
+                      />
                     );
                   })}
                 </div>

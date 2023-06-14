@@ -22,7 +22,8 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
     const [roomIdList, setRoomIdList] = useRecoilState(roomIdStates);
     const [roomMsgState, setRoomMsgState] = useRecoilState(roomMsgStates);
     const [headerState, setHeaderState] = useState({})
-
+    const [page, setPage] = useState(1);
+    
     const messagesEndRef = useRef(null);
     const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
     // const clientRef = useRef(null); // client를 useRef로 설정
@@ -69,6 +70,32 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
     // 2. 겟요청으로 방내용 가져오고 채팅방 구독
     // 3. else -> 
 
+  // Fetches new data
+  const fetchMoreData = async () => {
+    const nextPage = page + 1;
+    const res = await getAPI(`/chat/${roomIdState}?size=8&page=${nextPage}`);
+    const reversedContent = [...res.data.content].reverse();
+    setMessages((prevMessages) => [...reversedContent, ...prevMessages]);
+    console.log("...res.data.content", ...res.data.content)
+    console.log("...res.data.content.reverse", ...res.data.content.reverse())
+    setPage(nextPage);
+  };
+
+  // Checks if user has scrolled to the bottom
+  const handleScroll = (e) => {
+    const { scrollTop } = e.currentTarget;
+    if (scrollTop === 0) {
+      fetchMoreData();
+    }
+  };
+
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
 
@@ -81,7 +108,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
             if (isHandleGetAPIRunning.current) { return; }
             isHandleGetAPIRunning.current = true;
             try {
-                const res = await getAPI(`/chat/${roomIdState}`);
+                const res = await getAPI(`/chat/${roomIdState}?size=8&page=1`);
                 console.log(res);
                 console.log('API fetch complete');
                 setMessages(res.data.content.reverse());
@@ -252,7 +279,9 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                     </div>
                     <div className="w-[360px] h-px bg-gray-200"></div>
                 </div>
-                <div className='h-[370px] w-full overflow-y-auto'>
+                <div 
+                onScroll={handleScroll}
+                className='h-[370px] w-full overflow-y-auto'>
                     {messages.map((message, index) => {
                         const sentAt = message.sentAt
                         const formattedTime = new Date(sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -261,7 +290,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                             <div className="flex justify-end px-4">
                                 <div key={index} className=" flex-end">
                                     <div className="flex justify-end">
-                                        {message.senderNickname}
+                                        {message.senderNickname} / {message.chatRecordId}
                                     </div>
                                     <div className="flex gap-x-1 items-center justify-end">
                                         <div className='text-[8px] h-[50px] flex mx-[-5px] items-end gap-x-2'>
@@ -290,7 +319,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                                 <div key={index}>
                                     <div>
                                         <div className="flex justify-start">
-                                            {message.senderNickname}
+                                            {message.senderNickname} / {message.chatRecordId}
                                         </div>
                                     </div>
                                     <div className="flex gap-x-1 items-center">

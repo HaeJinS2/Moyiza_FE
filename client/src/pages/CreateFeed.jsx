@@ -91,7 +91,6 @@ function CreateFeed() {
         oneDayGroupSize: null,
         oneDayLatitude: null,
         oneDayLocation: null,
-        oneDayLocation: null,
         oneDayStartTime: null,
         oneDayTitle: null,
         tag: null,

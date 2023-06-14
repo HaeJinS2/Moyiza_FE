@@ -18,11 +18,14 @@ axios.interceptors.request.use(
             } 
         } 
 
-        if (config.url === '/user/signup'){
-            config.headers["Content-Type"] = "multipart/form-data";
+        if (config.url === '/user/test/signup'){
+            config.headers["Content-Type"] = "application/json";
         } 
+        else if(config.url.includes(`/user/test/upload`)){
+            config.headers["Content-Type"] = "multipart/form";
+        }
         else if(config.url.includes(`/user/mypage`)){
-            config.headers["Content-Type"] = "multipart/form-data";
+            config.headers["Content-Type"] = "multipart/form";
         }
         else if(config.url === '/user/signup/social'){
             config.headers["Content-Type"] = "application/json";
@@ -48,6 +51,7 @@ axios.interceptors.response.use(
     },
     // 에러 처리
     async function (error) {
+
         console.log(error.response.status)
         const originalRequest = error.config;
 

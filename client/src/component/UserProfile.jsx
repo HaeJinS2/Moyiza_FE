@@ -15,6 +15,33 @@ function UserProfile({
     console.log(profileImage);
     console.log(email);
     // const [imageFile, setImageFile] = useState(null);
+    const [interests, setInterests] = useState([
+        { name: '스포츠', details: ['축구', '농구', '야구', '테니스', '수영', '등산', '요가', '스쿼시', '배드민턴', '자전거'] },
+        { name: '문화', details: ['영화', '음악', '미술', '공연', '사진', '문학', '방송', '디자인', '연극', '오페라'] },
+        { name: '연애', details: ['데이트', '커플', '심리', '결혼', '이별', '남친', '여친', '친구', '썸', '러브스타일'] },
+        { name: '여행', details: ['해외여행', '국내여행', '자유여행', '배낭여행', '호텔', '풍경', '음식여행', '관광지', '문화체험', '독특한 장소'] }
+    ]);
+    console.log(setInterests);
+    const [expanded, setExpanded] = useState(true);
+    const [selectedDetails, setSelectedDetails] = useState([]);
+
+    const toggleExpanded = () => {
+        setExpanded(!expanded);
+    };
+
+    const handleDetailClick = (detail) => {
+        if (selectedDetails.includes(detail)) {
+            setSelectedDetails(selectedDetails.filter((item) => item !== detail));
+        } else {
+            if (selectedDetails.length < 3) {
+                setSelectedDetails([...selectedDetails, detail]);
+            }
+        }
+    };
+
+    const isDetailSelected = (detail) => {
+        return selectedDetails.includes(detail);
+    };
 
     // 모달 스타일 설정
     const modalStyles = {
@@ -103,17 +130,50 @@ function UserProfile({
                             class="int h-10 rounded-lg px-3.5 py-2 w-[70%] shadow"
                             type="file"
                             name="imageFile"
-                           ></input>
+                        ></input>
                         {/* <div className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg w-[18%] h-10 bg-[#FF7F1E] flex align-center justify-center">
                             파일 선택
                         </div> */}
-                       
-                    </div> 
+
+                    </div>
 
 
                     <div className='flex items-center mb-[220px] w-full'>
-                        <div className='font-medium'>관심사</div>
+                        <div className='w-[30%]'>
+                            <div className='font-medium'>관심사</div>
+                        </div>
+                        <button type="button" onClick={toggleExpanded} className=" w-[38px] h-[38px] bg-[#FF7F1E] text-white text-[30px] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
+                        {expanded ? '+' : '-'}
+                        </button>
+
+                        {!expanded && (
+                            <div>
+                                {interests.map((interest) => (
+                                    <div key={interest.name}>
+                                        <h3>{interest.name}</h3>
+                                        <ul>
+                                            {interest.details.map((detail) => (
+                                                <li key={detail} onClick={() => handleDetailClick(detail)}>
+                                                    <span>{detail}</span>
+                                                    {isDetailSelected(detail) && (
+                                                        <button
+                                                            onClick={() => setSelectedDetails(selectedDetails.filter((item) => item !== detail))}
+                                                            className="ml-2 bg-red-500 text-white rounded p-1"
+                                                        >
+                                                            삭제
+                                                        </button>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+
                     </div>
+
                     <div>
                         <button className='bg-[#FF7F1E] text-white rounded-[50px] w-20 h-10 mb-[10px] mr-[10px] shadow hover:shadow-lg'>저장</button>
                         <button onClick={closeModal} className='bg-[#626262] text-white rounded-[50px] w-20 h-10 mb-[10px] shadow hover:shadow-lg'>닫기</button>

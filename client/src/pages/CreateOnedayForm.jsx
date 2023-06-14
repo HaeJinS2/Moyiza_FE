@@ -692,7 +692,6 @@ function OnedayStep6({
             function (result, status) {
               console.log(locationInput);
               if (status === window.kakao.maps.services.Status.OK) {
-                console.log("이거찍어줘",result)
                 let detailAddr = !!result[0].address
                   ? result[0].address.address_name
                   : locationInput;

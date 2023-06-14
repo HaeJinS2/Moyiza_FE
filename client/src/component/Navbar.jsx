@@ -22,6 +22,8 @@ function Navbar() {
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
   const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
   const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
+  const [currentChatType, setCurrentChatType] = useState('CLUB');
+
   const roomMsgState = useRecoilValue(roomMsgStates);
 
   const [data, setData] = useState([]);
@@ -30,6 +32,7 @@ function Navbar() {
 
   console.log("roomIdListState", roomIdListState)
   console.log("roomInfoState", roomInfoState)
+  console.log("채팅방 목록 data", data)
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
       getAPI(`/chat/clubchat`)
@@ -37,10 +40,23 @@ function Navbar() {
           console.log("dataa", response.data)
           if (Array.isArray(response.data)) {
             const chatIds = response.data.map((item) => item.chatId);
-            setRoomId(chatIds);
-            setRoomIdListState(chatIds)
-            setData(response.data)
-            setRoomInfoState(response.data)
+            setRoomId((pre) => [...pre, ...chatIds]);
+            setRoomIdListState((pre) => [...pre, ...chatIds])
+            setData((pre) => [...pre, ...response.data])
+            setRoomInfoState((pre) => [...pre, ...response.data])
+          }
+        })
+        .catch((error) => console.log(error));
+
+      getAPI(`/chat/onedaychat`)
+        .then((response) => {
+          console.log("onedaychat", response.data)
+          if (Array.isArray(response.data)) {
+            const chatIds = response.data.map((item) => item.chatId);
+            setRoomId((pre) => [...pre, ...chatIds]);
+            setRoomIdListState((pre) => [...pre, ...chatIds])
+            setData((pre) => [...pre, ...response.data])
+            setRoomInfoState((pre) => [...pre, ...response.data])
           }
         })
         .catch((error) => console.log(error));
@@ -72,12 +88,12 @@ function Navbar() {
     navigate("/user/mypage");
   };
 
-// useEffect(() => {
-//   console.log("roomMsgState",roomMsgState)
-// }, [roomMsgState])
+  // useEffect(() => {
+  //   console.log("roomMsgState",roomMsgState)
+  // }, [roomMsgState])
 
   const [isScrolled, setIsScrolled] = useState(false);
- 
+
   const checkScroll = () => {
     if (window.scrollY > 0) {
       setIsScrolled(true);
@@ -129,6 +145,20 @@ function Navbar() {
     };
   }, [chatModalOpen, profileModalOpen]);
 
+  const getFilteredData = () => {
+    if (currentChatType === null) {
+      return data;
+    } else {
+      return data.filter(item => item.chatType === currentChatType);
+    }
+  }
+
+  const handleButtonClick = (e, chatType) => {
+    e.stopPropagation(); // 이벤트 전파를 막습니다.
+    setCurrentChatType(chatType);
+  }
+
+  const filteredData = getFilteredData();
 
   return (
     <>
@@ -188,7 +218,15 @@ function Navbar() {
                               </button>
                             </div>
                             <div className="w-[370px] h-[400px]  overflow-auto">
-                              {data?.map((item, i) => {
+                              <div className="flex py-4 px-8  gap-4">
+                              <button 
+                              className={`${currentChatType === 'CLUB' ? "font-bold border-b-[3px] border-black" : ""}`}
+                              onClick={(e) => handleButtonClick(e, 'CLUB')}>CLUB</button>
+                              <button 
+                              className={`${currentChatType === 'ONEDAY' ? "font-bold border-b-[3px] border-black" : ""}`}
+                              onClick={(e) => handleButtonClick(e, 'ONEDAY')}>ONEDAY</button>
+                              </div>
+                              {filteredData?.map((item, i) => {
                                 const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
                                 const contentToDisplay = matchingState ? matchingState : item.lastMessage;
 
@@ -214,9 +252,9 @@ function Navbar() {
                                       <div className="flex items-center justify-center gap-x-4 px-4 py-1">
                                         <div>
                                           <div className="w-[52px] h-[52px] rounded-full">
-                                            <img 
-                                            className=" aspect-square  rounded-full object-cover"
-                                            src={`${data[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                            <img
+                                              className=" aspect-square  rounded-full object-cover"
+                                              src={`${data[i]?.chatThumbnail}`} alt="club_thumbnail" />
                                           </div>
                                         </div>
                                         <div className="flex flex-col items-start">

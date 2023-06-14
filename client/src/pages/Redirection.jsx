@@ -24,22 +24,22 @@ function Redirection() {
         if (getToken) {
             setCookie('ACCESS_TOKEN', getToken);
             // goSignup();
-            window.location.href = `${process.env.REACT_APP_SERVER_URL}/signup/social`
+            window.location.href = `${process.env.REACT_DEV_URL}/signup/social`
             // swal('환영합니다! 회원가입을 완료해주세요');
         } else if (confirmToken) {
             setCookie('ACCESS_TOKEN', confirmToken);
             // goMain();
-            window.location.href =`${process.env.REACT_APP_SERVER_URL}/`
+            window.location.href =`${process.env.REACT_DEV_URL}/`
             swal('로그인 성공!')
         } else if (error) {
             // goLogin();
-            window.location.href = `${process.env.REACT_APP_SERVER_URL}/login`
+            window.location.href = `${process.env.REACT_DEV_URL}/login`
             swal(error);
             goLogin();
         }
         else {
             // goLogin();
-            window.location.href = `${process.env.REACT_APP_SERVER_URL}/login`
+            window.location.href = `${process.env.REACT_DEV_URL}/login`
             swal('잘못된 접근입니다')
         }
 

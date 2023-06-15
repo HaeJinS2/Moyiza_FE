@@ -109,7 +109,7 @@ function Login() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const url = `${process.env.REACT_APP_SERVER_URL}/user/login`;
+        const url = `${process.env.REACT_APP_SERVER_URL}/login`;
         const data = {
             ...userloginInput
         };

@@ -45,8 +45,8 @@ function EndedClubEventCard({
                 alt="club_calender"
               />
               <span className="flex items-center">
-                {startTime.split("T")[0].split("-")[1]}월
-                {startTime.split("T")[0].split("-")[2]}일
+                {startTime?.split("T")[0].split("-")[1]}월
+                {startTime?.split("T")[0].split("-")[2]}일
               </span>
             </div>
             <div className="flex items-center">
@@ -54,9 +54,9 @@ function EndedClubEventCard({
                 src={`${process.env.PUBLIC_URL}/images/club/club_location.png`}
                 alt="club_location"
               />
-              {location.split(" ")[0] === "서울"
-                ? location.split(" ")[1]
-                : location.split(" ")[0]}
+              {location?.split(" ")[0] === "서울"
+                ? location?.split(" ")[1]
+                : location?.split(" ")[0]}
             </div>
           </div>
         </div>

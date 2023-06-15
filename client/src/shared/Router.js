@@ -21,6 +21,7 @@ import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
 import SignUpSocial from "../pages/SignUpSocial";
 import Redirection from "../pages/Redirection";
+import WriteReview from "../pages/WriteReview";
 
 const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
 
@@ -57,6 +58,7 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
           <Route path="/create-oneday-form" element={<CreateOnedayForm />} />
           <Route path="/oneday/:id" element={<OnedayDetail />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/writereview" element={<WriteReview />} />
 
 
           {/* <Route path="/404" element={<NotFound />} /> */}

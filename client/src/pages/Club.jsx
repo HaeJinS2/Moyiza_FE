@@ -353,6 +353,7 @@ const handleTagClick = (tag) => {
                             id={item.club_id}
                             maxGroupSize={item.maxGroupSize}
                             nowMemberCount={item.nowMemberCount}
+                            isLikedByUser={item.isLikedByUser}
                           />
                         );
                       })
@@ -370,6 +371,7 @@ const handleTagClick = (tag) => {
                             eventId={item.id}
                             maxGroupSize={item.maxGroupSize}
                             nowMemberCount={item.nowMemberCount}
+                            isLikedByUser={item.isLikedByUser}
                           />
                         );
                       })

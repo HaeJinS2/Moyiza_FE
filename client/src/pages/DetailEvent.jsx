@@ -4,10 +4,11 @@ import Modal from "react-modal";
 import "../index.css";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
-import { getAPI } from "../axios";
+import { deleteAPI, getAPI, postAPI } from "../axios";
 // import { getHeaderAPI } from '../axios';
 import { useRecoilState } from "recoil";
 import { userNicknameState } from "../states/userStateTmp";
+import { HeartCheckbox } from "../component/HeartCheckBox";
 
 Modal.setAppElement("#root");
 
@@ -19,7 +20,8 @@ function DetailEvent({
   setIsOpen,
   handleLeaveEvent,
   image,
-  page
+  page,
+  isLikedByUser,
 }) {
   // const [modalIsOpen, setIsOpen] = useState(false);
   // const [inputValue, setInputValue] = useState("");
@@ -34,9 +36,9 @@ function DetailEvent({
 
   // 내가 참석중이라면 true 아니면 false
   const [isNicknameExists, setIsNicknameExists] = useState(false);
+  const [checked, setChecked] = useState(false);
 
-  console.log(content.eventAttendantList);
-  console.log(marker);
+  console.log(content.eventAttendantList, marker);
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
@@ -74,53 +76,6 @@ function DetailEvent({
   console.log(isNicknameExists);
   console.log("123", content);
   console.log(nicknameState.userNickname);
-  // useEffect(() => {
-  //     console.log(userLat, userLng)
-  // }, [userLat, userLng])
-
-  // useEffect(() => {
-  //     if (map && inputValue) {
-  //         let url = `https://dapi.kakao.com/v2/local/search/address.json?query=${inputValue}`;
-  //         getHeaderAPI(url, {
-  //             headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_MAPS_API_KEY_REST}` },
-  //         })
-  //             .then((response) => {
-  //                 let address = response.data.documents[0];
-  //                 let lat = address.y;
-  //                 let lng = address.x;
-
-  //                 let moveLatLon = new window.kakao.maps.LatLng(lat, lng);
-  //                 map.setCenter(moveLatLon);
-  //             })
-  //             .catch((error) => {
-  //                 console.log(error);
-  //             });
-  //     }
-  // }, [inputValue, map]);
-
-  // useEffect(() => {
-  //   const initializeMap = () => {
-  //     if (modalIsOpen && window.kakao && window.kakao.maps) {
-  //       let mapContainer = document.getElementById("map");
-  //       let mapOption = {
-  //         center: new window.kakao.maps.LatLng(
-  //           content.eventLatitude,
-  //           content.eventLongitude
-  //         ),
-  //         level: 3,
-  //       };
-
-  //       let mapInstance = new window.kakao.maps.Map(mapContainer, mapOption);
-  //       setMap(mapInstance);
-  //     }
-  //   };
-
-  //   if (modalIsOpen) {
-  //     const delay = setTimeout(initializeMap, 100);
-  //     return () => clearTimeout(delay);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [modalIsOpen]);
 
   useEffect(() => {
     if (map) {
@@ -180,10 +135,29 @@ function DetailEvent({
   // const handleDetailClubButton = () => {
   //     setIsOpen(true)
   // }
+  useEffect(() => {
+    setChecked(isLikedByUser)
+  }, [isLikedByUser])
 
   const closeModal = () => {
     setIsOpen(false);
   };
+
+  const likeDetailBtn = (e) => {
+    if (!checked) {
+      postAPI(`/club/${clubId}/event/${eventId}/like`, {}).then((res) => {
+        // swal("포스트!")
+        setChecked(e);
+        console.log(res)
+      }).catch((err) => console.log(err))
+    } else {
+      deleteAPI(`/club/${clubId}/event/${eventId}/like`, {}).then((res) => {
+        // swal("딜리트!")
+        setChecked(e);
+        console.log(res)
+      }).catch((err) => console.log(err))
+    }
+  }
 
   const eventStartTime = content?.eventStartTime;
   const month = eventStartTime?.split("T")[0].split("-")[1];
@@ -271,8 +245,18 @@ function DetailEvent({
         {/* <div id="map" style={{ width: "500px", height: "400px" }}></div>
           </div> */}
         <div className="flex flex-col w-full h-full gap-[15px] items-center">
-          <div className="flex text-2xl justify-center text-orange-400 font-semibold items-center">
-            <p>{content.eventTitle}</p>
+          <div className="flex justify-between w-full">
+            <div className="w-[220px]">참여중인지아닌지</div>
+            <div className="flex text-2xl w-[220px] justify-center text-orange-400 font-semibold items-center">
+              <p>{content.eventTitle}</p>
+            </div>
+            <div className="w-[220px] text-right">
+              <HeartCheckbox
+                likeBtn={likeDetailBtn}
+                checked={checked}
+                setChecked={setChecked}
+              />
+            </div>
           </div>
           <div>
             <img className=" object-cover" src={image} alt="empty" />
@@ -280,7 +264,7 @@ function DetailEvent({
           <div className="flex justify-between items-center w-[587px] h-[59px] bg-neutral-100 rounded-2xl p-4 pt-6">
             <div className="flex flex-col justify-center items-center">
               <img
-              
+
                 src={`${process.env.PUBLIC_URL}/images/detail/detail_calender.svg`}
                 alt="detail_calender"
               />

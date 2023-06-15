@@ -211,25 +211,25 @@ function Navbar() {
                       ">{roomMsgState.length}</div>
                       {chatModalOpen && (
                         <>
-                          <div className="absolute top-[70px] right-[-110px] shadow-cm rounded-[25px]">
+                          <div className="absolute top-[70px] right-[-110px] border-[1px] rounded-[25px]">
 
                             <div className="flex justify-between px-4 py-2 bg-white rounded-t-[25px] border-b border-gray-300">
-                              <div className="text-3xl px-4">채팅</div>
+                              <div className="text-[30px] font-semibold px-4">채팅</div>
 
                               <button
-                                className="px-4"
+                                className="px-4 text-[28px]"
                                 onClick={() => setChatModalOpen(false)}>
                                 X
                               </button>
                             </div>
-                            <div className="w-[370px] h-[400px]  overflow-auto">
-                              <div className="flex py-4 px-8  gap-4">
+                            <div className="w-[370px] h-[360px]  overflow-auto">
+                              <div className="flex py-4 px-8  gap-y-2 gap-x-1  bg-white">
                                 <button
-                                  className={`${currentChatType === 'CLUB' ? "font-bold border-b-[3px] border-black" : ""}`}
-                                  onClick={(e) => handleButtonClick(e, 'CLUB')}>CLUB</button>
+                                  className={`${currentChatType === 'CLUB' ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl" : "text-[#747474]  w-[75px] h-[27px]"}`}
+                                  onClick={(e) => handleButtonClick(e, 'CLUB')}>일상속</button>
                                 <button
-                                  className={`${currentChatType === 'ONEDAY' ? "font-bold border-b-[3px] border-black" : ""}`}
-                                  onClick={(e) => handleButtonClick(e, 'ONEDAY')}>ONEDAY</button>
+                                  className={`${currentChatType === 'ONEDAY' ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl" : "text-[#747474]  w-[75px] h-[27px]"}`}
+                                  onClick={(e) => handleButtonClick(e, 'ONEDAY')}>하루속</button>
                               </div>
                               {filteredData?.map((item, i) => {
                                 const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);

@@ -353,6 +353,7 @@ const handleTagClick = (tag) => {
                             maxGroupSize={item.maxGroupSize}
                             nowMemberCount={item.nowMemberCount}
                             isLikedByUser={item.isLikedByUser}
+                            imageList={item.imageUrlList}
                           />
                         );
                       })
@@ -371,6 +372,7 @@ const handleTagClick = (tag) => {
                             maxGroupSize={item.maxGroupSize}
                             nowMemberCount={item.nowMemberCount}
                             isLikedByUser={item.isLikedByUser}
+                            imageList={item.imageUrlList}
                           />
                         );
                       })

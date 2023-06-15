@@ -28,15 +28,20 @@ let imageArr = [
   `${process.env.PUBLIC_URL}/images/category/hobby.png`,
   `${process.env.PUBLIC_URL}/images/category/love.png`,
 ];
+
 function Club() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[0]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const [searchPage, setSearchPage] = useState(0);
   const [page, setPage] = useState(0);
   // const [pageChanged, setPageChanged] = useState(false);
-
   const [club, setClub] = useState([]);
+  const [filterList, setFilterList] = useState({});
+  const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const [activatedFilterCategory, setActivatedFilterCategory] = useState("");
+  const [activatedFilterTag, setActivatedFilterTag] = useState("");
 
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
@@ -44,7 +49,9 @@ function Club() {
   const [filteredClubList, setFilteredClubList] = useState([]);
   const divRef = useRef(null);
   const navigate = useNavigate();
+
   console.log(totalPages);
+
   //   const [club1, categories1] = useQueries(
   //     [
   //       {
@@ -109,8 +116,11 @@ function Club() {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`)
       .then((res) => {
+        console.log("카테고리태그", res);
+        const categoryAndTagList = res.data.categoryAndTagList;
         const newCategorylist = ["전체", ...res.data.categoryList];
         setCategories(newCategorylist);
+        setFilterList(categoryAndTagList);
       })
       .catch((err) => {
         console.log(err);
@@ -153,10 +163,45 @@ function Club() {
     }
   };
 
+  const toggleFilter = () => {
+    filterIsOpen ? setFilterIsOpen(false) : setFilterIsOpen(true);
+  };
+
+  // 태그 선택 처리 함수
+const handleTagClick = (tag) => {
+  let updatedTags;
+  
+  // 이미 선택된 태그를 다시 클릭했을 경우 배열에서 해당 태그 제거
+  if (selectedTags.includes(tag)) {
+    updatedTags = selectedTags.filter((selectedTag) => selectedTag !== tag);
+  } else {
+    updatedTags = [...selectedTags, tag];
+    
+    // 최대 3개의 태그만 선택 가능
+    if (updatedTags.length > 3) {
+      updatedTags.shift();
+    }
+  }
+
+  setSelectedTags(updatedTags);
+
+  let searchUrl = "/club/search?";
+  if(updatedTags[0]) searchUrl += `tag1=${updatedTags[0]}&`;
+  if(updatedTags[1]) searchUrl += `tag2=${updatedTags[1]}&`;
+  if(updatedTags[2]) searchUrl += `tag3=${updatedTags[2]}`;
+
+  getAPI(searchUrl)
+    .then((res) => {
+      setFilteredClubList(res.data.content);
+    })
+    .catch((err) => setFilteredClubList([]));
+};
+
   if (isLoading) {
     return <Loading />;
   }
   console.log(club);
+  console.log("이거뭐야", filterList);
   return (
     <>
       <div ref={divRef}>
@@ -207,11 +252,50 @@ function Club() {
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">일상속 인기주제</p>
-                <button>
+                <button className="relative">
                   <img
+                    onClick={() => toggleFilter()}
                     src={`${process.env.PUBLIC_URL}/images/filter.svg`}
                     alt="filter_button"
                   />
+                  {filterIsOpen && (
+                    <div className="px-2 py-4 absolute flex flex-col top-[43px] right-[2px] bg-white w-[800px] h-[150px] z-30 shadow-cms rounded-xl">
+                      <div className="flex justify-between mb-2">
+                        {Object.keys(filterList).map((category) => {
+                          return (
+                            <button
+                              className={`${
+                                activatedFilterCategory === category
+                                  ? "bg-orange-400 rounded-full text-white px-2"
+                                  : " px-2 py-1"
+                              } text-[1rem] font-semibold flex items-center w-[75px] justify-center gap-1`}
+                              onClick={() => {
+                                setActivatedFilterCategory(category);
+                              }}
+                            >
+                              {category}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className=" grid grid-cols-8 gap-1">
+                        {filterList[activatedFilterCategory]?.map((tag) => {
+                          return (
+                            <button
+                              onClick={() => handleTagClick(tag)}
+                              className={`${
+                                selectedTags.includes(tag)
+                                  ? "text-orange-400 border-2 border-orange-400"
+                                  : "border-2 border-white"
+                              } rounded-full px-1 py-[1px]`}
+                            >
+                              {tag}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </button>
               </div>
               <body className="flex flex-col">

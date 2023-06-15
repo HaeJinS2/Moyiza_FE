@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartCheckbox } from "./HeartCheckBox";
 import { deleteAPI, postAPI } from "../axios";
-import swal from 'sweetalert'
+// import swal from 'sweetalert'
 
 function ClubCard({
   tag,

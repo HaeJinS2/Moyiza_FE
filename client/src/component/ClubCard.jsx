@@ -38,13 +38,13 @@ function ClubCard({
   const likedOnedayBtn = (e) => {
     if (!checked) {
       postAPI(`/oneday/${id}/like`, {}).then((res) => {
-        swal("포스트!")
+        // swal("포스트!")
         setChecked(e);
         console.log(res)
       }).catch((err) => console.log(err))
     } else {
       deleteAPI(`/oneday/${id}/like`, {}).then((res) => {
-        swal("딜리트!")
+        // swal("딜리트!")
         setChecked(e);
         console.log(res)
       }).catch((err) => console.log(err))

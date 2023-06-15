@@ -3,10 +3,17 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles({
+    favoriteIcon: {
+      color: '#F40404', // 원하는 색상으로 변경합니다.
+    },
+  });
+  
 export const HeartCheckbox = ({checked, setChecked, likeClubBtn}) => {
 
-  
+    const classes = useStyles();
 
 
 
@@ -18,7 +25,7 @@ export const HeartCheckbox = ({checked, setChecked, likeClubBtn}) => {
             checked={checked}
             onChange={(e)=>likeClubBtn(e.target.checked)}
             icon={<FavoriteBorder />}
-            checkedIcon={<Favorite />}
+            checkedIcon={<Favorite className={classes.favoriteIcon} />}
             name="heartCheckbox"
           />
         }

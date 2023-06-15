@@ -80,7 +80,7 @@ function OnedayDetail() {
 
   const getOnedayMembers = () => {
     getAPI(`/oneday/${id}`).then((res) => {
-      const onedayMember = res.data.oneDayMemberResponseList;
+      const onedayMember = res.data.memberResponseList;
       setOnedayMember(onedayMember);
       setOnedayMemberNicknameArr(
         onedayMember?.map((member) => member.userNickName)
@@ -94,7 +94,7 @@ function OnedayDetail() {
       }
     });
   };
-
+  console.log(onedayMember)
   console.log(isMember);
   console.log(onedayDetail?.data);
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드

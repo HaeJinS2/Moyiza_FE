@@ -10,7 +10,7 @@ import { latestClubState } from "../states/clubState";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import EndedClubEventCard from "../component/EndedClubEventCard";
-import { userNicknameState } from "../states/userStateTmp";
+import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import CreateEventModal from "../component/CreateEventModal";
 
 import swal from "sweetalert";
@@ -21,6 +21,7 @@ function Detail() {
   const [eventlists, setEventLists] = useState([]);
   const [onEdit, setOnEdit] = useState(false);
   const [latestClub, setLatestClub] = useRecoilState(latestClubState);
+  const isLoggedIn = useRecoilValue(isLoggedInState);
   const navigate = useNavigate();
   const userNickname = useRecoilValue(userNicknameState);
   const [isMember, setIsMember] = useState(false);
@@ -107,15 +108,20 @@ function Detail() {
 
   // 클럽 가입하기 버튼
   const handleJoinClub = () => {
-    postAPI(`/club/${id}/join`, {})
-      .then((res) => {
-        setIsMember(true);
-        console.log(res.data.message);
-        getAPI(`/club/${id}`).then((res) => swal("가입이 승인됐습니다!"));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (isLoggedIn) {
+      postAPI(`/club/${id}/join`, {})
+        .then((res) => {
+          setIsMember(true);
+          console.log(res.data.message);
+          getAPI(`/club/${id}`).then((res) => swal("가입이 승인됐습니다!"));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      swal("로그인이 필요한 기능입니다!");
+      navigate("/login");
+    }
   };
 
   const handleGoodbyeClub = () => {
@@ -197,12 +203,11 @@ function Detail() {
     postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
       console.log(res);
       onJoinSuccess && onJoinSuccess();
-      getAPI(`/club/${id}/eventlist`)
-      .then((res) => {
+      getAPI(`/club/${id}/eventlist`).then((res) => {
         console.log(res);
         setEventLists(res.data);
         swal("이벤트 참가 신청이 완료되었습니다!");
-      })
+      });
     });
   };
 
@@ -210,12 +215,11 @@ function Detail() {
     deleteAPI(`/club/${clubId}/event/join/${eventId}`).then((res) => {
       console.log(res);
       onLeaveSuccess && onLeaveSuccess();
-      getAPI(`/club/${id}/eventlist`)
-      .then((res) => {
+      getAPI(`/club/${id}/eventlist`).then((res) => {
         console.log(res);
         setEventLists(res.data);
         swal("이벤트 참가 신청이 취소됐습니다!");
-      })
+      });
     });
   };
 
@@ -234,7 +238,7 @@ function Detail() {
     <>
       <div ref={divRef} />
       <BodyContainer>
-        <header className="flex pt-40 flex-col justify-center items-center relative gap-10 mb-10">
+        <header className="flex pt-40 flex-col justify-center items-center relative mb-10">
           <div className="flex justify-between w-full items-center">
             <button onClick={() => navigate(-1)}>
               <img
@@ -274,7 +278,7 @@ function Detail() {
                 alt="clubThumbnail"
               />
             </div>
-            <div className="flex justify-center gap-20">
+            <div className="flex justify-center gap-20 mb-10">
               {clubDetail?.data.clubTag.map((item) => {
                 return (
                   <>
@@ -489,6 +493,13 @@ function Detail() {
                   src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
                 />
               </button>
+            )}
+          </div>
+          <div className="flex items-center justify-center">
+            {isMember && (
+              <div className="flex text-2xl justify-center items-center mt-10 bg-[#646464] text-white w-[224px] h-[60px]  py-2 rounded-full ">
+                <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
+              </div>
             )}
           </div>
 

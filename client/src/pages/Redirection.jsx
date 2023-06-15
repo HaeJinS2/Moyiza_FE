@@ -30,17 +30,17 @@ function Redirection() {
         if (getToken) {
             setCookie('ACCESS_TOKEN', getToken);
             // goSignup();
-            window.location.href = `${process.env.REACT_DEV_URL}/signup/social`
+            window.location.href = 'http://moyiza.s3-website.ap-northeast-2.amazonaws.com/signup/social'
             swal('환영합니다! 회원가입을 완료해주세요');
 
         } else if (confirmToken) {
             setCookie('ACCESS_TOKEN', confirmToken);
             // goMain();
-            window.location.href =`${process.env.REACT_DEV_URL}/`
+            window.location.href ='http://moyiza.s3-website.ap-northeast-2.amazonaws.com/'
             swal('로그인 성공!')
         } else if (error) {
             // goLogin();
-            window.location.href = `${process.env.REACT_DEV_URL}/login`
+            window.location.href = 'http://moyiza.s3-website.ap-northeast-2.amazonaws.com/login'
             swal(error);
             // goLogin();
         }

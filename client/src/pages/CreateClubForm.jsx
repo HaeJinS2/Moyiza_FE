@@ -36,7 +36,7 @@ function CreateClubForm() {
     const [contentInput, setContentInput] = useState(club?.clubContent || '');
     const [restrictionInput, setRestrictionInput] = useState(club?.genderPolicy == null ? '' : club.genderPolicy);
     const [restrictionInput2, setRestrictionInput2] = useState(club?.agePolicy == null ? '' : club.agePolicy);
-    const [agePolicy, setAgePolicy] = useState(club?.agePolicy == null ? { x: 20 } : { x: club.agePolicy });
+    const [agePolicy, setAgePolicy] = useState(club?.agePolicy == null ? { x: 15 } : { x: club.agePolicy });
     const [maxGroupSize, setMaxGroupSize] = useState(club?.maxGroupSize == null ? { x: 5 } : { x: club?.maxGroupSize });
 
     const [selectedFile, setSelectedFile] = useState(club?.thumbnailUrl || '');
@@ -312,7 +312,7 @@ function CreateClubForm() {
             swal("최대인원을 입력해주세요!")
             return; 
         }
-        
+
         putAPI(url,
             data
         )

@@ -238,8 +238,8 @@ function CreateClub() {
                             </div>
                         </div>
                         <div className="flex gap-x-10">
-                            <button className="w-[224px] h-[60px] bg-[#FF7F1E] text-white rounded-3xl font-semibold text-[28px]" onClick={handleConfirm}>새로만들기</button>
-                            <button className="w-[224px] h-[60px] bg-[#747474] text-white rounded-3xl font-semibold text-[28px]" onClick={handleCancel}>불러오기</button>
+                            <button className="w-[224px] h-[60px] bg-[#FF7F1E] text-white rounded-3xl font-semibold text-[28px]" onClick={handleCancel}>새로만들기</button>
+                            <button className="w-[224px] h-[60px] bg-[#747474] text-white rounded-3xl font-semibold text-[28px]" onClick={handleConfirm}>불러오기</button>
                         </div>
                         <div>
                             <span className="text-[#747474]">새로운 모임을 만들면 기존정보는 삭제됩니다.</span>

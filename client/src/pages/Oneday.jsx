@@ -313,6 +313,7 @@ function Oneday() {
                               id={item.onedayId}
                               maxGroupSize={item.onedayGroupSize}
                               nowMemberCount={item.onedayAttendantsNum}
+                              isLikedByUser={item.isLikedByUser}
                             />
                         );
                       })
@@ -330,6 +331,7 @@ function Oneday() {
                               id={item.oneDayId}
                               maxGroupSize={item.onedayGroupSize}
                               nowMemberCount={item.onedayAttendantsNum}
+                              isLikedByUser={item.isLikedByUser}
                             />
                         );
                       })

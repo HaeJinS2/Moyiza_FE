@@ -269,6 +269,7 @@ function Club() {
                             id={item.club_id}
                             maxGroupSize={item.maxGroupSize}
                             nowMemberCount={item.nowMemberCount}
+                            isLikedByUser={item.isLikedByUser}
                           />
                         );
                       })
@@ -286,6 +287,7 @@ function Club() {
                             eventId={item.id}
                             maxGroupSize={item.maxGroupSize}
                             nowMemberCount={item.nowMemberCount}
+                            isLikedByUser={item.isLikedByUser}
                           />
                         );
                       })

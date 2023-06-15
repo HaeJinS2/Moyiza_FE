@@ -13,6 +13,7 @@ function ClubEventCard({
   location,
   handleLeaveEvent,
   image,
+  isLikedByUser,
 }) {
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -72,6 +73,7 @@ function ClubEventCard({
         eventId={eventId}
         modalIsOpen={modalIsOpen}
         setIsOpen={setIsOpen}
+        isLikedByUser={isLikedByUser}
       />
     </div>
   );

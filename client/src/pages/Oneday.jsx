@@ -314,6 +314,7 @@ function Oneday() {
                               maxGroupSize={item.onedayGroupSize}
                               nowMemberCount={item.onedayAttendantsNum}
                               isLikedByUser={item.isLikedByUser}
+                              imageList={item?.imageUrlList}
                             />
                         );
                       })
@@ -332,6 +333,7 @@ function Oneday() {
                               maxGroupSize={item.onedayGroupSize}
                               nowMemberCount={item.onedayAttendantsNum}
                               isLikedByUser={item.isLikedByUser}
+                              imageList={item?.imageUrlList}
                             />
                         );
                       })

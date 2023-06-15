@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import { getAPI, postAPI, deleteAPI } from "../axios";
 import BodyContainer from "../component/BodyContainer";
 import OnedayCard from "../component/OnedayCard";
-import { userNicknameState } from "../states/userStateTmp";
+import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import { useQueryClient } from "react-query";
@@ -17,6 +17,8 @@ function OnedayDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
+  const isLoggedIn = useRecoilValue(isLoggedInState);
+
   const [onEdit, setOnEdit] = useState(false);
   const userNickname = useRecoilValue(userNicknameState);
   const [onedayMember, setOnedayMember] = useState([]);
@@ -128,16 +130,28 @@ function OnedayDetail() {
   };
 
   const handleJoinOneday = () => {
-    postAPI(`/oneday/${id}/join`, {})
-      .then((res) => {
-        setIsMember(true);
-        getAPI(`/oneday/${id}`).then((res) => {
-          swal("하루속 가입이 승인됐습니다!");
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (isLoggedIn) {
+      if (
+        onedayDetail.data.oneDayGroupSize ===
+        onedayDetail.data.oneDayAttendantListSize
+      ) {
+        swal("더이상 가입할 수 없습니다!");
+      } else {
+        postAPI(`/oneday/${id}/join`, {})
+          .then((res) => {
+            setIsMember(true);
+            getAPI(`/oneday/${id}`).then((res) => {
+              swal("하루속 가입이 승인됐습니다!");
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    } else {
+      swal("로그인이 필요한 기능입니다.");
+      navigate("/login");
+    }
   };
 
   const handleQuitOneday = () => {

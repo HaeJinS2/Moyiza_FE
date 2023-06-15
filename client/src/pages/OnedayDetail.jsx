@@ -80,7 +80,8 @@ function OnedayDetail() {
 
   const getOnedayMembers = () => {
     getAPI(`/oneday/${id}`).then((res) => {
-      const onedayMember = res.data.oneDayMemberResponseList;
+      console.log("res.data", res.data)
+      const onedayMember = res.data.memberResponseList;
       setOnedayMember(onedayMember);
       setOnedayMemberNicknameArr(
         onedayMember?.map((member) => member.userNickName)

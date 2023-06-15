@@ -41,7 +41,6 @@ function Club() {
   const [filterList, setFilterList] = useState({});
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [activatedFilterCategory, setActivatedFilterCategory] = useState("");
-  const [activatedFilterTag, setActivatedFilterTag] = useState("");
 
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);

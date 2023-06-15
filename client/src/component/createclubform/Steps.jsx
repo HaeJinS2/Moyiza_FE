@@ -236,13 +236,14 @@ export const Step5 = ({ nextStep, prevStep, progress, selectedGenderPolicy, setS
                                                 }}
                                                 axis="x"
                                                 xstep={5}
-                                                xmin={20}
+                                                xmin={15}
                                                 xmax={50}
                                                 x={agePolicy.x}
                                                 onChange={({ x }) => handleAgePolicyChange({ x: parseFloat(x.toFixed(2)) })}
                                             />
                                         )}
                                         <div className="flex justify-between">
+                                            <div>15</div>
                                             <div>20</div>
                                             <div>25</div>
                                             <div>30</div>

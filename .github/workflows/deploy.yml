@@ -4,13 +4,14 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     
     env:
-      REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
+      REACT_APP_SERVER_URL: ${{ github.ref == 'refs/heads/main' && secrets.REACT_APP_SERVER_URL || secrets.REACT_APP_SERVER_URL_DEV }}
       REACT_APP_KAKAO_MAPS_API_KEY_JS: ${{ secrets.REACT_APP_KAKAO_MAPS_API_KEY_JS }}
       REACT_APP_KAKAO_MAPS_API_KEY_REST: ${{ secrets.REACT_APP_KAKAO_MAPS_API_KEY_REST }}
       REACT_APP_AMPLITUDE_API_KEY: ${{ secrets.REACT_APP_AMPLITUDE_API_KEY }}
@@ -37,7 +38,7 @@ jobs:
       with:
         args: --acl public-read --follow-symlinks --delete
       env:
-        AWS_S3_BUCKET: moyiza
+        AWS_S3_BUCKET: ${{ github.ref == 'refs/heads/main' && 'moyiza' || 'moyiza.dev' }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'ap-northeast-2'

@@ -142,7 +142,7 @@ function CreateOnedayForm() {
       switch (onedayStep) {
         case 1:
           if (
-            savedOnedayData.category === null ||
+            savedOnedayData.category === null &&
             savedOnedayData.category === undefined
           ) {
             return swal("관심사를 선택해주세요!");
@@ -159,7 +159,7 @@ function CreateOnedayForm() {
           break;
         case 2:
           if (
-            savedOnedayData.tag === null ||
+            savedOnedayData.tag === null &&
             savedOnedayData.tag.length === 0
           ) {
             return swal("태그를 한 가지 이상 선택해주세요!");
@@ -177,8 +177,8 @@ function CreateOnedayForm() {
 
         case 3:
           if (
-            savedOnedayData.oneDayTitle === null ||
-            savedOnedayData.oneDayTitle === undefined ||
+            savedOnedayData.oneDayTitle === null &&
+            savedOnedayData.oneDayTitle === undefined &&
             savedOnedayData.oneDayTitle.length === 0
           ) {
             return swal("이벤트 이름을 입력해주세요!");
@@ -194,13 +194,13 @@ function CreateOnedayForm() {
           break;
         case 4:
           if (
-            savedOnedayData.oneDayContent === null ||
-            savedOnedayData.oneDayContent === undefined ||
+            savedOnedayData.oneDayContent === null &&
+            savedOnedayData.oneDayContent === undefined &&
             savedOnedayData.oneDayContent.length === 0
           ) {
             swal("이벤트 내용을 입력해주세요!");
           } else if (
-            savedOnedayData.oneDayImage === null ||
+            savedOnedayData.oneDayImage === null &&
             savedOnedayData.oneDayImage === undefined
           ) {
             swal("이벤트 이미지를 등록해주세요!");
@@ -224,7 +224,7 @@ function CreateOnedayForm() {
             .slice(0, 19);
           console.log(localISOString);
           if (
-            savedOnedayData.oneDayStartTime === null ||
+            savedOnedayData.oneDayStartTime === null &&
             savedOnedayData.oneDayStartTime === undefined
           ) {
             setSavedOnedayData({
@@ -245,12 +245,12 @@ function CreateOnedayForm() {
           break;
         case 6:
           if (
-            savedOnedayData.oneDayLocation === null ||
-            savedOnedayData.oneDayLocation === undefined ||
-            savedOnedayData.oneDayLocation.length === 0 ||
-            savedOnedayData.oneDayLatitude === null ||
-            savedOnedayData.oneDayLatitude === undefined ||
-            savedOnedayData.oneDayLongitude === null ||
+            savedOnedayData.oneDayLocation === null &&
+            savedOnedayData.oneDayLocation === undefined &&
+            savedOnedayData.oneDayLocation.length === 0 &&
+            savedOnedayData.oneDayLatitude === null &&
+            savedOnedayData.oneDayLatitude === undefined &&
+            savedOnedayData.oneDayLongitude === null &&
             savedOnedayData.oneDayLongitude === undefined
           ) {
             swal("장소를 입력해주세요!");
@@ -270,12 +270,12 @@ function CreateOnedayForm() {
           break;
         case 7:
           if (
-            savedOnedayData.genderPolicy === null ||
+            savedOnedayData.genderPolicy === null &&
             savedOnedayData.genderPolicy === undefined
           ) {
             swal("성별 제한을 입력해주세요!");
           } else if (
-            savedOnedayData.agePolicy === null ||
+            savedOnedayData.agePolicy === null &&
             savedOnedayData.agePolicy === undefined
           ) {
             swal("나이 제한을 입력해주세요!");
@@ -293,7 +293,7 @@ function CreateOnedayForm() {
           break;
         case 8:
           if (
-            savedOnedayData.oneDayGroupSize === null ||
+            savedOnedayData.oneDayGroupSize === null &&
             savedOnedayData.oneDayGroupSize === undefined
           ) {
             swal("최대 인원 수를 입력해주세요!");

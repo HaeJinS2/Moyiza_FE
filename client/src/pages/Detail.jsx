@@ -398,6 +398,7 @@ function Detail() {
                                   attendantsNum={item?.attendantsNum}
                                   startTime={item?.eventStartTime}
                                   location={item?.eventLocation}
+                                  isLikedByUser={item?.isLikedByUser}
                                 />
                                 {onEdit ? (
                                   <div className="w-full justify-between flex gap-2">

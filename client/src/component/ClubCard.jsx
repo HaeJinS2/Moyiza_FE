@@ -62,7 +62,7 @@ function ClubCard({
         <div className=" w-[544px] h-[263px] relative ">
           <div className="absolute top-5 right-0">
             <HeartCheckbox
-              likeClubBtn={likeClubBtn}
+              likeBtn={likeClubBtn}
               checked={checked}
               setChecked={setChecked}
             />
@@ -112,7 +112,7 @@ function ClubCard({
         <div className=" w-[544px] h-[263px] relative ">
           <div className="absolute top-5 right-0">
             <HeartCheckbox
-              likeClubBtn={likedOnedayBtn}
+              likeBtn={likedOnedayBtn}
               checked={checked}
               setChecked={setChecked}
             />

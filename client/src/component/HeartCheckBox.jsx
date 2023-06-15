@@ -11,7 +11,7 @@ const useStyles = makeStyles({
     },
   });
   
-export const HeartCheckbox = ({checked, setChecked, likeClubBtn}) => {
+export const HeartCheckbox = ({checked, setChecked, likeBtn}) => {
 
     const classes = useStyles();
 
@@ -23,7 +23,7 @@ export const HeartCheckbox = ({checked, setChecked, likeClubBtn}) => {
         control={
           <Checkbox
             checked={checked}
-            onChange={(e)=>likeClubBtn(e.target.checked)}
+            onChange={(e)=>likeBtn(e.target.checked)}
             icon={<FavoriteBorder />}
             checkedIcon={<Favorite className={classes.favoriteIcon} />}
             name="heartCheckbox"

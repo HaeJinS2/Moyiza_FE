@@ -2,7 +2,6 @@ import { LinearProgress } from "@mui/material";
 import { styled } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import BodyContainer from "../component/BodyContainer";
 import Container from "../component/Container";
 import imageCompression from "browser-image-compression";
 
@@ -17,6 +16,18 @@ import { setHours, setMinutes } from "date-fns";
 import { filePutAPI, postAPI, putAPI } from "../axios";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
+
+let imageArr = [
+  `${process.env.PUBLIC_URL}/images/createFeed/create_exercise.svg`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_sports.svg`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_travel.svg`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_culture.svg`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_art.svg`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_activity.svg`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_love.svg`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_book.svg`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_favorite.svg`,
+];
 
 function CreateOnedayForm() {
   const navigate = useNavigate();
@@ -128,12 +139,12 @@ function CreateOnedayForm() {
       return;
     }
 
-    if (savedOnedayData?.oneDayGroupSize) {
-      setOnedayStep(9);
-    } else {
-      setOnedayStep(8);
-      return;
-    }
+    // if (savedOnedayData?.oneDayGroupSize) {
+    //   setOnedayStep(9);
+    // } else {
+    //   setOnedayStep(8);
+    //   return;
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -273,19 +284,19 @@ function CreateOnedayForm() {
           break;
         case 7:
           if (
-            savedOnedayData.genderPolicy === null ||
-            savedOnedayData.genderPolicy === undefined
+            savedOnedayData.gender === null ||
+            savedOnedayData.gender === undefined
           ) {
             swal("성별 제한을 입력해주세요!");
           } else if (
-            savedOnedayData.agePolicy === null ||
-            savedOnedayData.agePolicy === undefined
+            savedOnedayData.age === null ||
+            savedOnedayData.age === undefined
           ) {
             swal("나이 제한을 입력해주세요!");
           } else {
             putAPI(`/oneday/create/${tmpOnedayId}/policy`, {
-              genderPolicy: savedOnedayData.genderPolicy,
-              agePolicy: savedOnedayData.agePolicy,
+              gender: savedOnedayData.gender,
+              age: savedOnedayData.age,
             })
               .then((res) => {
                 console.log(res.data.message);
@@ -330,12 +341,12 @@ function CreateOnedayForm() {
   return (
     <>
       <Container>
-        <div className="flex justify-center pt-48 pb-32 text-3xl">
-          모두와 함께할&nbsp; <span className="text-green-400">하루</span>를
-          만들어보세요
-        </div>
-        <div className="h-screen max-w-[1920px] shadow-cm bg-[#FFFCF2] rounded-t-3xl">
-          <BodyContainer>
+        <div className="flex flex-col justify-center items-center">
+          <div className="flex justify-center pt-48 pb-32 text-3xl">
+            모두와 함께할&nbsp; <span className="text-green-400">하루</span>를
+            만들어보세요
+          </div>
+          <div className="h-auto min-w-[1280px] flex flex-col items-center shadow-cm bg-[#FFFCF2] rounded-t-3xl pb-10">
             {onedayStep === 1 && (
               <OnedayStep1
                 savedOnedayData={savedOnedayData}
@@ -413,13 +424,13 @@ function CreateOnedayForm() {
                 onedayStep={onedayStep}
               />
             )}
-          </BodyContainer>
-          <div className="flex justify-center">
-            <GradientLinearProgress
-              sx={{ width: "1200px" }}
-              variant="determinate"
-              value={(onedayStep / 9) * 100}
-            />
+            <div className="flex justify-center">
+              <GradientLinearProgress
+                sx={{ width: "1140px" }}
+                variant="determinate"
+                value={(onedayStep / 9) * 100}
+              />
+            </div>
           </div>
         </div>
       </Container>
@@ -451,7 +462,7 @@ function OnedayStep1({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="grid grid-cols-3 gap-x-[122px] gap-y-[60px] justify-items-center w-full h-full">
+        <div className="grid grid-cols-3 gap-x-[36px] gap-y-[36px] w-[526px] h-[228px]">
           {categoryList?.map((category, i) => {
             return (
               <button
@@ -464,10 +475,15 @@ function OnedayStep1({
                 }}
                 className={`${
                   category === savedOnedayData?.category
-                    ? "bg-neutral-400"
+                    ? "bg-[#dddddd]"
                     : "bg-white"
-                }  w-[180px] h-[60px]  rounded-full shadow-cms`}
+                }  w-[142px] h-[52px]  rounded-full border-2 flex gap-1 justify-center items-center font-semibold text-[1.25rem]`}
               >
+                <img
+                  src={imageArr[i]}
+                  className="w-[24px] h-[24px]"
+                  alt="create_oneday_category"
+                />
                 {category}
               </button>
             );
@@ -492,7 +508,7 @@ function OnedayStep2({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="grid grid-cols-3 gap-x-[122px] gap-y-[60px] justify-items-center w-full h-full">
+        <div className="grid grid-cols-3 gap-x-[36px] gap-y-[36px] w-[526px] h-[228px]">
           {tag?.map((tag, i) => {
             return (
               <>
@@ -526,9 +542,9 @@ function OnedayStep2({
                   }}
                   className={`${
                     savedOnedayData?.tag?.includes(tag)
-                      ? "bg-neutral-400"
+                      ? "bg-[#dddddd]"
                       : "bg-white"
-                  }  w-[180px] h-[60px]  rounded-full shadow-cms`}
+                  }  w-[142px] h-[52px] rounded-full text-[1.25rem] font-semibold border-2`}
                 >
                   {tag}
                 </button>
@@ -554,9 +570,9 @@ function OnedayStep3({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className=" w-full flex flex-col justify-between items-center">
+        <div className=" w-[526px] h-[228px] flex flex-col  justify-between items-center">
           <input
-            className="flex shadow-cms rounded-full w-3/5 px-4 py-3"
+            className="flex shadow-cms rounded-full w-[600px] px-5 py-3"
             type="text"
             placeholder="하루속 이벤트 이름을 입력해주세요."
             value={savedOnedayData.oneDayTitle}
@@ -635,18 +651,20 @@ function OnedayStep4({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="h-full w-full flex flex-col gap-10 px-60">
-          <div className="flex flex-col gap-2">
-            <div className="w-full">
+        <div className="w-[868px] h-[228px] flex flex-col px-10 gap-5 mb-[20px]">
+          <div className="flex flex-col gap-1">
+            <div className="w-full text-[1.25rem]">
               1) 하루속을 대표할 이미지를 등록해주세요.
             </div>
             <input onChange={handleFileOnChange} type="file" />
           </div>
           <div>
-            <div className="flex flex-col gap-2">
-              <div>2) 하루속 이벤트를 소개할 내용을 적어주세요.</div>
-              <input
-                className="shadow-cms rounded-3xl w-full h-[200px] px-2 py-2"
+            <div className="flex flex-col gap-1">
+              <div className="text-[1.25rem]">
+                2) 하루속 이벤트를 소개할 내용을 적어주세요.
+              </div>
+              <textarea
+                className="shadow-cms rounded-3xl w-full h-[130px] p-4"
                 placeholder="우리 일상을 소개해주세요."
                 type="text"
                 value={savedOnedayData.oneDayContent}
@@ -759,7 +777,6 @@ function OnedayStep6({
             function (result, status) {
               console.log(locationInput);
               if (status === window.kakao.maps.services.Status.OK) {
-                console.log("이거찍어줘", result);
                 let detailAddr = !!result[0].address
                   ? result[0].address.address_name
                   : locationInput;
@@ -802,13 +819,13 @@ function OnedayStep6({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="h-full w-full flex flex-col gap-1 0 px-60">
+        <div className="h-full w-full flex flex-col gap-1 0 px-20">
           <div>
-            <div className="flex flex-col gap-2">
-              <div>장소</div>
+            <div className="flex flex-col gap-2 text-[1.25rem]">
+              <div>장소를 선택해주세요.</div>
               <input
-                className="shadow-cms rounded-3xl w-full px-2 py-2"
-                placeholder="만날 장소를 입력해주세요."
+                className="shadow-cms rounded-3xl w-full px-4 pt-[10px] pb-2"
+                placeholder="만날 장소를 동 or 도로명 주소로 입력해주세요."
                 type="text"
                 value={locationInput}
                 onChange={(e) => {
@@ -831,9 +848,9 @@ function OnedayStep7({
   savedOnedayData,
   genderPolicyList,
 }) {
-  const [agePolicy, setAgePolicy] = useState(20);
+  const [age, setAge] = useState(20);
   useEffect(() => {
-    setSavedOnedayData({ ...savedOnedayData, genderPolicy: agePolicy });
+    setSavedOnedayData({ ...savedOnedayData });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -843,25 +860,25 @@ function OnedayStep7({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="h-full w-full flex flex-col gap-10 px-60">
-          <div>
-            <div className="flex flex-col gap-2">
-              <div>1) 성별</div>
-              <div className="flex justify-around pt-2">
+        <div className="h-full w-full flex flex-col px-20">
+          <div className="pb-4">
+            <div className="flex flex-col">
+              <div className="text-[1.5rem] pb-4">1) 성별</div>
+              <div className="flex justify-around">
                 {genderPolicyList.map((item) => {
                   return (
                     <button
                       onClick={() => {
                         setSavedOnedayData({
                           ...savedOnedayData,
-                          genderPolicy: item,
+                          gender: item,
                         });
                       }}
                       className={` ${
-                        savedOnedayData.genderPolicy === item
-                          ? "bg-neutral-400"
+                        savedOnedayData.gender === item
+                          ? "bg-[#dddddd]"
                           : "bg-white"
-                      }  w-[180px] h-[60px] px-4 py-1 rounded-full shadow-cms`}
+                      }  w-[142px] h-[62px] text-[1rem] font-semibold rounded-full border-2`}
                     >
                       {item}
                     </button>
@@ -872,17 +889,17 @@ function OnedayStep7({
           </div>
           <div>
             <div className="flex flex-col gap-2">
-              <div>2) 연령 {agePolicy}살 </div>
+              <div className="text-[1.5rem]">2) 연령</div>
               <Slider
                 style={{ width: "97%" }}
                 axis="x"
-                x={agePolicy}
-                xmin={20}
+                x={age}
+                xmin={15}
                 xmax={50}
                 xstep={5}
                 onChange={({ x }) => {
-                  setAgePolicy(x);
-                  setSavedOnedayData({ ...savedOnedayData, agePolicy: x });
+                  setAge(x);
+                  setSavedOnedayData({ ...savedOnedayData, age: x });
                 }}
                 styles={{
                   track: {
@@ -896,6 +913,16 @@ function OnedayStep7({
                   },
                 }}
               />
+              <div className="flex justify-between pr-4 ">
+                <div>20</div>
+                <div>15</div>
+                <div>25</div>
+                <div>30</div>
+                <div>35</div>
+                <div>40</div>
+                <div>45</div>
+                <div>50</div>
+              </div>
             </div>
           </div>
         </div>
@@ -912,7 +939,7 @@ function OnedayStep8({
 }) {
   const [groupSize, setGroupSize] = useState(5);
   useEffect(() => {
-    setSavedOnedayData({ ...savedOnedayData, oneDayGroupSize: groupSize });
+    setSavedOnedayData({ ...savedOnedayData });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -922,8 +949,7 @@ function OnedayStep8({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="h-full w-full flex flex-col gap-10 px-60">
-          <div>{groupSize}</div>
+        <div className="h-full w-full flex flex-col gap-10 px-20">
           <Slider
             style={{ width: "97%" }}
             axis="x"
@@ -947,6 +973,15 @@ function OnedayStep8({
               },
             }}
           />
+          <div className="flex justify-between pr-3 relative">
+            <div className="absolute">5</div>
+            <div className="absolute left-[93px]">10</div>
+            <div className="absolute left-[200px]">15</div>
+            <div className="absolute left-[302px]">20</div>
+            <div className="absolute left-[407px]">25</div>
+            <div className="absolute left-[510px]">30</div>
+            <div className="absolute left-[615px]">35</div>
+          </div>
         </div>
       </CreateOnedayFormLayout>
     </>
@@ -988,21 +1023,21 @@ function CreateOnedayFormLayout({
     <>
       <div
         className={`flex flex-col ${
-          onedayStep < 9 ? "justify-between" : "justify-center"
-        }  items-center h-[800px] max-w-[1200px]`}
+          onedayStep < 9 ? "" : "justify-center"
+        }  items-center h-[auto] max-w-[1140px]`}
       >
         <>
-          <div className="self-start px-60 pt-20 pb-10 text-3xl font-sans font-semibold">
+          <div className="self-start min-w-[800px] text-[1.5rem] py-5 font-semibold">
             {header}
           </div>
-          <div className="flex flex-col items-center justify-between w-full h-[500px]">
+          <div className="flex flex-col items-center w-full h-auto">
             {children}
           </div>
-          <div className="py-16 flex gap-20">
+          <div className="flex gap-[30px] py-9">
             {onedayStep > 1 && onedayStep < 9 && (
               <button
                 onClick={handleOnedayStep}
-                className="w-[224px] h-[60px] bg-[#747474] text-white rounded-full"
+                className="w-[200px] h-[60px] bg-[#747474] text-[1.5rem] font-semibold text-white rounded-full"
                 name="prev"
               >
                 이전
@@ -1011,7 +1046,7 @@ function CreateOnedayFormLayout({
             {onedayStep >= 1 && onedayStep < 9 && (
               <button
                 onClick={handleOnedayStep}
-                className="w-[224px] h-[60px] bg-[#08B159] text-white rounded-full"
+                className="w-[200px] h-[60px] bg-[#08B159] text-[1.5rem] font-semibold text-white rounded-full"
                 name="next"
               >
                 다음

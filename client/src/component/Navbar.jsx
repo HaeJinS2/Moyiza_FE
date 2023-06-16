@@ -232,10 +232,10 @@ function Navbar() {
                                   className={`${currentChatType === 'ONEDAY' ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl" : "text-[#747474]  w-[75px] h-[27px]"}`}
                                   onClick={(e) => handleButtonClick(e, 'ONEDAY')}>하루속</button>
                               </div>
+                              <div className="bg-white h-[301px] w-full rounded-b-2xl">
                               {filteredData?.map((item, i) => {
                                 const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
                                 const contentToDisplay = matchingState ? matchingState : item.lastMessage;
-
                                 return (
                                   <>
                                     <button
@@ -272,7 +272,7 @@ function Navbar() {
                                   </>
                                 )
                               }
-                              )}
+                              )}</div>
                             </div>
                           </div>
                         </>

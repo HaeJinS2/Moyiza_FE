@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getAPI, deleteAPI, postAPI } from '../axios'
 import { AnimatePresence, motion } from "framer-motion";
 import { HeartCheckbox } from '../component/HeartCheckBox';
+import swal from 'sweetalert';
 
 function DetailReview() {
     const [data, setData] = useState([]);
@@ -50,6 +51,14 @@ function DetailReview() {
                 })
             }).catch((err) => console.log(err))
         }
+    }
+
+    const deleteReviewBtn = () => {
+        deleteAPI(`/review/16`, {}).then((res) => {
+            swal("삭제완료!")
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
     useEffect(() => {
@@ -157,9 +166,12 @@ function DetailReview() {
                         </div>
                     </div>
                     <div>
-                        <div className='w-[449px] h-[250px]'>
+                        <div className='w-[449px] h-[200px]'>
                             {data.textContent}
                         </div>
+                    </div>
+                    <div>
+                        <button onClick={deleteReviewBtn}>삭제버튼</button>
                     </div>
                 </div>
             </div>

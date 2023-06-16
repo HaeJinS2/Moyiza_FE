@@ -11,7 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import EndedClubEventCard from "../component/EndedClubEventCard";
 import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
-import CreateEventModal from "../component/CreateEventModal";
+// import CreateEventModal from "../component/CreateEventModal";
 
 import swal from "sweetalert";
 
@@ -107,6 +107,7 @@ function Detail() {
   };
 
   // 클럽 가입하기 버튼
+  // eslint-disable-next-line
   const handleJoinClub = () => {
     if (isLoggedIn) {
       postAPI(`/club/${id}/join`, {})

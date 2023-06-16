@@ -20,7 +20,7 @@ function ClubCard({
 
   const [checked, setChecked] = useState(false);
   // eslint-disable-next-line
-  const [imageArr, setImageArr] = useState([...imageList, "thumbnail1", "thumbnail2"]);
+  const [imageArr, setImageArr] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
 
   const [progressEventPage, setProgressEventPage] = useState(0);
@@ -34,6 +34,11 @@ function ClubCard({
 
   const navigate = useNavigate();
   console.log("imageArr", imageArr)
+
+  useEffect(() => {
+    setImageArr([...imageList, "thumbnail1", "thumbnail2"])
+  },[imageList])
+
   const likeClubBtn = (e) => {
     if (!checked) {
       postAPI(`/club/${id}/like`, {}).then((res) => {

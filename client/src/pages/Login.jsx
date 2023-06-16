@@ -17,9 +17,9 @@ import swal from 'sweetalert';
 function Login() {
     // 소셜로그인   
 
-    const KAKAO_AUTH_URL = `http://13.125.51.14/oauth2/authorization/kakao?redirect_uri=http://moyiza.s3-website.ap-northeast-2.amazonaws.com/oauth/redirect`;
-    const NAVER_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver?redirect_uri=http://moyiza.s3-website.ap-northeast-2.amazonaws.com/oauth/redirect`;
-    const GOOGLE_AUTH_URL = `http://ec2-13-125-51-14.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google?redirect_uri=http://moyiza.s3-website.ap-northeast-2.amazonaws.com/oauth/redirect`;
+    const KAKAO_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/kakao?redirect_uri=https://mo2za.com/oauth/redirect`;
+    const NAVER_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/naver?redirect_uri=https://mo2za.com/oauth/redirect`;
+    const GOOGLE_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/google?redirect_uri=https://mo2za.com/oauth/redirect`;
     
     const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
     console.log(isLoggedIn2)

@@ -201,7 +201,7 @@ function SignUp() {
 			ImageFormData.append('imageFile', profileImage);
 
 			// 이미지를 먼저 업로드 한 뒤, 3S 저장 URL을 response 받는다.
-			const IMAGE_UPLOAD_URL = "http://13.125.51.14/uploadImg";
+			const IMAGE_UPLOAD_URL = `${process.env.REACT_APP_SERVER_URL}/uploadImg`;
 			const uploadRes = await axios.post(IMAGE_UPLOAD_URL, ImageFormData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -212,7 +212,7 @@ function SignUp() {
 			// 만약 uploadRes.data 를 불러올 수 없는 경우에 대한 리스크 처리 필요 합니다.
 			formData.append('imageUrl', uploadRes.data);
 
-			const originUrl = `http://13.125.51.14/signup`;
+			const originUrl = `${process.env.REACT_APP_SERVER_URL}/signup`;
 			const signupResponse = await axios.post(originUrl, formData, {
 				headers: {
 					'Content-Type': 'application/json'

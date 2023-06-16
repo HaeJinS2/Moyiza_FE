@@ -20,9 +20,12 @@ function ClubCard({
 
   const [checked, setChecked] = useState(false);
   // eslint-disable-next-line
-  const [imageArr, setImageArr] = useState([...imageList]);
+  const [imageArr, setImageArr] = useState([...imageList, "thumbnail1", "thumbnail2"]);
+  const [isHovered, setIsHovered] = useState(false);
+
   const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
+
   if (progressTuple[1] !== progressEventPage) {
     setProgressTuple([progressTuple[1], progressEventPage]);
   }
@@ -99,6 +102,8 @@ function ClubCard({
                   {imageArr?.slice(progressEventPage * 1, progressEventPage * 1 + 1).map((item) => {
                     return (
                       <img
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
                         className='aspect-square  object-cover  w-[197px] h-[197px] bg-[#747474] rounded-2xl relative top-9'
                         src={item}
                         alt="reviewImg"
@@ -114,7 +119,10 @@ function ClubCard({
               </AnimatePresence>
 
               <button
-                className='w-[40px] absolute left-8 top-[120px] z-10'
+                style={{ opacity: isHovered ? 1 : 0 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className='w-[30px] absolute left-8 top-[120px] z-10'
                 onClick={(e) => {
                   e.stopPropagation();
                   setProgressEventPage(progressEventPage === 0 ? imageArr.length - 1 : progressEventPage - 1)
@@ -128,7 +136,10 @@ function ClubCard({
               </button>
 
               <button
-                className='w-[40px] absolute right-8 top-[120px] z-10'
+                style={{ opacity: isHovered ? 1 : 0 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className='w-[30px] absolute right-8 top-[120px] z-10'
                 onClick={(e) => {
                   e.stopPropagation();
                   setProgressEventPage(progressEventPage === imageArr.length - 1 ? 0 : progressEventPage + 1)
@@ -189,15 +200,80 @@ function ClubCard({
           </div>
           <div
             onClick={() => navigate(`/oneday/${id}`)}
-            className="cursor-pointer flex items-center border bg-white p-8 rounded-2xl w-[544px] h-[263px]"
+            className="cursor-pointer flex items-center border bg-white rounded-2xl  w-[544px] h-[263px]"
           >
+            <div className="flex justify-center w-[500px] h-[277px] text-black items-center overflow-hidden relative">
 
-            <img
+              <AnimatePresence custom={progressDirection}>
+                <motion.div
+                  key={progressEventPage}
+                  variants={varients}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={progressDirection}
+                  transition={{ duration: 0.5 }}
+                  className={`h-[200px] absolute top-0 right-0 flex z-10 justify-center items-center w-full `}
+                >
+                  {imageArr?.slice(progressEventPage * 1, progressEventPage * 1 + 1).map((item) => {
+                    return (
+                      <img
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                        className='aspect-square  object-cover  w-[197px] h-[197px] bg-[#747474] rounded-2xl relative top-9'
+                        src={item}
+                        alt="reviewImg"
+                      />
+                    )
+                  })}
+                  {/* <img
+      className="aspect-square rounded-2xl w-[197px] h-[197px] object-cover mr-6"
+      src={thumbnail}
+      alt="clubThumbnail"
+    /> */}
+                </motion.div>
+              </AnimatePresence>
+
+              <button
+                style={{ opacity: isHovered ? 1 : 0 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className='w-[30px] absolute left-8 top-[120px] z-10'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProgressEventPage(progressEventPage === 0 ? imageArr.length - 1 : progressEventPage - 1)
+                }}
+              >
+                <img
+                  className='opacity-80'
+                  alt="prev_button"
+                  src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                />
+              </button>
+
+              <button
+                style={{ opacity: isHovered ? 1 : 0 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className='w-[30px] absolute right-8 top-[120px] z-10'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProgressEventPage(progressEventPage === imageArr.length - 1 ? 0 : progressEventPage + 1)
+                }}
+              >
+                <img
+                  className='opacity-80'
+                  alt="next_button"
+                  src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                />
+              </button>
+            </div>
+            {/* <img
               className="aspect-square rounded-2xl w-[197px] h-[197px] object-cover mr-6"
               src={thumbnail}
               alt="clubThumbnail"
-            />
-            <div className="flex flex-col gap-4 w-full h-full">
+            /> */}
+            {/* <div className="flex flex-col gap-4 w-full h-full">
               <div className="flex justify-between text-xs text-[#0BB159]">
                 <div className="flex gap-2">
                   {tag?.map((tag) => {
@@ -219,6 +295,39 @@ function ClubCard({
                 <div className="flex justify-between">
                   <div></div>
                   <div className=" text-neutral-400 text-sm">
+                    {nowMemberCount}/{maxGroupSize}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> */}
+
+
+            <div className="flex flex-col gap-4 w-full h-[197px]">
+              <div className="flex justify-between text-xs text-[#0BB159]">
+                <div className="flex gap-2 items-center">
+                  {tag.map((tag) => {
+                    return (
+                      <div className="rounded-full border-[1px] px-2 py-1 max-h-[25px] border-[#0BB159]">
+                        {tag}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div>
+                </div>
+              </div>
+              <div className="flex h-full justify-between flex-col pr-6">
+                <div>
+                  <div className="w-full text-2xl font-semibold">
+                    {title}
+                  </div>
+                  <div className="text-sm">{content}</div>
+                </div>
+                <div className="flex justify-between">
+                  <div></div>
+                  <div className=" text-neutral-400 text-sm ">
                     {nowMemberCount}/{maxGroupSize}
                   </div>
                 </div>

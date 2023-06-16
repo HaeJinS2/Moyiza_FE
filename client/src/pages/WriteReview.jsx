@@ -106,7 +106,8 @@ function WriteReview() {
 
     const handleSubmit = () => {
         // reviewType 및 identifier은 받은 값으로 넣어야함
-        const data = { reviewType: state.reviewType, identifier: state.id, title, textContent: content }
+        // const data = { reviewType: state.reviewType, identifier: state.id, title, textContent: content }
+        const data = { reviewType: "EVENT", identifier: 3, title, textContent: content }
         const imgArr = [selectedFile1, selectedFile2, selectedFile3]
         const formData = new FormData();
         // console.log("여기여기", state.reviewType,"state.reviewType",state.id,"state.id")

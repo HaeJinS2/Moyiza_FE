@@ -2,7 +2,7 @@ import React from "react";
 
 function ReviewCard() {
   return (
-    <div className=" w-[588px] h-[411px] p-4 border-2 flex flex-col justify-between">
+    <div className=" w-[588px] h-[411px] p-4 border-1 flex flex-col justify-between">
       <header className="flex">
         <div>
           <div className="w-[87px] h-[87px] bg-blue-400">프로필</div>

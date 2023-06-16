@@ -4,7 +4,9 @@ import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {  roomIdStates, roomMsgStates, } from "../states/chatState";
+// import { roomIdStates, roomMsgStates, } from "../states/chatState";
+import { roomIdListStates, roomIdStates, roomMsgStates, roomInfoStates } from "../states/chatState";
+
 import { isLoggedInState } from '../states/userStateTmp';
 import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
@@ -13,7 +15,7 @@ import swal from 'sweetalert';
 // import { userState } from "../states/userState";
 
 
-function Navbar() {
+function Navbar({ clientRef }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
   const navigate = useNavigate();
   // const [roomId, setRoomId] = useState([]);
@@ -21,8 +23,8 @@ function Navbar() {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
-  // const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
-  // const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
+  const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
+  const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
   const [currentChatType, setCurrentChatType] = useState('CLUB');
   const [filteredRoomId, setFilteredRoomId] = useState([]);
   const roomMsgState = useRecoilValue(roomMsgStates);
@@ -33,8 +35,8 @@ function Navbar() {
   const chatModalRef = useRef();
   const profileModalRef = useRef();
 
-  //console.log("roomIdListState", roomIdListState)
-  //console.log("roomInfoState", roomInfoState)
+  console.log("roomIdListState", roomIdListState)
+  console.log("roomInfoState", roomInfoState)
   //console.log("채팅방 목록 data", data)
 
   console.log("reloadChatState", reloadChatState)
@@ -54,11 +56,11 @@ function Navbar() {
             index === self.findIndex((t) => t.chatId === item.chatId)
           );
 
-          // const allChatIds = uniqueData.map((item) => item.chatId);
+          const allChatIds = uniqueData.map((item) => item.chatId);
 
-          // setRoomIdListState(allChatIds);
+          setRoomIdListState(allChatIds);
           setData(uniqueData);
-          // setRoomInfoState(uniqueData);
+          setRoomInfoState(uniqueData);
         }
       });
       setReloadChatState(false)
@@ -76,10 +78,14 @@ function Navbar() {
   const logoutHandler = () => {
     setIsLoggedIn(false);
     setIsLoggedIn2(false);
+
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
     navigate("/");
     swal("로그아웃 되었습니다.");
+    if (clientRef.current) {
+      clientRef.current.deactivate();
+    }
   };
 
   // const goHome = () => {
@@ -237,46 +243,46 @@ function Navbar() {
                                   onClick={(e) => handleButtonClick(e, 'ONEDAY')}>하루속</button>
                               </div>
                               <div className="bg-white h-[301px] w-full rounded-b-2xl">
-                              {filteredData?.map((item, i) => {
-                                const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
-                                const contentToDisplay = matchingState ? matchingState : item.lastMessage;
-                                return (
-                                  <>
-                                    <button
-                                      className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
+                                {filteredData?.map((item, i) => {
+                                  const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
+                                  const contentToDisplay = matchingState ? matchingState : item.lastMessage;
+                                  return (
+                                    <>
+                                      <button
+                                        className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
                                       ${
-                                        // id === currentRoom
-                                        // ? "bg-slate-400"
-                                        // :
-                                        "bg-white"
-                                        }`}
-                                      key={filteredRoomId[i]}
-                                      onClick={
-                                        () => {
-                                          handleRoomIdState(filteredRoomId[i])
-                                          setChatModalOpen(false);
+                                          // id === currentRoom
+                                          // ? "bg-slate-400"
+                                          // :
+                                          "bg-white"
+                                          }`}
+                                        key={filteredRoomId[i]}
+                                        onClick={
+                                          () => {
+                                            handleRoomIdState(filteredRoomId[i])
+                                            setChatModalOpen(false);
+                                          }
+                                          // connectToRoom(id)
                                         }
-                                        // connectToRoom(id)
-                                      }
-                                    >
-                                      <div className="flex items-center justify-center gap-x-4 px-4 py-1">
-                                        <div>
-                                          <div className="w-[52px] h-[52px] rounded-full">
-                                            <img
-                                              className=" aspect-square  rounded-full object-cover"
-                                              src={`${filteredData[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                      >
+                                        <div className="flex items-center justify-center gap-x-4 px-4 py-1">
+                                          <div>
+                                            <div className="w-[52px] h-[52px] rounded-full">
+                                              <img
+                                                className=" aspect-square  rounded-full object-cover"
+                                                src={`${filteredData[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                            </div>
+                                          </div>
+                                          <div className="flex flex-col items-start">
+                                            <div>{item?.roomName}</div>
+                                            <div className="font-normal">{contentToDisplay?.content}</div>
                                           </div>
                                         </div>
-                                        <div className="flex flex-col items-start">
-                                          <div>{item?.roomName}</div>
-                                          <div className="font-normal">{contentToDisplay?.content}</div>
-                                        </div>
-                                      </div>
-                                    </button>
-                                  </>
-                                )
-                              }
-                              )}</div>
+                                      </button>
+                                    </>
+                                  )
+                                }
+                                )}</div>
                             </div>
                           </div>
                         </>
@@ -312,32 +318,32 @@ function Navbar() {
                           <div className="mt-[12px]">
                             <div className="text-[24px] mb-[11px] mt-[11px] ml-[30px]">프로필</div>
                             <hr className="mb-[12px]" />
-                          <div className="flex flex-col ml-[30px]">
-                            {/* 닉네임 */}
-                            <div className="flex w-[230px] flex items-center mb-[12px] ">
-                              <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
-                              <div>닉네임</div>
-                            </div>
-                            {/* 개인정보 변경 */}
-                            <div className="flex flex-row flex-start mb-[12px]">
-                              <img
-                                className="w-[40px] h-[40px] mr-[23px]"
-                                src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}
-                                alt="profile_icon"
-                              />
-                              <button onClick={goMyInfo}>개인정보 변경
-                              </button>
-                            </div>
-                            {/* 로그아웃 */}
-                            <div className="flex flex-row flex-start mb-[12px]">
-                              <img
-                                className="w-[40px] h-[40px] mr-[23px]"
-                                src={`${process.env.PUBLIC_URL}/images/logout.svg`}
-                                alt="logout_icon"
-                              />
-                              <button onClick={logoutHandler}>로그아웃
-                              </button>
-                            </div>
+                            <div className="flex flex-col ml-[30px]">
+                              {/* 닉네임 */}
+                              <div className="flex w-[230px] flex items-center mb-[12px] ">
+                                <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
+                                <div>닉네임</div>
+                              </div>
+                              {/* 개인정보 변경 */}
+                              <div className="flex flex-row flex-start mb-[12px]">
+                                <img
+                                  className="w-[40px] h-[40px] mr-[23px]"
+                                  src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}
+                                  alt="profile_icon"
+                                />
+                                <button onClick={goMyInfo}>개인정보 변경
+                                </button>
+                              </div>
+                              {/* 로그아웃 */}
+                              <div className="flex flex-row flex-start mb-[12px]">
+                                <img
+                                  className="w-[40px] h-[40px] mr-[23px]"
+                                  src={`${process.env.PUBLIC_URL}/images/logout.svg`}
+                                  alt="logout_icon"
+                                />
+                                <button onClick={logoutHandler}>로그아웃
+                                </button>
+                              </div>
                             </div>
 
                           </div>

@@ -4,15 +4,18 @@ import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState, useRecoilValue } from "recoil";
+// import { roomIdStates, roomMsgStates, } from "../states/chatState";
 import { roomIdListStates, roomIdStates, roomMsgStates, roomInfoStates } from "../states/chatState";
+
 import { isLoggedInState } from '../states/userStateTmp';
+import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 // import { userState } from "../states/userState";
 
 
-function Navbar() {
+function Navbar({ clientRef }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
   const navigate = useNavigate();
   // const [roomId, setRoomId] = useState([]);
@@ -26,6 +29,7 @@ function Navbar() {
   const [filteredRoomId, setFilteredRoomId] = useState([]);
   const roomMsgState = useRecoilValue(roomMsgStates);
   const [filteredData, setFilteredData] = useState([]);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [data, setData] = useState([]);
   const chatModalRef = useRef();
@@ -33,8 +37,9 @@ function Navbar() {
 
   console.log("roomIdListState", roomIdListState)
   console.log("roomInfoState", roomInfoState)
-  console.log("채팅방 목록 data", data)
+  //console.log("채팅방 목록 data", data)
 
+  console.log("reloadChatState", reloadChatState)
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
       const fetchClubChat = getAPI(`/chat/clubchat`);
@@ -58,9 +63,10 @@ function Navbar() {
           setRoomInfoState(uniqueData);
         }
       });
+      setReloadChatState(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn2]);
+  }, [isLoggedIn2, reloadChatState]);
 
   useEffect(() => {
     console.log("isLoggedIn", isLoggedIn);
@@ -72,10 +78,14 @@ function Navbar() {
   const logoutHandler = () => {
     setIsLoggedIn(false);
     setIsLoggedIn2(false);
+
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
     navigate("/");
     swal("로그아웃 되었습니다.");
+    if (clientRef.current) {
+      clientRef.current.deactivate();
+    }
   };
 
   // const goHome = () => {
@@ -83,7 +93,8 @@ function Navbar() {
   // }
 
   const goMyInfo = () => {
-    navigate("/user/mypage");
+    navigate("/mypage/");
+    // navigate(`/mypage/${user_id}`);
   };
 
   // useEffect(() => {
@@ -231,47 +242,47 @@ function Navbar() {
                                   className={`${currentChatType === 'ONEDAY' ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl" : "text-[#747474]  w-[75px] h-[27px]"}`}
                                   onClick={(e) => handleButtonClick(e, 'ONEDAY')}>하루속</button>
                               </div>
-                              {filteredData?.map((item, i) => {
-                                const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
-                                const contentToDisplay = matchingState ? matchingState : item.lastMessage;
-
-                                return (
-                                  <>
-                                    <button
-                                      className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
+                              <div className="bg-white h-[301px] w-full rounded-b-2xl">
+                                {filteredData?.map((item, i) => {
+                                  const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
+                                  const contentToDisplay = matchingState ? matchingState : item.lastMessage;
+                                  return (
+                                    <>
+                                      <button
+                                        className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
                                       ${
-                                        // id === currentRoom
-                                        // ? "bg-slate-400"
-                                        // :
-                                        "bg-white"
-                                        }`}
-                                      key={filteredRoomId[i]}
-                                      onClick={
-                                        () => {
-                                          handleRoomIdState(filteredRoomId[i])
-                                          setChatModalOpen(false);
+                                          // id === currentRoom
+                                          // ? "bg-slate-400"
+                                          // :
+                                          "bg-white"
+                                          }`}
+                                        key={filteredRoomId[i]}
+                                        onClick={
+                                          () => {
+                                            handleRoomIdState(filteredRoomId[i])
+                                            setChatModalOpen(false);
+                                          }
+                                          // connectToRoom(id)
                                         }
-                                        // connectToRoom(id)
-                                      }
-                                    >
-                                      <div className="flex items-center justify-center gap-x-4 px-4 py-1">
-                                        <div>
-                                          <div className="w-[52px] h-[52px] rounded-full">
-                                            <img
-                                              className=" aspect-square  rounded-full object-cover"
-                                              src={`${filteredData[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                      >
+                                        <div className="flex items-center justify-center gap-x-4 px-4 py-1">
+                                          <div>
+                                            <div className="w-[52px] h-[52px] rounded-full">
+                                              <img
+                                                className=" aspect-square  rounded-full object-cover"
+                                                src={`${filteredData[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                            </div>
+                                          </div>
+                                          <div className="flex flex-col items-start">
+                                            <div>{item?.roomName}</div>
+                                            <div className="font-normal">{contentToDisplay?.content}</div>
                                           </div>
                                         </div>
-                                        <div className="flex flex-col items-start">
-                                          <div>{item?.roomName}</div>
-                                          <div className="font-normal">{contentToDisplay?.content}</div>
-                                        </div>
-                                      </div>
-                                    </button>
-                                  </>
-                                )
-                              }
-                              )}
+                                      </button>
+                                    </>
+                                  )
+                                }
+                                )}</div>
                             </div>
                           </div>
                         </>
@@ -307,32 +318,32 @@ function Navbar() {
                           <div className="mt-[12px]">
                             <div className="text-[24px] mb-[11px] mt-[11px] ml-[30px]">프로필</div>
                             <hr className="mb-[12px]" />
-                          <div className="flex flex-col ml-[30px]">
-                            {/* 닉네임 */}
-                            <div className="flex w-[230px] flex items-center mb-[12px] ">
-                              <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
-                              <div>닉네임</div>
-                            </div>
-                            {/* 개인정보 변경 */}
-                            <div className="flex flex-row flex-start mb-[12px]">
-                              <img
-                                className="w-[40px] h-[40px] mr-[23px]"
-                                src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}
-                                alt="profile_icon"
-                              />
-                              <button onClick={goMyInfo}>개인정보 변경
-                              </button>
-                            </div>
-                            {/* 로그아웃 */}
-                            <div className="flex flex-row flex-start mb-[12px]">
-                              <img
-                                className="w-[40px] h-[40px] mr-[23px]"
-                                src={`${process.env.PUBLIC_URL}/images/logout.svg`}
-                                alt="logout_icon"
-                              />
-                              <button onClick={logoutHandler}>로그아웃
-                              </button>
-                            </div>
+                            <div className="flex flex-col ml-[30px]">
+                              {/* 닉네임 */}
+                              <div className="flex w-[230px] flex items-center mb-[12px] ">
+                                <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
+                                <div>닉네임</div>
+                              </div>
+                              {/* 개인정보 변경 */}
+                              <div className="flex flex-row flex-start mb-[12px]">
+                                <img
+                                  className="w-[40px] h-[40px] mr-[23px]"
+                                  src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}
+                                  alt="profile_icon"
+                                />
+                                <button onClick={goMyInfo}>개인정보 변경
+                                </button>
+                              </div>
+                              {/* 로그아웃 */}
+                              <div className="flex flex-row flex-start mb-[12px]">
+                                <img
+                                  className="w-[40px] h-[40px] mr-[23px]"
+                                  src={`${process.env.PUBLIC_URL}/images/logout.svg`}
+                                  alt="logout_icon"
+                                />
+                                <button onClick={logoutHandler}>로그아웃
+                                </button>
+                              </div>
                             </div>
 
                           </div>

@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { getAPI, postAPI, deleteAPI } from "../axios";
-import BodyContainer from "../component/BodyContainer";
 import OnedayCard from "../component/OnedayCard";
 import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import { useQueryClient } from "react-query";
+import { reloadChatStates } from '../states/chatState';
 
 import swal from "sweetalert";
 function OnedayDetail() {
@@ -18,6 +18,7 @@ function OnedayDetail() {
   const navigate = useNavigate();
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
   const isLoggedIn = useRecoilValue(isLoggedInState);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [onEdit, setOnEdit] = useState(false);
   const userNickname = useRecoilValue(userNicknameState);
@@ -26,6 +27,7 @@ function OnedayDetail() {
   // eslint-disable-next-line
   const [isOwner, setIsOwner] = useState(false);
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
+
   // 멤버 페이지 관리
   const [memberPage, setMemberPage] = useState(0);
   const [memberTuple, setMemberTuple] = useState([null, memberPage]);
@@ -94,9 +96,9 @@ function OnedayDetail() {
       }
     });
   };
-  console.log(onedayMember)
+  console.log(onedayMember,reloadChatState);
   console.log(isMember);
-  console.log(onedayDetail?.data);
+  console.log("원데이", onedayDetail?.data);
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
   useEffect(() => {
@@ -110,13 +112,12 @@ function OnedayDetail() {
   }
 
   console.log(onedayMemberNicknameArr);
-  console.log(onedayMember);
 
   const oneDayStartTime = new Date(onedayDetail?.data.oneDayStartTime);
   let month = oneDayStartTime.getMonth() + 1;
   let date = oneDayStartTime.getDate();
   let hours = oneDayStartTime.getHours();
-  let minutes = oneDayStartTime.getMinutes();
+  // let minutes = oneDayStartTime.getMinutes();
 
   const handleDeleteOneday = () => {
     deleteAPI(`/oneday/${id}`)
@@ -141,6 +142,7 @@ function OnedayDetail() {
           .then((res) => {
             setIsMember(true);
             getAPI(`/oneday/${id}`).then((res) => {
+              setReloadChatState(true)
               swal("하루속 가입이 승인됐습니다!");
             });
           })
@@ -160,7 +162,8 @@ function OnedayDetail() {
         setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
           console.log(res.data.message);
-          swal("하루속 탈퇴가 승인됐습니다!");
+          setReloadChatState(true)
+          swal("모임에서 탈퇴했습니다!");
         });
       })
       .catch((err) => {
@@ -171,153 +174,202 @@ function OnedayDetail() {
   useEffect(() => {
     const fetchFilteredOnedayList = async () => {
       if (!onedayDetail) return;
-
-      try {
-        getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`).then(
-          (res) => {
-            setFilteredOnedayList(res.data.content);
-          }
-        );
-      } catch (err) {
-        setFilteredOnedayList([]);
-      }
+      getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`)
+        .then((res) => {
+          const filteredContent = res.data.content.filter(
+            (oneday) => oneday.onedayId !== parseInt(id)
+          );
+          setFilteredOnedayList(filteredContent);
+        })
+        .catch((err) => setFilteredOnedayList([]));
     };
 
     fetchFilteredOnedayList();
-  }, [onedayDetail]);
+  }, [onedayDetail, id]);
 
   console.log(filteredOnedayList);
 
   return (
     <>
       <div ref={divRef} />
-      <BodyContainer>
-        <div className="flex pt-40 flex-col justify-center items-center gap-10 mb-10">
-          <div className="flex justify-between w-[1200px] items-center">
-            <button onClick={() => navigate(-1)}>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
-                alt="previous_button"
-              />
-            </button>
-            <div className="font-bold text-[2rem]">
-              {onedayDetail?.data.oneDayTitle}
-            </div>
-            {isOwner ? (
-              onEdit ? (
-                <button onClick={() => setOnEdit(false)}>
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/setting.svg`}
-                    alt="cancel_button"
-                  />
-                </button>
-              ) : (
-                <button onClick={() => setOnEdit(true)}>
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/setting.svg`}
-                    alt="setting_button"
-                  />
-                </button>
-              )
-            ) : (
-              <div className="h-[60px] w-[60px]" />
-            )}
-          </div>
-          <div className="self-end">
-            {onEdit && (
-              <button
-                onClick={handleDeleteOneday}
-                className=" text-white bg-rose-400 px-2 py-1 rounded-full fixed top-32 sm:right-20 md:right-32 lg:right-60 xl:right-80"
-              >
-                모임 삭제
+      <div className="w-[1280px] flex flex-col justify-center items-center mx-auto">
+        <header className="flex pt-40 flex-col h-auto items-center w-[1140px] justify-center">
+          <div className="w-full flex flex-col">
+            <div className="flex justify-between w-full items-center mb-[20px]">
+              <button onClick={() => navigate(-1)}>
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                  alt="previous_button"
+                />
               </button>
-            )}
-          </div>
-          <div>
-            <div className="aspect-square flex w-full h-full justify-center items-center  overflow-hidden rounded-xl my-4">
-              <img
-                className="rounded-md w-[219px] h-[219px] object-fill"
-                src={onedayDetail?.data.imageList[0]}
-                alt="oneday_thumbnail"
-              />
-            </div>
-            <div className="flex justify-center gap-20">
-              {/* 원데이 태그가 아직 수정되지 않아서 출력하지 못함 */}
-              {/* {onedayDetail?.data.oneDayTag.map((item) => {
-                return (
-                  <>
-                    <div className="flex font-semibold  cursor-default items-center justify-center text-orange-400 text-xl border-orange-400 border-2 px-2 pt-[4px] rounded-full h-[35px]">
-                      {item}
-                    </div>
-                  </>
-                );
-              })} */}
-            </div>
-            <div className="flex justify-center">
-              {isMember ? (
-                <div className="flex  text-2xl  justify-center items-center mt-10 bg-green-500 text-white w-[224px] h-[60px]  py-2 rounded-full ">
-                  <button onClick={handleQuitOneday}>모임 탈퇴하기</button>
-                </div>
+              <div className="font-bold text-[2rem]">
+                {onedayDetail?.data.oneDayTitle}
+              </div>
+              {isOwner ? (
+                onEdit ? (
+                  <button onClick={() => setOnEdit(false)}>
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/oneday_onEdit.svg`}
+                      alt="cancel_edit_button"
+                    />
+                  </button>
+                ) : (
+                  <button onClick={() => setOnEdit(true)}>
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/setting.svg`}
+                      alt="edit_button"
+                    />
+                  </button>
+                )
               ) : (
-                <div className="flex text-2xl justify-center items-center mt-10 bg-green-500 text-white w-[224px] h-[60px] py-2 rounded-full">
-                  <button onClick={handleJoinOneday}>모임 가입하기</button>
+                <div className="h-[60px] w-[60px]" />
+              )}
+            </div>
+            <div className="flex gap-x-[70px] w-auto items-center">
+              <div className="flex justify-center">
+                <img
+                  className="rounded-xl w-[458px] h-[305px] object-contain aspect-square"
+                  src={onedayDetail?.data.imageList[0]}
+                  alt="club_main"
+                />
+              </div>
+              <div>
+                <div className="w-[548px] h-[294px] mt-[16px]">
+                  <div className="flex justify-center mb-[20px]">
+                    <div className="flex flex-col justify-center items-center w-[91px] h-[59px]">
+                      <div>
+                        <img
+                          className="w-[30px] h-[30px]"
+                          alt="detail_calender"
+                          src={`${process.env.PUBLIC_URL}/images/detail/detail_calender.svg`}
+                        />
+                      </div>
+                      <div className="flex justify-center text-[1rem]">
+                        {month}.{date}
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center items-center w-[91px] h-[59px] border-x-2">
+                      <div>
+                        <img
+                          className="w-[30px] h-[30px]"
+                          alt="detail_clock"
+                          src={`${process.env.PUBLIC_URL}/images/detail/detail_clock.svg`}
+                        />
+                      </div>
+                      <div className="flex justify-center text-[1rem]">
+                        {hours >= 12
+                          ? hours === 12
+                            ? "오후 12시"
+                            : `오후 ${hours - 12}시`
+                          : `오전 ${hours}시`}
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center items-center w-[91px] h-[59px] border-r-2">
+                      <div>
+                        <img
+                          className="w-[30px] h-[30px]"
+                          alt="detail_location"
+                          src={`${process.env.PUBLIC_URL}/images/detail/detail_location.svg`}
+                        />
+                      </div>
+                      <div className="flex justify-center text-[1rem]">
+                        {onedayDetail?.data?.oneDayLocation.split(" ")[0] ===
+                        "서울"
+                          ? onedayDetail?.data?.oneDayLocation.split(" ")[1]
+                          : onedayDetail?.data?.oneDayLocation.split(" ")[0]}
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center items-center w-[91px] h-[59px]">
+                      <div>
+                        <img
+                          className="w-[30px] h-[30px]"
+                          alt="club_detail_gender"
+                          src={`${process.env.PUBLIC_URL}/images/detail/club_detail_gender.svg`}
+                        />
+                      </div>
+                      <div className="flex justify-center text-[1rem]">
+                        {onedayDetail?.data.genderPolicy}
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center border-x-2 w-[91px] h-[59px]">
+                      <div className="flex justify-center text-[1.25rem]">
+                        Age
+                      </div>
+                      <div className="flex justify-center text-[1rem] w-full">
+                        {onedayDetail?.data.agePolicy}세
+                      </div>
+                    </div>
+                    <div className="flex flex-col  justify-center items-center w-[91px] h-[59px]">
+                      <div>
+                        <img
+                          className="w-[30px] h-[30px]"
+                          src={`${process.env.PUBLIC_URL}/images/detail/club_detail_people.svg`}
+                          alt="club_detail_people"
+                        />
+                      </div>
+                      <div className="flex justify-center text-[1rem]">
+                        {onedayDetail?.data.oneDayAttendantListSize}/
+                        {onedayDetail?.data.oneDayGroupSize}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-center mb-[20px] gap-4">
+                    {onedayDetail?.data.tagString.map((tag) => {
+                      return (
+                        <div className="w-[97.8px] h-[32.6px] rounded-full border-2 border-[#0AB159] text-[#0AB159] text-[1.125rem] justify-center flex items-center pt-[3px]">
+                          {tag}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="w-[543px] h-[162px] text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 relative">
+                    {onedayDetail?.data.oneDayContent}
+                  </div>
                 </div>
+              </div>
+            </div>
+            <div className="w-full h-[91px] mt-4">
+              {isOwner && onEdit ? (
+                <>
+                  <div className="flex">
+                    <div className="w-[458px] h-[91px] mr-[70px] flex justify-center">
+                      <button className="w-[120px] h-[40px] bg-[#0AB159] text-white text-[1.25rem] font-semibold rounded-full">
+                        수정하기
+                      </button>
+                    </div>
+                    <div className="w-[543px] h-[91px] flex justify-center ">
+                      <button className="w-[120px] h-[40px] bg-[#0AB159] text-white text-[1.25rem] font-semibold rounded-full">
+                        수정하기
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex">
+                    <div className="w-[458px] h-[91px] mr-[70px]"></div>
+                    <div className="w-[543px] h-[91px] flex justify-center ">
+                      {!isMember && (
+                        <button
+                          onClick={handleJoinOneday}
+                          className="w-[200px] h-[60px] bg-[#0AB159] text-white text-[1.25rem] font-semibold rounded-full"
+                        >
+                          가입하기
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </div>
-          <div className="flex w-[1080px] rounded-2xl h-[137px] bg-neutral-100 py-4 items-center justify-center">
-            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
-              <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_calender.svg`}
-                alt="oneday_start_time"
-              />
-              {month}.{date}
-            </div>
-            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
-              <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_clock.svg`}
-                alt="oneday_start_time"
-              />
-              {hours >= 12 ? "오후 " : "오전 "}
-              {hours >= 12 ? hours - 12 : hours}시 {minutes}분
-            </div>
-            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
-              <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_location.svg`}
-                alt="oneday_location"
-              />
-              {onedayDetail?.data.oneDayLocation.split(" ")[0] === "서울특별시"
-                ? onedayDetail?.data.oneDayLocation.split(" ")[1]
-                : onedayDetail?.data.oneDayLocation.split(" ")[0]}
-            </div>
-            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl border-x-4 h-4/5">
-              <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_gender.svg`}
-                alt="oneday_location"
-              />
-              {onedayDetail?.data.genderPolicy}
-            </div>
-            <div className="w-1/6 flex flex-col justify-center items-center gap-1 font-sans text-xl border-r-4 h-4/5">
-              <div className="w-[36px] h-[36px] flex justify-center items-center">
-                Age
-              </div>
-              <div> {onedayDetail?.data.agePolicy}세 이상</div>
-            </div>
-            <div className="w-1/6 flex flex-col justify-center items-center gap-2 font-sans text-xl">
-              <img
-                src={`${process.env.PUBLIC_URL}/images/oneday/oneday_people.svg`}
-                alt="oneday_attendant_state"
-              />
-              {onedayDetail?.data.oneDayAttendantListSize}/
-              {onedayDetail?.data.oneDayGroupSize}
-            </div>
-          </div>
-          <div className="flex w-[1080px] justify-center items-center h-[237px] bg-neutral-100 rounded-2xl pr-10">
-            <p className="text-black">{onedayDetail?.data.oneDayContent}</p>
-          </div>
-          <div className="flex justify-between w-[1140px]">
-            <div className="font-sans text-2xl font-semibold">참여멤버</div>
-            <div className="flex gap-4 ">
+        </header>
+
+        {/* 참여멤버 */}
+        <section className="flex flex-col w-[1140px] h-auto justify-between">
+          <div className="flex justify-between">
+            <div className="text-[2rem] font-semibold">참여멤버</div>
+            <div>
               {memberPage > 0 && (
                 <button onClick={() => setMemberPage(memberPage - 1)}>
                   <img
@@ -326,7 +378,7 @@ function OnedayDetail() {
                   />
                 </button>
               )}
-              {memberPage < Math.ceil(onedayMember?.length / 5) - 1 && (
+              {memberPage < Math.ceil(onedayMember?.length / 6) - 1 && (
                 <button onClick={() => setMemberPage(memberPage + 1)}>
                   <img
                     alt="next_button"
@@ -336,8 +388,8 @@ function OnedayDetail() {
               )}
             </div>
           </div>
-          <div className="flex h-full w-[1140px] justify-center items-center">
-            <div className="flex justify-center w-[1140px] h-[100px] text-black items-center overflow-hidden relative ">
+          <div className="flex w-full h-full justify-center items-center">
+            <div className="flex justify-center w-[1140px] h-[186px] text-black items-center overflow-hidden relative ">
               <AnimatePresence custom={memberDirection}>
                 <motion.div
                   key={memberPage}
@@ -347,33 +399,30 @@ function OnedayDetail() {
                   exit="exit"
                   custom={memberDirection}
                   transition={{ duration: 0.5 }}
-                  className={`h-[90px] flex absolute justify-center items-center w-[1140px] `}
+                  className={`h-[80px] absolute flex justify-center items-center w-full `}
                 >
                   <div
                     className={`${
-                      onedayMember?.length === 0 ? "" : "grid grid-cols-5"
-                    } w-full gap-16`}
+                      onedayMember?.length === 0 ? "" : "grid grid-cols-6"
+                    } w-full gap-4 `}
                   >
-                    {onedayMember?.length === 0 ? (
+                    {onedayMember.length === 0 ? (
                       <EmptyState page="onedayDetail" />
                     ) : (
                       onedayMember
-                        ?.slice(memberPage * 5, memberPage * 5 + 5)
+                        ?.slice(memberPage * 6, memberPage * 6 + 6)
                         .map((member, i) => {
                           return (
-                            <>
-                              <div
-                                key={i}
-                                className="flex justify-center items-center gap-5"
-                              >
-                                <img
-                                  className="w-[80px] h-[80px] bg-rose-400 rounded-full "
-                                  src={member.profilePictureUrl}
-                                  alt="profile_image"
-                                />
-                                <div className="]">{member.userNickname}</div>
-                              </div>
-                            </>
+                            <div 
+                            onClick={()=> navigate(`/mypage/${member.userId}`)}
+                            className="cursor-pointer flex gap-5 items-center">
+                              <img
+                                className="w-[80px] h-[80px] rounded-full"
+                                src={member.profilePictureUrl}
+                                alt="oneday_member"
+                              />
+                              <p>{member.userNickname}</p>
+                            </div>
                           );
                         })
                     )}
@@ -382,9 +431,12 @@ function OnedayDetail() {
               </AnimatePresence>
             </div>
           </div>
+        </section>
 
+        {/* 비슷한 하루속 이벤트 */}
+        <section>
           <div className="flex justify-between items-center w-[1140px]">
-            <div className="font-sans text-2xl font-semibold">
+            <div className="text-[2rem] font-semibold">
               비슷한 하루속 이벤트
             </div>
             <div className="flex justify-center gap-10">
@@ -456,8 +508,26 @@ function OnedayDetail() {
               </AnimatePresence>
             </div>
           </div>
+        </section>
+        <div className="flex items-center justify-center">
+          {isMember && !isOwner && (
+            <div className="flex text-2xl justify-center items-center mt-10 bg-[#646464] text-white w-[224px] h-[60px]  py-2 rounded-full ">
+              <button onClick={handleQuitOneday}>모임 탈퇴하기</button>
+            </div>
+          )}
         </div>
-      </BodyContainer>
+
+        <div className="flex justify-center pb-20">
+          {onEdit && (
+            <button
+              onClick={handleDeleteOneday}
+              className=" text-white text-2xl bg-[#646464] w-[224px] h-[60px] px-2 py-1 rounded-full"
+            >
+              모임 삭제
+            </button>
+          )}
+        </div>
+      </div>
     </>
   );
 }

@@ -15,13 +15,14 @@ function AppContent() {
   const roomIdListState = useRecoilValue(roomIdListStates);
   const [roomMsgState, setRoomMsgState] = useRecoilState(roomMsgStates);
 
+  console.log("roomIdListState",roomIdListState)
   const token = Cookies.get('ACCESS_TOKEN');
 
   const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
   const clientRef = useRef(null); // client를 useRef로 설정
   const subscriptionRef = useRef({});
   console.log(isLoggedIn)
-
+  console.log(" clientRef.current", clientRef.current)
   useEffect(() => {
     const token = Cookies.get('ACCESS_TOKEN');
     console.log("token", token);
@@ -70,6 +71,7 @@ function AppContent() {
     if (clientRef.current && clientRef.current.connected) {
       handleSub();
     } else {
+      
       const newClient = new Client({
         webSocketFactory: () =>
           new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
@@ -95,16 +97,19 @@ function AppContent() {
       const originalOnWebSocketClose =
         newClient.onWebSocketClose.bind(newClient);
 
-      newClient.onWebSocketClose = (evt) => {
-        if (errorCount.current >= 3) {
-          console.log("Connection failed!");
-          newClient.deactivate();
-          errorCount.current = 0;
-          return;
-        }
-
-        originalOnWebSocketClose(evt);
-      };
+        newClient.onWebSocketClose = (evt) => {
+          console.log("WebSocket connection closed.~!~!");  // 로그 추가
+          if (errorCount.current >= 3) {
+            console.log("Connection failed!");
+            newClient.deactivate();
+            errorCount.current = 0;
+            return;
+          }
+        
+          originalOnWebSocketClose(evt);
+        };
+        
+        
 
       newClient.activate();
       clientRef.current = newClient;

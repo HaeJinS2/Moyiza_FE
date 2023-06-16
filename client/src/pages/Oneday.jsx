@@ -35,12 +35,18 @@ function Oneday() {
   const [activePageTab, setActivePageTab] = useState(pageTabs[1]);
   const [searchPage, setSearchPage] = useState(0);
   const [page, setPage] = useState(0);
+  const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const [activatedFilterCategory, setActivatedFilterCategory] = useState("");
+
   // const [club, setClub] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   // const [categories, setCategories] = useState(null);
   const [onedayData, setOnedayData] = useState([]);
   const [categories, setCategories] = useState(null);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [filterList, setFilterList] = useState({});
+
   // const [queryResults1, queryResults2] = useQueries(
   //   [
   //     {
@@ -123,8 +129,11 @@ function Oneday() {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`)
       .then((res) => {
+        console.log("카테고리태그", res);
+        const categoryAndTagList = res.data.categoryAndTagList;
         const newCategorylist = ["전체", ...res.data.categoryList];
         setCategories(newCategorylist);
+        setFilterList(categoryAndTagList);
       })
       .catch((err) => {
         console.log(err);
@@ -193,6 +202,48 @@ function Oneday() {
   // const club = [...(queryResults2?.data?.data?.content || [])];
 
   //  const filteredOnedayList = [...res2?.data?.content];
+
+  const toggleFilter = () => {
+    filterIsOpen ? setFilterIsOpen(false) : setFilterIsOpen(true);
+  };
+
+  // 태그 선택 처리 함수
+  const handleTagClick = (tag) => {
+    let updatedTags;
+
+    // 이미 선택된 태그를 다시 클릭했을 경우 배열에서 해당 태그 제거
+    if (selectedTags.includes(tag)) {
+      updatedTags = selectedTags.filter((selectedTag) => selectedTag !== tag);
+    } else {
+      updatedTags = [...selectedTags, tag];
+
+      // 최대 3개의 태그만 선택 가능
+      if (updatedTags.length > 3) {
+        updatedTags.shift();
+      }
+    }
+
+    setSelectedTags(updatedTags);
+
+    let searchUrl = "/oneday/search?";
+    if (updatedTags[0]) searchUrl += `tag1=${updatedTags[0]}&`;
+    if (updatedTags[1]) searchUrl += `tag2=${updatedTags[1]}&`;
+    if (updatedTags[2]) searchUrl += `tag3=${updatedTags[2]}`;
+
+    getAPI(searchUrl)
+      .then((res) => {
+        setFilteredOnedayList(res.data.content);
+      })
+      .catch((err) => setFilteredOnedayList([]));
+  };
+
+
+
+
+
+
+
+
   if (isLoading) {
     return <Loading />;
   }
@@ -230,7 +281,7 @@ function Oneday() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="bg-neutral-200 text-[2.625rem] font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.svg)`,
                 backgroundSize: "cover",
@@ -238,22 +289,63 @@ function Oneday() {
                 backgroundPosition: "center",
               }}
             >
-              {/* 
+              
               <p>당신의 특별한 하루</p>
-              <p>'하루속'에서 함께하세요!</p> */}
+              <p>'하루속'에서 함께하세요!</p>
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cms bg-[#F9FFF8] rounded-t-[90px] mt-[477px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cms bg-[#F9FFF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">하루속 인기주제</p>
-                <button>
+                <button className="relative">
                   <img
+                    onClick={() => toggleFilter()}
                     src={`${process.env.PUBLIC_URL}/images/filter.svg`}
                     alt="filter_button"
                   />
+                  {filterIsOpen && (
+                    <div className="px-2 py-4 absolute flex flex-col top-[43px] right-[2px] bg-white w-[800px] h-auto z-30 shadow-cms rounded-xl">
+                      <div className="flex justify-between mb-2">
+                        {Object.keys(filterList).map((category) => {
+                          return (
+                            <button
+                              className={`${
+                                activatedFilterCategory === category
+                                  ? "bg-[#FF7F1D] rounded-full text-white px-2"
+                                  : " px-2 py-1"
+                              } text-[1rem] font-semibold flex items-center w-[75px] justify-center gap-1`}
+                              onClick={() => {
+                                setActivatedFilterCategory(category);
+                              }}
+                            >
+                              {category}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {activatedFilterCategory && (
+                        <div className="grid grid-cols-8 gap-1">
+                          {filterList[activatedFilterCategory]?.map((tag) => {
+                            return (
+                              <button
+                                onClick={() => handleTagClick(tag)}
+                                className={`${
+                                  selectedTags.includes(tag)
+                                    ? "text-[#FF7F1D] border-2 border-[#FF7F1D]"
+                                    : "border-2 border-white"
+                                } rounded-full px-1 py-[1px]`}
+                              >
+                                {tag}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </button>
               </div>
               <body className="flex flex-col">

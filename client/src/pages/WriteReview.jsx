@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import imageCompression from 'browser-image-compression';
 import { filePostAPI } from '../axios';
+import { useLocation } from "react-router";
 
 function WriteReview() {
 
@@ -12,7 +13,8 @@ function WriteReview() {
     const [selectedFileName1, setSelectedFileName1] = useState("");
     const [selectedFileName2, setSelectedFileName2] = useState("");
     const [selectedFileName3, setSelectedFileName3] = useState("");
-
+    // eslint-disable-next-line
+    const { state } = useLocation();
 
     console.log(selectedFileName1, selectedFileName2, selectedFileName3)
 
@@ -105,10 +107,12 @@ function WriteReview() {
 
     const handleSubmit = () => {
         // reviewType 및 identifier은 받은 값으로 넣어야함
-        const data = { reviewType: "EVENT", identifier: 129, title, textContent: content }
+        // const data = { reviewType: state.reviewType, identifier: state.id, title, textContent: content }
+        const data = { reviewType: "EVENT", identifier: 3, title, textContent: content }
         const imgArr = [selectedFile1, selectedFile2, selectedFile3]
         const formData = new FormData();
-
+        // console.log("여기여기", state.reviewType,"state.reviewType",state.id,"state.id")
+        // console.log("여기여기", "title",title,"textContent",content)
         imgArr.forEach((file) => {
             if (file) {
                 formData.append("image", file);

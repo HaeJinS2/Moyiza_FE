@@ -33,6 +33,7 @@ function Club() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[0]);
   const [selectedTags, setSelectedTags] = useState([]);
+  // const [filterToggle, setFilterToggle] = useState(false);
 
   const [searchPage, setSearchPage] = useState(0);
   const [page, setPage] = useState(0);
@@ -167,34 +168,34 @@ function Club() {
   };
 
   // 태그 선택 처리 함수
-const handleTagClick = (tag) => {
-  let updatedTags;
-  
-  // 이미 선택된 태그를 다시 클릭했을 경우 배열에서 해당 태그 제거
-  if (selectedTags.includes(tag)) {
-    updatedTags = selectedTags.filter((selectedTag) => selectedTag !== tag);
-  } else {
-    updatedTags = [...selectedTags, tag];
-    
-    // 최대 3개의 태그만 선택 가능
-    if (updatedTags.length > 3) {
-      updatedTags.shift();
+  const handleTagClick = (tag) => {
+    let updatedTags;
+
+    // 이미 선택된 태그를 다시 클릭했을 경우 배열에서 해당 태그 제거
+    if (selectedTags.includes(tag)) {
+      updatedTags = selectedTags.filter((selectedTag) => selectedTag !== tag);
+    } else {
+      updatedTags = [...selectedTags, tag];
+
+      // 최대 3개의 태그만 선택 가능
+      if (updatedTags.length > 3) {
+        updatedTags.shift();
+      }
     }
-  }
 
-  setSelectedTags(updatedTags);
+    setSelectedTags(updatedTags);
 
-  let searchUrl = "/club/search?";
-  if(updatedTags[0]) searchUrl += `tag1=${updatedTags[0]}&`;
-  if(updatedTags[1]) searchUrl += `tag2=${updatedTags[1]}&`;
-  if(updatedTags[2]) searchUrl += `tag3=${updatedTags[2]}`;
+    let searchUrl = "/club/search?";
+    if (updatedTags[0]) searchUrl += `tag1=${updatedTags[0]}&`;
+    if (updatedTags[1]) searchUrl += `tag2=${updatedTags[1]}&`;
+    if (updatedTags[2]) searchUrl += `tag3=${updatedTags[2]}`;
 
-  getAPI(searchUrl)
-    .then((res) => {
-      setFilteredClubList(res.data.content);
-    })
-    .catch((err) => setFilteredClubList([]));
-};
+    getAPI(searchUrl)
+      .then((res) => {
+        setFilteredClubList(res.data.content);
+      })
+      .catch((err) => setFilteredClubList([]));
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -213,8 +214,9 @@ const handleTagClick = (tag) => {
                   setActivePageTab(tab);
                   i === 0 ? navigate("/club") : navigate("/oneday");
                 }}
-                className={`${activePageTab === tab ? "text-black" : "hover:opacity-50"
-                  } relative rounded-full px-3 py-1.5 text-black outline-2 transition focus-visible:outline`}
+                className={`${
+                  activePageTab === tab ? "text-black" : "hover:opacity-50"
+                } relative rounded-full px-3 py-1.5 text-black outline-2 transition focus-visible:outline`}
               >
                 {activePageTab === tab && (
                   <motion.div
@@ -233,7 +235,7 @@ const handleTagClick = (tag) => {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="text-[2.625rem] font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/club/club_main.png)`,
                 backgroundSize: "cover",
@@ -247,7 +249,7 @@ const handleTagClick = (tag) => {
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cms bg-[#FFFBF8] rounded-t-[90px] mt-[477px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cms bg-[#FFFBF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">일상속 인기주제</p>
@@ -258,14 +260,14 @@ const handleTagClick = (tag) => {
                     alt="filter_button"
                   />
                   {filterIsOpen && (
-                    <div className="px-2 py-4 absolute flex flex-col top-[43px] right-[2px] bg-white w-[800px] h-[150px] z-30 shadow-cms rounded-xl">
+                    <div className="px-2 py-4 absolute flex flex-col top-[43px] right-[2px] bg-white w-[800px] h-auto z-30 shadow-cms rounded-xl">
                       <div className="flex justify-between mb-2">
                         {Object.keys(filterList).map((category) => {
                           return (
                             <button
                               className={`${
                                 activatedFilterCategory === category
-                                  ? "bg-orange-400 rounded-full text-white px-2"
+                                  ? "bg-[#FF7F1D] rounded-full text-white px-2"
                                   : " px-2 py-1"
                               } text-[1rem] font-semibold flex items-center w-[75px] justify-center gap-1`}
                               onClick={() => {
@@ -277,22 +279,24 @@ const handleTagClick = (tag) => {
                           );
                         })}
                       </div>
-                      <div className=" grid grid-cols-8 gap-1">
-                        {filterList[activatedFilterCategory]?.map((tag) => {
-                          return (
-                            <button
-                              onClick={() => handleTagClick(tag)}
-                              className={`${
-                                selectedTags.includes(tag)
-                                  ? "text-orange-400 border-2 border-orange-400"
-                                  : "border-2 border-white"
-                              } rounded-full px-1 py-[1px]`}
-                            >
-                              {tag}
-                            </button>
-                          );
-                        })}
-                      </div>
+                      {activatedFilterCategory && (
+                        <div className="grid grid-cols-8 gap-1">
+                          {filterList[activatedFilterCategory]?.map((tag) => {
+                            return (
+                              <button
+                                onClick={() => handleTagClick(tag)}
+                                className={`${
+                                  selectedTags.includes(tag)
+                                    ? "text-[#FF7F1D] border-2 border-[#FF7F1D]"
+                                    : "border-2 border-white"
+                                } rounded-full px-1 py-[1px]`}
+                              >
+                                {tag}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   )}
                 </button>
@@ -306,14 +310,15 @@ const handleTagClick = (tag) => {
                         setActiveTab(tab);
                         handleClubCategory(e);
                       }}
-                      className={`${activeTab === tab ? "text-black" : "hover:opacity-50"
-                        } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
+                      className={`${
+                        activeTab === tab ? "text-black" : "hover:opacity-50"
+                      } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                     >
                       {activeTab === tab && (
                         <motion.div
                           layoutId="active-pill-2"
                           transition={{ type: "spring", duration: 0.5 }}
-                          className="bg-transparent border-2 border-orange-400 absolute inset-0"
+                          className="bg-transparent border-2 border-[#FF7F1D] absolute inset-0"
                           style={{
                             borderRadius: 9999,
                           }}
@@ -322,7 +327,9 @@ const handleTagClick = (tag) => {
                       <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2.3px]">
                         <img
                           className="w-[20px] h-[20px] "
-                          src={imageArr[i]} alt="club_category" />
+                          src={imageArr[i]}
+                          alt="club_category"
+                        />
                         {tab}
                       </span>
                     </button>
@@ -330,8 +337,9 @@ const handleTagClick = (tag) => {
                 </div>
                 <div className="flex flex-col justify-between">
                   <div
-                    className={`grid justify-items-center ${filteredClubList.length === 0 ? "" : "grid-cols-2"
-                      }  gap-x-4 gap-y-5 pb-20 `}
+                    className={`grid justify-items-center ${
+                      filteredClubList.length === 0 ? "" : "grid-cols-2"
+                    }  gap-x-4 gap-y-5 pb-20 `}
                   >
                     {filteredClubList.length === 0 ? (
                       <EmptyState
@@ -383,7 +391,7 @@ const handleTagClick = (tag) => {
                 <div className="flex justify-center  pb-12">
                   <button
                     onClick={handleMore}
-                    className="bg-orange-400 text-white px-7 py-2 rounded-full"
+                    className="bg-[#FF7F1D] text-white px-7 py-2 rounded-full"
                   >
                     더보기
                   </button>
@@ -422,7 +430,7 @@ const handleTagClick = (tag) => {
               <p className=" text-[1.75rem]  font-sans font-semibold">
                 내가 찾는 일상속 이벤트가 없다면?
               </p>
-              <div className="text-orange-400 text-xl font-sans">
+              <div className="text-[#FF7F1D] text-xl font-sans">
                 {/* <CreateClub /> */}
                 <button
                   className="flex gap-x-2 justify-center items-center"

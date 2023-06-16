@@ -9,6 +9,7 @@ import { deleteAPI, getAPI, postAPI } from "../axios";
 import { useRecoilState } from "recoil";
 import { userNicknameState } from "../states/userStateTmp";
 import { HeartCheckbox } from "../component/HeartCheckBox";
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
@@ -27,6 +28,7 @@ function DetailEvent({
   // const [inputValue, setInputValue] = useState("");
   // eslint-disable-next-line
   const [map, setMap] = useState(null);
+  const navigate = useNavigate()
   // const [userLat, setUserLat] = useState(null);
   // const [userLng, setUserLng] = useState(null);
   // const [userAddress, setUserAddress] = useState("");
@@ -192,14 +194,14 @@ function DetailEvent({
           },
           content: {
             color: "#000000",
-            width: "680px",
+            width: "660px",
             height: "600px",
             margin: "auto",
             display: "flex",
             flexDirection: "column",
-            padding: "20px",
+            // padding: "20px",
             borderRadius: "10px",
-            gap: "10px",
+            // gap: "10px",
           },
         }}
       >
@@ -249,9 +251,13 @@ function DetailEvent({
         {/* <div id="map" style={{ width: "500px", height: "400px" }}></div>
           </div> */}
         <div className="flex flex-col w-full h-full gap-[15px] items-center">
-          <div className="flex justify-between w-full">
-            <div className="w-[220px]">참여중인지아닌지</div>
-            <div className="flex text-2xl w-[220px] justify-center text-[#ff7f1d] font-semibold items-center">
+          <div className="flex justify-between items-center w-full">
+            <div className="w-[220px] flex justify-center">
+              {isNicknameExists && (
+                <div className="w-[114.69px] h-[40px] border-[#ff7f1d] border-2 rounded-full text-[1.25rem] pt-[3.5px] flex justify-center items-center text-[#ff7f1d]">참여중</div>
+              ) }
+            </div>
+            <div className="flex text-2xl w-[220px] h-full text-center justify-center text-[#ff7f1d] font-semibold items-center">
               <p>{content.eventTitle}</p>
             </div>
             <div className="w-[220px] text-right">
@@ -263,47 +269,55 @@ function DetailEvent({
             </div>
           </div>
           <div>
-            <img className=" object-cover" src={image} alt="empty" />
+            <img className="object-cover" src={image} alt="event_image" />
           </div>
-          <div className="flex justify-between items-center w-[587px] h-[59px] bg-neutral-100 rounded-2xl p-4 pt-6">
-            <div className="flex flex-col justify-center items-center">
+          <div className="flex text-[1rem] items-center w-[588px] h-[67.22px] bg-[#F5F5F5] rounded-2xl">
+            <div className="flex flex-col justify-center items-center w-[147px] ">
               <img
+                className="w-[20px] h-[20px]"
                 src={`${process.env.PUBLIC_URL}/images/detail/detail_calender.svg`}
                 alt="detail_calender"
               />
-              <div>
+              <div className="flex items-center  mt-[3px]">
                 {month}.{date}
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center w-[147px] border-x-2">
               <img
+                className="w-[20px] h-[20px]"
                 src={`${process.env.PUBLIC_URL}/images/detail/detail_clock.svg`}
                 alt="detail_clock"
               />
-              <div>
+              <div className="flex items-center mt-[3px]">
                 {time()} {minute}분
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center w-[147px] border-r-2">
               <img
+                className="w-[20px] h-[20px]"
                 src={`${process.env.PUBLIC_URL}/images/detail/detail_location.svg`}
                 alt="detail_location"
               />
-              <div>{content.eventLocation}</div>
+              <div className="flex items-center mt-[3px]">
+                {content?.eventLocation?.split(" ")[0] === "서울"
+                  ? content?.eventLocation?.split(" ")[1]
+                  : content?.eventLocation?.split(" ")[0]}
+              </div>
             </div>
 
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center w-[147px]">
               <img
-                src={`${process.env.PUBLIC_URL}/images/detail/detail_people.svg`}
+                className="w-[20px] h-[20px]"
+                src={`${process.env.PUBLIC_URL}/images/detail/club_detail_people.svg`}
                 alt="detail_people"
               />
-              <div>
-                {content.eventAttendantListSize} / {content.eventGroupSize}
+              <div className="flex items-center mt-[3px]">
+                {content?.eventAttendantListSize} / {content?.eventGroupSize}
               </div>
             </div>
           </div>
           <div className="flex justify-center items-center w-[588px] h-[101px] rounded-2xl bg-neutral-100">
-            <p>{content.eventContent}</p>
+            <p>{content?.eventContent}</p>
           </div>
           <div className="flex justify-center gap-[30px] ">
             <button
@@ -314,9 +328,16 @@ function DetailEvent({
             </button>
             {isNicknameExists ? (
               page === "endedEvent" ? (
-                <button className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white">
-                  후기 작성하기
-                </button>
+                <button
+                onClick={() =>
+                  navigate(`/writereview`, {
+                    state: { id: eventId, reviewType: "EVENT" },
+                  })
+                }
+                className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white"
+              >
+                후기 작성하기
+              </button>
               ) : (
                 <button
                   onClick={() =>
@@ -344,7 +365,6 @@ function DetailEvent({
               )
             )}
           </div>
-          
         </div>
         {/* </div> */}
       </Modal>

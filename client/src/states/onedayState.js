@@ -1,8 +1,9 @@
 import { atom } from 'recoil';
+import { v1 } from 'uuid';
 
 
 export const onedayOptionState = atom({
-    key: 'optionState',
+    key: `optionState/${v1()}`,
     default: {
         optionLists: null,
         categoryLists: null,

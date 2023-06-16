@@ -49,7 +49,7 @@ function UserProfile({
         setExpanded(!expanded);
     };
 
-    const [selectedCategory, setSelectedCategory] = useState('');
+    // const [selectedCategory, setSelectedCategory] = useState('');
     const [categoryDetails, setCategoryDetails] = useState([]);
 
 

@@ -31,7 +31,7 @@ function RecommendCard({
           />
 
           <div className="w-[219px] text-xl font-semibold">{title}</div>
-          <div className="w-[219px] text-sm">{content.length >= 20 ? content.slice(0,20) +"..." : content }</div>
+          <div className="w-[219px] text-sm">{content.length >= 18 ? content.slice(0,18) +"..." : content }</div>
           <div className="w-[219px] text-neutral-400 text-sm">
             {nowMemberCount} / {maxGroupSize}
           </div>

@@ -43,7 +43,7 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
+        <Navbar clientRef={clientRef} />
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />

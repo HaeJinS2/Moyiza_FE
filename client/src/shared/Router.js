@@ -21,6 +21,9 @@ import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
 import SignUpSocial from "../pages/SignUpSocial";
 import Redirection from "../pages/Redirection";
+import TestPage from "../pages/TestPage";
+import WriteReview from "../pages/WriteReview";
+import DetailReview from "../pages/DetailReview";
 
 const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
 
@@ -45,8 +48,8 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
           <Route path="/oauth/redirect" element={<Redirection />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signup/social" element={<SignUpSocial />} />
-          <Route path="/mypage" element={<MyInfoClub />} />
-          <Route path="/mypage/oneday" element={<MyInfoOneday />} />
+          <Route path="/user/mypage" element={<MyInfoClub />} />
+          <Route path="/user/mypage/oneday" element={<MyInfoOneday />} />
           <Route path="/create-club-form" element={<CreateClubForm />} />
           <Route path="/club" element={<Club />} />
           <Route path="/oneday" element={<Oneday />} />
@@ -57,6 +60,9 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
           <Route path="/create-oneday-form" element={<CreateOnedayForm />} />
           <Route path="/oneday/:id" element={<OnedayDetail />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/writereview" element={<WriteReview />} />
+          <Route path="/detailreview" element={<DetailReview />} />
+          <Route path="/test" element={<TestPage />} />
 
 
           {/* <Route path="/404" element={<NotFound />} /> */}

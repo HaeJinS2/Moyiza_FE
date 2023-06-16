@@ -1,0 +1,76 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@amplitude/analytics-browser": "^1.10.3",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@mui/material": "^5.13.2",
+    "@mui/styles": "^5.13.2",
+    "@sentry/react": "^7.53.1",
+    "@sentry/tracing": "^7.53.1",
+    "@stomp/stompjs": "^7.0.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "aos": "^2.3.4",
+    "axios": "^1.4.0",
+    "browser-image-compression": "^2.0.2",
+    "canvas-confetti": "^1.6.0",
+    "date-fns": "^2.30.0",
+    "framer-motion": "^10.12.12",
+    "gsap": "^3.11.5",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.0",
+    "jwt-decode": "3.1.2",
+    "package.json": "^2.0.1",
+    "query-string": "^8.1.0",
+    "react": "^18.2.0",
+    "react-canvas-confetti": "^1.4.0",
+    "react-datepicker": "^4.11.0",
+    "react-dom": "^18.2.0",
+    "react-gsap": "^3.2.1",
+    "react-icons": "^4.8.0",
+    "react-input-slider": "^6.0.1",
+    "react-modal": "^3.16.1",
+    "react-query": "^3.39.3",
+    "react-reveal": "^1.2.2",
+    "react-router-dom": "^6.11.2",
+    "react-scripts": "5.0.1",
+    "recoil": "^0.7.7",
+    "sockjs-client": "^1.6.1",
+    "styled-components": "^6.0.0-rc.2",
+    "sweetalert": "^2.1.2",
+    "web-vitals": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  }
+}

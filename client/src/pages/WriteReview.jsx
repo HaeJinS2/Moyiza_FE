@@ -13,6 +13,7 @@ function WriteReview() {
     const [selectedFileName1, setSelectedFileName1] = useState("");
     const [selectedFileName2, setSelectedFileName2] = useState("");
     const [selectedFileName3, setSelectedFileName3] = useState("");
+    // eslint-disable-next-line
     const { state } = useLocation();
 
     console.log(selectedFileName1, selectedFileName2, selectedFileName3)

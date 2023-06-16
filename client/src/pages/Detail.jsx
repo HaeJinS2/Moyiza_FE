@@ -277,14 +277,14 @@ function Detail() {
                   <button onClick={() => setOnEdit(false)}>
                     <img
                       src={`${process.env.PUBLIC_URL}/images/onEdit.svg`}
-                      alt="cancel_button"
+                      alt="cancel_edit_button"
                     />
                   </button>
                 ) : (
                   <button onClick={() => setOnEdit(true)}>
                     <img
                       src={`${process.env.PUBLIC_URL}/images/setting.svg`}
-                      alt="setting_button"
+                      alt="edit_button"
                     />
                   </button>
                 )
@@ -295,7 +295,7 @@ function Detail() {
             <div className="flex gap-x-[70px] w-auto items-center">
               <div className="flex justify-center">
                 <img
-                  className="rounded-xl w-[458px] h-[305px] object-fill aspect-square"
+                  className="rounded-xl w-[458px] h-[305px] object-contain aspect-square"
                   src={clubDetail?.data.clubImageUrlList[0]}
                   alt="club_main"
                 />
@@ -350,17 +350,17 @@ function Detail() {
                 </div>
               </div>
             </div>
-            <div className="w-full h-[91px]">
+            <div className="w-full h-[91px]  mt-4">
               {isOwner && onEdit ? (
                 <>
                   <div className="flex">
-                    <div className="w-[458px] h-[91px] mr-[70px] flex justify-center">
-                      <button className="w-[120px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
-                        수정하기
+                    <div className="w-[458px] h-[91px] mr-[70px] flex justify-center ">
+                      <button className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full ">
+                        사진 추가하기
                       </button>
                     </div>
                     <div className="w-[543px] h-[91px] flex justify-center ">
-                      <button className="w-[120px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
+                      <button className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
                         수정하기
                       </button>
                     </div>
@@ -371,9 +371,14 @@ function Detail() {
                   <div className="flex">
                     <div className="w-[458px] h-[91px] mr-[70px]"></div>
                     <div className="w-[543px] h-[91px] flex justify-center ">
-                      <button className="w-[200px] h-[60px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
-                        가입하기
-                      </button>
+                      {!isMember && (
+                        <button
+                          onClick={handleJoinClub}
+                          className="w-[200px] h-[60px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full"
+                        >
+                          가입하기
+                        </button>
+                      )}
                     </div>
                   </div>
                 </>
@@ -381,8 +386,13 @@ function Detail() {
             </div>
           </div>
           <button
-            onClick={()=>navigate(`/writereview`, { state: { id: id, reviewType: "CLUB" } })}
-            className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white">
+            onClick={() =>
+              navigate(`/writereview`, {
+                state: { id: id, reviewType: "CLUB" },
+              })
+            }
+            className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white"
+          >
             후기 작성하기
           </button>
         </header>
@@ -432,10 +442,11 @@ function Detail() {
                     className={`h-[200px] flex justify-center items-center w-full `}
                   >
                     <div
-                      className={`${memberList?.length === 0
+                      className={`${
+                        memberList?.length === 0
                           ? ""
                           : "grid grid-cols-4 grid-rows-2"
-                        } justify-items-center gap-2 mt-10`}
+                      } justify-items-center gap-2 mt-10`}
                     >
                       {memberList?.length === 0 ? (
                         <EmptyState page="member" />
@@ -487,15 +498,15 @@ function Detail() {
                 )}
                 {progressEventPage <
                   Math.ceil(progressEvents.length / 4) - 1 && (
-                    <button
-                      onClick={() => setProgressEventPage(progressEventPage + 1)}
-                    >
-                      <img
-                        alt="next_button"
-                        src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
-                      />
-                    </button>
-                  )}
+                  <button
+                    onClick={() => setProgressEventPage(progressEventPage + 1)}
+                  >
+                    <img
+                      alt="next_button"
+                      src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                    />
+                  </button>
+                )}
               </div>
             </div>
             <div className="flex justify-center items-center">
@@ -512,8 +523,9 @@ function Detail() {
                     className={`h-[200px] absolute flex justify-center items-center w-full `}
                   >
                     <div
-                      className={`${progressEvents.length === 0 ? "" : "grid grid-cols-4"
-                        } gap-x-4 gap-y-8 justify-items-center w-full`}
+                      className={`${
+                        progressEvents.length === 0 ? "" : "grid grid-cols-4"
+                      } gap-x-4 gap-y-8 justify-items-center w-full`}
                     >
                       {progressEvents.length === 0 ? (
                         <EmptyState page="detail" />
@@ -544,11 +556,11 @@ function Detail() {
                                   />
                                   {onEdit ? (
                                     <div className="w-full justify-between flex gap-2">
-                                      <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">
+                                      <button className="w-[126px] h-[30px] rounded-full bg-[#ff7f1d] text-white text-[1.25rem] pt-[1px]">
                                         수정하기
                                       </button>
                                       <button
-                                        className="w-[126px] h-[30px] rounded-full border-2 border-orange-400 bg-white text-orange-400 text-lg"
+                                        className="w-[126px] h-[30px] rounded-full border-2 border-[#ff7f1d] bg-white text-[#ff7f1d] text-[1.25rem] pt-[1px]"
                                         onClick={() =>
                                           handleDeleteEvent(id, item.id)
                                         }
@@ -573,7 +585,10 @@ function Detail() {
               {isOwner ? (
                 <>
                   <div className="flex w-full h-full justify-end">
-                    <CreateEventModal id={id} getClubEventLists={getClubEventLists} />
+                    <CreateEventModal
+                      id={id}
+                      getClubEventLists={getClubEventLists}
+                    />
                   </div>
                 </>
               ) : (
@@ -620,10 +635,11 @@ function Detail() {
                 className={`h-full absolute flex  w-full `}
               >
                 <div
-                  className={`${reviewList?.length === 0
+                  className={`${
+                    reviewList?.length === 0
                       ? ""
                       : "grid grid-cols-3 grid-rows-2"
-                    } w-full `}
+                  } w-full `}
                 >
                   {reviewList?.length === 0 ? (
                     <EmptyState page="review" />
@@ -631,7 +647,7 @@ function Detail() {
                     reviewList
                       ?.slice(reviewPage * 6, reviewPage * 6 + 6)
                       .map((item) => {
-                        return <ClubReviewCard />;
+                        return <ClubReviewCard isOwner={isOwner} onEdit={onEdit} />;
                       })
                   )}
                 </div>
@@ -646,7 +662,7 @@ function Detail() {
           </p>
 
           <div className="flex h-full justify-center items-center">
-            <div className="flex justify-center w-full h-[50vh] text-black items-start overflow-hidden relative">
+            <div className="flex justify-center w-full h-[308px] text-black items-start overflow-hidden relative">
               <AnimatePresence custom={endedDirection}>
                 <motion.div
                   key={endedEventPage}
@@ -659,10 +675,11 @@ function Detail() {
                   className={`h-full absolute flex  w-full `}
                 >
                   <div
-                    className={`${endedEvents.length === 0
+                    className={`${
+                      endedEvents.length === 0
                         ? ""
                         : "grid grid-cols-3 grid-rows-3"
-                      } gap-x-4 gap-y-8 w-full `}
+                    } gap-x-4 gap-y-8 w-full `}
                   >
                     {endedEvents.length === 0 ? (
                       <EmptyState page="detail" />
@@ -712,7 +729,7 @@ function Detail() {
             )}
           </div>
           <div className="flex items-center justify-center">
-            {isMember && (
+            {isMember  && !isOwner && (
               <div className="flex text-2xl justify-center items-center mt-10 bg-[#646464] text-white w-[224px] h-[60px]  py-2 rounded-full ">
                 <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
               </div>

@@ -295,6 +295,7 @@ function CreateEvent() {
                                 className="shadow-md"
                                 dateFormat="yyyy'년'MM'월'dd'일' HH'시'mm'분'"
                                 showIcon
+                                minDate={new Date()}
                                 selected={dateTime}
                                 onChange={handleDateTimeChange}
                                 customInput={<CustomInput />}

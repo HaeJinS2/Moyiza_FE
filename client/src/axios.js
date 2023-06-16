@@ -18,10 +18,10 @@ axios.interceptors.request.use(
             } 
         } 
 
-        if (config.url === '/user/test/signup'){
+        if (config.url === '/signup'){
             config.headers["Content-Type"] = "application/json";
         } 
-        else if(config.url.includes(`/user/test/upload`)){
+        else if(config.url.includes(`/uploadImg`)){
             config.headers["Content-Type"] = "multipart/form";
         }
         else if(config.url.includes(`/user/mypage`)){
@@ -34,7 +34,7 @@ axios.interceptors.request.use(
             config.headers["Content-Type"] = "application/json";
         }
         
-        console.log("config : ", config);
+        //console.log("config : ", config);
 
         return config;
     },
@@ -116,12 +116,12 @@ export function putAPI(url, data) {
 }
 
 export function getAPI(url) {
-    console.log("GET Start, url : ", url);
+    //console.log("GET Start, url : ", url);
     return axios.get(API_BASE_URL + url);
 }
 
 export function getHeaderAPI(url, config) {
-    console.log("GET Start, url : ", url, config);
+    //console.log("GET Start, url : ", url, config);
     return axios.get(url, config);
 }
 

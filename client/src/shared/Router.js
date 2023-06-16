@@ -16,7 +16,7 @@ import ChatWindow from "../component/ChatWindow";
 import { useRecoilValue } from "recoil";
 import { roomIdStates, roomInfoStates } from "../states/chatState";
 import CreateOnedayForm from "../pages/CreateOnedayForm";
-import MyInfoOneday from "../pages/MyInfoOneday";
+// import MyInfoOneday from "../pages/MyInfoOneday";
 import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
 import SignUpSocial from "../pages/SignUpSocial";
@@ -35,8 +35,8 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
   //   console.log("roomInfoState:", roomInfoState)
   // }, [roomInfoState])
 
-  console.log(roomIdState)
-  console.log("testClient", testClient)
+  //console.log(roomIdState)
+  //console.log("testClient", testClient)
 
   return (
     <>
@@ -48,8 +48,8 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
           <Route path="/oauth/redirect" element={<Redirection />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signup/social" element={<SignUpSocial />} />
-          <Route path="/user/mypage" element={<MyInfoClub />} />
-          <Route path="/user/mypage/oneday" element={<MyInfoOneday />} />
+          <Route path="/user/mypage/:id" element={<MyInfoClub />} />
+          {/* <Route path="/user/mypage/oneday" element={<MyInfoOneday />} /> */}
           <Route path="/create-club-form" element={<CreateClubForm />} />
           <Route path="/club" element={<Club />} />
           <Route path="/oneday" element={<Oneday />} />

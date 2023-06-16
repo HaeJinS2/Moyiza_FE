@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { roomIdListStates, roomIdStates, roomMsgStates, roomInfoStates } from "../states/chatState";
+import {  roomIdStates, roomMsgStates, } from "../states/chatState";
 import { isLoggedInState } from '../states/userStateTmp';
 import swal from 'sweetalert';
 // import { Client } from "@stomp/stompjs";
@@ -20,8 +20,8 @@ function Navbar() {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
-  const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
-  const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
+  // const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
+  // const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
   const [currentChatType, setCurrentChatType] = useState('CLUB');
   const [filteredRoomId, setFilteredRoomId] = useState([]);
   const roomMsgState = useRecoilValue(roomMsgStates);
@@ -31,9 +31,9 @@ function Navbar() {
   const chatModalRef = useRef();
   const profileModalRef = useRef();
 
-  console.log("roomIdListState", roomIdListState)
-  console.log("roomInfoState", roomInfoState)
-  console.log("채팅방 목록 data", data)
+  //console.log("roomIdListState", roomIdListState)
+  //console.log("roomInfoState", roomInfoState)
+  //console.log("채팅방 목록 data", data)
 
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
@@ -51,11 +51,11 @@ function Navbar() {
             index === self.findIndex((t) => t.chatId === item.chatId)
           );
 
-          const allChatIds = uniqueData.map((item) => item.chatId);
+          // const allChatIds = uniqueData.map((item) => item.chatId);
 
-          setRoomIdListState(allChatIds);
+          // setRoomIdListState(allChatIds);
           setData(uniqueData);
-          setRoomInfoState(uniqueData);
+          // setRoomInfoState(uniqueData);
         }
       });
     }

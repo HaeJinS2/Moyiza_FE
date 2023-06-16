@@ -31,7 +31,7 @@ function Redirection() {
             setCookie('ACCESS_TOKEN', getToken);
             // goSignup();
             // swal('환영합니다! 회원가입을 완료해주세요');
-            window.location.href = 'http://moyiza.s3-website.ap-northeast-2.amazonaws.com/signup/social'
+            window.location.href = 'https://mo2za.com/signup/social'
 
         } else if (confirmToken) {
             setCookie('ACCESS_TOKEN', confirmToken);
@@ -39,7 +39,7 @@ function Redirection() {
             swal('로그인 성공!')
             setTimeout(() => {
                 swal.close();
-                window.location.href = 'http://moyiza.s3-website.ap-northeast-2.amazonaws.com/';
+                window.location.href = 'https://mo2za.com/';
               }, 1500);
               
         } else if (error) {
@@ -47,17 +47,17 @@ function Redirection() {
             swal(error);
             setTimeout(() => {
                 swal.close();
-                window.location.href = 'http://moyiza.s3-website.ap-northeast-2.amazonaws.com/login';
+                window.location.href = 'https://mo2za.com/login';
               }, 1500);
             // goLogin();
         }
         else {
             // goLogin();
-            swal('잘못된 접근입니다.')
+            swal('잘못된 접근입니다')
 
             setTimeout(() => {
                 swal.close();
-                window.location.href = 'http://moyiza.s3-website.ap-northeast-2.amazonaws.com/login';
+                window.location.href = 'https://mo2za.com/login';
             }, 1500);
         }
     });

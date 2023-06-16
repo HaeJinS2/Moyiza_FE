@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { deleteAPI, getAPI, postAPI } from "../axios";
@@ -15,6 +15,7 @@ import CreateEventModal from "../component/CreateEventModal";
 import swal from "sweetalert";
 
 function Detail() {
+  const queryClient = useQueryClient();
   const { id } = useParams();
   const [clubMemberNicknameArr, setClubMemberNicknameArr] = useState([]);
   const [eventlists, setEventLists] = useState([]);
@@ -131,8 +132,8 @@ function Detail() {
       postAPI(`/club/${id}/join`, {})
         .then((res) => {
           setIsMember(true);
-          console.log(res.data.message);
-          getAPI(`/club/${id}`).then((res) => swal("가입이 승인됐습니다!"));
+          queryClient.invalidateQueries("getDetailClub");
+          swal("가입이 승인됐습니다!");
         })
         .catch((err) => {
           console.log(err);
@@ -147,8 +148,8 @@ function Detail() {
     postAPI(`/club/${id}/goodbye`, {})
       .then((res) => {
         setIsMember(false);
-        console.log(res.data.message);
-        getAPI(`/club/${id}`).then((res) => swal("클럽 탈퇴 완료"));
+        queryClient.invalidateQueries("getDetailClub");
+        swal("클럽 탈퇴 완료");
       })
       .catch((err) => {
         console.log(err);

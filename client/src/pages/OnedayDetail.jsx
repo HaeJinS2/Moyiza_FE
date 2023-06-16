@@ -170,20 +170,18 @@ function OnedayDetail() {
   useEffect(() => {
     const fetchFilteredOnedayList = async () => {
       if (!onedayDetail) return;
-
-      try {
-        getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`).then(
-          (res) => {
-            setFilteredOnedayList(res.data.content);
-          }
-        );
-      } catch (err) {
-        setFilteredOnedayList([]);
-      }
+      getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`)
+        .then((res) => {
+          const filteredContent = res.data.content.filter(
+            (oneday) => oneday.onedayId !== parseInt(id)
+          );
+          setFilteredOnedayList(filteredContent);
+        })
+        .catch((err) => setFilteredOnedayList([]));
     };
 
     fetchFilteredOnedayList();
-  }, [onedayDetail]);
+  }, [onedayDetail, id]);
 
   console.log(filteredOnedayList);
 
@@ -365,26 +363,26 @@ function OnedayDetail() {
 
         {/* 참여멤버 */}
         <section className="flex flex-col w-[1140px] h-auto justify-between">
-            <div className="flex justify-between">
-              <div className="text-[2rem] font-semibold">참여멤버</div>
-              <div>
-                {memberPage > 0 && (
-                  <button onClick={() => setMemberPage(memberPage - 1)}>
-                    <img
-                      alt="prev_button"
-                      src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
-                    />
-                  </button>
-                )}
-                {memberPage < Math.ceil(onedayMember?.length / 6) - 1 && (
-                  <button onClick={() => setMemberPage(memberPage + 1)}>
-                    <img
-                      alt="next_button"
-                      src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
-                    />
-                  </button>
-                )}
-              </div>
+          <div className="flex justify-between">
+            <div className="text-[2rem] font-semibold">참여멤버</div>
+            <div>
+              {memberPage > 0 && (
+                <button onClick={() => setMemberPage(memberPage - 1)}>
+                  <img
+                    alt="prev_button"
+                    src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                  />
+                </button>
+              )}
+              {memberPage < Math.ceil(onedayMember?.length / 6) - 1 && (
+                <button onClick={() => setMemberPage(memberPage + 1)}>
+                  <img
+                    alt="next_button"
+                    src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                  />
+                </button>
+              )}
+            </div>
           </div>
           <div className="flex w-full h-full justify-center items-center">
             <div className="flex justify-center w-[1140px] h-[186px] text-black items-center overflow-hidden relative ">
@@ -408,17 +406,14 @@ function OnedayDetail() {
                       <EmptyState page="onedayDetail" />
                     ) : (
                       onedayMember
-                        ?.slice(
-                          memberPage * 6,
-                          memberPage * 6 + 6
-                        )
+                        ?.slice(memberPage * 6, memberPage * 6 + 6)
                         .map((member, i) => {
                           return (
                             <div className="flex gap-5 items-center">
-                              <img 
-                              className="w-[80px] h-[80px] rounded-full"
-                              src={member.profilePictureUrl}
-                              alt='oneday_member'
+                              <img
+                                className="w-[80px] h-[80px] rounded-full"
+                                src={member.profilePictureUrl}
+                                alt="oneday_member"
                               />
                               <p>{member.userNickname}</p>
                             </div>
@@ -509,23 +504,23 @@ function OnedayDetail() {
           </div>
         </section>
         <div className="flex items-center justify-center">
-            {isMember && !isOwner && (
-              <div className="flex text-2xl justify-center items-center mt-10 bg-[#646464] text-white w-[224px] h-[60px]  py-2 rounded-full ">
-                <button onClick={handleQuitOneday}>모임 탈퇴하기</button>
-              </div>
-            )}
-          </div>
+          {isMember && !isOwner && (
+            <div className="flex text-2xl justify-center items-center mt-10 bg-[#646464] text-white w-[224px] h-[60px]  py-2 rounded-full ">
+              <button onClick={handleQuitOneday}>모임 탈퇴하기</button>
+            </div>
+          )}
+        </div>
 
-          <div className="flex justify-center pb-20">
-            {onEdit && (
-              <button
-                onClick={handleDeleteOneday}
-                className=" text-white text-2xl bg-[#646464] w-[224px] h-[60px] px-2 py-1 rounded-full"
-              >
-                모임 삭제
-              </button>
-            )}
-          </div>
+        <div className="flex justify-center pb-20">
+          {onEdit && (
+            <button
+              onClick={handleDeleteOneday}
+              className=" text-white text-2xl bg-[#646464] w-[224px] h-[60px] px-2 py-1 rounded-full"
+            >
+              모임 삭제
+            </button>
+          )}
+        </div>
       </div>
     </>
   );

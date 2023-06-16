@@ -37,7 +37,8 @@ function MyInfoOneday() {
         const fetchData = async () => {
             try {
                 // GET 요청 수행
-                const response = await getAPI('/user/mypage');
+                const response = await getAPI('/mypage/142');
+                // const response = await getAPI(`/mypage/${user_id}`);
 
                 // 응답이 성공적인지 확인
                 if (response.status === 200) {
@@ -65,36 +66,38 @@ function MyInfoOneday() {
 
     return (
         <>
-            <div ref={divRef}>
+            <div className="flex flex-row" ref={divRef}>
                 <Navbar />
                 <Container>
                     {/* <section className="h-[calc(100vh-0px)] flex flex-col items-center "> */}
-                    <div className="flex flex-col">
-                        {/* <div className="flex w-full h-[500px] items-center justify-center "> */}
-                        <UserProfile
-                            nickname={nickname}
-                            profileImage={profileImage}
-                            email={email}
-                        />
+                    <div className="flex ">
+                        <div className="mt-[128px]">
+                            {/* <div className="flex w-full h-[500px] items-center justify-center "> */}
+                            <UserProfile
+                                nickname={nickname}
+                                profileImage={profileImage}
+                                email={email}
+                            />
+                        </div>
                         {/* </div> */}
-                        <div className="flex flex-col items-center w-full shadow-cm bg-[#FFFCF2] rounded-t-[100px]">
-                            <div className="flex py-[103px] flex-col gap-y-24 z-10">
+                        {/* <div className="flex flex-col items-center w-full shadow-cm bg-[#FFFCF2] rounded-t-[100px]"> */}
+                            <div className="flex mt-[128px] ml-[48px] flex-col z-10">
                                 <div className="flex justify-start items-start w-full">
                                     <span className="text-[20px] text-left">
-                                        <div className="flex gap-10 mb-12">
+                                        <div className="flex gap-10">
                                             {pageTabs.map((tab, i) => (
                                                 <button
                                                     key={i}
                                                     onClick={() => {
                                                         setActivePageTab(tab)
-                                                        i === 0 ? navigate("/user/mypage") : navigate("/user/mypage/oneday");
+                                                        i === 0 ? navigate("/mypage") : navigate("/mypage/oneday");
                                                     }} // 배열로 설정
                                                     className={`${activePageTab === tab ? 'text-black' : 'hover:opacity-50'
                                                         } relative rounded-full px-3 py-1.5 text-sm font-medium text-black outline-2 transition focus-visible:outline`}
                                                 >
                                                     {activePageTab === tab && (
                                                         <motion.div
-                                                            layoutId="active-pill"
+                                                            layoutId="active-pill-1"
                                                             transition={{ type: 'spring', duration: 0.5 }}
                                                             className="border-b-[4px] border-black absolute inset-0"
                                                         />
@@ -116,8 +119,8 @@ function MyInfoOneday() {
                                                     >
                                                         <div className="text-[32px] mt-[53px] flex flex-col justify-between align-center w-full">
                                                             <div className='flex justify-between align-center'>
-                                                                <div className="text-[32px]">{nickname ? `${nickname}님의 운영중인 하루속` : null}</div>
-                                                                <div className='text-[20px]'>총 0개</div>
+                                                                <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 하루속` : null}</div>
+                                                                {/* <div className='text-[20px]'>총 0개</div> */}
                                                             </div>
                                                         </div>
 
@@ -125,8 +128,8 @@ function MyInfoOneday() {
                                                             <p className='text-[20px] mt-[109px] mb-[109px]'>운영중인 하루가 없어요.</p>
                                                         </div>
                                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
-                                                            <div className="text-[32px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
-                                                            <div className='text-[20px]'> 총 {oneDaysInParticipatingInfo.length}개</div>
+                                                            <div className="text-[24px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
+                                                            {/* <div className='text-[20px]'> 총 {oneDaysInParticipatingInfo.length}개</div> */}
                                                         </div>
                                                         <div className='flex flex-col items-center justify-center w-[1200px]'>
                                                             <p className='text-[20px] mt-[109px]'>참여중인 하루가 없어요.</p>
@@ -142,18 +145,18 @@ function MyInfoOneday() {
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
                                                     // className="border-black inset-0"
                                                     >
-                                                        <div className="text-[32px] mb-[57px] flex flex-col justify-between align-center w-full">
-                                                            <div className='flex justify-between align-center mb-[57px]'>
-                                                                <div>{nickname ? `${nickname}님의 운영중인 하루속` : ''}</div>
-                                                                {oneDaysInOperationInfo.length > 0 && (
+                                                        <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                            <div className='flex justify-between align-center mb-[25px]'>
+                                                                <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 하루속` : ''}</div>
+                                                                {/* {oneDaysInOperationInfo.length > 0 && (
                                                                     <div className='text-[20px] '>총 {oneDaysInOperationInfo.length}개</div>
-                                                                )}
+                                                                )} */}
                                                             </div>
-                                                            <div className='w-[1130px] flex flex-wrap justify-between'>
+                                                            <div className='w-[748px] flex flex-wrap justify-between'>
                                                                 {oneDaysInOperationInfo.map((club, i) => {
                                                                     return (
                                                                         <ProfileCardOneday
-                                                                            className="mb-[30px] mr-[20px]"
+                                                                            className="mr-[28px]"
                                                                             key={club.oneDayId}
                                                                             oneDayTitle={club.oneDayTitle}
                                                                             oneDayImage={club.oneDayImage}
@@ -166,15 +169,15 @@ function MyInfoOneday() {
                                                                     );
                                                                 })}
                                                             </div>
-                                                            <div className='flex justify-between align-center mt-[90px] text-[28px]'>
-                                                                <div className="text-[32px] mb-[57px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
-                                                                <div className='text-[20px] '> 총 {oneDaysInParticipatingInfo.length}개</div>
+                                                            <div className='flex justify-between align-center mt-[48px] text-[25px]'>
+                                                                <div className="text-[24px] ">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
+                                                                {/* <div className='text-[20px] '> 총 {oneDaysInParticipatingInfo.length}개</div> */}
                                                             </div>
-                                                            <div className='w-[1130px] flex flex-wrap justify-between'>
+                                                            <div className='w-[748px] flex flex-wrap justify-between'>
                                                                 {oneDaysInParticipatingInfo.map((club, i) => {
                                                                     return (
                                                                         <ProfileCardOneday
-                                                                            className="mb-[30px] mr-[20px]"
+                                                                            className="mr-[28px]"
                                                                             key={club.oneDayId}
                                                                             oneDayTitle={club.oneDayTitle}
                                                                             oneDayImage={club.oneDayImage}
@@ -196,7 +199,7 @@ function MyInfoOneday() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {/* </div> */}
                     {/* </section> */}
                 </Container>
             </div>

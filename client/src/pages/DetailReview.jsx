@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { getAPI } from '../axios'
+import { getAPI, deleteAPI, postAPI } from '../axios'
 import { AnimatePresence, motion } from "framer-motion";
+import { HeartCheckbox } from '../component/HeartCheckBox';
+import swal from 'sweetalert';
 
 function DetailReview() {
     const [data, setData] = useState([]);
+    const [checked, setChecked] = useState(false);
     const [progressEventPage, setProgressEventPage] = useState(0);
     const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
     if (progressTuple[1] !== progressEventPage) {
@@ -11,6 +14,7 @@ function DetailReview() {
     }
     let progressPrev = progressTuple[0];
     let progressDirection = progressEventPage > progressPrev ? 1 : -1;
+
     useEffect(() => {
         getAPI(`/review/15`).then((res) => {
             setData(res.data)
@@ -20,6 +24,46 @@ function DetailReview() {
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    const likedReviewBtn = (e) => {
+        if (!checked) {
+            postAPI(`/review/15/like`, {}).then((res) => {
+                // swal("포스트!")
+                setChecked(e);
+                console.log(res)
+                getAPI(`/review/15`).then((res) => {
+                    setData(res.data)
+                    console.log("res.data", res.data)
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }).catch((err) => console.log(err))
+        } else {
+            deleteAPI(`/review/15/like`, {}).then((res) => {
+                // swal("딜리트!")
+                setChecked(e);
+                console.log(res)
+                getAPI(`/review/15`).then((res) => {
+                    setData(res.data)
+                    console.log("res.data", res.data)
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }).catch((err) => console.log(err))
+        }
+    }
+
+    const deleteReviewBtn = () => {
+        deleteAPI(`/review/16`, {}).then((res) => {
+            swal("삭제완료!")
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+    useEffect(() => {
+        setChecked(data.isLikedByUser)
+    }, [data.isLikedByUser])
 
     return (
         <div className='flex flex-col h-[100vh] items-center justify-center gap-y-4 '>
@@ -107,20 +151,27 @@ function DetailReview() {
                                 </div>
                                 <div>{data?.writerNickname}</div>
                             </div>
-                            <div className='flex items-center gap-x-2'>
+                            <div className='flex items-center'>
                                 <div>
-                                    이모티콘
+                                    <HeartCheckbox
+                                        likeBtn={likedReviewBtn}
+                                        checked={checked}
+                                        setChecked={setChecked}
+                                    />
                                 </div>
-                                <div>
+                                <div className='w-[10px]'>
                                     {data?.numLikes}
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <div className='w-[449px] h-[250px]'>
+                        <div className='w-[449px] h-[200px]'>
                             {data.textContent}
                         </div>
+                    </div>
+                    <div>
+                        <button onClick={deleteReviewBtn}>삭제버튼</button>
                     </div>
                 </div>
             </div>

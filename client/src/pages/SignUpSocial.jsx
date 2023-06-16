@@ -48,7 +48,7 @@ function SignUpSocial() {
     const birth = `${year}-${month}-${day}`;
     // 닉네임 중복 검사
     const nicknameValidationPost = async ({ nickname }) => {
-        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/check/nickname`, { nickname });
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/check/nickname`, { nickname });
         return response.data;
     };
 
@@ -95,7 +95,7 @@ function SignUpSocial() {
                 birth: birth,
                 phone: phoneNum,
             };
-            const url = `${process.env.REACT_APP_SERVER_URL}/user/signup/social`;
+            const url = `${process.env.REACT_APP_SERVER_URL}/signup/social`;
             const socialSignupResponse = await axios.put(url, data);
 
 

@@ -136,8 +136,8 @@ function DetailEvent({
   //     setIsOpen(true)
   // }
   useEffect(() => {
-    setChecked(isLikedByUser)
-  }, [isLikedByUser])
+    setChecked(isLikedByUser);
+  }, [isLikedByUser]);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -145,19 +145,23 @@ function DetailEvent({
 
   const likeDetailBtn = (e) => {
     if (!checked) {
-      postAPI(`/club/${clubId}/event/${eventId}/like`, {}).then((res) => {
-        // swal("포스트!")
-        setChecked(e);
-        console.log(res)
-      }).catch((err) => console.log(err))
+      postAPI(`/club/${clubId}/event/${eventId}/like`, {})
+        .then((res) => {
+          // swal("포스트!")
+          setChecked(e);
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
     } else {
-      deleteAPI(`/club/${clubId}/event/${eventId}/like`, {}).then((res) => {
-        // swal("딜리트!")
-        setChecked(e);
-        console.log(res)
-      }).catch((err) => console.log(err))
+      deleteAPI(`/club/${clubId}/event/${eventId}/like`, {})
+        .then((res) => {
+          // swal("딜리트!")
+          setChecked(e);
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
     }
-  }
+  };
 
   const eventStartTime = content?.eventStartTime;
   const month = eventStartTime?.split("T")[0].split("-")[1];
@@ -247,7 +251,7 @@ function DetailEvent({
         <div className="flex flex-col w-full h-full gap-[15px] items-center">
           <div className="flex justify-between w-full">
             <div className="w-[220px]">참여중인지아닌지</div>
-            <div className="flex text-2xl w-[220px] justify-center text-orange-400 font-semibold items-center">
+            <div className="flex text-2xl w-[220px] justify-center text-[#ff7f1d] font-semibold items-center">
               <p>{content.eventTitle}</p>
             </div>
             <div className="w-[220px] text-right">
@@ -264,7 +268,6 @@ function DetailEvent({
           <div className="flex justify-between items-center w-[587px] h-[59px] bg-neutral-100 rounded-2xl p-4 pt-6">
             <div className="flex flex-col justify-center items-center">
               <img
-
                 src={`${process.env.PUBLIC_URL}/images/detail/detail_calender.svg`}
                 alt="detail_calender"
               />
@@ -309,30 +312,39 @@ function DetailEvent({
             >
               닫기
             </button>
-            {isNicknameExists ? page !== 'endedEvent' && (
-              <button
-                onClick={() =>
-                  handleLeaveEvent(clubId, eventId, () =>
-                    setIsNicknameExists(false)
-                  )
-                }
-                className="w-[200px] h-[60px] rounded-full font-semibold bg-orange-400 text-[1.25rem] text-white"
-              >
-                탈퇴하기
-              </button>
-            ) : page !== 'endedEvent' && (
-              <button
-                onClick={() =>
-                  handleJoinEvent(clubId, eventId, () =>
-                    setIsNicknameExists(true)
-                  )
-                }
-                className="w-[200px] h-[60px rounded-full bg-orange-400 text-[1.25rem] text-white"
-              >
-                참여하기
-              </button>
+            {isNicknameExists ? (
+              page === "endedEvent" ? (
+                <button className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white">
+                  후기 작성하기
+                </button>
+              ) : (
+                <button
+                  onClick={() =>
+                    handleLeaveEvent(clubId, eventId, () =>
+                      setIsNicknameExists(false)
+                    )
+                  }
+                  className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white"
+                >
+                  탈퇴하기
+                </button>
+              )
+            ) : (
+              page !== "endedEvent" && (
+                <button
+                  onClick={() =>
+                    handleJoinEvent(clubId, eventId, () =>
+                      setIsNicknameExists(true)
+                    )
+                  }
+                  className="w-[200px] h-[60px] rounded-full bg-[#ff7f1d] text-[1.25rem] text-white"
+                >
+                  참여하기
+                </button>
+              )
             )}
           </div>
+          
         </div>
         {/* </div> */}
       </Modal>

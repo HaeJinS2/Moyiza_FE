@@ -42,10 +42,12 @@ function SignUp() {
 	const handleConfirmEmail = () => {
 		const requestData = { email };
 
-		postAPI("/user/signup/confirmEmail", requestData)
+		postAPI("/signup/confirmEmail", requestData)
 			.then((response) => {
 				if (response.status === 200) {
 					swal("인증번호가 이메일로 전송되었습니다.");
+				} else if (response.status === 400){
+					swal("중복된 이메일입니다.");
 				} else {
 					swal("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
 				}
@@ -59,7 +61,7 @@ function SignUp() {
 	const handleConfirm = () => {
 		const requestData = { email, verificationCode };
 
-		postAPI("/user/signup/confirmEmail", requestData)
+		postAPI("/signup/confirmEmail", requestData)
 			.then((response) => {
 				if (response.status === 200) {
 					swal("이메일 인증이 성공하였습니다.");
@@ -127,7 +129,7 @@ function SignUp() {
 	const birth = `${year}-${month}-${day}`;
 	// 닉네임 중복 검사
 	const nicknameValidationPost = async ({ nickname }) => {
-		const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/check/nickname`, { nickname });
+		const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/check/nickname`, { nickname });
 		return response.data;
 	};
 
@@ -199,7 +201,7 @@ function SignUp() {
 			ImageFormData.append('imageFile', profileImage);
 
 			// 이미지를 먼저 업로드 한 뒤, 3S 저장 URL을 response 받는다.
-			const IMAGE_UPLOAD_URL = "http://13.125.51.14/user/test/upload";
+			const IMAGE_UPLOAD_URL = "http://13.125.51.14/uploadImg";
 			const uploadRes = await axios.post(IMAGE_UPLOAD_URL, ImageFormData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -210,7 +212,7 @@ function SignUp() {
 			// 만약 uploadRes.data 를 불러올 수 없는 경우에 대한 리스크 처리 필요 합니다.
 			formData.append('imageUrl', uploadRes.data);
 
-			const originUrl = `http://13.125.51.14/user/test/signup`;
+			const originUrl = `http://13.125.51.14/signup`;
 			const signupResponse = await axios.post(originUrl, formData, {
 				headers: {
 					'Content-Type': 'application/json'

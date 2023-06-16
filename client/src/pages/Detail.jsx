@@ -385,16 +385,6 @@ function Detail() {
               )}
             </div>
           </div>
-          <button
-            onClick={() =>
-              navigate(`/writereview`, {
-                state: { id: id, reviewType: "CLUB" },
-              })
-            }
-            className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white"
-          >
-            후기 작성하기
-          </button>
         </header>
 
         {/* 모임규칙, 참여멤버 */}
@@ -455,7 +445,7 @@ function Detail() {
                           ?.slice(memberPage * 8, memberPage * 8 + 8)
                           .map((member) => {
                             return (
-                              <div className="w-[114px] h-[60px] flex justify-between items-center">
+                              <div className="w-[114px] h-[60px] flex gap-2 font-semibold items-center">
                                 <div>
                                   <img
                                     className="w-[60px] h-[60px] rounded-full"
@@ -647,7 +637,9 @@ function Detail() {
                     reviewList
                       ?.slice(reviewPage * 6, reviewPage * 6 + 6)
                       .map((item) => {
-                        return <ClubReviewCard isOwner={isOwner} onEdit={onEdit} />;
+                        return (
+                          <ClubReviewCard isOwner={isOwner} onEdit={onEdit} />
+                        );
                       })
                   )}
                 </div>
@@ -729,7 +721,7 @@ function Detail() {
             )}
           </div>
           <div className="flex items-center justify-center">
-            {isMember  && !isOwner && (
+            {isMember && !isOwner && (
               <div className="flex text-2xl justify-center items-center mt-10 bg-[#646464] text-white w-[224px] h-[60px]  py-2 rounded-full ">
                 <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
               </div>

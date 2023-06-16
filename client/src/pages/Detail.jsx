@@ -25,6 +25,7 @@ function Detail() {
   const userNickname = useRecoilValue(userNicknameState);
   const [isMember, setIsMember] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
@@ -379,9 +380,11 @@ function Detail() {
               )}
             </div>
           </div>
-          <button className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white">
-                  후기 작성하기
-                </button>
+          <button
+            onClick={()=>navigate(`/writereview`, { state: { id: id, reviewType: "CLUB" } })}
+            className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white">
+            후기 작성하기
+          </button>
         </header>
 
         {/* 모임규칙, 참여멤버 */}
@@ -429,11 +432,10 @@ function Detail() {
                     className={`h-[200px] flex justify-center items-center w-full `}
                   >
                     <div
-                      className={`${
-                        memberList?.length === 0
+                      className={`${memberList?.length === 0
                           ? ""
                           : "grid grid-cols-4 grid-rows-2"
-                      } justify-items-center gap-2 mt-10`}
+                        } justify-items-center gap-2 mt-10`}
                     >
                       {memberList?.length === 0 ? (
                         <EmptyState page="member" />
@@ -485,15 +487,15 @@ function Detail() {
                 )}
                 {progressEventPage <
                   Math.ceil(progressEvents.length / 4) - 1 && (
-                  <button
-                    onClick={() => setProgressEventPage(progressEventPage + 1)}
-                  >
-                    <img
-                      alt="next_button"
-                      src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
-                    />
-                  </button>
-                )}
+                    <button
+                      onClick={() => setProgressEventPage(progressEventPage + 1)}
+                    >
+                      <img
+                        alt="next_button"
+                        src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                      />
+                    </button>
+                  )}
               </div>
             </div>
             <div className="flex justify-center items-center">
@@ -510,9 +512,8 @@ function Detail() {
                     className={`h-[200px] absolute flex justify-center items-center w-full `}
                   >
                     <div
-                      className={`${
-                        progressEvents.length === 0 ? "" : "grid grid-cols-4"
-                      } gap-x-4 gap-y-8 justify-items-center w-full`}
+                      className={`${progressEvents.length === 0 ? "" : "grid grid-cols-4"
+                        } gap-x-4 gap-y-8 justify-items-center w-full`}
                     >
                       {progressEvents.length === 0 ? (
                         <EmptyState page="detail" />
@@ -619,11 +620,10 @@ function Detail() {
                 className={`h-full absolute flex  w-full `}
               >
                 <div
-                  className={`${
-                    reviewList?.length === 0
+                  className={`${reviewList?.length === 0
                       ? ""
                       : "grid grid-cols-3 grid-rows-2"
-                  } w-full `}
+                    } w-full `}
                 >
                   {reviewList?.length === 0 ? (
                     <EmptyState page="review" />
@@ -659,11 +659,10 @@ function Detail() {
                   className={`h-full absolute flex  w-full `}
                 >
                   <div
-                    className={`${
-                      endedEvents.length === 0
+                    className={`${endedEvents.length === 0
                         ? ""
                         : "grid grid-cols-3 grid-rows-3"
-                    } gap-x-4 gap-y-8 w-full `}
+                      } gap-x-4 gap-y-8 w-full `}
                   >
                     {endedEvents.length === 0 ? (
                       <EmptyState page="detail" />
@@ -673,7 +672,7 @@ function Detail() {
                         .map((item) => {
                           return (
                             <EndedClubEventCard
-                            page="endedEvent"
+                              page="endedEvent"
                               image={item?.image}
                               key={item?.id}
                               clubId={item?.clubId}

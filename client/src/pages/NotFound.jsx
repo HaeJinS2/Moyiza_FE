@@ -14,7 +14,7 @@ function NotFound() {
       <h4>Sorry, there is nothing here</h4>
       <button 
       className='text-slate-600'
-      onClick={()=>navigate(-2)}>Go Back</button>
+      onClick={()=>navigate(`/`)}>Go Home</button>
     </div>
   )
 }

@@ -11,6 +11,7 @@ import EmptyState from "../component/EmptyState";
 import EndedClubEventCard from "../component/EndedClubEventCard";
 import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import CreateEventModal from "../component/CreateEventModal";
+import { reloadChatStates } from '../states/chatState';
 
 import swal from "sweetalert";
 
@@ -28,6 +29,7 @@ function Detail() {
   const [isOwner, setIsOwner] = useState(false);
   const [eventArr, setEventArr] = useState([]);
   const [eventReview, setEventReview] = useState([]);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
@@ -146,6 +148,7 @@ function Detail() {
       postAPI(`/club/${id}/join`, {})
         .then((res) => {
           setIsMember(true);
+          setReloadChatState(true)
           queryClient.invalidateQueries("getDetailClub");
           swal("가입이 승인됐습니다!");
         })
@@ -162,6 +165,7 @@ function Detail() {
     postAPI(`/club/${id}/goodbye`, {})
       .then((res) => {
         setIsMember(false);
+        setReloadChatState(true)
         queryClient.invalidateQueries("getDetailClub");
         swal("클럽 탈퇴 완료");
       })
@@ -199,7 +203,7 @@ function Detail() {
   };
   console.log(isMember);
   console.log(eventlists);
-  console.log(clubDetail?.data);
+  console.log(clubDetail?.data,reloadChatState);
 
   console.log("res.data!",eventReview)
 
@@ -413,7 +417,16 @@ function Detail() {
         {/* 모임규칙, 참여멤버 */}
         <section className="flex w-[1140px] h-auto justify-between mb-[91px]">
           <div className="w-[562px] h-auto ">
-            <div className="text-[2rem] font-semibold">모임규칙</div>
+            <div className="text-[2rem] font-semibold flex justify-between ">
+              <div>모임 규칙</div>
+              {onEdit ? (
+                <button className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
+                  수정하기
+                </button>
+              ) : (
+                <div></div>
+              )}
+            </div>
             <div className="text-[1.25rem] h-[215px] bg-[#F5F5F5] rounded-xl mt-10 p-4">
               수정하기를 눌러 내용을 작성해주세요!
             </div>
@@ -467,7 +480,9 @@ function Detail() {
                           ?.slice(memberPage * 8, memberPage * 8 + 8)
                           .map((member) => {
                             return (
-                              <div className="w-[114px] h-[60px] flex gap-2 font-semibold items-center">
+                              <div 
+                              onClick={()=> navigate(`/mypage/${member.userId}`)}
+                              className="cursor-pointer w-[114px] h-[60px] flex gap-2 font-semibold items-center">
                                 <div>
                                   <img
                                     className="w-[60px] h-[60px] rounded-full"

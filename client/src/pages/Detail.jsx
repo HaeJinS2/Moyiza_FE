@@ -11,7 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import EndedClubEventCard from "../component/EndedClubEventCard";
 import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
-import CreateEventModal from "../component/CreateEventModal";
+// import CreateEventModal from "../component/CreateEventModal";
 
 import swal from "sweetalert";
 
@@ -107,6 +107,7 @@ function Detail() {
   };
 
   // 클럽 가입하기 버튼
+  // eslint-disable-next-line
   const handleJoinClub = () => {
     if (isLoggedIn) {
       postAPI(`/club/${id}/join`, {})
@@ -232,14 +233,13 @@ function Detail() {
       .catch((error) => swal("이벤트 삭제 요청이 거절됐습니다."));
   };
   console.log(clubMemberNicknameArr);
-  console.log(progressEvents);
   console.log(clubDetail);
   return (
     <>
       <div ref={divRef} />
       <BodyContainer>
-        <header className="flex pt-40 flex-col justify-center items-center relative mb-10">
-          <div className="flex justify-between w-full items-center">
+        <header className="flex pt-40 flex-col items-center mb-10 w-full justify-center">
+          <div className="flex justify-between w-full items-center mb-[20px]">
             <button onClick={() => navigate(-1)}>
               <img
                 src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
@@ -269,166 +269,222 @@ function Detail() {
               <div className="h-[60px] w-[60px]" />
             )}
           </div>
-
-          <div className="flex flex-col gap-y-[40px]">
-            <div className="flex w-full h-full justify-center items-center relative overflow-hidden rounded-xl">
+          <div className="flex w-full gap-x-[70px]">
+            <div className="flex justify-center">
               <img
-                className="rounded-2xl aspect-square  w-[246px] h-[246px] object-fill"
-                src={clubDetail?.data.thumbnailUrl}
-                alt="clubThumbnail"
+                className="rounded-xl w-[458px] h-[305px] object-fill aspect-square"
+                src={clubDetail?.data.clubImageUrlList[0]}
+                alt="club_main"
               />
             </div>
-            <div className="flex justify-center gap-20 mb-10">
-              {clubDetail?.data.clubTag.map((item) => {
-                return (
-                  <>
-                    <div className="flex cursor-default items-center justify-center text-orange-400 text-xl border-orange-400 border-[1px] px-2 pt-[2px] w-[110px] rounded-full h-[35px]">
-                      {item}
+            <div>
+              <div className="w-[543px] h-[294px]">
+                <div className="flex justify-center mb-[20px]">
+                  <div className="flex flex-col justify-center items-center w-[181px]">
+                    <div>
+                      <img
+                        alt="club_detail_gender"
+                        src={`${process.env.PUBLIC_URL}/images/detail/club_detail_gender.svg`}
+                      />
                     </div>
-                  </>
-                );
-              })}
-            </div>
-            <div className="flex justify-center">
-              {isMember ? (
-                <div className="flex  text-2xl  justify-center items-center bg-orange-400 text-white w-[224px] h-[60px]  py-2 rounded-full ">
-                  <button onClick={handleGoodbyeClub}>모임 탈퇴하기</button>
+                    <div className="flex justify-center text-[1rem]">
+                      {clubDetail?.data.genderPolicy}
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-center px-[46px] border-x-2 w-[181px]">
+                    <div className="flex justify-center text-[1.25rem]">
+                      Age
+                    </div>
+                    <div className="flex justify-center text-[1rem]">
+                      {clubDetail?.data.agePolicy}세 이상
+                    </div>
+                  </div>
+                  <div className="flex flex-col  justify-center items-center w-[181px]">
+                    <div>
+                      <img
+                        src={`${process.env.PUBLIC_URL}/images/detail/club_detail_people.svg`}
+                        alt="club_detail_people"
+                      />
+                    </div>
+                    <div className="flex justify-center text-[1rem]">
+                      {clubDetail?.data.nowMemberCount} /
+                      {clubDetail?.data.maxGroupSize}
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                <div className="flex text-2xl justify-center items-center bg-orange-400 text-white w-[224px] h-[60px] py-2 rounded-full">
-                  <button onClick={handleJoinClub}>모임 가입하기</button>
+                <div className="flex justify-center mb-[20px] gap-4">
+                  {clubDetail?.data.clubTag.map((tag) => {
+                    return (
+                      <div className="w-[97.8px] h-[32.6px] rounded-full border-2 border-[#FF7F1D] text-[#FF7F1D] text-[1.125rem] justify-center flex items-center pt-[3px]">
+                        {tag}
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
+                <div className="w-[543px] h-[162px] text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6">
+                  {clubDetail?.data.clubContent}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-between items-center w-full h-[237px] bg-neutral-200 rounded-2xl pr-10">
-            <p className="text-black text-2xl px-4">
-              {clubDetail?.data.clubContent}
-            </p>
-            {isOwner ? (
-              onEdit ? (
-                <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">
-                  수정하기
-                </button>
-              ) : (
-                <>
-                  {/* <button
-                className="bg-orange-400 text-white flex justify-center items-center w-[60px] h-[60px] rounded-full text-5xl pt-[6px]"
-                onClick={() => navigate(`/create-event-form/${id}`)}
-              >
-                +
-              </button> */}
-
-                  <CreateEventModal
-                    getClubEventLists={getClubEventLists}
-                    id={id}
-                  />
-                </>
-              )
-            ) : (
-              ""
-            )}
           </div>
         </header>
-        <body className="flex flex-col gap-4">
-          <div className="flex justify-between gap-10">
-            <div>
-              <p className="text-xl">진행중인 일상속 이벤트</p>
-            </div>
-            <div>
-              {progressEventPage > 0 && (
-                <button
-                  onClick={() => setProgressEventPage(progressEventPage - 1)}
-                >
-                  <img
-                    alt="prev_button"
-                    src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
-                  />
-                </button>
-              )}
-              {progressEventPage < Math.ceil(progressEvents.length / 4) - 1 && (
-                <button
-                  onClick={() => setProgressEventPage(progressEventPage + 1)}
-                >
-                  <img
-                    alt="next_button"
-                    src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
-                  />
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="flex justify-center items-center">
-            <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
-              <AnimatePresence custom={progressDirection}>
-                <motion.div
-                  key={progressEventPage}
-                  variants={varients}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  custom={progressDirection}
-                  transition={{ duration: 0.5 }}
-                  className={`h-[200px] absolute flex justify-center items-center w-full `}
-                >
-                  <div
-                    className={`${
-                      progressEvents.length === 0 ? "" : "grid grid-cols-4"
-                    } gap-x-4 gap-y-8 justify-items-center w-full`}
-                  >
-                    {progressEvents.length === 0 ? (
-                      <EmptyState page="detail" />
-                    ) : (
-                      progressEvents
-                        .slice(progressEventPage * 4, progressEventPage * 4 + 4) // progressEvents 배열에서 현재 페이지에 해당하는 4개의 요소만 선택
-                        .map((item) => {
-                          return (
-                            <>
-                              <div className="flex flex-col gap-2 ">
-                                <ClubEventCard
-                                  image={item?.image}
-                                  handleLeaveEvent={handleLeaveEvent}
-                                  handleJoinEvent={handleJoinEvent}
-                                  key={item?.id}
-                                  clubId={item?.clubId}
-                                  eventId={item?.id}
-                                  title={item?.eventTitle}
-                                  content={item?.eventContent}
-                                  size={item?.eventGroupSize}
-                                  attendantsNum={item?.attendantsNum}
-                                  startTime={item?.eventStartTime}
-                                  location={item?.eventLocation}
-                                  isLikedByUser={item?.isLikedByUser}
-                                />
-                                {onEdit ? (
-                                  <div className="w-full justify-between flex gap-2">
-                                    <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">
-                                      수정하기
-                                    </button>
-                                    <button
-                                      className="w-[126px] h-[30px] rounded-full border-2 border-orange-400 bg-white text-orange-400 text-lg"
-                                      onClick={() =>
-                                        handleDeleteEvent(id, item.id)
-                                      }
-                                    >
-                                      삭제하기
-                                    </button>
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                            </>
-                          );
-                        })
-                    )}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
 
-          <p className="text-xl">종료된 일상속 이벤트</p>
+        {/* 모임규칙, 참여멤버 */}
+        <section className="flex w-[1140px] justify-between">
+          <div className="w-[562px] h-[250px] bg-blue-300">
+            <div className="text-[2rem] font-semibold">모임규칙</div>
+            <div className="text-[1.25rem] ">내용</div>
+          </div>
+          <div className="w-[525px] h-[261px] bg-blue-300">
+            <div className="flex justify-between">
+              <div className="text-[2rem] font-semibold">참여멤버</div>
+              <div className="flex">
+                <div>이전</div>
+                <div>다음</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-4 grid-rows-2 justify-items-center gap-2">
+              <div className="w-[114px] h-[60px] bg-emerald-200">멤버1</div>
+              <div className="w-[114px] h-[60px] bg-emerald-200">멤버1</div>
+              <div className="w-[114px] h-[60px] bg-emerald-200">멤버1</div>
+              <div className="w-[114px] h-[60px] bg-emerald-200">멤버1</div>
+              <div className="w-[114px] h-[60px] bg-emerald-200">멤버1</div>
+              <div className="w-[114px] h-[60px] bg-emerald-200">멤버1</div>
+              <div className="w-[114px] h-[60px] bg-emerald-200">멤버1</div>
+              <div className="w-[114px] h-[60px] bg-emerald-200">멤버1</div>
+            </div>
+          </div>
+        </section>
+
+        {/* 진행중인 이벤트 */}
+        <section className="w-[1140px]">
+          <body className="flex flex-col gap-4">
+            <div className="flex justify-between gap-10">
+              <div>
+                <p className="text-[2rem] font-semibold">
+                  진행중인 일상속 이벤트
+                </p>
+              </div>
+              <div>
+                {progressEventPage > 0 && (
+                  <button
+                    onClick={() => setProgressEventPage(progressEventPage - 1)}
+                  >
+                    <img
+                      alt="prev_button"
+                      src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                    />
+                  </button>
+                )}
+                {progressEventPage <
+                  Math.ceil(progressEvents.length / 4) - 1 && (
+                  <button
+                    onClick={() => setProgressEventPage(progressEventPage + 1)}
+                  >
+                    <img
+                      alt="next_button"
+                      src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                    />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="flex justify-center items-center">
+              <div className="flex justify-center w-full h-96 text-black items-center overflow-hidden relative">
+                <AnimatePresence custom={progressDirection}>
+                  <motion.div
+                    key={progressEventPage}
+                    variants={varients}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    custom={progressDirection}
+                    transition={{ duration: 0.5 }}
+                    className={`h-[200px] absolute flex justify-center items-center w-full `}
+                  >
+                    <div
+                      className={`${
+                        progressEvents.length === 0 ? "" : "grid grid-cols-4"
+                      } gap-x-4 gap-y-8 justify-items-center w-full`}
+                    >
+                      {progressEvents.length === 0 ? (
+                        <EmptyState page="detail" />
+                      ) : (
+                        progressEvents
+                          .slice(
+                            progressEventPage * 4,
+                            progressEventPage * 4 + 4
+                          ) // progressEvents 배열에서 현재 페이지에 해당하는 4개의 요소만 선택
+                          .map((item) => {
+                            return (
+                              <>
+                                <div className="flex flex-col gap-2 ">
+                                  <ClubEventCard
+                                    image={item?.image}
+                                    handleLeaveEvent={handleLeaveEvent}
+                                    handleJoinEvent={handleJoinEvent}
+                                    key={item?.id}
+                                    clubId={item?.clubId}
+                                    eventId={item?.id}
+                                    title={item?.eventTitle}
+                                    content={item?.eventContent}
+                                    size={item?.eventGroupSize}
+                                    attendantsNum={item?.attendantsNum}
+                                    startTime={item?.eventStartTime}
+                                    location={item?.eventLocation}
+                                    isLikedByUser={item?.isLikedByUser}
+                                  />
+                                  {onEdit ? (
+                                    <div className="w-full justify-between flex gap-2">
+                                      <button className="w-[126px] h-[30px] rounded-full bg-orange-400 text-white text-lg">
+                                        수정하기
+                                      </button>
+                                      <button
+                                        className="w-[126px] h-[30px] rounded-full border-2 border-orange-400 bg-white text-orange-400 text-lg"
+                                        onClick={() =>
+                                          handleDeleteEvent(id, item.id)
+                                        }
+                                      >
+                                        삭제하기
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                              </>
+                            );
+                          })
+                      )}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+          </body>
+        </section>
+
+        {/* 이벤트 참여 후기 */}
+        <section className="flex flex-col w-[1140px] h-[350px] ">
+          <div className="flex justify-between">
+            <div className="text-[2rem] font-semibold">이벤트 참여후기</div>
+            <div className="flex">
+              <div>이전</div>
+              <div>다음</div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 grid-rows-2 gap-2 justify-items-center">
+            <div className="w-[340px] h-[115px] bg-rose-300">멤버1</div>
+            <div className="w-[340px] h-[115px] bg-rose-300">멤버1</div>
+            <div className="w-[340px] h-[115px] bg-rose-300">멤버1</div>
+            <div className="w-[340px] h-[115px] bg-rose-300">멤버1</div>
+            <div className="w-[340px] h-[115px] bg-rose-300">멤버1</div>
+            <div className="w-[340px] h-[115px] bg-rose-300">멤버1</div>
+          </div>
+        </section>
+
+        <body className="flex flex-col gap-4 w-[1140px]">
+          <p className="text-[2rem] font-semibold">지난 일상속 이벤트</p>
 
           <div className="flex h-full justify-center items-center">
             <div className="flex justify-center w-full h-[50vh] text-black items-start overflow-hidden relative">

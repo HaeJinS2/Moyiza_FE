@@ -10,15 +10,15 @@ import { roomIdListStates, roomIdStates, roomMsgStates, roomInfoStates } from ".
 import { isLoggedInState } from '../states/userStateTmp';
 import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
-// import { Client } from "@stomp/stompjs";
-// import SockJS from "sockjs-client";
-// import { userState } from "../states/userState";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import { userState } from "../states/userState";
 
 
 function Navbar({ clientRef }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
   const navigate = useNavigate();
-  // const [roomId, setRoomId] = useState([]);
+  const [roomId, setRoomId] = useState([]);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);

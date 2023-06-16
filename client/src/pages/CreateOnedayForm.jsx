@@ -508,7 +508,7 @@ function OnedayStep2({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="grid grid-cols-3 gap-x-[36px] gap-y-[36px] w-[526px] h-[228px]">
+        <div className="grid grid-cols-3 gap-x-[36px] gap-y-[36px] w-[526px] h-auto">
           {tag?.map((tag, i) => {
             return (
               <>
@@ -914,8 +914,8 @@ function OnedayStep7({
                 }}
               />
               <div className="flex justify-between pr-4 ">
-                <div>20</div>
                 <div>15</div>
+                <div>20</div>
                 <div>25</div>
                 <div>30</div>
                 <div>35</div>
@@ -1024,7 +1024,7 @@ function CreateOnedayFormLayout({
       <div
         className={`flex flex-col ${
           onedayStep < 9 ? "" : "justify-center"
-        }  items-center h-[auto] max-w-[1140px]`}
+        }  items-center h-auto max-w-[1140px]`}
       >
         <>
           <div className="self-start min-w-[800px] text-[1.5rem] py-5 font-semibold">

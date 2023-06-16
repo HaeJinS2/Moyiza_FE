@@ -20,6 +20,7 @@ function ClubReviewCard({ isOwner, onEdit }) {
         className="absolute top-10 right-[-35px]"
         >
           <img
+          alt='remove_review'
             src={`${process.env.PUBLIC_URL}/images/detail/review_remove.svg`}
           />
         </div>

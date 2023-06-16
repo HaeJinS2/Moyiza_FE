@@ -115,7 +115,7 @@ function OnedayDetail() {
   let month = oneDayStartTime.getMonth() + 1;
   let date = oneDayStartTime.getDate();
   let hours = oneDayStartTime.getHours();
-  let minutes = oneDayStartTime.getMinutes();
+  // let minutes = oneDayStartTime.getMinutes();
 
   const handleDeleteOneday = () => {
     deleteAPI(`/oneday/${id}`)

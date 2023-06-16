@@ -33,7 +33,7 @@ function Club() {
   const [activeTab, setActiveTab] = useState("전체");
   const [activePageTab, setActivePageTab] = useState(pageTabs[0]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [filterToggle, setFilterToggle] = useState(false);
+  // const [filterToggle, setFilterToggle] = useState(false);
 
   const [searchPage, setSearchPage] = useState(0);
   const [page, setPage] = useState(0);

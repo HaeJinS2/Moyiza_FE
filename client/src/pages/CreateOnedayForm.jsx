@@ -295,8 +295,8 @@ function CreateOnedayForm() {
             swal("나이 제한을 입력해주세요!");
           } else {
             putAPI(`/oneday/create/${tmpOnedayId}/policy`, {
-              gender: savedOnedayData.gender,
-              age: savedOnedayData.age,
+              genderPolicy: savedOnedayData.gender,
+              agePolicy: savedOnedayData.age,
             })
               .then((res) => {
                 console.log(res.data.message);

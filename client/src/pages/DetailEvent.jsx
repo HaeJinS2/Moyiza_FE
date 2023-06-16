@@ -331,7 +331,7 @@ function DetailEvent({
                 <button
                 onClick={() =>
                   navigate(`/writereview`, {
-                    state: { id: clubId, reviewType: "CLUB" },
+                    state: { id: eventId, reviewType: "EVENT" },
                   })
                 }
                 className="w-[200px] h-[60px] rounded-full font-semibold bg-[#ff7f1d] text-[1.25rem] text-white"

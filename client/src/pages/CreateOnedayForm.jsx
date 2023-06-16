@@ -720,6 +720,7 @@ function OnedayStep5({
                     oneDayStartTime: localISOString,
                   });
                 }}
+                minDate={new Date()} // 이 부분을 추가하세요
                 showTimeSelect
                 dateFormat="yyyy MMMM d, h:mm aa"
                 inline

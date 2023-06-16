@@ -25,6 +25,8 @@ function Detail() {
   const userNickname = useRecoilValue(userNicknameState);
   const [isMember, setIsMember] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [eventArr, setEventArr] = useState([]);
+  const [eventReview, setEventReview] = useState([]);
 
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
@@ -91,6 +93,8 @@ function Detail() {
   //이벤트 리스트 가져오는 코드
   useEffect(() => {
     getClubEventLists();
+
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -109,6 +113,16 @@ function Detail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   console.log(latestClub);
+
+  useEffect(() => {
+    eventArr.map((item) => 
+      getAPI(`/review?reviewType=EVENT&identifier=${item}`).then((res) => {
+        setEventReview((pre) => [...pre, ...res.data.content])
+      })
+    )
+
+//  console.log("eventReview",eventReview)
+  },[eventArr])
 
   const getClubMembers = () => {
     getAPI(`/club/${id}/members`).then((res) => {
@@ -169,8 +183,13 @@ function Detail() {
   const getClubEventLists = () => {
     getAPI(`/club/${id}/eventlist`)
       .then((res) => {
-        console.log(res);
+        console.log("res", res);
         setEventLists(res.data);
+
+        let arr = [...res.data]
+        console.log("res.data", arr)
+        let tmp = arr?.map(item => item.id)
+        setEventArr(tmp)
       })
       .catch((err) => {
         console.log(err);
@@ -180,6 +199,9 @@ function Detail() {
   console.log(isMember);
   console.log(eventlists);
   console.log(clubDetail?.data);
+
+  console.log("res.data!",eventReview)
+
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
   useEffect(() => {
@@ -220,7 +242,7 @@ function Detail() {
 
   // 멤버 리스트
   const memberList = clubDetail?.data.memberList;
-  const reviewList = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+  const reviewList = eventReview
   const handleJoinEvent = (clubId, eventId, onJoinSuccess) => {
     postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
       console.log(res);
@@ -432,11 +454,10 @@ function Detail() {
                     className={`h-[200px] flex justify-center items-center w-full `}
                   >
                     <div
-                      className={`${
-                        memberList?.length === 0
+                      className={`${memberList?.length === 0
                           ? ""
                           : "grid grid-cols-4 grid-rows-2"
-                      } justify-items-center gap-2 mt-10`}
+                        } justify-items-center gap-2 mt-10`}
                     >
                       {memberList?.length === 0 ? (
                         <EmptyState page="member" />
@@ -488,15 +509,15 @@ function Detail() {
                 )}
                 {progressEventPage <
                   Math.ceil(progressEvents.length / 4) - 1 && (
-                  <button
-                    onClick={() => setProgressEventPage(progressEventPage + 1)}
-                  >
-                    <img
-                      alt="next_button"
-                      src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
-                    />
-                  </button>
-                )}
+                    <button
+                      onClick={() => setProgressEventPage(progressEventPage + 1)}
+                    >
+                      <img
+                        alt="next_button"
+                        src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                      />
+                    </button>
+                  )}
               </div>
             </div>
             <div className="flex justify-center items-center">
@@ -513,9 +534,8 @@ function Detail() {
                     className={`h-[200px] absolute flex justify-center items-center w-full `}
                   >
                     <div
-                      className={`${
-                        progressEvents.length === 0 ? "" : "grid grid-cols-4"
-                      } gap-x-4 gap-y-8 justify-items-center w-full`}
+                      className={`${progressEvents.length === 0 ? "" : "grid grid-cols-4"
+                        } gap-x-4 gap-y-8 justify-items-center w-full`}
                     >
                       {progressEvents.length === 0 ? (
                         <EmptyState page="detail" />
@@ -625,11 +645,10 @@ function Detail() {
                 className={`h-full absolute flex  w-full `}
               >
                 <div
-                  className={`${
-                    reviewList?.length === 0
+                  className={`${reviewList?.length === 0
                       ? ""
                       : "grid grid-cols-3 grid-rows-2"
-                  } w-full `}
+                    } w-full `}
                 >
                   {reviewList?.length === 0 ? (
                     <EmptyState page="review" />
@@ -638,7 +657,7 @@ function Detail() {
                       ?.slice(reviewPage * 6, reviewPage * 6 + 6)
                       .map((item) => {
                         return (
-                          <ClubReviewCard isOwner={isOwner} onEdit={onEdit} />
+                          <ClubReviewCard eventReview={item} isOwner={isOwner} onEdit={onEdit} />
                         );
                       })
                   )}
@@ -667,11 +686,10 @@ function Detail() {
                   className={`h-full absolute flex  w-full `}
                 >
                   <div
-                    className={`${
-                      endedEvents.length === 0
+                    className={`${endedEvents.length === 0
                         ? ""
                         : "grid grid-cols-3 grid-rows-3"
-                    } gap-x-4 gap-y-8 w-full `}
+                      } gap-x-4 gap-y-8 w-full `}
                   >
                     {endedEvents.length === 0 ? (
                       <EmptyState page="detail" />

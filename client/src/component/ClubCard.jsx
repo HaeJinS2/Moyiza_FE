@@ -20,9 +20,12 @@ function ClubCard({
 
   const [checked, setChecked] = useState(false);
   // eslint-disable-next-line
-  const [imageArr, setImageArr] = useState([...imageList]);
+  const [imageArr, setImageArr] = useState([...imageList,"thumbnail1", "thumbnail2"]);
+  const [isHovered, setIsHovered] = useState(false);
+
   const [progressEventPage, setProgressEventPage] = useState(0);
   const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
+
   if (progressTuple[1] !== progressEventPage) {
     setProgressTuple([progressTuple[1], progressEventPage]);
   }
@@ -99,6 +102,8 @@ function ClubCard({
                   {imageArr?.slice(progressEventPage * 1, progressEventPage * 1 + 1).map((item) => {
                     return (
                       <img
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
                         className='aspect-square  object-cover  w-[197px] h-[197px] bg-[#747474] rounded-2xl relative top-9'
                         src={item}
                         alt="reviewImg"
@@ -114,7 +119,10 @@ function ClubCard({
               </AnimatePresence>
 
               <button
-                className='w-[40px] absolute left-8 top-[120px] z-10'
+                style={{ opacity: isHovered ? 1 : 0 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className='w-[30px] absolute left-8 top-[120px] z-10'
                 onClick={(e) => {
                   e.stopPropagation();
                   setProgressEventPage(progressEventPage === 0 ? imageArr.length - 1 : progressEventPage - 1)
@@ -128,7 +136,10 @@ function ClubCard({
               </button>
 
               <button
-                className='w-[40px] absolute right-8 top-[120px] z-10'
+                style={{ opacity: isHovered ? 1 : 0 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className='w-[30px] absolute right-8 top-[120px] z-10'
                 onClick={(e) => {
                   e.stopPropagation();
                   setProgressEventPage(progressEventPage === imageArr.length - 1 ? 0 : progressEventPage + 1)

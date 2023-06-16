@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartCheckbox } from "./HeartCheckBox";
 import { deleteAPI, postAPI } from "../axios";
+import { AnimatePresence, motion } from "framer-motion";
 // import swal from 'sweetalert'
 
 function ClubCard({
@@ -14,11 +15,22 @@ function ClubCard({
   nowMemberCount,
   page,
   isLikedByUser,
+  imageList,
 }) {
 
   const [checked, setChecked] = useState(false);
-  const navigate = useNavigate();
+  // eslint-disable-next-line
+  const [imageArr, setImageArr] = useState([...imageList]);
+  const [progressEventPage, setProgressEventPage] = useState(0);
+  const [progressTuple, setProgressTuple] = useState([null, progressEventPage]);
+  if (progressTuple[1] !== progressEventPage) {
+    setProgressTuple([progressTuple[1], progressEventPage]);
+  }
+  let progressPrev = progressTuple[0];
+  let progressDirection = progressEventPage > progressPrev ? 1 : -1;
 
+  const navigate = useNavigate();
+  console.log("imageArr", imageArr)
   const likeClubBtn = (e) => {
     if (!checked) {
       postAPI(`/club/${id}/like`, {}).then((res) => {
@@ -69,14 +81,72 @@ function ClubCard({
           </div>
           <div
             onClick={() => navigate(`/club/${id}`)}
-            className="cursor-pointer flex items-center border bg-white p-8 rounded-2xl  w-[544px] h-[263px]"
+            className="cursor-pointer flex items-center border bg-white rounded-2xl  w-[544px] h-[263px]"
           >
-            <img
+            <div className="flex justify-center w-[500px] h-[277px] text-black items-center overflow-hidden relative">
+
+              <AnimatePresence custom={progressDirection}>
+                <motion.div
+                  key={progressEventPage}
+                  variants={varients}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={progressDirection}
+                  transition={{ duration: 0.5 }}
+                  className={`h-[200px] absolute top-0 right-0 flex z-10 justify-center items-center w-full `}
+                >
+                  {imageArr?.slice(progressEventPage * 1, progressEventPage * 1 + 1).map((item) => {
+                    return (
+                      <img
+                        className='aspect-square  object-cover  w-[197px] h-[197px] bg-[#747474] rounded-2xl relative top-9'
+                        src={item}
+                        alt="reviewImg"
+                      />
+                    )
+                  })}
+                  {/* <img
+                    className="aspect-square rounded-2xl w-[197px] h-[197px] object-cover mr-6"
+                    src={thumbnail}
+                    alt="clubThumbnail"
+                  /> */}
+                </motion.div>
+              </AnimatePresence>
+
+              <button
+                className='w-[40px] absolute left-8 top-[120px] z-10'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProgressEventPage(progressEventPage === 0 ? imageArr.length - 1 : progressEventPage - 1)
+                }}
+              >
+                <img
+                  className='opacity-80'
+                  alt="prev_button"
+                  src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                />
+              </button>
+
+              <button
+                className='w-[40px] absolute right-8 top-[120px] z-10'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProgressEventPage(progressEventPage === imageArr.length - 1 ? 0 : progressEventPage + 1)
+                }}
+              >
+                <img
+                  className='opacity-80'
+                  alt="next_button"
+                  src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                />
+              </button>
+            </div>
+            {/* <img
               className="aspect-square rounded-2xl w-[197px] h-[197px] object-cover mr-6"
               src={thumbnail}
               alt="clubThumbnail"
-            />
-            <div className="flex flex-col gap-4 w-full h-full">
+            /> */}
+            <div className="flex flex-col gap-4 w-full h-[197px]">
               <div className="flex justify-between text-xs text-orange-400">
                 <div className="flex gap-2 items-center">
                   {tag.map((tag) => {
@@ -91,7 +161,7 @@ function ClubCard({
 
                 </div>
               </div>
-              <div className="flex h-full justify-between flex-col">
+              <div className="flex h-full justify-between flex-col pr-6">
                 <div>
                   <div className="w-full text-2xl font-semibold">
                     {title}
@@ -100,7 +170,7 @@ function ClubCard({
                 </div>
                 <div className="flex justify-between">
                   <div></div>
-                  <div className=" text-neutral-400 text-sm">
+                  <div className=" text-neutral-400 text-sm ">
                     {nowMemberCount}/{maxGroupSize}
                   </div>
                 </div>
@@ -121,6 +191,7 @@ function ClubCard({
             onClick={() => navigate(`/oneday/${id}`)}
             className="cursor-pointer flex items-center border bg-white p-8 rounded-2xl w-[544px] h-[263px]"
           >
+
             <img
               className="aspect-square rounded-2xl w-[197px] h-[197px] object-cover mr-6"
               src={thumbnail}
@@ -159,5 +230,10 @@ function ClubCard({
     </>
   );
 }
+let varients = {
+  enter: (direction) => ({ x: direction * 700 }),
+  center: { x: 0 },
+  exit: (direction) => ({ x: direction * -700 }),
+};
 
 export default ClubCard;

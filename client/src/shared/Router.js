@@ -21,6 +21,7 @@ import OnedayDetail from "../pages/OnedayDetail";
 import Search from "../pages/Search";
 import SignUpSocial from "../pages/SignUpSocial";
 import Redirection from "../pages/Redirection";
+import TestPage from "../pages/TestPage";
 import WriteReview from "../pages/WriteReview";
 import DetailReview from "../pages/DetailReview";
 
@@ -61,6 +62,7 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
           <Route path="/search" element={<Search />} />
           <Route path="/writereview" element={<WriteReview />} />
           <Route path="/detailreview" element={<DetailReview />} />
+          <Route path="/test" element={<TestPage />} />
 
 
           {/* <Route path="/404" element={<NotFound />} /> */}

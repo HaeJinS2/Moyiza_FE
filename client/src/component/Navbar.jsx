@@ -303,16 +303,15 @@ function Navbar() {
                         alt="profile_icon"
                       />
                       {profileModalOpen && (
-                        <div className="absolute bg-white z-10 flex flex-col items-start gap-3 p-2 top-[70px] right-0 shadow-cm rounded-xl">
+                        <div className="absolute bg-white z-10 flex flex-col items-start top-[70px] right-0 shadow-cm rounded-xl">
                           <div className="mt-[12px]">
-                            <div className="text-[24px] mb-[11px] ml-[30px]">프로필</div>
+                            <div className="text-[24px] mb-[11px] mt-[11px] ml-[30px]">프로필</div>
                             <hr className="mb-[12px]" />
                           <div className="flex flex-col ml-[30px]">
                             {/* 닉네임 */}
-                            <div className="flex w-[230px] gap-2 flex mb-[12px] ">
-                              <div className="w-[52px] h-[52px] bg-black rounded-full"></div>
+                            <div className="flex w-[230px] flex items-center mb-[12px] ">
+                              <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
                               <div>닉네임</div>
-                              
                             </div>
                             {/* 개인정보 변경 */}
                             <div className="flex flex-row flex-start mb-[12px]">
@@ -325,7 +324,7 @@ function Navbar() {
                               </button>
                             </div>
                             {/* 로그아웃 */}
-                            <div className="flex flex-row flex-start">
+                            <div className="flex flex-row flex-start mb-[12px]">
                               <img
                                 className="w-[40px] h-[40px] mr-[23px]"
                                 src={`${process.env.PUBLIC_URL}/images/logout.svg`}

@@ -2,17 +2,20 @@ import React from "react";
 
 function ClubReviewCard() {
   return (
-    <div
-      className="cursor-pointer flex w-full h-[261px] px-2 shadow-md justify-center flex-col"
-    >
-      <div className="flex flex-row justify-between">
-        <div className="flex">
-          <div className="w-[60px] h-[60px] bg-blue-400">프로필</div>
-          <div>닉네임</div>
-        </div>
-        <div>게시 날짜</div>
+    <div className="cursor-pointer flex w-[340.6px] h-[114.89px] px-4 border-2 items-center justify-between rounded-[10px]">
+      <div className="w-[81.48px] h-[81.48px] bg-slate-500 rounded-[10px] mr-4">
+        
       </div>
-      <div className="w-full h-2/4">후기 내용</div>
+        <div className="flex justify-between flex-col w-[205px] h-full py-4">
+          <div className="flex justify-between">
+            <div className="text-[1rem] font-semibold">제목</div>
+            <div className="text-[0.875rem] text-[#747474]">일시</div>
+          </div>
+          <div className="flex justify-between">
+            <div className="text-[0.875rem] text-[#747474]">좋아요</div>
+            <div className="text-[0.875rem] text-[#747474]">닉네임</div>
+          </div>
+      </div>
     </div>
   );
 }

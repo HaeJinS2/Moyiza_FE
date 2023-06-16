@@ -12,44 +12,55 @@ function ProfileCard({
 }) {
     const navigate = useNavigate();
 
-    
+
     return (
         <>
             <div
                 onClick={() => navigate(`/club/${club_id}`)}
-                className="cursor-pointer flex w-[555px] shadow-cm rounded-xl h-[220px] items-center mt-10 bg-white "
+                className="cursor-pointer rounded-[18px] flex w-[360px] border border-[#E8E8E8] rounded-xl h-[175px] items-center mb-[16px] bg-white "
             >
                 <div className="flex items-center rounded-xl ">
                     <img
-                        className="rounded-md w-[178px] h-[178px] border-[1px] ml-5"
+                        className="rounded-[15px] w-[130px] h-[130px] border-[1px] ml-5"
                         src={thumbnailUrl}
                         alt="clubThumbnail"
                     />
                 </div>
-                
-                <div className="w-[317px] ml-[20px] flex justify-start flex-col">
+
+                <div className="w-[172px] h-[130px] ml-[20px] flex justify-start flex-col">
                     <div className="flex justify-between">
-                    <div className="text-[16px] text-orange-400 mb-[12px] w-[240px] flex">
-                        {clubTag.map((tag) => {
-                            return (
-                                <div
-                                    key={tag}
-                                    className="rounded-full mr-2 b-1 border-2 px-2 py-1 border-orange-400 flex justify-start">
-                                    {tag}
-                                </div>
-                            );
-                        })}
-                    </div>
-                        <div className="text-[14px]">
-                            {nowMemberCount} / {maxGroupSize}
+                        <div className="text-[12px] text-orange-400 mb-[12px] w-[240px] flex ">
+                            {clubTag.map((tag) => {
+                                return (
+                                    <div
+                                        key={tag}
+                                        className="rounded-[50px] mb-[15px] mr-1 b-1 border-1 px-2 bg-orange-400 text-white flex justify-start align-center">
+                                        {tag}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
-                    <div className="w-[240px] h-[27px] truncate hover:text-clip text-[20px] font-bold">
-                            {clubTitle}
+                    <div className="w-[160px] h-[60px] truncate hover:text-clip text-[20px] font-bold">
+                        {clubTitle}
+                    </div>
+                    <div className="flex justify-between">
+                        <button>
+                            {/* 아이콘 하트로 변경해야 함 ---------------------------*/}
+                            {/* <img
+                                className="w-[21px] h-[21px]"
+                                src={`${process.env.PUBLIC_URL}/images/logout.svg`}
+                                alt="heart"
+                            /> */}
+                        </button>
+                        <div className="text-[14px] flex items-center text-[#747474]">
+                            <img
+                                className="w-[14px] h-[14px] mr-[5px]"
+                                src={`${process.env.PUBLIC_URL}/images/count.svg`}
+                                alt="count"
+                            />
+                            {nowMemberCount}/{maxGroupSize}
                         </div>
-                    <div className="block text-ellipsis whitespace-normal hover:text-clip overflow-hidden text-[16px] text-[#686868] mt-[12px] mb-[20px] w-[240px] h-[70px]">
-                        {clubContent}
-                        {/* 매주 수요일 7시 화곡역에 만나서 러닝해요! 운동목적모임입니다! */}
                     </div>
                 </div>
             </div>

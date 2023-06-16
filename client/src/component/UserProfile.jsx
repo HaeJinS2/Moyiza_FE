@@ -6,7 +6,8 @@ import Frame from '../component/img/Frame.png';
 function UserProfile({
     nickname,
     email,
-    profileImage
+    profileImage,
+    // birth
 }) {
 
 
@@ -84,26 +85,33 @@ function UserProfile({
         }
     }, [profileImage]);
     return (
-        <div>
+        <div className='w-[334px] h-[530px] bg-[#FFFCF2] rounded-[20px] flex justify-center border border-[#E8E8E8] '>
             {/* 프로필 사진 */}
-            <div style={{ alignItems: 'center' }} className="profile-picture mt-[240px] mb-[114px] flex flex-col justify-center">
-                {imageURL && <img className="w-[200px] h-[200px] rounded-full shadow drop-shadow-md" src={imageURL} alt="Profile" />}
+            <div style={{ alignItems: 'center' }} className="profile-picture absolute flex flex-col justify-center mt-[100px]">
+                {imageURL && <img className="w-[135px] h-[135px] rounded-full shadow" src={imageURL} alt="Profile" />}
                 {/* 작은 원 */}
-                <div className='absolute right-[45%]'>
-                    <div className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center" onClick={openModal}>
+                {/* <div className='absolute '> */}
+                    <div className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute top-20 left-40" onClick={openModal}>
                         <img src={Frame} alt=''></img>
                     </div>
-                </div>
-
+                {/* </div> */}
                 <div>
-                    <div className='name mt-[16px] text-[34px] flex items-center justify-center'>{nickname || ''}</div>
-                    <div className='email mt-[7px] text-[24px] text-[#A6A6A6]'>{email || ''}</div>
+                    <div className='name mt-[10px] text-[28px] flex items-center justify-center'>{nickname || ''}</div>
+                    {/* <div className='name mt-[10px] text-[20px] flex items-center justify-center text-[#A6A6A6]'>{birth|| ''}</div> */}
+                    <div className='email mt-[5px] text-[20px] text-[#A6A6A6]'>{email || ''}</div>
                 </div>
-                <div className="text-[16px]  mt-[17px] flex justify-between">
+                <div className="text-[16px] mt-[19px] gap-2 flex justify-between ">
                     <div className="rounded-full bg-[#FFE14F] b-1 px-4 py-1 text-[white]">
                         {/* {tag} */}
-                        필라테스
+                        여행
                     </div>
+                    <div className="rounded-full bg-[#FFE14F] b-1 px-4 py-1 text-[white]">
+                        {/* {tag} */}
+                        음악
+                    </div>
+                </div>
+                <div className='mt-[34px] text-[16px] text-[#A6A6A6] w-[269px] h-[19px] truncate hover:text-clip'>
+                    안녕하세요! 저는 어쩌구 저쩌구 블라블라울라불라 랄랄
                 </div>
             </div>
 

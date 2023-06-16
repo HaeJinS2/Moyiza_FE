@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import Frame from '../component/img/Frame.png';
+import axios from 'axios';
+import { useMutation } from 'react-query';
+import swal from 'sweetalert';
+// import { getAPI } from '../axios';
 
 
 function UserProfile({
@@ -9,47 +13,79 @@ function UserProfile({
     profileImage,
     // birth
 }) {
+    // 닉네임 중복 검사
+    const nicknameValidationPost = async ({ nickname }) => {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/check/nickname`, { nickname });
+        return response.data;
+    };
 
+    // validation api
+    const validationMutation = useMutation(nicknameValidationPost, {
+        onSuccess: (data) => {
+            if (data.isDuplicatedNick === false) {
+                swal('사용가능한 아이디입니다.');
+            }
+        },
+        onError: (data) => {
+            if (data.response.data.message === "중복된 닉네임 사용") {
+                swal('이미 사용중인 아이디입니다.');
+            }
+        },
+    });
+
+    const nicknameValidationHandler = () => {
+        validationMutation.mutate({
+            nickname,
+        });
+    };
 
     // const { nickname, profileImage, email } = UserInfoOnMyPage || '';
     console.log(nickname);
     console.log(profileImage);
     console.log(email);
     // const [imageFile, setImageFile] = useState(null);
-    const [interests, setInterests] = useState([
-        { name: '스포츠', details: ['축구', '농구', '야구', '테니스', '수영', '등산', '요가', '스쿼시', '배드민턴', '자전거'] },
-        { name: '문화', details: ['영화', '음악', '미술', '공연', '사진', '문학', '방송', '디자인', '연극', '오페라'] },
-        { name: '연애', details: ['데이트', '커플', '심리', '결혼', '이별', '남친', '여친', '친구', '썸', '러브스타일'] },
-        { name: '여행', details: ['해외여행', '국내여행', '자유여행', '배낭여행', '호텔', '풍경', '음식여행', '관광지', '문화체험', '독특한 장소'] }
-    ]);
-    console.log(setInterests);
     const [expanded, setExpanded] = useState(true);
-    const [selectedDetails, setSelectedDetails] = useState([]);
-
     const toggleExpanded = () => {
         setExpanded(!expanded);
     };
 
-    const handleDetailClick = (detail) => {
-        if (selectedDetails.includes(detail)) {
-            setSelectedDetails(selectedDetails.filter((item) => item !== detail));
-        } else {
-            if (selectedDetails.length < 3) {
-                setSelectedDetails([...selectedDetails, detail]);
+    // const [selectedCategory, setSelectedCategory] = useState('');
+    const [categoryDetails, setCategoryDetails] = useState([]);
+
+
+    const categories = [
+        "예술", "자기계발", "액티비티", "여행", "연애",
+        "취미", "문화", "스포츠", "운동"
+    ];
+
+    // 카테고리 클릭 시 세부 카테고리 가져오기
+    const getCategoryDetails = async (category) => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/profile/tags?category=${category}`, {
+                headers: {
+                    //   'Authorization': `Bearer ${ACCESS_TOKEN}`
+                }
+            });
+
+            if (response.data && response.data.tags) {
+                setCategoryDetails(response.data.tags);
             }
+        } catch (error) {
+            console.error(error);
         }
     };
 
-    const isDetailSelected = (detail) => {
-        return selectedDetails.includes(detail);
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category);
+        getCategoryDetails(category);
     };
 
     // 모달 스타일 설정
     const modalStyles = {
         // content: `w-[600px] h-[500px] mx-auto border-2 border-gray-300 rounded-lg p-6'`
         content: {
-            width: '500px',
-            height: '600px',
+            width: '550px',
+            height: '650px',
             margin: 'auto',
             border: '1px solid #ccc',
             borderRadius: '50px',
@@ -84,6 +120,11 @@ function UserProfile({
             setImageURL(profileImage);
         }
     }, [profileImage]);
+
+
+
+
+
     return (
         <div className='w-[334px] h-[530px] bg-[#FFFCF2] rounded-[20px] flex justify-center border border-[#E8E8E8] '>
             {/* 프로필 사진 */}
@@ -91,9 +132,9 @@ function UserProfile({
                 {imageURL && <img className="w-[135px] h-[135px] rounded-full shadow" src={imageURL} alt="Profile" />}
                 {/* 작은 원 */}
                 {/* <div className='absolute '> */}
-                    <div className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute top-20 left-40" onClick={openModal}>
-                        <img src={Frame} alt=''></img>
-                    </div>
+                <div className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute top-20 left-40" onClick={openModal}>
+                    <img src={Frame} alt=''></img>
+                </div>
                 {/* </div> */}
                 <div>
                     <div className='name mt-[10px] text-[28px] flex items-center justify-center'>{nickname || ''}</div>
@@ -113,7 +154,7 @@ function UserProfile({
                 <div className='mt-[34px] text-[16px] text-[#A6A6A6] w-[269px] h-[19px] truncate hover:text-clip'>
                     안녕하세요! 저는 어쩌구 저쩌구 블라블라울라불라 랄랄
                 </div>
-            </div>
+            </div>%
 
             {/* 프로필 수정 모달 */}
             <Modal
@@ -127,7 +168,8 @@ function UserProfile({
                     <div className='flex items-center mb-5 w-full'>
                         <div className='w-[30%]'>
                             <p className='font-medium'>닉네임</p></div>
-                        <input placeholder={nickname || ''} class="int w-[70%] h-10 rounded-lg px-3.5 py-2 shadow"></input>
+                        <input placeholder={nickname || ''} class="int w-[47%] mr-[3%] h-10 rounded-lg px-3.5 py-2 shadow"></input>
+                        <button type='button' style={{ width: '20%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 w-30 h-12 px-4 py-1 shadow hover:shadow-lg" onClick={nicknameValidationHandler}>중복확인</button>
                     </div>
                     <div className='flex items-center mb-5 w-full'>
                         <div className='w-[30%]'>
@@ -146,39 +188,42 @@ function UserProfile({
                     </div>
 
 
-                    <div className='flex items-center mb-[220px] w-full'>
-                        <div className='w-[30%]'>
-                            <div className='font-medium'>관심사</div>
+                    <div className='mb-[220px] w-full'>
+                        <div className='flex flex-row items-center'>
+                            <div className='w-[30%]'>
+                                <div className='font-medium'>관심사</div>
+                            </div>
+                            <button type="button" onClick={toggleExpanded} className=" w-[38px] h-[38px] bg-[#FF7F1E] text-white text-[30px] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
+                                {expanded ? '+' : '-'}
+                            </button>
                         </div>
-                        <button type="button" onClick={toggleExpanded} className=" w-[38px] h-[38px] bg-[#FF7F1E] text-white text-[30px] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
-                        {expanded ? '+' : '-'}
-                        </button>
-
-                        {!expanded && (
-                            <div>
-                                {interests.map((interest) => (
-                                    <div key={interest.name}>
-                                        <h3>{interest.name}</h3>
-                                        <ul>
-                                            {interest.details.map((detail) => (
-                                                <li key={detail} onClick={() => handleDetailClick(detail)}>
-                                                    <span>{detail}</span>
-                                                    {isDetailSelected(detail) && (
-                                                        <button
-                                                            onClick={() => setSelectedDetails(selectedDetails.filter((item) => item !== detail))}
-                                                            className="ml-2 bg-red-500 text-white rounded p-1"
-                                                        >
-                                                            삭제
-                                                        </button>
-                                                    )}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                        {!expanded && <div className=" mt-[20px] w-[500px] h-[320px] bg-[#FFFCF2] rounded-[20px] flex flex-col justify-start items-center">
+                            <div className='mt-[20px] '>최대 3개까지 선택할 수 있습니다</div>
+                            <div className='mt-[20px] text-[14px] flex-row flex px-4 py-1 '>
+                                {categories.map((tag) => {
+                                    return (
+                                        <button
+                                            key={tag}
+                                            className="rounded-[50px] mr-1 b-1 border-1 px-2  bg-white text-orange-400 flex justify-start align-center"
+                                            onClick={() => handleCategoryClick(tag)}>
+                                            {tag}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            {/* 세부 카테고리 표시 */}
+                            <div className="mt-[20px] text-[15px] flex-wrap justify-between flex px-4 py-1">
+                                {categoryDetails.map((detail) => (
+                                    <button
+                                        key={detail}
+                                        className="w-[30%] mb-2 rounded-[50px] mr-1 b-1 border-1 px-2 bg-white "
+                                    >
+                                        {detail}
+                                    </button>
                                 ))}
                             </div>
-                        )}
-
+                        </div>
+                        }
 
                     </div>
 

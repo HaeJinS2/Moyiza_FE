@@ -83,7 +83,8 @@ function Navbar() {
   // }
 
   const goMyInfo = () => {
-    navigate("/user/mypage");
+    navigate("/mypage/");
+    // navigate(`/mypage/${user_id}`);
   };
 
   // useEffect(() => {

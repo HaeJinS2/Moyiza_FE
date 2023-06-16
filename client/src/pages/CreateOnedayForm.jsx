@@ -16,6 +16,7 @@ import { setHours, setMinutes } from "date-fns";
 import { filePutAPI, postAPI, putAPI } from "../axios";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
+import { reloadChatStates } from '../states/chatState';
 
 let imageArr = [
   `${process.env.PUBLIC_URL}/images/createFeed/create_exercise.svg`,
@@ -36,7 +37,8 @@ function CreateOnedayForm() {
   const tmpOnedayId = useRecoilValue(onedayTmpIdState);
   const [savedOnedayData, setSavedOnedayData] =
     useRecoilState(savedOnedayDataState);
-
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
+  console.log(reloadChatState)
   // useEffect(() => {
   //   if (
   //     savedOnedayData?.category === null &&
@@ -320,6 +322,7 @@ function CreateOnedayForm() {
                 postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
                   .then((res) => {
                     setOnedayStep(9);
+                    setReloadChatState(true)
                     swal("하루속 이벤트 개설 완료!");
                     navigate("/oneday");
                     setSavedOnedayData({});
@@ -473,11 +476,10 @@ function OnedayStep1({
                     category: category,
                   });
                 }}
-                className={`${
-                  category === savedOnedayData?.category
+                className={`${category === savedOnedayData?.category
                     ? "bg-[#dddddd]"
                     : "bg-white"
-                }  w-[142px] h-[52px]  rounded-full border-2 flex gap-1 justify-center items-center font-semibold text-[1.25rem]`}
+                  }  w-[142px] h-[52px]  rounded-full border-2 flex gap-1 justify-center items-center font-semibold text-[1.25rem]`}
               >
                 <img
                   src={imageArr[i]}
@@ -540,11 +542,10 @@ function OnedayStep2({
                       }
                     });
                   }}
-                  className={`${
-                    savedOnedayData?.tag?.includes(tag)
+                  className={`${savedOnedayData?.tag?.includes(tag)
                       ? "bg-[#dddddd]"
                       : "bg-white"
-                  }  w-[142px] h-[52px] rounded-full text-[1.25rem] font-semibold border-2`}
+                    }  w-[142px] h-[52px] rounded-full text-[1.25rem] font-semibold border-2`}
                 >
                   {tag}
                 </button>
@@ -875,11 +876,10 @@ function OnedayStep7({
                           gender: item,
                         });
                       }}
-                      className={` ${
-                        savedOnedayData.gender === item
+                      className={` ${savedOnedayData.gender === item
                           ? "bg-[#dddddd]"
                           : "bg-white"
-                      }  w-[142px] h-[62px] text-[1rem] font-semibold rounded-full border-2`}
+                        }  w-[142px] h-[62px] text-[1rem] font-semibold rounded-full border-2`}
                     >
                       {item}
                     </button>
@@ -1023,9 +1023,8 @@ function CreateOnedayFormLayout({
   return (
     <>
       <div
-        className={`flex flex-col ${
-          onedayStep < 9 ? "" : "justify-center"
-        }  items-center h-auto max-w-[1140px]`}
+        className={`flex flex-col ${onedayStep < 9 ? "" : "justify-center"
+          }  items-center h-auto max-w-[1140px]`}
       >
         <>
           <div className="self-start min-w-[800px] text-[1.5rem] py-5 font-semibold">

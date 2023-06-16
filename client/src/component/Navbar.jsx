@@ -6,6 +6,7 @@ import { getAPI } from "../axios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {  roomIdStates, roomMsgStates, } from "../states/chatState";
 import { isLoggedInState } from '../states/userStateTmp';
+import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
@@ -26,6 +27,7 @@ function Navbar() {
   const [filteredRoomId, setFilteredRoomId] = useState([]);
   const roomMsgState = useRecoilValue(roomMsgStates);
   const [filteredData, setFilteredData] = useState([]);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [data, setData] = useState([]);
   const chatModalRef = useRef();
@@ -35,6 +37,7 @@ function Navbar() {
   //console.log("roomInfoState", roomInfoState)
   //console.log("채팅방 목록 data", data)
 
+  console.log("reloadChatState", reloadChatState)
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
       const fetchClubChat = getAPI(`/chat/clubchat`);
@@ -58,9 +61,10 @@ function Navbar() {
           // setRoomInfoState(uniqueData);
         }
       });
+      setReloadChatState(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn2]);
+  }, [isLoggedIn2, reloadChatState]);
 
   useEffect(() => {
     console.log("isLoggedIn", isLoggedIn);

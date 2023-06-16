@@ -8,7 +8,7 @@ import imageCompression from 'browser-image-compression';
 import { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 } from '../component/createclubform/Steps.jsx'
 import Navbar from "../component/Navbar";
 import swal from "sweetalert";
-
+import { reloadChatStates } from '../states/chatState';
 function CreateClubForm() {
     const [club, setClub] = useRecoilState(clubState);
     // const [tempId, setTempId] = useRecoilState(tempIdState);
@@ -42,8 +42,10 @@ function CreateClubForm() {
     const [selectedFile, setSelectedFile] = useState(club?.thumbnailUrl || '');
     const [selectedFileName, setSelectedFileName] = useState("");
     const [preview, setPreview] = useState(null);
+
+    const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
     
-    console.log(selectedGenderPolicy)
+    console.log(selectedGenderPolicy,reloadChatState)
     // const [maxGroupSize, setMaxGroupSize] = useState(club.maxGroupSize || "")
     const navigate = useNavigate();
     console.log("option", option)
@@ -332,6 +334,7 @@ function CreateClubForm() {
     const handleSubmit = () => {
         postAPI(`/club/create/${club.createclub_id}/confirm`, {}).then((response) => {
             console.log(response)
+            setReloadChatState(true)
             setClub({});
             setStep(step + 1);
         }).catch((error) => {

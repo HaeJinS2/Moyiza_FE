@@ -11,6 +11,7 @@ import EmptyState from "../component/EmptyState";
 import EndedClubEventCard from "../component/EndedClubEventCard";
 import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import CreateEventModal from "../component/CreateEventModal";
+import { reloadChatStates } from '../states/chatState';
 
 import swal from "sweetalert";
 
@@ -28,6 +29,7 @@ function Detail() {
   const [isOwner, setIsOwner] = useState(false);
   const [eventArr, setEventArr] = useState([]);
   const [eventReview, setEventReview] = useState([]);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
@@ -146,6 +148,7 @@ function Detail() {
       postAPI(`/club/${id}/join`, {})
         .then((res) => {
           setIsMember(true);
+          setReloadChatState(true)
           queryClient.invalidateQueries("getDetailClub");
           swal("가입이 승인됐습니다!");
         })
@@ -162,6 +165,7 @@ function Detail() {
     postAPI(`/club/${id}/goodbye`, {})
       .then((res) => {
         setIsMember(false);
+        setReloadChatState(true)
         queryClient.invalidateQueries("getDetailClub");
         swal("클럽 탈퇴 완료");
       })
@@ -199,7 +203,7 @@ function Detail() {
   };
   console.log(isMember);
   console.log(eventlists);
-  console.log(clubDetail?.data);
+  console.log(clubDetail?.data,reloadChatState);
 
   console.log("res.data!",eventReview)
 

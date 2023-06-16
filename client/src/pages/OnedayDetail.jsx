@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { getAPI, postAPI, deleteAPI } from "../axios";
 import OnedayCard from "../component/OnedayCard";
 import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import { useQueryClient } from "react-query";
+import { reloadChatStates } from '../states/chatState';
 
 import swal from "sweetalert";
 function OnedayDetail() {
@@ -17,6 +18,7 @@ function OnedayDetail() {
   const navigate = useNavigate();
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
   const isLoggedIn = useRecoilValue(isLoggedInState);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [onEdit, setOnEdit] = useState(false);
   const userNickname = useRecoilValue(userNicknameState);
@@ -94,7 +96,7 @@ function OnedayDetail() {
       }
     });
   };
-  console.log(onedayMember);
+  console.log(onedayMember,reloadChatState);
   console.log(isMember);
   console.log("원데이", onedayDetail?.data);
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
@@ -140,6 +142,7 @@ function OnedayDetail() {
           .then((res) => {
             setIsMember(true);
             getAPI(`/oneday/${id}`).then((res) => {
+              setReloadChatState(true)
               swal("하루속 가입이 승인됐습니다!");
             });
           })
@@ -159,6 +162,7 @@ function OnedayDetail() {
         setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
           console.log(res.data.message);
+          setReloadChatState(true)
           swal("모임에서 탈퇴했습니다!");
         });
       })

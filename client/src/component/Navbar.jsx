@@ -4,8 +4,9 @@ import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { roomIdListStates, roomIdStates, roomMsgStates, roomInfoStates } from "../states/chatState";
+import {  roomIdStates, roomMsgStates, } from "../states/chatState";
 import { isLoggedInState } from '../states/userStateTmp';
+import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
@@ -20,21 +21,23 @@ function Navbar() {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
-  const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
-  const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
+  // const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
+  // const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
   const [currentChatType, setCurrentChatType] = useState('CLUB');
   const [filteredRoomId, setFilteredRoomId] = useState([]);
   const roomMsgState = useRecoilValue(roomMsgStates);
   const [filteredData, setFilteredData] = useState([]);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [data, setData] = useState([]);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
 
-  console.log("roomIdListState", roomIdListState)
-  console.log("roomInfoState", roomInfoState)
-  console.log("채팅방 목록 data", data)
+  //console.log("roomIdListState", roomIdListState)
+  //console.log("roomInfoState", roomInfoState)
+  //console.log("채팅방 목록 data", data)
 
+  console.log("reloadChatState", reloadChatState)
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
       const fetchClubChat = getAPI(`/chat/clubchat`);
@@ -51,16 +54,17 @@ function Navbar() {
             index === self.findIndex((t) => t.chatId === item.chatId)
           );
 
-          const allChatIds = uniqueData.map((item) => item.chatId);
+          // const allChatIds = uniqueData.map((item) => item.chatId);
 
-          setRoomIdListState(allChatIds);
+          // setRoomIdListState(allChatIds);
           setData(uniqueData);
-          setRoomInfoState(uniqueData);
+          // setRoomInfoState(uniqueData);
         }
       });
+      setReloadChatState(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn2]);
+  }, [isLoggedIn2, reloadChatState]);
 
   useEffect(() => {
     console.log("isLoggedIn", isLoggedIn);

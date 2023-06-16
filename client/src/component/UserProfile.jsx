@@ -76,7 +76,7 @@ function UserProfile({
     };
 
     const handleCategoryClick = (category) => {
-        setSelectedCategory(category);
+        // setSelectedCategory(category);
         getCategoryDetails(category);
     };
 

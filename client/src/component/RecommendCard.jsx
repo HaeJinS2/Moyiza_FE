@@ -36,7 +36,7 @@ function RecommendCard({
               alt="clubThumbnail"
             />
 
-            <div className="w-[219px] text-xl font-semibold">{title}</div>
+            <div className="w-[219px] text-[1rem] font-semibold">{title.length >= 12 ? title.slice(0,17) + "..." : title}</div>
             <div className="w-[219px] text-sm">
               {content.length >= 18 ? content.slice(0, 18) + "..." : content}
             </div>
@@ -67,8 +67,8 @@ function RecommendCard({
               alt="clubThumbnail"
             />
 
-            <div className="w-[219px] text-xl font-semibold">{title}</div>
-            <div className="w-[219px] text-sm">{content}</div>
+            <div className="w-[219px] text-xl font-semibold">{title.length >= 12 ? title.slice(0,17) + "..." : title}</div>
+            <div className="w-[219px] text-sm">{content.length >= 18 ? content.slice(0, 18) + "..." : content}</div>
             <div className="w-[219px] text-neutral-400 text-sm">
               {nowMemberCount} / {maxGroupSize}
             </div>

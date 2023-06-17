@@ -234,7 +234,7 @@ function OnedayDetail() {
                 />
               </div>
               <div>
-                <div className="w-[548px] h-[294px] mt-[16px]">
+                <div className="w-[548px] min-h-[294px] h-auto mt-[16px]">
                   <div className="flex justify-center mb-[20px]">
                     <div className="flex flex-col justify-center items-center w-[91px] h-[59px]">
                       <div>
@@ -322,7 +322,7 @@ function OnedayDetail() {
                       );
                     })}
                   </div>
-                  <div className="w-[543px] h-[162px] text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 relative">
+                  <div className="w-[543px] min-h-[162px] h-auto text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 pb-2 relative">
                     {onedayDetail?.data.oneDayContent}
                   </div>
                 </div>

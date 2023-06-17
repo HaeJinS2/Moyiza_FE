@@ -412,9 +412,10 @@ function OnedayDetail() {
                       onedayMember
                         ?.slice(memberPage * 6, memberPage * 6 + 6)
                         .map((member, i) => {
+                          console.log(member)
                           return (
                             <div 
-                            onClick={()=> navigate(`/mypage/${member.userId}`)}
+                            onClick={()=> navigate(`user/mypage/${member.userId}`)}
                             className="cursor-pointer flex gap-5 items-center">
                               <img
                                 className="w-[80px] h-[80px] rounded-full"

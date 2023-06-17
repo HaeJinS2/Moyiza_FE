@@ -424,7 +424,7 @@ function Club() {
                         title={item?.clubTitle}
                         content={item?.clubContent}
                         tag={item?.clubTag}
-                        thumbnail={item?.thumbnailUrl}
+                        thumbnail={item?.clubImageUrlList[0]}
                         id={item?.club_id}
                         maxGroupSize={item?.maxGroupSize}
                         nowMemberCount={item?.nowMemberCount}

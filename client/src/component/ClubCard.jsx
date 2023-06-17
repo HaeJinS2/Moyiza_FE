@@ -180,9 +180,9 @@ function ClubCard({
               <div className="flex h-full justify-between flex-col pr-6">
                 <div>
                   <div className="w-full text-2xl font-semibold">
-                    {title}
+                    {title.length > 12 ? title.slice(0,12) + "..." : title}
                   </div>
-                  <div className="text-sm">{content}</div>
+                  <div className="text-sm">{content.length > 150? content.slice(0,150) + "...": content }</div>
                 </div>
                 <div className="flex justify-between">
                   <div></div>
@@ -326,9 +326,9 @@ function ClubCard({
               <div className="flex h-full justify-between flex-col pr-6">
                 <div>
                   <div className="w-full text-2xl font-semibold">
-                    {title}
+                  {title.length > 12 ? title.slice(0,12) + "..." : title}
                   </div>
-                  <div className="text-sm">{content}</div>
+                  <div className="text-sm">{content.length > 150? content.slice(0,150) + "...": content }</div>
                 </div>
                 <div className="flex justify-between">
                   <div></div>

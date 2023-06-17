@@ -11,14 +11,16 @@ function WriteReview() {
     const [selectedFile1, setSelectedFile1] = useState('');
     const [selectedFile2, setSelectedFile2] = useState('');
     const [selectedFile3, setSelectedFile3] = useState('');
+    // eslint-disable-next-line
     const [selectedFileName1, setSelectedFileName1] = useState("");
+    // eslint-disable-next-line
     const [selectedFileName2, setSelectedFileName2] = useState("");
+    // eslint-disable-next-line
     const [selectedFileName3, setSelectedFileName3] = useState("");
     // eslint-disable-next-line
     const { state } = useLocation();
     const navigate = useNavigate();
 
-    console.log(selectedFileName1, selectedFileName2, selectedFileName3)
 
     const handleFileChange1 = async (event) => {
         const file = event.target.files[0];
@@ -33,7 +35,6 @@ function WriteReview() {
 
         try {
             const resizingFile = await imageCompression(file, options);
-            console.log('Compressed file:', resizingFile);
             setSelectedFile1(resizingFile);
             let reader = new FileReader();
 
@@ -62,7 +63,6 @@ function WriteReview() {
 
         try {
             const resizingFile = await imageCompression(file, options);
-            console.log('Compressed file:', resizingFile);
             setSelectedFile2(resizingFile);
             let reader = new FileReader();
 
@@ -91,7 +91,6 @@ function WriteReview() {
 
         try {
             const resizingFile = await imageCompression(file, options);
-            console.log('Compressed file:', resizingFile);
             setSelectedFile3(resizingFile);
             let reader = new FileReader();
 
@@ -146,7 +145,6 @@ function WriteReview() {
             setSelectedFileName3('')
             swal("작성이 완료되었습니다!")
             navigate(-1)
-            console.log(response)
         }).catch((error) => {
             console.error(error)
         })

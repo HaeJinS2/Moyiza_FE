@@ -96,7 +96,6 @@ function CreateFeed() {
           setSavedOnedayData({
             ...res.data.oneDayCreatingResponseDto,
           });
-          console.log(res.data.oneDayCreatingResponseDto);
           openModal();
         });
       }

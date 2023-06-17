@@ -13,6 +13,7 @@ import { logEvent, setAmplitudeUserId } from "../utils/amplitude";
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [emailState, setEserEmailState] = useRecoilState(userEmailState);
+  // eslint-disable-next-line
   const [userId, setUserId] = useRecoilState(userIdState);
   // const [user, setUser] = useRecoilState(userState);
   const [input, setInput] = useState("");
@@ -24,16 +25,13 @@ const Chat = () => {
   const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
   const clientRef = useRef(null); // client를 useRef로 설정
   const subscriptionRef = useRef(null);
-  console.log("userId",userId)
-  console.log("headerState",headerState)
+
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
-    console.log(token);
     if (token) {
       try {
         const decoded = jwt_decode(token);
         setUserId(decoded.userId);
-        console.log("Decoded sub: ", decoded.userId);
       } catch (error) {
         console.error("토큰 오류", error);
       }
@@ -45,7 +43,6 @@ const Chat = () => {
   useEffect(() => {
     getAPI(`/chat/clubchat`)
       .then((response) => {
-        console.log(response.data);
         if (Array.isArray(response.data)) {
           const chatIds = response.data.map((item) => item.chatId);
           setRoomId(chatIds);
@@ -58,13 +55,10 @@ const Chat = () => {
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
-    console.log(token);
     if (token) {
       try {
         const decoded = jwt_decode(token);
         setEserEmailState({ user: decoded });
-        console.log("Decoded sub: ", decoded.sub);
-        console.log(emailState);
       } catch (error) {
         console.error("토큰 오류", error);
       }
@@ -79,7 +73,6 @@ const Chat = () => {
   useEffect(() => {
     if (currentRoom)
 {    getAPI(`/chat/${currentRoom}`).then((res) => {
-      console.log("res.data.content",res.data.content);
       setMessages(res.data.content.reverse());
     });}
   }, [currentRoom])
@@ -100,7 +93,6 @@ const Chat = () => {
         (message) => {
           if (message) {
             if (message.headers.lastReadMessage) {
-              console.log("userId",userId)
               setHeaderState(message.headers)
             }
             let newMessage = JSON.parse(message.body);
@@ -127,8 +119,6 @@ const Chat = () => {
             (message) => {
               if (message) {
                 if (message.headers.lastReadMessage) {
-                  console.log("들어오면안돼")
-                  console.log("userId",userId)
                   setHeaderState(message.headers)
                 }
                 let newMessage = JSON.parse(message.body);
@@ -190,10 +180,6 @@ const Chat = () => {
 
   const sendMessage = (msg) => {
     const token = Cookies.get("ACCESS_TOKEN");
-    console.log(currentRoom);
-    console.log(msg);
-    console.log(clientRef);
-    console.log(emailState.userEmail);
     if (input && clientRef.current) {
       clientRef.current.publish({
         destination: `/app/chat/${currentRoom}`,
@@ -216,7 +202,6 @@ const Chat = () => {
       });
     }
   };
-  console.log(emailState)
 
   // Render the messages from the server.
   return (

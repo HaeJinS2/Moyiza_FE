@@ -11,7 +11,6 @@ const Redirect = () => {
 
   useEffect(() => {
     const token = new URLSearchParams(location.search).get('token');
-    console.log('token', token);
     if (token) {
       dispatch(setToken(token));
       dispatch(fetchUser());

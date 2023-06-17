@@ -31,7 +31,6 @@ const SearchBar = () => {
     if (e.type === "keypress" && e.key !== "Enter") return;
     Promise.all([
       getAPI(`/oneday/search?q=${search}`).then((res) => {
-        console.log(res.data.content);
         setSearchList((prev) => ({
           ...prev,
           searchedOnedayList: res.data.content,
@@ -39,7 +38,6 @@ const SearchBar = () => {
       }),
 
       getAPI(`/club/search?q=${search}`).then((res) => {
-        console.log(res.data.content);
         setSearchList((prev) => ({
           ...prev,
           searchedClubList: res.data.content,

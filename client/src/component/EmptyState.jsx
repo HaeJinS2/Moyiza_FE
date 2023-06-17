@@ -9,7 +9,6 @@ const EmptyState = ({
   showReset = false,
 }) => {
   const navigate = useNavigate();
-  console.log(page);
   return (
     <>
       <div className="flex flex-col justify-center items-center ">

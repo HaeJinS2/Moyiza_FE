@@ -96,10 +96,10 @@ function SignUpSocial() {
                 phone: phoneNum,
             };
             const url = `${process.env.REACT_APP_SERVER_URL}/signup/social`;
+            // eslint-disable-next-line
             const socialSignupResponse = await axios.put(url, data);
 
 
-            console.log(socialSignupResponse);
             goMain();
             swal('회원가입 성공');
         } catch (error) {

@@ -300,7 +300,7 @@ function Oneday() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="bg-neutral-200 text-[2.625rem] font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="bg-neutral-200 text-[2.625rem] font-sans font-semibold flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.svg)`,
                 backgroundSize: "cover",

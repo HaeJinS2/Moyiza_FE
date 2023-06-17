@@ -46,7 +46,7 @@ function UserProfile(
         try {
             const formData = new FormData();
 
-            formData.append('nickname', userInput.nickname);
+            formData.append('nickname', userInput.initialNickname);
             formData.append('content', userInput.content);
             formData.append('tags', userInput.tags);
 
@@ -121,7 +121,7 @@ function UserProfile(
             }
         };
 
-    const {  nickname, content } =
+    const { nickname, content } =
     // tags, 
         userInput;
     const handleInput = e => {
@@ -177,6 +177,7 @@ function UserProfile(
     const modalStyles = {
         // content: `w-[600px] h-[500px] mx-auto border-2 border-gray-300 rounded-lg p-6'`
         content: {
+            // marginTop: '200px',
             width: '550px',
             height: '800px',
             margin: 'auto',
@@ -250,9 +251,9 @@ function UserProfile(
                             <div className='flex items-center mb-5 w-full'>
                                 <div className='w-[30%]'>
                                     <p className='font-medium'>닉네임</p></div>
-                                <input placeholder={nickname || ''}
+                                <input placeholder={initialNickname || ''}
                                     class="int w-[47%] mr-[3%] h-10 rounded-lg px-3.5 py-2 shadow"
-                                    value={userInput.nickname}
+                                    value={userInput.initialNickname}
                                     onChange={handleInput}></input>
                                 <button type='button' style={{ width: '20%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 w-30 h-[45px] px-4 py-1 shadow hover:shadow-lg" onClick={nicknameValidationHandler}>중복확인</button>
                             </div>

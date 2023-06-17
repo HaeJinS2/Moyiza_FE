@@ -143,7 +143,7 @@ function OnedayDetail() {
             setIsMember(true);
             getAPI(`/oneday/${id}`).then((res) => {
               setReloadChatState(true)
-              swal("하루속 가입이 승인됐습니다!");
+              swal("하루속 가입이 승인됐습니다! \n 상단의 채팅방을 통해 소통해주세요!");
             });
           })
           .catch((err) => {

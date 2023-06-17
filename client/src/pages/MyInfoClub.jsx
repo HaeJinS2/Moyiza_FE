@@ -68,7 +68,7 @@ function MyInfoClub() {
     return (
         <>
             <div className="flex flex-row" ref={divRef}>
-                <Navbar />
+                <Navbar className='z-9999'/>
                 <Container>
                     {/* <section className="h-[calc(100vh-0px)] flex flex-col items-center "> */}
                     <div className='flex'>
@@ -83,7 +83,7 @@ function MyInfoClub() {
                         </div>
                         {/* </div> */}
                         {/* <div className="flex flex-col items-center w-full shadow-cm bg-[#FFFCF2] rounded-t-[100px]"> */}
-                        <div className="flex mt-[128px] ml-[48px] flex-col z-10">
+                        <div className="flex mt-[128px] ml-[48px] flex-col z-7777">
                             <div className="flex justify-start items-start w-full">
                                 <span className="text-[20px] text-left">
                                     <div className="flex gap-10">
@@ -280,6 +280,7 @@ function MyInfoClub() {
                     </div>
                 </Container>
             </div>
+
         </>
     );
 }

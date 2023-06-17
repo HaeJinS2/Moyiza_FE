@@ -343,7 +343,9 @@ function Navbar({ clientRef }) {
                               {/* 닉네임 */}
 
                               <div className="flex w-[230px] items-center mb-[12px] ">
-                                <img src={user.profileUrl} className="w-[48px] h-[48px] mr-[16px] bg-black rounded-full"/>
+                                <img src={user.profileUrl} 
+                                alt='user_profile'
+                                className="w-[48px] h-[48px] mr-[16px] bg-black rounded-full"/>
                                 <div>{user.nickName}</div>
                               </div>
                               {/* 개인정보 변경 */}

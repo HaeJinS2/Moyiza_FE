@@ -719,7 +719,7 @@ function Detail() {
                             return (
                               <div
                                 onClick={() =>
-                                  navigate(`/mypage/${member.userId}`)
+                                  navigate(`/user/mypage/${member.userId}`)
                                 }
                                 className="cursor-pointer w-[114px] h-[60px] flex gap-2 font-semibold items-center"
                               >

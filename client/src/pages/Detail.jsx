@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { deleteAPI, filePutAPI, getAPI, postAPI } from "../axios";
+import { deleteAPI, filePutAPI, getAPI, postAPI, putAPI } from "../axios";
 import ClubEventCard from "../component/ClubEventCard";
 import ClubReviewCard from "../component/ClubReviewCard";
 import { latestClubState } from "../states/clubState";
@@ -38,6 +38,9 @@ function Detail() {
   const [deletedImages, setDeletedImages] = useState([]);
   const [prevClubImages, setPrevClubImages] = useState([]);
   const [imageFormData, setImageFormData] = useState({});
+  const [imageArr, setImageArr] = useState([]);
+  const [onEditClubRule, setOnEditClubRule] = useState("");
+  const [clubRule, setClubRule] = useState("");
 
   function openModal() {
     setModalIsOpen(true);
@@ -89,6 +92,10 @@ function Detail() {
     isError,
     data: clubDetail,
   } = useQuery("getDetailClub", () => getAPI(`/club/${id}`), {
+    onSuccess: (res) => {
+      setClubRule(res.data.clubRule);
+      return console.log("ㅁㄷㅈ럊ㄷㄹㅁㅈㄷㄹ", res);
+    },
     refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
   });
 
@@ -306,15 +313,16 @@ function Detail() {
 
   // 사진 추가시
   const handleImageChange = async (e) => {
-    const formData = new FormData();
+    // const formData = new FormData();
     const files = e.target.files;
-    // setImageArr([...imageArr, files])
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      formData.append("image", file);
-    }
-    console.log("추가할 이미지", files, formData);
-    setImageFormData(formData);
+    setImageArr((prev) => [...prev, ...files]);
+    // // setImageArr([...imageArr, files])
+    // for (let i = 0; i < files.length; i++) {
+    //   const file = files[i];
+    //   formData.append("image", file);
+    // }
+    // console.log("추가할 이미지", files, formData);
+    // setImageFormData(formData);
     // 로컬이미지 가져오기
     const addImageUrls = Array.from(files).map((file) =>
       URL.createObjectURL(file)
@@ -336,18 +344,17 @@ function Detail() {
   // 이미지 변경사항 서버에 보내기
   const handleSubmitChangeImage = () => {
     const formData = new FormData();
-
-    // imageArr.forEach((file) => {
-    //   if (file) {
-    //     formData.append("image", file);
-    //   }
-    // });
-    const blob = new Blob([JSON.stringify(deletedImages)], {
+    const deleteImg = { deleteImage: deletedImages };
+    imageArr.forEach((file) => {
+      if (file) {
+        formData.append("image", file);
+      }
+    });
+    console.log("이거", deletedImages);
+    const blob = new Blob([JSON.stringify(deleteImg)], {
       type: "application/json",
     });
-    formData.append('image',imageFormData)
-    formData.append("deleteImage", blob);
-    console.log("이미지 변경",deletedImages, imageFormData)
+    formData.append("removeImageRequest", blob);
     filePutAPI(`/club/${id}/image`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -358,10 +365,25 @@ function Detail() {
         },
       ],
     })
-      .then((res) => console.log(res))
+      .then((res) => {
+        queryClient.invalidateQueries("getDetailClub");
+        console.log(res);
+      })
       .catch((error) => console.log(error));
-    setDeletedImages([])
-    setImageFormData({})
+    setDeletedImages([]);
+    setImageFormData({});
+    setImageUrls([]);
+  };
+
+  const handleClubRuleInput = (e) => {
+    setClubRule(e.target.value);
+  };
+
+  const handleSubmitClubRule = () => {
+    putAPI(`/club/${id}/rule`, { clubRule: clubRule }).then((res) => {
+      queryClient.invalidateQueries("getDetailClub");
+      console.log(res);
+    });
   };
 
   return (
@@ -576,7 +598,9 @@ function Detail() {
                       </Modal>
                     </div>
                     <div className="w-[543px] h-[91px] flex justify-center ">
-                      <button className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
+                      <button 
+                      onClick={() => swal("아직 준비중인 기능입니다.")}
+                      className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
                         수정하기
                       </button>
                     </div>
@@ -609,16 +633,41 @@ function Detail() {
             <div className="text-[2rem] font-semibold flex justify-between ">
               <div>모임 규칙</div>
               {onEdit ? (
-                <button className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
-                  수정하기
-                </button>
+                onEditClubRule ? (
+                  <button
+                    onClick={() => {
+                      handleSubmitClubRule();
+                      setOnEditClubRule(false);
+                    }}
+                    className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full"
+                  >
+                    수정완료
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setOnEditClubRule(true)}
+                    className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full"
+                  >
+                    수정하기
+                  </button>
+                )
               ) : (
                 <div></div>
               )}
             </div>
-            <div className="text-[1.25rem] h-[215px] bg-[#F5F5F5] rounded-xl mt-10 p-4">
-              수정하기를 눌러 내용을 작성해주세요!
-            </div>
+            {onEditClubRule ? (
+              <textarea
+                className="text-[1.25rem] h-[215px] w-full bg-[#F5F5F5] rounded-xl mt-10 p-4"
+                value={clubRule}
+                onChange={handleClubRuleInput}
+              />
+            ) : (
+              <div className="text-[1.25rem] h-[215px] bg-[#F5F5F5] rounded-xl mt-10 p-4">
+                {clubDetail?.data.clubRule.length === 0
+                  ? "수정 버튼을 눌러 규칙을 작성해주세요!"
+                  : clubDetail?.data.clubRule}
+              </div>
+            )}
           </div>
           <div className="w-[525px] h-[261px] ">
             <div className="flex justify-between">

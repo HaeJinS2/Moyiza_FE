@@ -11,6 +11,7 @@ import { isLoggedInState } from '../states/userStateTmp';
 import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
 import { getCookie, parseJwt } from "../utils/jwtUtils";
+// import { userState } from "../states/userState";
 
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
@@ -34,21 +35,28 @@ function Navbar({ clientRef }) {
   const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [data, setData] = useState([]);
+  // const [userId, setUserId] =useState('')
+  // const user = useRecoilState(userState);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
   console.log("roomIdListState", roomIdListState)
   console.log("roomInfoState", roomInfoState)
 
   //console.log("채팅방 목록 data", data)
-  
- // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
-const accessToken = getCookie('ACCESS_TOKEN');
 
-// ACCESS_TOKEN 값을 파싱하여 JSON 페이로드를 추출합니다.
-const payload = parseJwt(accessToken);
+  let userId = ''
+  // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
+  const accessToken = getCookie('ACCESS_TOKEN');
 
-// user_id 값을 추출합니다.
-const userId = payload.userId;
+  if (accessToken) {
+    // ACCESS_TOKEN 값을 파싱하여 JSON 페이로드를 추출합니다.
+    const payload = parseJwt(accessToken);
+    // user_id 값을 추출합니다.
+    userId = payload.userId
+  }
+
+
+
 
   console.log("reloadChatState", reloadChatState)
   useEffect(() => {
@@ -102,7 +110,7 @@ const userId = payload.userId;
   // const goHome = () => {
   //   navigate('/');
   // }
-console.log('userId',userId)
+  console.log('userId', userId)
 
   const goMyInfo = () => {
     // navigate("/mypage/");

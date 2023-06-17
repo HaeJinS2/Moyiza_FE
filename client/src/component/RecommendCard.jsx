@@ -31,8 +31,8 @@ function RecommendCard({
           </div>
           <div className=" flex-col flex items-center justify-centeroverflow-hidden rounded-xl">
             <img
-              className="aspect-square rounded-2xl w-[219px] h-[219px] object-fill"
-              src={thumbnail}
+              className="aspect-square rounded-2xl w-[219px] h-[219px] object-cover"
+              src={thumbnail ? thumbnail : `${process.env.PUBLIC_URL}/images/favicon.png`}
               alt="clubThumbnail"
             />
 
@@ -62,8 +62,8 @@ function RecommendCard({
           </div>
           <div className="aspect-square flex-col flex w-full h-full items-center justify-center relative overflow-hidden rounded-xl">
             <img
-              className="rounded-2xl w-[219px] h-[219px] object-cover"
-              src={thumbnail}
+              className="rounded-2xl w-[219px] h-[219px] aspect-square object-cover"
+              src={thumbnail ? thumbnail : `${process.env.PUBLIC_URL}/images/favicon.png`}
               alt="clubThumbnail"
             />
 

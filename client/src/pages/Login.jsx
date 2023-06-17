@@ -124,7 +124,8 @@ function Login() {
             // const jwt2 = refreshToken.replace('Bearer ', '');
             setCookie('ACCESS_TOKEN', jwt1, 1)
             // setCookie('REFRESH_TOKEN', jwt2, 1);
-            const email = parseJwt(jwt1).sub;
+            const email = parseJwt(jwt1);
+            
             setUser(email);
 
             // 사용자를 로컬 스토리지에 저장

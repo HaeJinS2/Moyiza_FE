@@ -10,6 +10,9 @@ import { roomIdListStates, roomIdStates, roomMsgStates, roomInfoStates } from ".
 import { isLoggedInState } from '../states/userStateTmp';
 import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
+import { getCookie, parseJwt } from "../utils/jwtUtils";
+// import { userState } from "../states/userState";
+
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 // import { userState } from "../states/userState";
@@ -32,12 +35,28 @@ function Navbar({ clientRef }) {
   const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [data, setData] = useState([]);
+  // const [userId, setUserId] =useState('')
+  // const user = useRecoilState(userState);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
-
   console.log("roomIdListState", roomIdListState)
   console.log("roomInfoState", roomInfoState)
+
   //console.log("채팅방 목록 data", data)
+
+  let userId = ''
+  // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
+  const accessToken = getCookie('ACCESS_TOKEN');
+
+  if (accessToken) {
+    // ACCESS_TOKEN 값을 파싱하여 JSON 페이로드를 추출합니다.
+    const payload = parseJwt(accessToken)
+    // user_id 값을 추출합니다.
+    userId = payload.userId
+  }
+
+
+
 
   console.log("reloadChatState", reloadChatState)
   useEffect(() => {
@@ -91,10 +110,11 @@ function Navbar({ clientRef }) {
   // const goHome = () => {
   //   navigate('/');
   // }
+  console.log('userId', userId)
 
   const goMyInfo = () => {
-    navigate("/mypage/");
-    // navigate(`/mypage/${user_id}`);
+    // navigate("/mypage/");
+    navigate(`user/mypage/${userId}`);
   };
 
   // useEffect(() => {
@@ -250,6 +270,7 @@ function Navbar({ clientRef }) {
                                     <>
                                       <button
                                         className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
+
                                       ${
                                           // id === currentRoom
                                           // ? "bg-slate-400"
@@ -320,6 +341,7 @@ function Navbar({ clientRef }) {
                             <hr className="mb-[12px]" />
                             <div className="flex flex-col ml-[30px]">
                               {/* 닉네임 */}
+
                               <div className="flex w-[230px] items-center mb-[12px] ">
                                 <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
                                 <div>닉네임</div>

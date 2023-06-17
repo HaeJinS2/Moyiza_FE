@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import imageCompression from 'browser-image-compression';
 import { filePostAPI } from '../axios';
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import swal from 'sweetalert';
 
 function WriteReview() {
 
@@ -15,6 +16,7 @@ function WriteReview() {
     const [selectedFileName3, setSelectedFileName3] = useState("");
     // eslint-disable-next-line
     const { state } = useLocation();
+    const navigate = useNavigate();
 
     console.log(selectedFileName1, selectedFileName2, selectedFileName3)
 
@@ -107,8 +109,8 @@ function WriteReview() {
 
     const handleSubmit = () => {
         // reviewType 및 identifier은 받은 값으로 넣어야함
-        // const data = { reviewType: state.reviewType, identifier: state.id, title, textContent: content }
-        const data = { reviewType: "EVENT", identifier: 3, title, textContent: content }
+        const data = { reviewType: state.reviewType, identifier: state.id, title, textContent: content }
+        // const data = { reviewType: "EVENT", identifier: 3, title, textContent: content }
         const imgArr = [selectedFile1, selectedFile2, selectedFile3]
         const formData = new FormData();
         // console.log("여기여기", state.reviewType,"state.reviewType",state.id,"state.id")
@@ -134,6 +136,16 @@ function WriteReview() {
                 },
             ],
         }).then((response) => {
+            setTitle('')
+            setContent('')
+            setSelectedFile1('')
+            setSelectedFile2('')
+            setSelectedFile3('')
+            setSelectedFileName1('')
+            setSelectedFileName2('')
+            setSelectedFileName3('')
+            swal("작성이 완료되었습니다!")
+            navigate(-1)
             console.log(response)
         }).catch((error) => {
             console.error(error)

@@ -269,7 +269,7 @@ function Club() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="text-[2.625rem] font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="text-[2.625rem] font-semibold  flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/club/club_main.png)`,
                 backgroundSize: "cover",

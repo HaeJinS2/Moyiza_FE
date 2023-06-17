@@ -532,7 +532,7 @@ function Oneday() {
                     onClick={() => navigate(`/create-feed`)}
                   >
                     <span className="text-[1.25rem] mt-[4px]">
-                      일상속 만들러가기
+                      하루속 만들러가기
                     </span>
                     <img
                       src={`${process.env.PUBLIC_URL}/images/oneday/arrow_green.png`}

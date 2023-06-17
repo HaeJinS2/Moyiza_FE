@@ -22,7 +22,6 @@ function UserProfile(
         content: initialContent,
         tags: [],
     });
-console.log(imageFile);
 
     // 프로필 사진 입력
     const imgRef = useRef();
@@ -31,7 +30,6 @@ console.log(imageFile);
     const onChangeImage = (e) => {
 
         if (e.target.files.length > 0) {
-            console.log(e.target.files[0]);
             setProfileImage(e.target.files[0]);
             let reader = new FileReader();
             let file = imgRef.current.files[0];
@@ -72,7 +70,6 @@ console.log(imageFile);
                     'Content-Type': 'application/json'
                 }
             });
-            console.log(submitResponse);
             swal('회원정보 수정 성공');
 
         } catch (error) {

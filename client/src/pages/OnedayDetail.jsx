@@ -16,8 +16,10 @@ function OnedayDetail() {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  // eslint-disable-next-line
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
   const isLoggedIn = useRecoilValue(isLoggedInState);
+  // eslint-disable-next-line
   const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [onEdit, setOnEdit] = useState(false);
@@ -106,9 +108,7 @@ console.log("이잉" , onedayDetail)
       }
     });
   };
-  console.log(onedayMember,reloadChatState);
-  console.log(isMember);
-  console.log("원데이", onedayDetail?.data);
+
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
   useEffect(() => {
@@ -121,7 +121,6 @@ console.log("이잉" , onedayDetail)
   //   <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
   // }
 
-  console.log(onedayMemberNicknameArr);
 
   const oneDayStartTime = new Date(onedayDetail?.data?.oneDayStartTime);
   let month = oneDayStartTime.getMonth() + 1;
@@ -132,7 +131,6 @@ console.log("이잉" , onedayDetail)
   const handleDeleteOneday = () => {
     deleteAPI(`/oneday/${id}`)
       .then((res) => {
-        console.log(res.data?.message);
         swal("하루속 삭제 완료");
       })
       .catch((err) => {
@@ -171,7 +169,6 @@ console.log("이잉" , onedayDetail)
       .then((res) => {
         setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
-          console.log(res.data?.message);
           setReloadChatState(true)
           swal("모임에서 탈퇴했습니다!");
         });
@@ -197,7 +194,6 @@ console.log("이잉" , onedayDetail)
     fetchFilteredOnedayList();
   }, [onedayDetail, id]);
 
-  console.log(filteredOnedayList);
 
   return (
     <>

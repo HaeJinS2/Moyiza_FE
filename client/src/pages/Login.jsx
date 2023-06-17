@@ -20,9 +20,8 @@ function Login() {
     const KAKAO_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/kakao?redirect_uri=https://mo2za.com/oauth/redirect`;
     const NAVER_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/naver?redirect_uri=https://mo2za.com/oauth/redirect`;
     const GOOGLE_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/google?redirect_uri=https://mo2za.com/oauth/redirect`;
-    
+  // eslint-disable-next-line
     const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
-    console.log(isLoggedIn2)
     const kakaologin = () => {
         window.location.href = KAKAO_AUTH_URL;
     }
@@ -71,10 +70,9 @@ function Login() {
     //     handleAuthorizationCode();
     // }, []);
     //--------------------------------------------------------------------
+    // eslint-disable-next-line
     const [user, setUser] = useRecoilState(userState);
     const navigate = useNavigate();
-
-    console.log({ user })
 
     const goSignUp = () => {
         navigate('/signup');

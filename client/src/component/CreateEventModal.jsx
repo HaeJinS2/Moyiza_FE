@@ -34,7 +34,6 @@ function CreateEventModal({ id, getClubEventLists }) {
   // const { id } = useParams();
 
   useEffect(() => {
-    console.log("userLat", userLat, "userLng", userLng, userAddress);
   }, [userLat, userLng, userAddress]);
 
   useEffect(() => {
@@ -109,7 +108,6 @@ function CreateEventModal({ id, getClubEventLists }) {
           .then((response) => {
             let address = response.data.documents[0].address;
             setUserAddress(address.address_name);
-            console.log(response.data.documents[0]);
           })
           .catch((error) => {
             console.log(error);
@@ -182,7 +180,6 @@ function CreateEventModal({ id, getClubEventLists }) {
       }
     )
       .then((response) => {
-        console.log(response);
         getClubEventLists();
         closeModal();
       })
@@ -221,7 +218,6 @@ function CreateEventModal({ id, getClubEventLists }) {
 
     try {
       const resizingFile = await imageCompression(file, options);
-      console.log("Compressed file:", resizingFile);
       setSelectedFile(resizingFile);
       let reader = new FileReader();
 

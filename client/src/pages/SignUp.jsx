@@ -92,7 +92,6 @@ function SignUp() {
 	const onChangeImage = (e) => {
 
 		if (e.target.files.length > 0) {
-			console.log(e.target.files[0]);
 			setProfileImage(e.target.files[0]);
 			let reader = new FileReader();
 			let file = imgRef.current.files[0];
@@ -213,12 +212,12 @@ function SignUp() {
 			formData.append('imageUrl', uploadRes.data);
 
 			const originUrl = `${process.env.REACT_APP_SERVER_URL}/signup`;
+			// eslint-disable-next-line
 			const signupResponse = await axios.post(originUrl, formData, {
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			});
-      console.log(signupResponse);
 			swal('회원가입 성공!');
 			goLogin();
 

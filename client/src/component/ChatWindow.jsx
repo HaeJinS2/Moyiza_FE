@@ -24,7 +24,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
     const [roomMsgState, setRoomMsgState] = useRecoilState(roomMsgStates);
     const [headerState, setHeaderState] = useState({})
     const [page, setPage] = useState(2);
-    
+
     const messagesEndRef = useRef(null);
     const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
     // const clientRef = useRef(null); // client를 useRef로 설정
@@ -72,20 +72,20 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
     setPage(nextPage);
   };
 
-  // Checks if user has scrolled to the bottom
-  const handleScroll = (e) => {
-    const { scrollTop } = e.currentTarget;
-    if (scrollTop === 0) {
-      fetchMoreData();
-    }
-  };
+    // Checks if user has scrolled to the bottom
+    const handleScroll = (e) => {
+        const { scrollTop } = e.currentTarget;
+        if (scrollTop === 0) {
+            fetchMoreData();
+        }
+    };
 
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
@@ -100,7 +100,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
             isHandleGetAPIRunning.current = true;
             try {
                 const res = await getAPI(`/chat/${roomIdState}?size=8&page=0`);
-
                 setMessages(res.data.content.reverse());
                 setTmpMessage([...tmpMessage, res.data.content]);
 
@@ -251,11 +250,15 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                     <div className='flex h-[55px] px-4 justify-between items-center gap-x-[10px]'>
                         <div className='flex gap-x-2 items-center'>
                             <img
-                            className='aspect-square object-cover h-[36px] w-[36px] rounded-full'
-                            src={roomInfo?.chatThumbnail}
-                            alt="chat_thumbnail"
+                                className='aspect-square object-cover h-[36px] w-[36px] rounded-full'
+                                src={roomInfo?.chatThumbnail}
+                                alt="chat_thumbnail"
                             />
-                            <span className='text-[24px]'>{roomInfo?.roomName}</span>
+                            <span className='text-[20px]'>
+                                {roomInfo?.roomName.length > 7
+                                    ? `${roomInfo?.roomName.substring(0, 12)}...`
+                                    : roomInfo?.roomName}
+                            </span>
                         </div>
                         <div>
                             <button
@@ -265,9 +268,9 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                     </div>
                     <div className="w-[360px] h-px bg-gray-200"></div>
                 </div>
-                <div 
-                onScroll={handleScroll}
-                className='h-[370px] w-full overflow-y-auto'>
+                <div
+                    onScroll={handleScroll}
+                    className='h-[370px] w-full overflow-y-auto'>
                     {messages.map((message, index) => {
                         const sentAt = message.sentAt
                         const formattedTime = new Date(sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });

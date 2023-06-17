@@ -186,6 +186,7 @@ console.log(imageFile);
             border: '1px solid #ccc',
             borderRadius: '50px',
             padding: '30px',
+            backgroundColor : 'white',
         },
     };
 

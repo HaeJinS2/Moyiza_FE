@@ -50,7 +50,7 @@ function Navbar({ clientRef }) {
 
   if (accessToken) {
     // ACCESS_TOKEN 값을 파싱하여 JSON 페이로드를 추출합니다.
-    const payload = parseJwt(accessToken);
+    const payload = parseJwt(accessToken)
     // user_id 값을 추출합니다.
     userId = payload.userId
   }

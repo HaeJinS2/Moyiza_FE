@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { getAPI, postAPI, deleteAPI } from "../axios";
 import OnedayCard from "../component/OnedayCard";
 import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import { useQueryClient } from "react-query";
+import { reloadChatStates } from '../states/chatState';
 
 import swal from "sweetalert";
 function OnedayDetail() {
@@ -17,6 +18,7 @@ function OnedayDetail() {
   const navigate = useNavigate();
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
   const isLoggedIn = useRecoilValue(isLoggedInState);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [onEdit, setOnEdit] = useState(false);
   const userNickname = useRecoilValue(userNicknameState);
@@ -94,7 +96,7 @@ function OnedayDetail() {
       }
     });
   };
-  console.log(onedayMember);
+  console.log(onedayMember,reloadChatState);
   console.log(isMember);
   console.log("원데이", onedayDetail?.data);
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
@@ -140,7 +142,8 @@ function OnedayDetail() {
           .then((res) => {
             setIsMember(true);
             getAPI(`/oneday/${id}`).then((res) => {
-              swal("하루속 가입이 승인됐습니다!");
+              setReloadChatState(true)
+              swal("하루속 가입이 승인됐습니다! \n 상단의 채팅방을 통해 소통해주세요!");
             });
           })
           .catch((err) => {
@@ -159,6 +162,7 @@ function OnedayDetail() {
         setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
           console.log(res.data.message);
+          setReloadChatState(true)
           swal("모임에서 탈퇴했습니다!");
         });
       })
@@ -170,20 +174,18 @@ function OnedayDetail() {
   useEffect(() => {
     const fetchFilteredOnedayList = async () => {
       if (!onedayDetail) return;
-
-      try {
-        getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`).then(
-          (res) => {
-            setFilteredOnedayList(res.data.content);
-          }
-        );
-      } catch (err) {
-        setFilteredOnedayList([]);
-      }
+      getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`)
+        .then((res) => {
+          const filteredContent = res.data.content.filter(
+            (oneday) => oneday.onedayId !== parseInt(id)
+          );
+          setFilteredOnedayList(filteredContent);
+        })
+        .catch((err) => setFilteredOnedayList([]));
     };
 
     fetchFilteredOnedayList();
-  }, [onedayDetail]);
+  }, [onedayDetail, id]);
 
   console.log(filteredOnedayList);
 
@@ -365,26 +367,26 @@ function OnedayDetail() {
 
         {/* 참여멤버 */}
         <section className="flex flex-col w-[1140px] h-auto justify-between">
-            <div className="flex justify-between">
-              <div className="text-[2rem] font-semibold">참여멤버</div>
-              <div>
-                {memberPage > 0 && (
-                  <button onClick={() => setMemberPage(memberPage - 1)}>
-                    <img
-                      alt="prev_button"
-                      src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
-                    />
-                  </button>
-                )}
-                {memberPage < Math.ceil(onedayMember?.length / 6) - 1 && (
-                  <button onClick={() => setMemberPage(memberPage + 1)}>
-                    <img
-                      alt="next_button"
-                      src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
-                    />
-                  </button>
-                )}
-              </div>
+          <div className="flex justify-between">
+            <div className="text-[2rem] font-semibold">참여멤버</div>
+            <div>
+              {memberPage > 0 && (
+                <button onClick={() => setMemberPage(memberPage - 1)}>
+                  <img
+                    alt="prev_button"
+                    src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                  />
+                </button>
+              )}
+              {memberPage < Math.ceil(onedayMember?.length / 6) - 1 && (
+                <button onClick={() => setMemberPage(memberPage + 1)}>
+                  <img
+                    alt="next_button"
+                    src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                  />
+                </button>
+              )}
+            </div>
           </div>
           <div className="flex w-full h-full justify-center items-center">
             <div className="flex justify-center w-[1140px] h-[186px] text-black items-center overflow-hidden relative ">
@@ -408,17 +410,16 @@ function OnedayDetail() {
                       <EmptyState page="onedayDetail" />
                     ) : (
                       onedayMember
-                        ?.slice(
-                          memberPage * 6,
-                          memberPage * 6 + 6
-                        )
+                        ?.slice(memberPage * 6, memberPage * 6 + 6)
                         .map((member, i) => {
                           return (
-                            <div className="flex gap-5 items-center">
-                              <img 
-                              className="w-[80px] h-[80px] rounded-full"
-                              src={member.profilePictureUrl}
-                              alt='oneday_member'
+                            <div 
+                            onClick={()=> navigate(`/mypage/${member.userId}`)}
+                            className="cursor-pointer flex gap-5 items-center">
+                              <img
+                                className="w-[80px] h-[80px] rounded-full"
+                                src={member.profilePictureUrl}
+                                alt="oneday_member"
                               />
                               <p>{member.userNickname}</p>
                             </div>
@@ -509,23 +510,23 @@ function OnedayDetail() {
           </div>
         </section>
         <div className="flex items-center justify-center">
-            {isMember && !isOwner && (
-              <div className="flex text-2xl justify-center items-center mt-10 bg-[#646464] text-white w-[224px] h-[60px]  py-2 rounded-full ">
-                <button onClick={handleQuitOneday}>모임 탈퇴하기</button>
-              </div>
-            )}
-          </div>
+          {isMember && !isOwner && (
+            <div className="flex text-2xl justify-center items-center mt-10 bg-[#646464] text-white w-[224px] h-[60px]  py-2 rounded-full ">
+              <button onClick={handleQuitOneday}>모임 탈퇴하기</button>
+            </div>
+          )}
+        </div>
 
-          <div className="flex justify-center pb-20">
-            {onEdit && (
-              <button
-                onClick={handleDeleteOneday}
-                className=" text-white text-2xl bg-[#646464] w-[224px] h-[60px] px-2 py-1 rounded-full"
-              >
-                모임 삭제
-              </button>
-            )}
-          </div>
+        <div className="flex justify-center pb-20">
+          {onEdit && (
+            <button
+              onClick={handleDeleteOneday}
+              className=" text-white text-2xl bg-[#646464] w-[224px] h-[60px] px-2 py-1 rounded-full"
+            >
+              모임 삭제
+            </button>
+          )}
+        </div>
       </div>
     </>
   );

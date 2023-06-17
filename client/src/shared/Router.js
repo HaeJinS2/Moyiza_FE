@@ -24,6 +24,8 @@ import Redirection from "../pages/Redirection";
 import TestPage from "../pages/TestPage";
 import WriteReview from "../pages/WriteReview";
 import DetailReview from "../pages/DetailReview";
+import NotFound from "../pages/NotFound";
+import { Navigate } from 'react-router-dom';
 
 const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
 
@@ -41,7 +43,7 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
+        <Navbar clientRef={clientRef} />
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
@@ -63,9 +65,8 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
           <Route path="/writereview" element={<WriteReview />} />
           <Route path="/detailreview" element={<DetailReview />} />
           <Route path="/test" element={<TestPage />} />
-
-
-          {/* <Route path="/404" element={<NotFound />} /> */}
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/404" />} />
         </Routes>
         {
           roomIdState ?

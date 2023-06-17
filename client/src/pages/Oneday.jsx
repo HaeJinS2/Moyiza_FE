@@ -35,12 +35,19 @@ function Oneday() {
   const [activePageTab, setActivePageTab] = useState(pageTabs[1]);
   const [searchPage, setSearchPage] = useState(0);
   const [page, setPage] = useState(0);
+  const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const [activatedFilterCategory, setActivatedFilterCategory] = useState("");
+
   // const [club, setClub] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   // const [categories, setCategories] = useState(null);
   const [onedayData, setOnedayData] = useState([]);
   const [categories, setCategories] = useState(null);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [filterList, setFilterList] = useState({});
+  const [popularOneday, setPupularOneday] = useState([]);
+  const [imminentOneday, setImminentOneday] = useState([]);
   // const [queryResults1, queryResults2] = useQueries(
   //   [
   //     {
@@ -73,7 +80,6 @@ function Oneday() {
   //   }
   // );
 
-
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
   //   const res1 = queryResults[0];
   //   const res2 = queryResults[1];
@@ -97,16 +103,14 @@ function Oneday() {
     // });
 
     // 클럽 전체 페이지를 가져오는 코드
-    getAPI(`/oneday?page=${page}&size=6&sort=createdAt,DESC`)
-    .then((res) => {
+    getAPI(`/oneday?page=${page}&size=6&sort=createdAt,DESC`).then((res) => {
       const newContent = [...onedayData, ...res.data.content];
       setOnedayData(newContent);
       setFilteredOnedayList(newContent);
     });
 
-    getAPI(`/oneday`)
-    .then((res) => {
-      setTotalPages(res.data.totalPages)
+    getAPI(`/oneday`).then((res) => {
+      setTotalPages(res.data.totalPages);
     });
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,8 +127,11 @@ function Oneday() {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`)
       .then((res) => {
+        console.log("카테고리태그", res);
+        const categoryAndTagList = res.data.categoryAndTagList;
         const newCategorylist = ["전체", ...res.data.categoryList];
         setCategories(newCategorylist);
+        setFilterList(categoryAndTagList);
       })
       .catch((err) => {
         console.log(err);
@@ -132,27 +139,31 @@ function Oneday() {
   }, []);
   //카테고리에 따라 검색하는 코드
   const handleClubCategory = (e) => {
-    logEvent("Button Clicked", { name: "handleOnedayCategory", page: "Oneday" });
+    logEvent("Button Clicked", {
+      name: "handleOnedayCategory",
+      page: "Oneday",
+    });
     setActiveTab(e.currentTarget.textContent);
     setSearchPage(0);
     if (e.currentTarget.textContent === "전체") {
       setFilteredOnedayList(onedayData);
     } else {
-      try{
-      getAPI(`/oneday/search?q=&category=${e.currentTarget.textContent}&size=6&page=0`)
-        .then((res) => setFilteredOnedayList([...res.data.content]))
-        .catch((err) => setFilteredOnedayList([]));
+      try {
+        getAPI(
+          `/oneday/search?q=&category=${e.currentTarget.textContent}&size=6&page=0`
+        )
+          .then((res) => setFilteredOnedayList([...res.data.content]))
+          .catch((err) => setFilteredOnedayList([]));
       } catch (err) {
-          setFilteredOnedayList([])
-        }
+        setFilteredOnedayList([]);
+      }
     }
   };
-
 
   // const handleMore = async () => {
   //   if (activeTab === "전체") {
   //     setPage(page + 1);
-      
+
   //   } else {
   //     try {
   //       setSearchPage((prev) => prev + 1);
@@ -175,7 +186,9 @@ function Oneday() {
       } else {
         setSearchPage((prev) => prev + 1);
         const res = await getAPI(
-          `/oneday/search?q=&category=${activeTab}&page=${searchPage + 1}&size=6`
+          `/oneday/search?q=&category=${activeTab}&page=${
+            searchPage + 1
+          }&size=6`
         );
         setFilteredOnedayList((prev) => [...prev, ...res.data.content]);
       }
@@ -193,6 +206,63 @@ function Oneday() {
   // const club = [...(queryResults2?.data?.data?.content || [])];
 
   //  const filteredOnedayList = [...res2?.data?.content];
+
+  const toggleFilter = () => {
+    filterIsOpen ? setFilterIsOpen(false) : setFilterIsOpen(true);
+  };
+
+  // 태그 선택 처리 함수
+  const handleTagClick = (tag) => {
+    let updatedTags;
+
+    // 이미 선택된 태그를 다시 클릭했을 경우 배열에서 해당 태그 제거
+    if (selectedTags.includes(tag)) {
+      updatedTags = selectedTags.filter((selectedTag) => selectedTag !== tag);
+    } else {
+      updatedTags = [...selectedTags, tag];
+
+      // 최대 3개의 태그만 선택 가능
+      if (updatedTags.length > 3) {
+        updatedTags.shift();
+      }
+    }
+
+    setSelectedTags(updatedTags);
+
+    let searchUrl = "/oneday/search?";
+    if (updatedTags[0]) searchUrl += `tag1=${updatedTags[0]}&`;
+    if (updatedTags[1]) searchUrl += `tag2=${updatedTags[1]}&`;
+    if (updatedTags[2]) searchUrl += `tag3=${updatedTags[2]}`;
+
+    getAPI(searchUrl)
+      .then((res) => {
+        setFilteredOnedayList(res.data.content);
+      })
+      .catch((err) => setFilteredOnedayList([]));
+  };
+
+  const getPupularOneday = () => {
+    getAPI("/oneday/popular").then((res) => {
+      setPupularOneday(res.data);
+      console.log("인기 원데이", res);
+    });
+  };
+
+  useEffect(() => {
+    getPupularOneday();
+  }, []);
+
+  const getImminentOneday = () => {
+    getAPI("/oneday/imminent").then((res) => {
+      setImminentOneday(res.data);
+      console.log("임박한 원데이", res);
+    });
+  };
+
+  useEffect(() => {
+    getImminentOneday();
+  }, []);
+  console.log("떳냐", imminentOneday, popularOneday);
   if (isLoading) {
     return <Loading />;
   }
@@ -230,7 +300,7 @@ function Oneday() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="bg-neutral-200 text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="bg-neutral-200 text-[2.625rem] font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.svg)`,
                 backgroundSize: "cover",
@@ -238,22 +308,62 @@ function Oneday() {
                 backgroundPosition: "center",
               }}
             >
-              {/* 
               <p>당신의 특별한 하루</p>
-              <p>'하루속'에서 함께하세요!</p> */}
+              <p>'하루속'에서 함께하세요!</p>
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cms bg-[#F9FFF8] rounded-t-[90px] mt-[477px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cms bg-[#F9FFF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
-                <p className="text-[2rem] font-bold">하루속 인기주제</p>
-                <button>
+                <p className="text-[2rem] font-bold">최신 하루속 이벤트</p>
+                <button className="relative">
                   <img
+                    onClick={() => toggleFilter()}
                     src={`${process.env.PUBLIC_URL}/images/filter.svg`}
                     alt="filter_button"
                   />
+                  {filterIsOpen && (
+                    <div className="px-2 py-4 absolute flex flex-col top-[43px] right-[2px] bg-white w-[800px] h-auto z-30 shadow-cms rounded-xl">
+                      <div className="flex justify-between mb-2">
+                        {Object.keys(filterList).map((category) => {
+                          return (
+                            <button
+                              className={`${
+                                activatedFilterCategory === category
+                                  ? "bg-[#FF7F1D] rounded-full text-white px-2"
+                                  : " px-2 py-1"
+                              } text-[1rem] font-semibold flex items-center w-[75px] justify-center gap-1`}
+                              onClick={() => {
+                                setActivatedFilterCategory(category);
+                              }}
+                            >
+                              {category}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {activatedFilterCategory && (
+                        <div className="grid grid-cols-8 gap-1">
+                          {filterList[activatedFilterCategory]?.map((tag) => {
+                            return (
+                              <button
+                                onClick={() => handleTagClick(tag)}
+                                className={`${
+                                  selectedTags.includes(tag)
+                                    ? "text-[#FF7F1D] border-2 border-[#FF7F1D]"
+                                    : "border-2 border-white"
+                                } rounded-full px-1 py-[1px]`}
+                              >
+                                {tag}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </button>
               </div>
               <body className="flex flex-col">
@@ -280,9 +390,11 @@ function Oneday() {
                         />
                       )}
                       <span className="relative text-base z-10 mix-blend flex items-center gap-2 pt-[2.3px]">
-                        <img 
-                        className="w-[20px] h-[20px]"
-                        src={imageArr[i]} alt="club_category" />
+                        <img
+                          className="w-[20px] h-[20px]"
+                          src={imageArr[i]}
+                          alt="club_category"
+                        />
                         {tab}
                       </span>
                     </button>
@@ -303,38 +415,38 @@ function Oneday() {
                     ) : filteredOnedayList ? (
                       filteredOnedayList?.map((item, i) => {
                         return (
-                            <ClubCard
-                              page="oneday"
-                              key={i}
-                              title={item.onedayTitle}
-                              content={item.onedayContent}
-                              tag={item.onedayTag}
-                              thumbnail={item.thumbnailUrl}
-                              id={item.onedayId}
-                              maxGroupSize={item.onedayGroupSize}
-                              nowMemberCount={item.onedayAttendantsNum}
-                              isLikedByUser={item.isLikedByUser}
-                              imageList={item?.imageUrlList}
-                            />
+                          <ClubCard
+                            page="oneday"
+                            key={i}
+                            title={item.onedayTitle}
+                            content={item.onedayContent}
+                            tag={item.onedayTag}
+                            thumbnail={item.thumbnailUrl}
+                            id={item.onedayId}
+                            maxGroupSize={item.onedayGroupSize}
+                            nowMemberCount={item.onedayAttendantsNum}
+                            isLikedByUser={item.isLikedByUser}
+                            imageList={item?.imageUrlList}
+                          />
                         );
                       })
                     ) : (
                       // : null
                       onedayData?.map((item, i) => {
                         return (
-                            <ClubCard
-                              page="oneday"
-                              key={i}
-                              title={item.onedayTitle}
-                              content={item.onedayContent}
-                              tag={item.onedayTag}
-                              thumbnail={item.thumbnailUrl}
-                              id={item.oneDayId}
-                              maxGroupSize={item.onedayGroupSize}
-                              nowMemberCount={item.onedayAttendantsNum}
-                              isLikedByUser={item.isLikedByUser}
-                              imageList={item?.imageUrlList}
-                            />
+                          <ClubCard
+                            page="oneday"
+                            key={i}
+                            title={item.onedayTitle}
+                            content={item.onedayContent}
+                            tag={item.onedayTag}
+                            thumbnail={item.thumbnailUrl}
+                            id={item.oneDayId}
+                            maxGroupSize={item.onedayGroupSize}
+                            nowMemberCount={item.onedayAttendantsNum}
+                            isLikedByUser={item.isLikedByUser}
+                            imageList={item?.imageUrlList}
+                          />
                         );
                       })
                     )}
@@ -353,31 +465,60 @@ function Oneday() {
               </body>
             </div>
 
-            <section>
+            <section className="py-10">
               <div className="max-w-[1140px] mx-auto">
-                <p className="text-3xl font-bold py-4">하루속 추천주제</p>
+                <p className="text-3xl font-bold py-4">하루속 인기주제</p>
 
-                <div className="flex flex-col justify-between mb-80">
+                <div className="flex flex-col justify-between">
                   <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
-                    {onedayData?.map((item, i) => {
+                    {popularOneday?.map((item, i) => {
                       return (
-                          <RecommendCard
-                            page="oneday"
-                            key={i}
-                            title={item.onedayTitle}
-                            content={item.onedayContent}
-                            tag={item.onedayTag}
-                            thumbnail={item.thumbnailUrl}
-                            id={item.oneDayId}
-                            maxGroupSize={item.onedayGroupSize}
-                            nowMemberCount={item.onedayAttendantsNum}
-                          />
+                        <RecommendCard
+                          page="oneday"
+                          key={i}
+                          title={item.oneDayTitle}
+                          content={item.oneDayContent}
+                          tag={item.oneDayTag}
+                          thumbnail={item.oneDayImage}
+                          id={item.oneDayId}
+                          maxGroupSize={item.oneDayGroupSize}
+                          nowMemberCount={item.attendantsNum}
+                        />
                       );
                     })}
                   </div>
                 </div>
               </div>
             </section>
+
+            <section>
+              <div className="max-w-[1140px] mx-auto">
+                <p className="text-3xl font-bold py-4">
+                  곧 시작해요!
+                </p>
+
+                <div className="flex flex-col justify-between mb-10">
+                  <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
+                    {imminentOneday?.map((item, i) => {
+                      return (
+                        <RecommendCard
+                          page="oneday"
+                          key={i}
+                          title={item.oneDayTitle}
+                          content={item.oneDayContent}
+                          tag={item.oneDayTag}
+                          thumbnail={item.oneDayImage}
+                          id={item.oneDayId}
+                          maxGroupSize={item.oneDayGroupSize}
+                          nowMemberCount={item.attendantsNum}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </section>
+
             <section className="h-auto">
               <div className="flex flex-col w-full bg-[#E4FFE0] items-center gap-4 justify-center h-[228px]">
                 {/* <div className="fixed z-100 bottom-16 flex justify-center items-center mt-10 bg-orange-400 text-white w-[130px] py-2 rounded-lg"> */}

@@ -4,8 +4,11 @@ import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { roomIdStates, roomMsgStates, } from "../states/chatState";
+// import { roomIdStates, roomMsgStates, } from "../states/chatState";
+import { roomIdListStates, roomIdStates, roomMsgStates, roomInfoStates } from "../states/chatState";
+
 import { isLoggedInState } from '../states/userStateTmp';
+import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
 import { getCookie, parseJwt } from "../utils/jwtUtils";
 
@@ -14,7 +17,7 @@ import { getCookie, parseJwt } from "../utils/jwtUtils";
 // import { userState } from "../states/userState";
 
 
-function Navbar() {
+function Navbar({ clientRef }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
   const navigate = useNavigate();
   // const [roomId, setRoomId] = useState([]);
@@ -22,20 +25,20 @@ function Navbar() {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
-  // const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
-  // const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
+  const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
+  const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
   const [currentChatType, setCurrentChatType] = useState('CLUB');
   const [filteredRoomId, setFilteredRoomId] = useState([]);
   const roomMsgState = useRecoilValue(roomMsgStates);
   const [filteredData, setFilteredData] = useState([]);
+  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [data, setData] = useState([]);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
+  console.log("roomIdListState", roomIdListState)
+  console.log("roomInfoState", roomInfoState)
 
-
-  //console.log("roomIdListState", roomIdListState)
-  //console.log("roomInfoState", roomInfoState)
   //console.log("채팅방 목록 data", data)
   
  // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
@@ -47,6 +50,7 @@ const payload = parseJwt(accessToken);
 // user_id 값을 추출합니다.
 const userId = payload.userId;
 
+  console.log("reloadChatState", reloadChatState)
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
       const fetchClubChat = getAPI(`/chat/clubchat`);
@@ -63,16 +67,17 @@ const userId = payload.userId;
             index === self.findIndex((t) => t.chatId === item.chatId)
           );
 
-          // const allChatIds = uniqueData.map((item) => item.chatId);
+          const allChatIds = uniqueData.map((item) => item.chatId);
 
-          // setRoomIdListState(allChatIds);
+          setRoomIdListState(allChatIds);
           setData(uniqueData);
-          // setRoomInfoState(uniqueData);
+          setRoomInfoState(uniqueData);
         }
       });
+      setReloadChatState(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn2]);
+  }, [isLoggedIn2, reloadChatState]);
 
   useEffect(() => {
     console.log("isLoggedIn", isLoggedIn);
@@ -84,10 +89,14 @@ const userId = payload.userId;
   const logoutHandler = () => {
     setIsLoggedIn(false);
     setIsLoggedIn2(false);
+
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
     navigate("/");
     swal("로그아웃 되었습니다.");
+    if (clientRef.current) {
+      clientRef.current.deactivate();
+    }
   };
 
   // const goHome = () => {
@@ -245,47 +254,48 @@ console.log('userId',userId)
                                   className={`${currentChatType === 'ONEDAY' ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl" : "text-[#747474]  w-[75px] h-[27px]"}`}
                                   onClick={(e) => handleButtonClick(e, 'ONEDAY')}>하루속</button>
                               </div>
-                              {filteredData?.map((item, i) => {
-                                const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
-                                const contentToDisplay = matchingState ? matchingState : item.lastMessage;
+                              <div className="bg-white h-[301px] w-full rounded-b-2xl">
+                                {filteredData?.map((item, i) => {
+                                  const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
+                                  const contentToDisplay = matchingState ? matchingState : item.lastMessage;
+                                  return (
+                                    <>
+                                      <button
+                                        className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
 
-                                return (
-                                  <>
-                                    <button
-                                      className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
                                       ${
-                                        // id === currentRoom
-                                        // ? "bg-slate-400"
-                                        // :
-                                        "bg-white"
-                                        }`}
-                                      key={filteredRoomId[i]}
-                                      onClick={
-                                        () => {
-                                          handleRoomIdState(filteredRoomId[i])
-                                          setChatModalOpen(false);
+                                          // id === currentRoom
+                                          // ? "bg-slate-400"
+                                          // :
+                                          "bg-white"
+                                          }`}
+                                        key={filteredRoomId[i]}
+                                        onClick={
+                                          () => {
+                                            handleRoomIdState(filteredRoomId[i])
+                                            setChatModalOpen(false);
+                                          }
+                                          // connectToRoom(id)
                                         }
-                                        // connectToRoom(id)
-                                      }
-                                    >
-                                      <div className="flex items-center justify-center gap-x-4 px-4 py-1">
-                                        <div>
-                                          <div className="w-[52px] h-[52px] rounded-full">
-                                            <img
-                                              className=" aspect-square  rounded-full object-cover"
-                                              src={`${filteredData[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                      >
+                                        <div className="flex items-center justify-center gap-x-4 px-4 py-1">
+                                          <div>
+                                            <div className="w-[52px] h-[52px] rounded-full">
+                                              <img
+                                                className=" aspect-square  rounded-full object-cover"
+                                                src={`${filteredData[i]?.chatThumbnail}`} alt="club_thumbnail" />
+                                            </div>
+                                          </div>
+                                          <div className="flex flex-col items-start">
+                                            <div>{item?.roomName}</div>
+                                            <div className="font-normal">{contentToDisplay?.content}</div>
                                           </div>
                                         </div>
-                                        <div className="flex flex-col items-start">
-                                          <div>{item?.roomName}</div>
-                                          <div className="font-normal">{contentToDisplay?.content}</div>
-                                        </div>
-                                      </div>
-                                    </button>
-                                  </>
-                                )
-                              }
-                              )}
+                                      </button>
+                                    </>
+                                  )
+                                }
+                                )}</div>
                             </div>
                           </div>
                         </>
@@ -323,7 +333,8 @@ console.log('userId',userId)
                             <hr className="mb-[12px]" />
                             <div className="flex flex-col ml-[30px]">
                               {/* 닉네임 */}
-                              <div className="flex w-[230px] flex items-center mb-[12px] ">
+
+                              <div className="flex w-[230px] items-center mb-[12px] ">
                                 <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
                                 <div>닉네임</div>
                               </div>

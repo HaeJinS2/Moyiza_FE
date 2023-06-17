@@ -47,6 +47,7 @@ function Club() {
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
+  const [popularClubList, setPopularClubList] = useState([]);
   const divRef = useRef(null);
   const navigate = useNavigate();
 
@@ -197,6 +198,17 @@ function Club() {
       .catch((err) => setFilteredClubList([]));
   };
 
+  const getPupularClub = () => {
+    getAPI("/club/popular").then((res) => {
+      setPopularClubList(res.data);
+      console.log("인기 클럽", res);
+    });
+  };
+
+  useEffect(() => {
+    getPupularClub();
+  }, []);
+
   if (isLoading) {
     return <Loading />;
   }
@@ -235,7 +247,7 @@ function Club() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="text-5xl font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="text-[2.625rem] font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/club/club_main.png)`,
                 backgroundSize: "cover",
@@ -249,7 +261,7 @@ function Club() {
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cms bg-[#FFFBF8] rounded-t-[90px] mt-[477px] z-10">
+          <section className="h-auto min-w-[1280px] shadow-cms bg-[#FFFBF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">일상속 인기주제</p>
@@ -404,19 +416,18 @@ function Club() {
 
               <div className="flex flex-col justify-between">
                 <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
-                  {club?.map((item, i) => {
+                  {popularClubList?.map((item, i) => {
                     return (
                       <RecommendCard
                         page="club"
                         key={i}
-                        title={item.clubTitle}
-                        content={item.clubContent}
-                        tag={item.clubTag}
-                        thumbnail={item.thumbnailUrl}
-                        id={item.club_id}
-                        eventId={item.id}
-                        maxGroupSize={item.maxGroupSize}
-                        nowMemberCount={item.nowMemberCount}
+                        title={item?.clubTitle}
+                        content={item?.clubContent}
+                        tag={item?.clubTag}
+                        thumbnail={item?.thumbnailUrl}
+                        id={item?.club_id}
+                        maxGroupSize={item?.maxGroupSize}
+                        nowMemberCount={item?.nowMemberCount}
                       />
                     );
                   })}

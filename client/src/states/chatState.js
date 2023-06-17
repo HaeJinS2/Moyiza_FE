@@ -19,3 +19,8 @@ export const roomInfoStates = atom({
     key: 'roomInfoStates',
     default: [],
 });
+
+export const reloadChatStates = atom({
+    key: 'reloadChatStates',
+    default: false,
+});

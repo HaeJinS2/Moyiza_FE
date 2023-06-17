@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { deleteAPI, filePostAPI, filePutAPI, getAPI, postAPI } from "../axios";
+import { deleteAPI, filePutAPI, getAPI, postAPI } from "../axios";
 import ClubEventCard from "../component/ClubEventCard";
 import ClubReviewCard from "../component/ClubReviewCard";
 import { latestClubState } from "../states/clubState";
@@ -38,7 +38,6 @@ function Detail() {
   const [deletedImages, setDeletedImages] = useState([]);
   const [prevClubImages, setPrevClubImages] = useState([]);
   const [imageFormData, setImageFormData] = useState({});
-  const [imageArr, setImageArr] = useState([])
 
   function openModal() {
     setModalIsOpen(true);
@@ -524,7 +523,7 @@ function Detail() {
                                 }
                               >
                                 <div>
-                                  <img src="" />
+                                  {/* <img src="" /> */}
                                   <input
                                     id="fileInput"
                                     onChange={handleImageChange}

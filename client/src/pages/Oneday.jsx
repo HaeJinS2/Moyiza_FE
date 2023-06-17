@@ -495,7 +495,7 @@ function Oneday() {
               <div className="max-w-[1140px] mx-auto">
                 <p className="text-3xl font-bold py-4">임박한 이벤트</p>
 
-                <div className="flex flex-col justify-between mb-80">
+                <div className="flex flex-col justify-between mb-10">
                   <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
                     {imminentOneday?.map((item, i) => {
                       return (

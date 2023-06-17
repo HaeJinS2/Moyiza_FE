@@ -11,7 +11,7 @@ import { isLoggedInState } from '../states/userStateTmp';
 import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
 import { getCookie, parseJwt } from "../utils/jwtUtils";
-import { userState } from "../states/userState";
+// import { userState } from "../states/userState";
 
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
@@ -36,7 +36,7 @@ function Navbar({ clientRef }) {
 
   const [data, setData] = useState([]);
   // const [userId, setUserId] =useState('')
-  const user = useRecoilState(userState);
+  // const user = useRecoilState(userState);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
   console.log("roomIdListState", roomIdListState)

@@ -176,7 +176,7 @@ function Detail() {
           setIsMember(true);
           setReloadChatState(true);
           queryClient.invalidateQueries("getDetailClub");
-          swal("가입이 승인됐습니다!");
+          swal("가입이 승인됐습니다. 상단의 채팅방을 통해 소통해주세요!");
         })
         .catch((err) => {
           console.log(err);

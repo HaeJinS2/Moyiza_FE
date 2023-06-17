@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { deleteAPI, getAPI, postAPI } from "../axios";
+import { deleteAPI, filePostAPI, filePutAPI, getAPI, postAPI } from "../axios";
 import ClubEventCard from "../component/ClubEventCard";
 import ClubReviewCard from "../component/ClubReviewCard";
 import { latestClubState } from "../states/clubState";
@@ -11,7 +11,8 @@ import EmptyState from "../component/EmptyState";
 import EndedClubEventCard from "../component/EndedClubEventCard";
 import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import CreateEventModal from "../component/CreateEventModal";
-import { reloadChatStates } from '../states/chatState';
+import { reloadChatStates } from "../states/chatState";
+import Modal from "react-modal";
 
 import swal from "sweetalert";
 
@@ -29,7 +30,23 @@ function Detail() {
   const [isOwner, setIsOwner] = useState(false);
   const [eventArr, setEventArr] = useState([]);
   const [eventReview, setEventReview] = useState([]);
-  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
+  const [reloadChatState, setReloadChatState] =
+    useRecoilState(reloadChatStates);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [deletedImages, setDeletedImages] = useState([]);
+  const [prevClubImages, setPrevClubImages] = useState([]);
+  const [imageFormData, setImageFormData] = useState({});
+  const [imageArr, setImageArr] = useState([])
+
+  function openModal() {
+    setModalIsOpen(true);
+  }
+
+  function closeModal() {
+    setModalIsOpen(false);
+  }
 
   // 진행중인 이벤트 상태관리
   const [progressEventPage, setProgressEventPage] = useState(0);
@@ -97,9 +114,14 @@ function Detail() {
   useEffect(() => {
     getClubEventLists();
 
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (clubDetail?.data?.clubImageUrlList) {
+      setPrevClubImages(clubDetail.data.clubImageUrlList);
+    }
+  }, [clubDetail]);
 
   // 최근 본 게시글 id 저장하는 코드
   useEffect(() => {
@@ -118,14 +140,13 @@ function Detail() {
   console.log(latestClub);
 
   useEffect(() => {
-    eventArr.map((item) => 
+    eventArr.map((item) =>
       getAPI(`/review?reviewType=EVENT&identifier=${item}`).then((res) => {
-        setEventReview((pre) => [...pre, ...res.data.content])
+        setEventReview((pre) => [...pre, ...res.data.content]);
       })
-    )
-
-//  console.log("eventReview",eventReview)
-  },[eventArr])
+    );
+    //  console.log("eventReview",eventReview)
+  }, [eventArr]);
 
   const getClubMembers = () => {
     getAPI(`/club/${id}/members`).then((res) => {
@@ -148,7 +169,7 @@ function Detail() {
       postAPI(`/club/${id}/join`, {})
         .then((res) => {
           setIsMember(true);
-          setReloadChatState(true)
+          setReloadChatState(true);
           queryClient.invalidateQueries("getDetailClub");
           swal("가입이 승인됐습니다!");
         })
@@ -165,7 +186,7 @@ function Detail() {
     postAPI(`/club/${id}/goodbye`, {})
       .then((res) => {
         setIsMember(false);
-        setReloadChatState(true)
+        setReloadChatState(true);
         queryClient.invalidateQueries("getDetailClub");
         swal("클럽 탈퇴 완료");
       })
@@ -191,10 +212,10 @@ function Detail() {
         console.log("res", res);
         setEventLists(res.data);
 
-        let arr = [...res.data]
-        console.log("res.data", arr)
-        let tmp = arr?.map(item => item.id)
-        setEventArr(tmp)
+        let arr = [...res.data];
+        console.log("res.data", arr);
+        let tmp = arr?.map((item) => item.id);
+        setEventArr(tmp);
       })
       .catch((err) => {
         console.log(err);
@@ -203,9 +224,9 @@ function Detail() {
   };
   console.log(isMember);
   console.log(eventlists);
-  console.log(clubDetail?.data,reloadChatState);
+  console.log(clubDetail?.data, reloadChatState);
 
-  console.log("res.data!",eventReview)
+  console.log("res.data!", eventReview);
 
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
@@ -247,7 +268,7 @@ function Detail() {
 
   // 멤버 리스트
   const memberList = clubDetail?.data.memberList;
-  const reviewList = eventReview
+  const reviewList = eventReview;
   const handleJoinEvent = (clubId, eventId, onJoinSuccess) => {
     postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
       console.log(res);
@@ -283,6 +304,67 @@ function Detail() {
   console.log(clubMemberNicknameArr);
   console.log(clubDetail);
   console.log("멤버리스트", memberList);
+
+  // 사진 추가시
+  const handleImageChange = async (e) => {
+    const formData = new FormData();
+    const files = e.target.files;
+    // setImageArr([...imageArr, files])
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      formData.append("image", file);
+    }
+    console.log("추가할 이미지", files, formData);
+    setImageFormData(formData);
+    // 로컬이미지 가져오기
+    const addImageUrls = Array.from(files).map((file) =>
+      URL.createObjectURL(file)
+    );
+    let newImageUrls = [...imageUrls, ...addImageUrls];
+    setImageUrls(newImageUrls);
+  };
+
+  // 이미지 삭제
+  const deleteImage = (index, image) => {
+    setDeletedImages([...deletedImages, image]);
+
+    const newClubImageList = [...prevClubImages];
+    newClubImageList.splice(index, 1);
+    setPrevClubImages(newClubImageList);
+    console.log("이미지삭제", newClubImageList);
+  };
+
+  // 이미지 변경사항 서버에 보내기
+  const handleSubmitChangeImage = () => {
+    const formData = new FormData();
+
+    // imageArr.forEach((file) => {
+    //   if (file) {
+    //     formData.append("image", file);
+    //   }
+    // });
+    const blob = new Blob([JSON.stringify(deletedImages)], {
+      type: "application/json",
+    });
+    formData.append('image',imageFormData)
+    formData.append("deleteImage", blob);
+    console.log("이미지 변경",deletedImages, imageFormData)
+    filePutAPI(`/club/${id}/image`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      transformRequest: [
+        function () {
+          return formData;
+        },
+      ],
+    })
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
+    setDeletedImages([])
+    setImageFormData({})
+  };
+
   return (
     <>
       <div ref={divRef} />
@@ -381,10 +463,118 @@ function Detail() {
               {isOwner && onEdit ? (
                 <>
                   <div className="flex">
-                    <div className="w-[458px] h-[91px] mr-[70px] flex justify-center ">
-                      <button className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full ">
+                    <div className="w-[458px] h-[91px] mr-[70px] flex justify-center items-start ">
+                      <button
+                        onClick={() => openModal()}
+                        className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full "
+                      >
                         사진 추가하기
                       </button>
+                      <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        contentLabel="Create Club Modal"
+                        style={{
+                          overlay: {
+                            backgroundColor: "rgba(0, 0, 0, 0.75)",
+                            zIndex: 1000,
+                          },
+                          content: {
+                            color: "black",
+                            width: "600px",
+                            height: "502px",
+                            margin: "auto",
+                            display: "flex",
+                            flexDirection: "column",
+                            // justifyContent: "between",
+                            // alignItems: "center",
+                            padding: "20px",
+                            borderRadius: "10px",
+                          },
+                        }}
+                      >
+                        <div className="flex flex-col">
+                          <div>기존 등록한 이미지</div>
+                          <div className="grid grid-cols-4">
+                            {prevClubImages.map((image, i) => {
+                              return (
+                                <div className="relative">
+                                  <img
+                                    className="w-[120px] h-[120px]"
+                                    src={image}
+                                    alt="club_image"
+                                  />
+                                  <div
+                                    onClick={() => deleteImage(i, image)}
+                                    className="absolute top-1 right-7 text-[#ff7f1d] font-semibold"
+                                  >
+                                    X
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <div>새로 등록할 이미지</div>
+                          <div className="flex flex-row justify-start items-start gap-3">
+                            <>
+                              <div
+                                className="cursor-pointer flex flex-col justify-center items-center w-[120px] h-[120px] border-2 rounded-md p-2"
+                                onClick={() =>
+                                  document.getElementById("fileInput").click()
+                                }
+                              >
+                                <div>
+                                  <img src="" />
+                                  <input
+                                    id="fileInput"
+                                    onChange={handleImageChange}
+                                    type="file"
+                                    className="hidden"
+                                    multiple
+                                  />
+                                </div>
+                                <div>{imageUrls.length}/4</div>
+                              </div>
+                            </>
+                            {imageUrls.map((imageUrl, i) => (
+                              <div key={i} className="relative">
+                                <img
+                                  className="w-[120px] h-[120px]"
+                                  src={imageUrl}
+                                  alt="이미지 미리보기"
+                                />
+                                <div
+                                  onClick={() => {
+                                    const updatedImageUrls = [...imageUrls];
+                                    updatedImageUrls.splice(i, 1);
+                                    setImageUrls(updatedImageUrls);
+                                  }}
+                                  className="cursor-pointer absolute top-0 right-2 text-xl text-black font-semibold"
+                                >
+                                  X
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex justify-center gap-10">
+                            <button
+                              onClick={() => {
+                                closeModal();
+                              }}
+                            >
+                              이미지 변경 취소하기
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleSubmitChangeImage();
+                                closeModal();
+                              }}
+                            >
+                              이미지 변경 완료
+                            </button>
+                          </div>
+                        </div>
+                      </Modal>
                     </div>
                     <div className="w-[543px] h-[91px] flex justify-center ">
                       <button className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
@@ -468,10 +658,11 @@ function Detail() {
                     className={`h-[200px] flex justify-center items-center w-full `}
                   >
                     <div
-                      className={`${memberList?.length === 0
+                      className={`${
+                        memberList?.length === 0
                           ? ""
                           : "grid grid-cols-4 grid-rows-2"
-                        } justify-items-center gap-2 mt-10`}
+                      } justify-items-center gap-2 mt-10`}
                     >
                       {memberList?.length === 0 ? (
                         <EmptyState page="member" />
@@ -480,9 +671,12 @@ function Detail() {
                           ?.slice(memberPage * 8, memberPage * 8 + 8)
                           .map((member) => {
                             return (
-                              <div 
-                              onClick={()=> navigate(`/mypage/${member.userId}`)}
-                              className="cursor-pointer w-[114px] h-[60px] flex gap-2 font-semibold items-center">
+                              <div
+                                onClick={() =>
+                                  navigate(`/mypage/${member.userId}`)
+                                }
+                                className="cursor-pointer w-[114px] h-[60px] flex gap-2 font-semibold items-center"
+                              >
                                 <div>
                                   <img
                                     className="w-[60px] h-[60px] rounded-full"
@@ -525,15 +719,15 @@ function Detail() {
                 )}
                 {progressEventPage <
                   Math.ceil(progressEvents.length / 4) - 1 && (
-                    <button
-                      onClick={() => setProgressEventPage(progressEventPage + 1)}
-                    >
-                      <img
-                        alt="next_button"
-                        src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
-                      />
-                    </button>
-                  )}
+                  <button
+                    onClick={() => setProgressEventPage(progressEventPage + 1)}
+                  >
+                    <img
+                      alt="next_button"
+                      src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                    />
+                  </button>
+                )}
               </div>
             </div>
             <div className="flex justify-center items-center">
@@ -550,8 +744,9 @@ function Detail() {
                     className={`h-[200px] absolute flex justify-center items-center w-full `}
                   >
                     <div
-                      className={`${progressEvents.length === 0 ? "" : "grid grid-cols-4"
-                        } gap-x-4 gap-y-8 justify-items-center w-full`}
+                      className={`${
+                        progressEvents.length === 0 ? "" : "grid grid-cols-4"
+                      } gap-x-4 gap-y-8 justify-items-center w-full`}
                     >
                       {progressEvents.length === 0 ? (
                         <EmptyState page="detail" />
@@ -661,10 +856,11 @@ function Detail() {
                 className={`h-full absolute flex  w-full `}
               >
                 <div
-                  className={`${reviewList?.length === 0
+                  className={`${
+                    reviewList?.length === 0
                       ? ""
                       : "grid grid-cols-3 grid-rows-2"
-                    } w-full `}
+                  } w-full `}
                 >
                   {reviewList?.length === 0 ? (
                     <EmptyState page="review" />
@@ -673,7 +869,11 @@ function Detail() {
                       ?.slice(reviewPage * 6, reviewPage * 6 + 6)
                       .map((item) => {
                         return (
-                          <ClubReviewCard eventReview={item} isOwner={isOwner} onEdit={onEdit} />
+                          <ClubReviewCard
+                            eventReview={item}
+                            isOwner={isOwner}
+                            onEdit={onEdit}
+                          />
                         );
                       })
                   )}
@@ -702,10 +902,11 @@ function Detail() {
                   className={`h-full absolute flex  w-full `}
                 >
                   <div
-                    className={`${endedEvents.length === 0
+                    className={`${
+                      endedEvents.length === 0
                         ? ""
                         : "grid grid-cols-3 grid-rows-3"
-                      } gap-x-4 gap-y-8 w-full `}
+                    } gap-x-4 gap-y-8 w-full `}
                   >
                     {endedEvents.length === 0 ? (
                       <EmptyState page="detail" />

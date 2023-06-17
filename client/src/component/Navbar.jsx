@@ -320,7 +320,7 @@ function Navbar({ clientRef }) {
                             <hr className="mb-[12px]" />
                             <div className="flex flex-col ml-[30px]">
                               {/* 닉네임 */}
-                              <div className="flex w-[230px] flex items-center mb-[12px] ">
+                              <div className="flex w-[230px] items-center mb-[12px] ">
                                 <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
                                 <div>닉네임</div>
                               </div>

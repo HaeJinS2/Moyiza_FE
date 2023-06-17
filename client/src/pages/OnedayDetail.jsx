@@ -69,12 +69,10 @@ function OnedayDetail() {
 
   useEffect (() => {
     getAPI(`/oneday/${id}`).then((res) => {
-      console.log("이잉?",res.data)
       setOnedayDetail(res)
     }).catch((err) => console.log(err))
   }, [id])
 
-console.log("이잉" , onedayDetail)
   // isOwner의 상태 관리
   // useEffect(() => {
   //   if (onedayDetail && onedayDetail.data) {

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Modal from "react-modal";
-import Frame from "../component/img/Frame.png";
+// import Frame from "../component/img/Frame.png";
 import axios from "axios";
 import { useMutation } from "react-query";
 import swal from "sweetalert";
@@ -206,9 +206,9 @@ function UserProfile({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 모달 열기
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+//   const openModal = () => {
+//     setIsModalOpen(true);
+//   };
 
   // 모달 닫기
   const closeModal = () => {
@@ -426,7 +426,7 @@ function UserProfile({
               </div>
             </div>
           </Modal>
-        </div>
+        {/* </div> */}
       </form>
     </>
   );

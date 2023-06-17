@@ -36,7 +36,7 @@ function ClubCard({
   console.log("imageArr", imageArr)
 
   useEffect(() => {
-    setImageArr(imageList.length > 0 ? [...imageList] : [`${process.env.PUBLIC_URL}/images/favicon.png`]);
+    setImageArr(imageList?.length > 0 ? [...imageList] : [`${process.env.PUBLIC_URL}/images/favicon.png`]);
   },[imageList])
 
   const likeClubBtn = (e) => {

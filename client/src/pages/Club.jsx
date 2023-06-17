@@ -42,7 +42,7 @@ function Club() {
   const [filterList, setFilterList] = useState({});
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [activatedFilterCategory, setActivatedFilterCategory] = useState("");
-
+  // eslint-disable-next-line
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   const [categories, setCategories] = useState(null);
@@ -50,8 +50,6 @@ function Club() {
   const [popularClubList, setPopularClubList] = useState([]);
   const divRef = useRef(null);
   const navigate = useNavigate();
-
-  console.log(totalPages);
 
   //   const [club1, categories1] = useQueries(
   //     [
@@ -87,13 +85,15 @@ function Club() {
     }
   }, []);
 
-
-  const filterRef = useRef(); 
+  const filterRef = useRef();
 
   useEffect(() => {
-    const checkIfClickedOutside = e => {
-
-      if (filterIsOpen && filterRef.current && !filterRef.current.contains(e.target)) {
+    const checkIfClickedOutside = (e) => {
+      if (
+        filterIsOpen &&
+        filterRef.current &&
+        !filterRef.current.contains(e.target)
+      ) {
         setFilterIsOpen(false);
       }
     };
@@ -105,9 +105,7 @@ function Club() {
     return () => {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
-
   }, [filterIsOpen, club]);
-
 
   // useEffect(() => {
   //   setPageChanged(true);
@@ -139,7 +137,6 @@ function Club() {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`)
       .then((res) => {
-        console.log("카테고리태그", res);
         const categoryAndTagList = res.data.categoryAndTagList;
         const newCategorylist = ["전체", ...res.data.categoryList];
         setCategories(newCategorylist);
@@ -223,7 +220,6 @@ function Club() {
   const getPupularClub = () => {
     getAPI("/club/popular").then((res) => {
       setPopularClubList(res.data);
-      console.log("인기 클럽", res);
     });
   };
 
@@ -234,8 +230,7 @@ function Club() {
   if (isLoading) {
     return <Loading />;
   }
-  console.log(club);
-  console.log("이거뭐야", filterList);
+
   return (
     <>
       <div ref={divRef}>

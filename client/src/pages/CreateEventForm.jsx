@@ -45,7 +45,6 @@ function CreateEvent() {
 
 
     useEffect(() => {
-        console.log("userLat", userLat, "userLng", userLng, userAddress)
     }, [userLat, userLng, userAddress])
 
     useEffect(() => {
@@ -114,7 +113,6 @@ function CreateEvent() {
                     .then((response) => {
                         let address = response.data.documents[0].address;
                         setUserAddress(address.address_name);
-                        console.log(response.data.documents[0])
                     })
                     .catch((error) => {
                         console.log(error);
@@ -171,7 +169,6 @@ function CreateEvent() {
                 },
             ],
         }).then((response) => {
-            console.log(response)
             navigate(-1)
         }).catch((error) => {
             console.error(error)
@@ -204,7 +201,6 @@ function CreateEvent() {
         setDateTime(date)
         const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm");
         setDateTimeString(formattedDate)
-        console.log(dateTimeString)
     };
     const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
         <button className="flex items-center justify-center  shadow-md w-80 h-12 rounded-lg mb-4 border-1" onClick={onClick} ref={ref}>
@@ -226,7 +222,6 @@ function CreateEvent() {
 
         try {
             const resizingFile = await imageCompression(file, options);
-            console.log('Compressed file:', resizingFile);
             setSelectedFile(resizingFile);
             let reader = new FileReader();
 

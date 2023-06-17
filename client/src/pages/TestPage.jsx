@@ -8,37 +8,31 @@ function testPage() {
     const likeClubBtn = () => {
         postAPI(`/club/182/like`,{}).then((res) => {
             swal("성공!")
-            console.log(res)
         }).catch((err) => console.log(err))
     }
     const likeClubCancelBtn = () => {
         deleteAPI(`/club/182/like`,{}).then((res) => {
             swal("성공!")
-            console.log(res)
         }).catch((err) => console.log(err))
     }
     const likeOnedayBtn = () => {
         postAPI(`/oneday/2753/like`,{}).then((res) => {
             swal("성공!")
-            console.log(res)
         }).catch((err) => console.log(err))
     }
     const likeOnedayCancelBtn = () => {
         deleteAPI(`/oneday/2753/like`,{}).then((res) => {
             swal("성공!")
-            console.log(res)
         }).catch((err) => console.log(err))
     }
     const likeEventBtn = () => {
         postAPI(`/club/182/event/129/like`,{}).then((res) => {
             swal("성공!")
-            console.log(res)
         }).catch((err) => console.log(err))
     }
     const likeEvenCancelBtn = () => {
         deleteAPI(`/club/182/event/129/like`,{}).then((res) => {
             swal("성공!")
-            console.log(res)
         }).catch((err) => console.log(err))
     }
     return (

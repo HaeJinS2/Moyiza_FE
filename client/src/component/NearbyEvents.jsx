@@ -11,14 +11,14 @@ function NearbyEvents() {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
+    // eslint-disable-next-line
     const [dataLat, setDataLat] = useState([]);
+    // eslint-disable-next-line
     const [dataLng, setDataLng] = useState([]);
     const navigate = useNavigate();
     // const [distances, setDistances] = useState([]);
     const nicknameState = useRecoilValue(userNicknameState);
 
-    console.log("data", data)
-    console.log("받은 위치", dataLat, dataLng)
     const geolocationOptions = {
         enableHighAccuracy: true,
         timeout: 1000 * 60 * 1,

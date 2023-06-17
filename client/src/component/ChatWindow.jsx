@@ -20,17 +20,16 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
     const [input, setInput] = useState("");
     const [userId, setUserId] = useRecoilState(userIdState);
     const [roomIdList, setRoomIdList] = useRecoilState(roomIdStates);
+    // eslint-disable-next-line
     const [roomMsgState, setRoomMsgState] = useRecoilState(roomMsgStates);
     const [headerState, setHeaderState] = useState({})
     const [page, setPage] = useState(2);
-    
+
     const messagesEndRef = useRef(null);
     const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
     // const clientRef = useRef(null); // client를 useRef로 설정
     const subscriptionRef = useRef(null);
     const isHandleGetAPIRunning = useRef(false);
-
-    console.log(roomMsgState)
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -39,12 +38,10 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
 
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
-        console.log(token);
         if (token) {
             try {
                 const decoded = jwt_decode(token);
                 setUserId(decoded.userId);
-                console.log("Decoded sub: ", decoded.userId);
             } catch (error) {
                 console.error("토큰 오류", error);
             }
@@ -61,10 +58,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
     };
 
 
-    console.log("messages~", messages)
-
-    console.log("subscriptionRefAlarm", subscriptionRefAlarm)
-
     // 수정 후 코드
     // 1. 이미 구독이 있으면 구독취소
     // 2. 겟요청으로 방내용 가져오고 채팅방 구독
@@ -76,25 +69,23 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
     const res = await getAPI(`/chat/${roomIdState}?size=17&page=${nextPage}`);
     const reversedContent = [...res.data.content].reverse();
     setMessages((prevMessages) => [...reversedContent, ...prevMessages]);
-    console.log("...res.data.content", ...res.data.content)
-    console.log("...res.data.content.reverse", ...res.data.content.reverse())
     setPage(nextPage);
   };
 
-  // Checks if user has scrolled to the bottom
-  const handleScroll = (e) => {
-    const { scrollTop } = e.currentTarget;
-    if (scrollTop === 0) {
-      fetchMoreData();
-    }
-  };
+    // Checks if user has scrolled to the bottom
+    const handleScroll = (e) => {
+        const { scrollTop } = e.currentTarget;
+        if (scrollTop === 0) {
+            fetchMoreData();
+        }
+    };
 
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         const token = Cookies.get("ACCESS_TOKEN");
@@ -109,8 +100,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
             isHandleGetAPIRunning.current = true;
             try {
                 const res = await getAPI(`/chat/${roomIdState}?size=8&page=0`);
-                console.log("res",res);
-                console.log('API fetch complete');
                 setMessages(res.data.content.reverse());
                 setTmpMessage([...tmpMessage, res.data.content]);
 
@@ -157,18 +146,15 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                 webSocketFactory: () =>
                     new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
                 debug: (str) => {
-                    console.log(str);
                 },
                 onConnect: (frame) => {
-                    console.log("Connected: " + frame);
                     handleGetAPI();
                 },
                 beforeConnect: () => {
                     newClient.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
                 },
                 onStompError: (frame) => {
-                    console.log("Broker reported error: " + frame.headers["message"]);
-                    console.log("Additional details: " + frame.body);
+
                     if (errorCount.current < 1) {
                         errorCount.current += 1;
                     }
@@ -180,7 +166,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
 
             newClient.onWebSocketClose = (evt) => {
                 if (errorCount.current >= 1) {
-                    console.log("Connection failed!");
                     newClient.deactivate();
                     errorCount.current = 0;
                     return;
@@ -191,6 +176,10 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
 
             newClient.activate();
             clientRef.current = newClient;
+
+            newClient.debug = function (str) {
+                // Do nothing. This will effectively silence the logs.
+              };
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -218,9 +207,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
 
     const sendMessage = (msg) => {
         const token = Cookies.get("ACCESS_TOKEN");
-        console.log(roomIdState);
-        console.log(msg);
-        console.log(clientRef);
         if (clientRef.current.connected) {
             if (input && clientRef.current) {
                 clientRef.current.publish({
@@ -240,7 +226,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
         if (subscriptionRef.current) {
             const removeRoom = roomIdList.filter((item) => item !== roomIdState)
             setRoomIdList(removeRoom)
-            console.log("subscriptionRef.current", subscriptionRef.current)
             subscriptionRef.current.unsubscribe();
             if (subscriptionRefAlarm.current) {
                 subscriptionRefAlarm.current[id] = clientRef.current.subscribe(
@@ -265,11 +250,15 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                     <div className='flex h-[55px] px-4 justify-between items-center gap-x-[10px]'>
                         <div className='flex gap-x-2 items-center'>
                             <img
-                            className='aspect-square object-cover h-[36px] w-[36px] rounded-full'
-                            src={roomInfo?.chatThumbnail}
-                            alt="chat_thumbnail"
+                                className='aspect-square object-cover h-[36px] w-[36px] rounded-full'
+                                src={roomInfo?.chatThumbnail}
+                                alt="chat_thumbnail"
                             />
-                            <span className='text-[24px]'>{roomInfo?.roomName}</span>
+                            <span className='text-[20px]'>
+                                {roomInfo?.roomName.length > 7
+                                    ? `${roomInfo?.roomName.substring(0, 12)}...`
+                                    : roomInfo?.roomName}
+                            </span>
                         </div>
                         <div>
                             <button
@@ -279,9 +268,9 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                     </div>
                     <div className="w-[360px] h-px bg-gray-200"></div>
                 </div>
-                <div 
-                onScroll={handleScroll}
-                className='h-[370px] w-full overflow-y-auto'>
+                <div
+                    onScroll={handleScroll}
+                    className='h-[370px] w-full overflow-y-auto'>
                     {messages.map((message, index) => {
                         const sentAt = message.sentAt
                         const formattedTime = new Date(sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });

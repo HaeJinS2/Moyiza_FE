@@ -47,15 +47,12 @@ function CreateClub() {
 
     const handleCreateClubButton = () => {
         postAPI(`/club/create`, {}).then((response) => {
-            console.log("test", response)
             setClub({
                 ...club,
                 createclub_id: response.data.createclub_id,
             })
             if (response.status === 202) { // 임시저장된 데이터가 있는 경우
-                console.log(club.createclub_id)
                 getAPI(`/club/create/${response.data.createclub_id}`).then((getResponse) => {
-                    console.log(response.data.createclub_id)
                     setClub(getResponse.data.createClub)
                     setOption({
                         ...option,

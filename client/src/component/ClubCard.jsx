@@ -33,7 +33,6 @@ function ClubCard({
   let progressDirection = progressEventPage > progressPrev ? 1 : -1;
 
   const navigate = useNavigate();
-  console.log("imageArr", imageArr)
 
   useEffect(() => {
     setImageArr(imageList?.length > 0 ? [...imageList] : [`${process.env.PUBLIC_URL}/images/favicon.png`]);
@@ -44,13 +43,11 @@ function ClubCard({
       postAPI(`/club/${id}/like`, {}).then((res) => {
         // swal("포스트!")
         setChecked(e);
-        console.log(res)
       }).catch((err) => console.log(err))
     } else {
       deleteAPI(`/club/${id}/like`, {}).then((res) => {
         // swal("딜리트!")
         setChecked(e);
-        console.log(res)
       }).catch((err) => console.log(err))
     }
   }
@@ -60,13 +57,11 @@ function ClubCard({
       postAPI(`/oneday/${id}/like`, {}).then((res) => {
         // swal("포스트!")
         setChecked(e);
-        console.log(res)
       }).catch((err) => console.log(err))
     } else {
       deleteAPI(`/oneday/${id}/like`, {}).then((res) => {
         // swal("딜리트!")
         setChecked(e);
-        console.log(res)
       }).catch((err) => console.log(err))
     }
   }

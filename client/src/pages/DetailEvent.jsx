@@ -32,6 +32,7 @@ function DetailEvent({
   // const [userLat, setUserLat] = useState(null);
   // const [userLng, setUserLng] = useState(null);
   // const [userAddress, setUserAddress] = useState("");
+  // eslint-disable-next-line
   const [marker, setMarker] = useState(null);
   const [content, setContent] = useState({});
   const [nicknameState, setNicknameState] = useRecoilState(userNicknameState);
@@ -40,17 +41,13 @@ function DetailEvent({
   const [isNicknameExists, setIsNicknameExists] = useState(false);
   const [checked, setChecked] = useState(false);
 
-  console.log(content.eventAttendantList, marker);
 
   useEffect(() => {
     const token = Cookies.get("ACCESS_TOKEN");
-    console.log(token);
     if (token) {
       try {
         const decoded = jwt_decode(token);
         setNicknameState({ userNickname: decoded.nickName });
-        console.log("Decoded sub: ", decoded.nickName);
-        console.log(nicknameState);
       } catch (error) {
         console.error("토큰 오류", error);
       }
@@ -75,9 +72,6 @@ function DetailEvent({
     setIsNicknameExists(nicknameExists);
   }, [content, nicknameState]);
 
-  console.log(isNicknameExists);
-  console.log("123", content);
-  console.log(nicknameState.userNickname);
 
   useEffect(() => {
     if (map) {
@@ -151,7 +145,6 @@ function DetailEvent({
         .then((res) => {
           // swal("포스트!")
           setChecked(e);
-          console.log(res);
         })
         .catch((err) => console.log(err));
     } else {
@@ -159,7 +152,6 @@ function DetailEvent({
         .then((res) => {
           // swal("딜리트!")
           setChecked(e);
-          console.log(res);
         })
         .catch((err) => console.log(err));
     }

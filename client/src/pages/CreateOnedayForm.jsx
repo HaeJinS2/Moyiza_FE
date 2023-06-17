@@ -37,9 +37,9 @@ function CreateOnedayForm() {
   const tmpOnedayId = useRecoilValue(onedayTmpIdState);
   const [savedOnedayData, setSavedOnedayData] =
     useRecoilState(savedOnedayDataState);
+  // eslint-disable-next-line
   const [reloadChatState, setReloadChatState] =
     useRecoilState(reloadChatStates);
-  console.log(reloadChatState);
   // useEffect(() => {
   //   if (
   //     savedOnedayData?.category === null &&
@@ -165,7 +165,6 @@ function CreateOnedayForm() {
               oneDayCategory: savedOnedayData.category,
             })
               .then((res) => {
-                console.log(res.data.message);
                 setOnedayStep(2);
               })
               .catch((error) => console.log(error));
@@ -182,7 +181,6 @@ function CreateOnedayForm() {
               tag: savedOnedayData.tag,
             })
               .then((res) => {
-                console.log(res.data.message);
                 setOnedayStep(3);
               })
               .catch((error) => console.log(error));
@@ -195,14 +193,12 @@ function CreateOnedayForm() {
             savedOnedayData.oneDayTitle === undefined ||
             savedOnedayData.oneDayTitle.length === 0
           ) {
-            console.log("제목", savedOnedayData.oneDayTitle);
             return swal("이벤트 이름을 입력해주세요!");
           } else {
             putAPI(`/oneday/create/${tmpOnedayId}/title`, {
               oneDayTitle: savedOnedayData.oneDayTitle,
             })
               .then((res) => {
-                console.log(res.data.message);
                 setOnedayStep(4);
               })
               .catch((error) => console.log(error));
@@ -226,7 +222,6 @@ function CreateOnedayForm() {
               oneDayContent: savedOnedayData.oneDayContent,
             })
               .then((res) => {
-                console.log(res.data.message);
                 setOnedayStep(5);
               })
               .catch((error) => console.log(error));
@@ -243,7 +238,6 @@ function CreateOnedayForm() {
             oneDayStartTime: savedOnedayData.oneDayStartTime,
           })
             .then((res) => {
-              console.log(res.data.message);
               setOnedayStep(6);
             })
             .catch((error) => console.log(error));
@@ -266,7 +260,6 @@ function CreateOnedayForm() {
               oneDayLongitude: savedOnedayData.oneDayLongitude,
             })
               .then((res) => {
-                console.log(res.data.message);
                 setOnedayStep(7);
               })
               .catch((error) => console.log(error));
@@ -290,7 +283,6 @@ function CreateOnedayForm() {
               agePolicy: savedOnedayData.age,
             })
               .then((res) => {
-                console.log(res.data.message);
                 setOnedayStep(8);
               })
               .catch((error) => console.log(error));
@@ -307,7 +299,6 @@ function CreateOnedayForm() {
               size: savedOnedayData.oneDayGroupSize,
             })
               .then((res) => {
-                console.log(res.data.message);
                 postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
                   .then((res) => {
                     setOnedayStep(9);
@@ -329,7 +320,6 @@ function CreateOnedayForm() {
     }
   };
 
-  console.log(onedayOptions, tmpOnedayId, savedOnedayData);
   return (
     <>
       <Container>
@@ -608,7 +598,6 @@ function OnedayStep4({
       setFile(compressedFile);
 
       const blob = new Blob([compressedFile], { type: "image" });
-      console.log(compressedFile);
 
       const formData = new FormData();
       formData.append("image", blob);
@@ -629,7 +618,7 @@ function OnedayStep4({
           },
         ],
       })
-        .then((res) => console.log(res))
+        .then((res) => res)
         .catch((error) => console.log(error));
     } catch (error) {
       console.log(error);
@@ -685,7 +674,6 @@ function OnedayStep5({
     setHours(setMinutes(new Date(), 0), 9)
   );
 
-  console.log(startDate);
   return (
     <>
       <CreateOnedayFormLayout
@@ -711,7 +699,7 @@ function OnedayStep5({
                     oneDayStartTime: newIsoString,
                   });
                 }}
-                minDate={new Date()} 
+                minDate={new Date()}
                 showTimeSelect
                 dateFormat="yyyy MMMM d, h:mm aa"
                 inline
@@ -760,14 +748,12 @@ function OnedayStep6({
           });
           newMarker.setMap(createdMap);
           markerRef.current = newMarker;
-          console.log("위도,경도", latlng.getLat(), latlng.getLng());
 
           const geocoder = new window.kakao.maps.services.Geocoder();
           geocoder.coord2Address(
             latlng.getLng(),
             latlng.getLat(),
             function (result, status) {
-              console.log(locationInput);
               if (status === window.kakao.maps.services.Status.OK) {
                 let detailAddr = !!result[0].address
                   ? result[0].address.address_name

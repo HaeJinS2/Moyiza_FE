@@ -16,7 +16,6 @@ function Search() {
   const searchList = useRecoilValue(searchState);
   const [activePageTab, setActivePageTab] = useState("");
   const navigate = useNavigate();
-  console.log("이거뭐야", searchList);
   return (
     <>
       <Container>

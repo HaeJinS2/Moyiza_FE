@@ -189,7 +189,7 @@ function SignUp() {
 			
 			formData.append('name', name);
 			formData.append('email', email);
-			formData.append('rawPassword', pw);
+			// formData.append('rawPassword', pw);
 			formData.append('password', pw);
 			formData.append('nickname', nickname);
 			formData.append('gender', gender);

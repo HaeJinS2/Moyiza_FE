@@ -4,9 +4,11 @@ import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {  roomIdStates, roomMsgStates, } from "../states/chatState";
+import { roomIdStates, roomMsgStates, } from "../states/chatState";
 import { isLoggedInState } from '../states/userStateTmp';
 import swal from 'sweetalert';
+import { getCookie, parseJwt } from "../utils/jwtUtils";
+
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 // import { userState } from "../states/userState";
@@ -31,9 +33,19 @@ function Navbar() {
   const chatModalRef = useRef();
   const profileModalRef = useRef();
 
+
   //console.log("roomIdListState", roomIdListState)
   //console.log("roomInfoState", roomInfoState)
   //console.log("채팅방 목록 data", data)
+  
+ // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
+const accessToken = getCookie('ACCESS_TOKEN');
+
+// ACCESS_TOKEN 값을 파싱하여 JSON 페이로드를 추출합니다.
+const payload = parseJwt(accessToken);
+
+// user_id 값을 추출합니다.
+const userId = payload.userId;
 
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
@@ -81,10 +93,11 @@ function Navbar() {
   // const goHome = () => {
   //   navigate('/');
   // }
+console.log('userId',userId)
 
   const goMyInfo = () => {
-    navigate("/mypage/");
-    // navigate(`/mypage/${user_id}`);
+    // navigate("/mypage/");
+    navigate(`user/mypage/${userId}`);
   };
 
   // useEffect(() => {
@@ -232,10 +245,10 @@ function Navbar() {
                                   className={`${currentChatType === 'ONEDAY' ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl" : "text-[#747474]  w-[75px] h-[27px]"}`}
                                   onClick={(e) => handleButtonClick(e, 'ONEDAY')}>하루속</button>
                               </div>
-                              <div className="bg-white h-[301px] w-full rounded-b-2xl">
                               {filteredData?.map((item, i) => {
                                 const matchingState = roomMsgState.slice().reverse().find(state => state.chatId === item.chatId);
                                 const contentToDisplay = matchingState ? matchingState : item.lastMessage;
+
                                 return (
                                   <>
                                     <button
@@ -272,7 +285,7 @@ function Navbar() {
                                   </>
                                 )
                               }
-                              )}</div>
+                              )}
                             </div>
                           </div>
                         </>
@@ -308,32 +321,32 @@ function Navbar() {
                           <div className="mt-[12px]">
                             <div className="text-[24px] mb-[11px] mt-[11px] ml-[30px]">프로필</div>
                             <hr className="mb-[12px]" />
-                          <div className="flex flex-col ml-[30px]">
-                            {/* 닉네임 */}
-                            <div className="flex w-[230px] flex items-center mb-[12px] ">
-                              <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
-                              <div>닉네임</div>
-                            </div>
-                            {/* 개인정보 변경 */}
-                            <div className="flex flex-row flex-start mb-[12px]">
-                              <img
-                                className="w-[40px] h-[40px] mr-[23px]"
-                                src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}
-                                alt="profile_icon"
-                              />
-                              <button onClick={goMyInfo}>개인정보 변경
-                              </button>
-                            </div>
-                            {/* 로그아웃 */}
-                            <div className="flex flex-row flex-start mb-[12px]">
-                              <img
-                                className="w-[40px] h-[40px] mr-[23px]"
-                                src={`${process.env.PUBLIC_URL}/images/logout.svg`}
-                                alt="logout_icon"
-                              />
-                              <button onClick={logoutHandler}>로그아웃
-                              </button>
-                            </div>
+                            <div className="flex flex-col ml-[30px]">
+                              {/* 닉네임 */}
+                              <div className="flex w-[230px] flex items-center mb-[12px] ">
+                                <div className="w-[48px] h-[48px] mr-[14px] bg-black rounded-full"></div>
+                                <div>닉네임</div>
+                              </div>
+                              {/* 개인정보 변경 */}
+                              <div className="flex flex-row flex-start mb-[12px]">
+                                <img
+                                  className="w-[40px] h-[40px] mr-[23px]"
+                                  src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}
+                                  alt="profile_icon"
+                                />
+                                <button onClick={goMyInfo}>개인정보 변경
+                                </button>
+                              </div>
+                              {/* 로그아웃 */}
+                              <div className="flex flex-row flex-start mb-[12px]">
+                                <img
+                                  className="w-[40px] h-[40px] mr-[23px]"
+                                  src={`${process.env.PUBLIC_URL}/images/logout.svg`}
+                                  alt="logout_icon"
+                                />
+                                <button onClick={logoutHandler}>로그아웃
+                                </button>
+                              </div>
                             </div>
 
                           </div>

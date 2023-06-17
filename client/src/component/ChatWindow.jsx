@@ -290,7 +290,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                             <div className="flex justify-end px-4">
                                 <div key={index} className=" flex-end">
                                     <div className="flex justify-end">
-                                        {message.senderNickname} / {message.chatRecordId}
+                                        {message.senderNickname}
                                     </div>
                                     <div className="flex gap-x-1 items-center justify-end">
                                         <div className='text-[8px] h-[50px] flex mx-[-5px] items-end gap-x-2'>
@@ -319,7 +319,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                                 <div key={index}>
                                     <div>
                                         <div className="flex justify-start">
-                                            {message.senderNickname} / {message.chatRecordId}
+                                            {message.senderNickname}
                                         </div>
                                     </div>
                                     <div className="flex gap-x-1 items-center">

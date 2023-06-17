@@ -37,7 +37,6 @@ function Detail() {
   const [imageUrls, setImageUrls] = useState([]);
   const [deletedImages, setDeletedImages] = useState([]);
   const [prevClubImages, setPrevClubImages] = useState([]);
-  const [imageFormData, setImageFormData] = useState({});
   const [imageArr, setImageArr] = useState([]);
   const [onEditClubRule, setOnEditClubRule] = useState("");
   const [clubRule, setClubRule] = useState("");
@@ -371,7 +370,6 @@ function Detail() {
       })
       .catch((error) => console.log(error));
     setDeletedImages([]);
-    setImageFormData({});
     setImageUrls([]);
   };
 

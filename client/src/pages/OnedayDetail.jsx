@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { getAPI, postAPI, deleteAPI } from "../axios";
@@ -49,24 +49,34 @@ function OnedayDetail() {
   let similarOnedayPrev = similarOnedayTuple[0];
   let similarOnedayDirection = similarOnedayPage > similarOnedayPrev ? 1 : -1;
 
+    const [onedayDetail, setOnedayDetail] = useState({});
+
   // 원데이 상세조회
-  const {
-    isLoading,
-    isError,
-    data: onedayDetail,
-  } = useQuery("getOnedayDetail", () => getAPI(`/oneday/${id}`), {
-    refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
-  });
+  // const {
+  //   isLoading,
+  //   isError,
+  //   data: onedayDetail,
+  // } = useQuery("getOnedayDetail", () => getAPI(`/oneday/${id}`), {
+  //   refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
+  // });
 
   useEffect(() => {
     queryClient.refetchQueries("getOnedayDetail");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMember]);
 
+  useEffect (() => {
+    getAPI(`/oneday/${id}`).then((res) => {
+      console.log("이잉?",res.data)
+      setOnedayDetail(res)
+    }).catch((err) => console.log(err))
+  }, [id])
+
+console.log("이잉" , onedayDetail)
   // isOwner의 상태 관리
   // useEffect(() => {
   //   if (onedayDetail && onedayDetail.data) {
-  //     if (userNickname.userNickname === onedayDetail.data.ownerNickname) {
+  //     if (userNickname.userNickname === onedayDetail.data?.ownerNickname) {
   //       setIsOwner(true);
   //     } else {
   //       setIsOwner(false);
@@ -82,7 +92,7 @@ function OnedayDetail() {
 
   const getOnedayMembers = () => {
     getAPI(`/oneday/${id}`).then((res) => {
-      const onedayMember = res.data.memberResponseList;
+      const onedayMember = res.data?.memberResponseList;
       setOnedayMember(onedayMember);
       setOnedayMemberNicknameArr(
         onedayMember?.map((member) => member.userNickName)
@@ -105,15 +115,15 @@ function OnedayDetail() {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  if (isLoading) {
-    <div>로딩중 입니다</div>;
-  } else if (isError) {
-    <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
-  }
+  // if (isLoading) {
+  //   <div>로딩중 입니다</div>;
+  // } else if (isError) {
+  //   <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
+  // }
 
   console.log(onedayMemberNicknameArr);
 
-  const oneDayStartTime = new Date(onedayDetail?.data.oneDayStartTime);
+  const oneDayStartTime = new Date(onedayDetail?.data?.oneDayStartTime);
   let month = oneDayStartTime.getMonth() + 1;
   let date = oneDayStartTime.getDate();
   let hours = oneDayStartTime.getHours();
@@ -122,7 +132,7 @@ function OnedayDetail() {
   const handleDeleteOneday = () => {
     deleteAPI(`/oneday/${id}`)
       .then((res) => {
-        console.log(res.data.message);
+        console.log(res.data?.message);
         swal("하루속 삭제 완료");
       })
       .catch((err) => {
@@ -133,8 +143,8 @@ function OnedayDetail() {
   const handleJoinOneday = () => {
     if (isLoggedIn) {
       if (
-        onedayDetail.data.oneDayGroupSize ===
-        onedayDetail.data.oneDayAttendantListSize
+        onedayDetail.data?.oneDayGroupSize ===
+        onedayDetail.data?.oneDayAttendantListSize
       ) {
         swal("더이상 가입할 수 없습니다!");
       } else {
@@ -161,7 +171,7 @@ function OnedayDetail() {
       .then((res) => {
         setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
-          console.log(res.data.message);
+          console.log(res.data?.message);
           setReloadChatState(true)
           swal("모임에서 탈퇴했습니다!");
         });
@@ -174,9 +184,9 @@ function OnedayDetail() {
   useEffect(() => {
     const fetchFilteredOnedayList = async () => {
       if (!onedayDetail) return;
-      getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`)
+      getAPI(`/oneday/search?q=&category=${onedayDetail.data?.category}`)
         .then((res) => {
-          const filteredContent = res.data.content.filter(
+          const filteredContent = res.data?.content.filter(
             (oneday) => oneday.onedayId !== parseInt(id)
           );
           setFilteredOnedayList(filteredContent);
@@ -203,7 +213,7 @@ function OnedayDetail() {
                 />
               </button>
               <div className="font-bold text-[2rem]">
-                {onedayDetail?.data.oneDayTitle}
+                {onedayDetail?.data?.oneDayTitle}
               </div>
               {isOwner ? (
                 onEdit ? (
@@ -229,7 +239,7 @@ function OnedayDetail() {
               <div className="flex justify-center">
                 <img
                   className="rounded-xl w-[458px] h-[305px] object-contain aspect-square"
-                  src={onedayDetail?.data.imageList[0]}
+                  src={onedayDetail?.data?.imageList[0]}
                   alt="club_main"
                 />
               </div>
@@ -288,7 +298,7 @@ function OnedayDetail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {onedayDetail?.data.genderPolicy}
+                        {onedayDetail?.data?.genderPolicy}
                       </div>
                     </div>
                     <div className="flex flex-col justify-center border-x-2 w-[91px] h-[59px]">
@@ -296,7 +306,7 @@ function OnedayDetail() {
                         Age
                       </div>
                       <div className="flex justify-center text-[1rem] w-full">
-                        {onedayDetail?.data.agePolicy}세
+                        {onedayDetail?.data?.agePolicy}세
                       </div>
                     </div>
                     <div className="flex flex-col  justify-center items-center w-[91px] h-[59px]">
@@ -308,13 +318,13 @@ function OnedayDetail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {onedayDetail?.data.oneDayAttendantListSize}/
-                        {onedayDetail?.data.oneDayGroupSize}
+                        {onedayDetail?.data?.oneDayAttendantListSize}/
+                        {onedayDetail?.data?.oneDayGroupSize}
                       </div>
                     </div>
                   </div>
                   <div className="flex justify-center mb-[20px] gap-4">
-                    {onedayDetail?.data.tagString.map((tag) => {
+                    {onedayDetail?.data?.tagString.map((tag) => {
                       return (
                         <div className="w-[97.8px] h-[32.6px] rounded-full border-2 border-[#0AB159] text-[#0AB159] text-[1.125rem] justify-center flex items-center pt-[3px]">
                           {tag}
@@ -323,7 +333,7 @@ function OnedayDetail() {
                     })}
                   </div>
                   <div className="w-[543px] h-[162px] text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 relative">
-                    {onedayDetail?.data.oneDayContent}
+                    {onedayDetail?.data?.oneDayContent}
                   </div>
                 </div>
               </div>

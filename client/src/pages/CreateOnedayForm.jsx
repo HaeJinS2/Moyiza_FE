@@ -16,7 +16,7 @@ import { setHours, setMinutes } from "date-fns";
 import { filePutAPI, postAPI, putAPI } from "../axios";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
-import { reloadChatStates } from '../states/chatState';
+import { reloadChatStates } from "../states/chatState";
 
 let imageArr = [
   `${process.env.PUBLIC_URL}/images/createFeed/create_exercise.svg`,
@@ -37,8 +37,9 @@ function CreateOnedayForm() {
   const tmpOnedayId = useRecoilValue(onedayTmpIdState);
   const [savedOnedayData, setSavedOnedayData] =
     useRecoilState(savedOnedayDataState);
-  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
-  console.log(reloadChatState)
+  const [reloadChatState, setReloadChatState] =
+    useRecoilState(reloadChatStates);
+  console.log(reloadChatState);
   // useEffect(() => {
   //   if (
   //     savedOnedayData?.category === null &&
@@ -232,22 +233,11 @@ function CreateOnedayForm() {
           }
           break;
         case 5:
-          let date = new Date();
-          let localISOString = new Date(
-            date.getTime() - date.getTimezoneOffset() * 60000
-          )
-            .toISOString()
-            .slice(0, 19);
-          console.log(localISOString);
           if (
             savedOnedayData.oneDayStartTime === null ||
             savedOnedayData.oneDayStartTime === undefined
           ) {
-            setSavedOnedayData({
-              ...savedOnedayData,
-              oneDayStartTime: localISOString,
-            });
-            swal("이벤트 시작 시간이 없어서 현재 시간으로 설정되었습니다.");
+            swal("이벤트 시작 시간을 입력해주세요!");
           }
           putAPI(`/oneday/create/${tmpOnedayId}/time`, {
             oneDayStartTime: savedOnedayData.oneDayStartTime,
@@ -257,7 +247,6 @@ function CreateOnedayForm() {
               setOnedayStep(6);
             })
             .catch((error) => console.log(error));
-
           break;
         case 6:
           if (
@@ -322,7 +311,7 @@ function CreateOnedayForm() {
                 postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
                   .then((res) => {
                     setOnedayStep(9);
-                    setReloadChatState(true)
+                    setReloadChatState(true);
                     swal("하루속 이벤트 개설 완료!");
                     navigate("/oneday");
                     setSavedOnedayData({});
@@ -476,10 +465,11 @@ function OnedayStep1({
                     category: category,
                   });
                 }}
-                className={`${category === savedOnedayData?.category
+                className={`${
+                  category === savedOnedayData?.category
                     ? "bg-[#dddddd]"
                     : "bg-white"
-                  }  w-[142px] h-[52px]  rounded-full border-2 flex gap-1 justify-center items-center font-semibold text-[1.25rem]`}
+                }  w-[142px] h-[52px]  rounded-full border-2 flex gap-1 justify-center items-center font-semibold text-[1.25rem]`}
               >
                 <img
                   src={imageArr[i]}
@@ -542,10 +532,11 @@ function OnedayStep2({
                       }
                     });
                   }}
-                  className={`${savedOnedayData?.tag?.includes(tag)
+                  className={`${
+                    savedOnedayData?.tag?.includes(tag)
                       ? "bg-[#dddddd]"
                       : "bg-white"
-                    }  w-[142px] h-[52px] rounded-full text-[1.25rem] font-semibold border-2`}
+                  }  w-[142px] h-[52px] rounded-full text-[1.25rem] font-semibold border-2`}
                 >
                   {tag}
                 </button>
@@ -693,13 +684,8 @@ function OnedayStep5({
   const [startDate, setStartDate] = useState(
     setHours(setMinutes(new Date(), 0), 9)
   );
-  let date = new Date();
-  let localISOString = new Date(
-    date.getTime() - date.getTimezoneOffset() * 60000
-  )
-    .toISOString()
-    .slice(0, 19);
 
+  console.log(startDate);
   return (
     <>
       <CreateOnedayFormLayout
@@ -716,12 +702,16 @@ function OnedayStep5({
                 selected={startDate}
                 onChange={(date) => {
                   setStartDate(date);
+                  let newDate = new Date(date);
+                  newDate.setHours(newDate.getHours() + 9);
+                  let newIsoString = newDate.toISOString().split(".")[0];
+
                   setSavedOnedayData({
                     ...savedOnedayData,
-                    oneDayStartTime: localISOString,
+                    oneDayStartTime: newIsoString,
                   });
                 }}
-                minDate={new Date()} // 이 부분을 추가하세요
+                minDate={new Date()} 
                 showTimeSelect
                 dateFormat="yyyy MMMM d, h:mm aa"
                 inline
@@ -876,10 +866,11 @@ function OnedayStep7({
                           gender: item,
                         });
                       }}
-                      className={` ${savedOnedayData.gender === item
+                      className={` ${
+                        savedOnedayData.gender === item
                           ? "bg-[#dddddd]"
                           : "bg-white"
-                        }  w-[142px] h-[62px] text-[1rem] font-semibold rounded-full border-2`}
+                      }  w-[142px] h-[62px] text-[1rem] font-semibold rounded-full border-2`}
                     >
                       {item}
                     </button>
@@ -1023,8 +1014,9 @@ function CreateOnedayFormLayout({
   return (
     <>
       <div
-        className={`flex flex-col ${onedayStep < 9 ? "" : "justify-center"
-          }  items-center h-auto max-w-[1140px]`}
+        className={`flex flex-col ${
+          onedayStep < 9 ? "" : "justify-center"
+        }  items-center h-auto max-w-[1140px]`}
       >
         <>
           <div className="self-start min-w-[800px] text-[1.5rem] py-5 font-semibold">

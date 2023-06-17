@@ -429,7 +429,7 @@ function Detail() {
                 />
               </div>
               <div>
-                <div className="w-[543px] h-[294px] mt-[16px]">
+                <div className="w-[543px] min-h-[294px] h-auto mt-[16px]">
                   <div className="flex justify-center mb-[20px]">
                     <div className="flex flex-col justify-center items-center w-[181px]">
                       <div>
@@ -472,7 +472,7 @@ function Detail() {
                       );
                     })}
                   </div>
-                  <div className="w-[543px] h-[162px] text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 relative">
+                  <div className="w-[543px] min-h-[162px] h-auto text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 pb-2 relative">
                     {clubDetail?.data.clubContent}
                   </div>
                 </div>
@@ -719,7 +719,7 @@ function Detail() {
                             return (
                               <div
                                 onClick={() =>
-                                  navigate(`/mypage/${member.userId}`)
+                                  navigate(`/user/mypage/${member.userId}`)
                                 }
                                 className="cursor-pointer w-[114px] h-[60px] flex gap-2 font-semibold items-center"
                               >

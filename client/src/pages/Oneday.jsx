@@ -88,6 +88,30 @@ function Oneday() {
   const divRef = useRef(null);
   const navigate = useNavigate();
 
+
+  const filterRef = useRef(); 
+
+  useEffect(() => {
+    const checkIfClickedOutside = e => {
+
+      if (filterIsOpen && filterRef.current && !filterRef.current.contains(e.target)) {
+        setFilterIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", checkIfClickedOutside);
+    setSelectedTags([]);
+    setActivatedFilterCategory("");
+    setFilteredOnedayList(onedayData);
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+
+  }, [filterIsOpen, onedayData]);
+
+
+
+
   useEffect(() => {
     if (divRef.current) {
       divRef.current.scrollIntoView({ behavior: "smooth" });
@@ -300,7 +324,7 @@ function Oneday() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="bg-neutral-200 text-[2.625rem] font-sans font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="bg-neutral-200 text-[2.625rem] font-sans font-semibold flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.svg)`,
                 backgroundSize: "cover",
@@ -318,7 +342,7 @@ function Oneday() {
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">최신 하루속 이벤트</p>
-                <button className="relative">
+                <button ref={filterRef} className="relative">
                   <img
                     onClick={() => toggleFilter()}
                     src={`${process.env.PUBLIC_URL}/images/filter.svg`}
@@ -326,6 +350,23 @@ function Oneday() {
                   />
                   {filterIsOpen && (
                     <div className="px-2 py-4 absolute flex flex-col top-[43px] right-[2px] bg-white w-[800px] h-auto z-30 shadow-cms rounded-xl">
+                      <div className="w-full flex justify-between px-6 pb-2">
+                        <div></div>
+                        <div
+                          onClick={() => {
+                            setSelectedTags([]);
+                            setActivatedFilterCategory("");
+                            setFilteredOnedayList(onedayData);
+                          }}
+                        >
+                          <img
+                          alt='reset_filter'
+                            className="w-[24px] h-[24px]"
+                            src={`${process.env.PUBLIC_URL}/images/filter_reset.svg`}
+                          />
+                        </div>
+                      </div>
+
                       <div className="flex justify-between mb-2">
                         {Object.keys(filterList).map((category) => {
                           return (
@@ -493,9 +534,7 @@ function Oneday() {
 
             <section>
               <div className="max-w-[1140px] mx-auto">
-                <p className="text-3xl font-bold py-4">
-                  곧 시작해요!
-                </p>
+                <p className="text-3xl font-bold py-4">곧 시작해요!</p>
 
                 <div className="flex flex-col justify-between mb-10">
                   <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
@@ -532,7 +571,7 @@ function Oneday() {
                     onClick={() => navigate(`/create-feed`)}
                   >
                     <span className="text-[1.25rem] mt-[4px]">
-                      일상속 만들러가기
+                      하루속 만들러가기
                     </span>
                     <img
                       src={`${process.env.PUBLIC_URL}/images/oneday/arrow_green.png`}

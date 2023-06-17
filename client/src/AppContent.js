@@ -108,6 +108,10 @@ function AppContent() {
 
       newClient.activate();
       clientRef.current = newClient;
+
+      newClient.debug = function (str) {
+        // Do nothing. This will effectively silence the logs.
+      };
     }
   }
     // setClient(clientRef)

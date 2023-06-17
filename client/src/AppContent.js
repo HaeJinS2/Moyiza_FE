@@ -10,29 +10,25 @@ import SockJS from "sockjs-client";
 import { roomIdListStates, roomMsgStates } from './states/chatState'
 
 function AppContent() {
+  // eslint-disable-next-line
   const [nicknameState, setNicknameState] = useRecoilState(userNicknameState);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
   const roomIdListState = useRecoilValue(roomIdListStates);
   const [roomMsgState, setRoomMsgState] = useRecoilState(roomMsgStates);
 
-  console.log("roomIdListState",roomIdListState)
   const token = Cookies.get('ACCESS_TOKEN');
 
   const errorCount = useRef(0); // 에러 카운트 상태를 직접 관리
   const clientRef = useRef(null); // client를 useRef로 설정
   const subscriptionRef = useRef({});
-  console.log(isLoggedIn)
-  console.log(" clientRef.current", clientRef.current)
+
   useEffect(() => {
     const token = Cookies.get('ACCESS_TOKEN');
-    console.log("token", token);
     if (token) {
       try {
         const decoded = jwt_decode(token);
         setNicknameState({ userNickname: decoded.nickName });
         setIsLoggedIn(true)
-        console.log('Decoded sub: ', decoded.nickName);
-        console.log(nicknameState);
       } catch (error) {
         console.error('토큰 오류', error);
       }
@@ -50,7 +46,6 @@ function AppContent() {
       roomIdListState.forEach((id) => {
         if (subscriptionRef.current) {
           if (subscriptionRef.current[id]) {
-            console.log(`${id}방은 이미 구독한 방`);
           } else {
           subscriptionRef.current[id] = clientRef.current.subscribe(
             `/chatalarm/${id}`,
@@ -113,6 +108,10 @@ function AppContent() {
 
       newClient.activate();
       clientRef.current = newClient;
+
+      newClient.debug = function (str) {
+        // Do nothing. This will effectively silence the logs.
+      };
     }
   }
     // setClient(clientRef)
@@ -120,7 +119,6 @@ function AppContent() {
   }, [roomIdListState, isLoggedIn]);
 
   useEffect(() => {
-    console.log("roomMsgState?????", roomMsgState)
   }, [roomMsgState])
 
   useEffect(() => {

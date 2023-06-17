@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function ClubReviewCard({ isOwner, onEdit, eventReview }) {
-  console.log("eventReview",eventReview)
   const navigate = useNavigate();
   return (
     <>

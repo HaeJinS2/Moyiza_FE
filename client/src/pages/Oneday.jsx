@@ -151,7 +151,6 @@ function Oneday() {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`)
       .then((res) => {
-        console.log("카테고리태그", res);
         const categoryAndTagList = res.data.categoryAndTagList;
         const newCategorylist = ["전체", ...res.data.categoryList];
         setCategories(newCategorylist);
@@ -268,7 +267,6 @@ function Oneday() {
   const getPupularOneday = () => {
     getAPI("/oneday/popular").then((res) => {
       setPupularOneday(res.data);
-      console.log("인기 원데이", res);
     });
   };
 
@@ -279,18 +277,15 @@ function Oneday() {
   const getImminentOneday = () => {
     getAPI("/oneday/imminent").then((res) => {
       setImminentOneday(res.data);
-      console.log("임박한 원데이", res);
     });
   };
 
   useEffect(() => {
     getImminentOneday();
   }, []);
-  console.log("떳냐", imminentOneday, popularOneday);
   if (isLoading) {
     return <Loading />;
   }
-  console.log("이건 필터원데이", filteredOnedayList);
   return (
     <>
       <div ref={divRef}>

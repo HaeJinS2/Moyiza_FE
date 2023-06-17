@@ -27,7 +27,9 @@ function Navbar({ clientRef }) {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [roomIdState, setRoomIdState] = useRecoilState(roomIdStates);
   const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
+  // eslint-disable-next-line
   const [roomIdListState, setRoomIdListState] = useRecoilState(roomIdListStates);
+  // eslint-disable-next-line
   const [roomInfoState, setRoomInfoState] = useRecoilState(roomInfoStates);
   const [currentChatType, setCurrentChatType] = useState('CLUB');
   const [filteredRoomId, setFilteredRoomId] = useState([]);
@@ -40,8 +42,6 @@ function Navbar({ clientRef }) {
   const user = useRecoilValue(userState);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
-  console.log("roomIdListState", roomIdListState)
-  console.log("roomInfoState", roomInfoState)
   //console.log("채팅방 목록 data", data)
 
   let userId = ''
@@ -58,7 +58,6 @@ function Navbar({ clientRef }) {
 
 
 
-  console.log("reloadChatState", reloadChatState)
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
       const fetchClubChat = getAPI(`/chat/clubchat`);
@@ -88,7 +87,6 @@ function Navbar({ clientRef }) {
   }, [isLoggedIn2, reloadChatState]);
 
   useEffect(() => {
-    console.log("isLoggedIn", isLoggedIn);
     // 로그인 여부를 확인하고 상태값 업데이트
     const cookie = Cookies.get("ACCESS_TOKEN");
     setIsLoggedIn(cookie ? true : false);
@@ -110,7 +108,7 @@ function Navbar({ clientRef }) {
   // const goHome = () => {
   //   navigate('/');
   // }
-  console.log('userId', userId)
+
 
   const goMyInfo = () => {
     // navigate("/mypage/");
@@ -147,7 +145,6 @@ function Navbar({ clientRef }) {
   }, []);
 
   useEffect(() => {
-    console.log("data", data)
   }, [data])
   // chatModal 또는 profileModal이 켜져있을때 모달의 외부를 클릭하면 모달이 닫히도록 하는 함수
   useEffect(() => {
@@ -182,7 +179,6 @@ function Navbar({ clientRef }) {
       const roomIdArr = tmp.map((item) => {
         return item.chatId
       })
-      console.log("tmp", tmp)
       setFilteredRoomId(roomIdArr)
       setFilteredData(tmp);
     }
@@ -342,7 +338,10 @@ function Navbar({ clientRef }) {
                             <div className="flex flex-col ml-[30px]">
                               {/* 닉네임 */}
 
-                              <div className="flex w-[230px] items-center mb-[12px] " onClick={goMyInfo}>
+
+                              <div 
+                              onClick={goMyInfo}
+                              className="flex w-[230px] items-center mb-[12px] ">
                                 <img src={user.profileUrl} 
                                 alt='user_profile'
                                 className="w-[48px] h-[48px] mr-[16px] bg-black rounded-full"/>

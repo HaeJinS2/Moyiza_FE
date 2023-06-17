@@ -47,6 +47,7 @@ function Club() {
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   const [categories, setCategories] = useState(null);
   const [filteredClubList, setFilteredClubList] = useState([]);
+  const [popularClubList, setPopularClubList] = useState([]);
   const divRef = useRef(null);
   const navigate = useNavigate();
 
@@ -196,6 +197,17 @@ function Club() {
       })
       .catch((err) => setFilteredClubList([]));
   };
+
+  const getPupularClub = () => {
+    getAPI("/club/popular").then((res) => {
+      setPopularClubList(res.data);
+      console.log("인기 클럽", res);
+    });
+  };
+
+  useEffect(() => {
+    getPupularClub();
+  }, []);
 
   if (isLoading) {
     return <Loading />;
@@ -404,19 +416,18 @@ function Club() {
 
               <div className="flex flex-col justify-between">
                 <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
-                  {club?.map((item, i) => {
+                  {popularClubList?.map((item, i) => {
                     return (
                       <RecommendCard
                         page="club"
                         key={i}
-                        title={item.clubTitle}
-                        content={item.clubContent}
-                        tag={item.clubTag}
-                        thumbnail={item.thumbnailUrl}
-                        id={item.club_id}
-                        eventId={item.id}
-                        maxGroupSize={item.maxGroupSize}
-                        nowMemberCount={item.nowMemberCount}
+                        title={item?.clubTitle}
+                        content={item?.clubContent}
+                        tag={item?.clubTag}
+                        thumbnail={item?.thumbnailUrl}
+                        id={item?.club_id}
+                        maxGroupSize={item?.maxGroupSize}
+                        nowMemberCount={item?.nowMemberCount}
                       />
                     );
                   })}

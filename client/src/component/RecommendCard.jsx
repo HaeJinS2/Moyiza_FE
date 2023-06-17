@@ -15,7 +15,9 @@ function RecommendCard({
   return (
     <>
       {page === "club" ? (
-        <div className="relative flex flex-col justify-center cursor-pointer">
+        <div 
+        onClick={() => navigate(`/club/${id}`)}
+        className="relative flex flex-col justify-center cursor-pointer">
           <div className="absolute z-10 top-3 left-10 flex justify-between text-xs rounded-2xl  text-white">
             <div className="flex gap-2 ">
               {tag.map((tag) => {

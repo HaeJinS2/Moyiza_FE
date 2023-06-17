@@ -179,6 +179,7 @@ function UserProfile({
     getCategoryDetails(category);
   };
 
+
   const handleRemoveCategory = (category) => {
     setSelectedCategories(
       selectedCategories.filter((item) => item !== category)
@@ -232,12 +233,12 @@ function UserProfile({
             )}
             {/* 작은 원 */}
             {/* <div className='absolute '> */}
-            <div
-              className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute top-20 left-40"
-              onClick={openModal}
-            >
-              <img src={Frame} alt=""></img>
-            </div>
+//             <div
+//               className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute top-20 left-40"
+//               onClick={openModal}
+//             >
+//               <img src={Frame} alt=""></img>
+//             </div>
             {/* </div> */}
             <div>
               <div className="name mt-[10px] text-[28px] flex items-center justify-center">
@@ -315,6 +316,7 @@ function UserProfile({
                   name="imageFile"
                 ></input>
                 {/* <div className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg w-[18%] h-10 bg-[#FF7F1E] flex align-center justify-center">
+
                             파일 선택
                         </div> */}
               </div>

@@ -108,10 +108,8 @@ const Chat = () => {
         webSocketFactory: () =>
           new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
         debug: (str) => {
-          console.log(str);
         },
         onConnect: (frame) => {
-          console.log("Connected: " + frame);
 
           // 새로운 구독 생성
           subscriptionRef.current = newClient.subscribe(
@@ -131,8 +129,6 @@ const Chat = () => {
           newClient.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
         },
         onStompError: (frame) => {
-          console.log("Broker reported error: " + frame.headers["message"]);
-          console.log("Additional details: " + frame.body);
           if (errorCount.current < 1) {
             errorCount.current += 1;
           }
@@ -144,7 +140,6 @@ const Chat = () => {
 
       newClient.onWebSocketClose = (evt) => {
         if (errorCount.current >= 1) {
-          console.log("연결 실패 해서 끊김!");
           newClient.deactivate();
           errorCount.current = 0;
           return;

@@ -418,7 +418,6 @@ console.log("이잉" , onedayDetail)
                       onedayMember
                         ?.slice(memberPage * 6, memberPage * 6 + 6)
                         .map((member, i) => {
-                          console.log(member)
                           return (
                             <div 
                             onClick={()=> navigate(`user/mypage/${member.userId}`)}

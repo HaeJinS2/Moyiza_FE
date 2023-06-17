@@ -192,7 +192,6 @@ function CreateEventModal({ id, getClubEventLists }) {
     setDateTime(date);
     const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm");
     setDateTimeString(formattedDate);
-    console.log(dateTimeString);
   };
 
   const CustomInput = React.forwardRef(({ value, onClick }, ref) => (

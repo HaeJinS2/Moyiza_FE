@@ -100,8 +100,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
             isHandleGetAPIRunning.current = true;
             try {
                 const res = await getAPI(`/chat/${roomIdState}?size=8&page=0`);
-                console.log("res", res);
-                console.log('API fetch complete');
                 setMessages(res.data.content.reverse());
                 setTmpMessage([...tmpMessage, res.data.content]);
 
@@ -148,18 +146,15 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                 webSocketFactory: () =>
                     new SockJS(`${process.env.REACT_APP_SERVER_URL}/chat/connect`),
                 debug: (str) => {
-                    console.log(str);
                 },
                 onConnect: (frame) => {
-                    console.log("Connected: " + frame);
                     handleGetAPI();
                 },
                 beforeConnect: () => {
                     newClient.connectHeaders["ACCESS_TOKEN"] = `Bearer ${token}`;
                 },
                 onStompError: (frame) => {
-                    console.log("Broker reported error: " + frame.headers["message"]);
-                    console.log("Additional details: " + frame.body);
+
                     if (errorCount.current < 1) {
                         errorCount.current += 1;
                     }
@@ -171,7 +166,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
 
             newClient.onWebSocketClose = (evt) => {
                 if (errorCount.current >= 1) {
-                    console.log("Connection failed!");
                     newClient.deactivate();
                     errorCount.current = 0;
                     return;
@@ -182,6 +176,10 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
 
             newClient.activate();
             clientRef.current = newClient;
+
+            newClient.debug = function (str) {
+                // Do nothing. This will effectively silence the logs.
+              };
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,7 +226,6 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
         if (subscriptionRef.current) {
             const removeRoom = roomIdList.filter((item) => item !== roomIdState)
             setRoomIdList(removeRoom)
-            console.log("subscriptionRef.current", subscriptionRef.current)
             subscriptionRef.current.unsubscribe();
             if (subscriptionRefAlarm.current) {
                 subscriptionRefAlarm.current[id] = clientRef.current.subscribe(

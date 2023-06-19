@@ -16,7 +16,7 @@ function Footer() {
           <div className="flex flex-col h-[91px] justify-between ">
             <p>소셜 미디어</p>
             <p>인스타그램</p>
-            <p>네이버 글로그</p>
+            <p>네이버 블로그</p>
           </div>
           <div className="flex w-[355px]">
             <div>이용약관</div>

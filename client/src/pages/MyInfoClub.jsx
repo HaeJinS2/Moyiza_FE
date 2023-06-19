@@ -69,12 +69,13 @@ function MyInfoClub() {
         <>
             <div className="flex flex-row" ref={divRef}>
                 <Navbar className='z-9999'/>
-                <Container>
+                <Container >
                     {/* <section className="h-[calc(100vh-0px)] flex flex-col items-center "> */}
                     <div className='flex'>
                         <div className="mt-[128px]">
                             {/* <div className="flex w-full h-[500px] items-center justify-center "> */}
                             <UserProfile
+                                className='z-8888'
                                 nickname={nickname}
                                 profileImage={profileImage}
                                 email={email}
@@ -95,12 +96,13 @@ function MyInfoClub() {
                                             >
                                                 {activePageTab === tab && (
                                                     <motion.div
+                                                    
                                                         layoutId="active-pill-1"
                                                         transition={{ type: 'spring', duration: 0.5 }}
-                                                        className="border-b-[4px] border-black absolute inset-0"
+                                                        className="border-b-[4px] border-black absolute inset-0 z-8877'"
                                                     />
                                                 )}
-                                                <span className="relative text-base z-10 mix-blend">{tab}</span>
+                                                <span className="relative text-base z-8877 mix-blend">{tab}</span>
                                             </button>
                                         ))}
                                     </div>
@@ -113,20 +115,20 @@ function MyInfoClub() {
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
                                                     // className="border-black inset-0"
                                                     >
-                                                        <div className="text-[32px] mt-[53px] flex flex-col justify-between align-center w-full">
-                                                            <div className='flex justify-between align-center'>
+                                                        <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                            <div className='flex justify-between align-center mb-[25px]'>
                                                                 <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 일상속` : null}</div>
                                                                 {/* <div className='text-[20px]'>총 0개</div> */}
                                                             </div>
                                                         </div>
-                                                        <div className='flex flex-col items-center justify-center w-[1200px]'>
+                                                        <div className='flex flex-col items-center justify-center w-[748px]'>
                                                             <p className='text-[20px] mt-[109px] mb-[109px]'>운영중인 일상이 없어요.</p>
                                                         </div>
                                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
                                                             <div className="text-[24px]">{nickname ? `${nickname}님의 참여중인 일상속` : null}</div>
                                                             {/* <div className='text-[20px]'> 총 {clubsInParticipatingInfo.length}개</div> */}
                                                         </div>
-                                                        <div className='flex flex-col items-center justify-center w-[1200px]'>
+                                                        <div className='flex flex-col items-center justify-center w-[748px]'>
                                                             <p className='text-[20px] mt-[109px]'>참여중인 일상이 없어요.</p>
                                                             <p className='text-[20px] mt-[5px] mb-[18px]'>일상을 즐기러 가볼까요?</p>
                                                             <button onClick={goClub} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#fff] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
@@ -162,7 +164,7 @@ function MyInfoClub() {
                                                                     />
                                                                 ))}
                                                             </div>
-                                                            <div className='flex justify-between align-center mt-[48px] mb-[25px]'>
+                                                            <div className='mt-[39px] flex flex-col justify-be8px] mb-[25px]'>
                                                                 <div className="text-[24px]">{nickname ? `${nickname}님의 참여중인 일상속` : null}</div>
                                                                 {/* <div className='text-[20px] '> 총 {clubsInParticipatingInfo.length}개</div> */}
                                                             </div>
@@ -196,20 +198,20 @@ function MyInfoClub() {
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
                                                     // className="border-black inset-0"
                                                     >
-                                                        <div className="text-[32px] mt-[53px] flex flex-col justify-between align-center w-full">
-                                                            <div className='flex justify-between align-center'>
+                                                        <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                            <div className='flex justify-between align-center mb-[25px]'>
                                                                 <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 하루속` : null}</div>
                                                                 {/* <div className='text-[20px]'>총 0개</div> */}
                                                             </div>
                                                         </div>
-                                                        <div className='flex flex-col items-center justify-center w-[1200px]'>
+                                                        <div className='flex flex-col items-center justify-center w-[748px]'>
                                                             <p className='text-[20px] mt-[109px] mb-[109px]'>운영중인 하루가 없어요.</p>
                                                         </div>
                                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
                                                             <div className="text-[24px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
                                                             {/* <div className='text-[20px]'> 총 {oneDaysInParticipatingInfo.length}개</div> */}
                                                         </div>
-                                                        <div className='flex flex-col items-center justify-center w-[1200px]'>
+                                                        <div className='flex flex-col items-center justify-center w-[748px]'>
                                                             <p className='text-[20px] mt-[109px]'>참여중인 하루가 없어요.</p>
                                                             <p className='text-[20px] mt-[5px] mb-[18px]'>하루를 즐기러 가볼까요?</p>
                                                             <button onClick={goOneday} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#fff] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
@@ -247,7 +249,7 @@ function MyInfoClub() {
                                                                     );
                                                                 })}
                                                             </div>
-                                                            <div className='flex justify-between align-center mt-[48px] text-[25px]'>
+                                                            <div className='mt-[39px] flex flex-col justify-be8px] mb-[25px]'>
                                                                 <div className="text-[24px] ">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
                                                                 {/* <div className='text-[20px] '> 총 {oneDaysInParticipatingInfo.length}개</div> */}
                                                             </div>

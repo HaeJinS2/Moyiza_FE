@@ -31,12 +31,12 @@ function RecommendCard({
           </div>
           <div className=" flex-col flex items-center justify-centeroverflow-hidden rounded-xl">
             <img
-              className="aspect-square rounded-2xl w-[219px] h-[219px] object-fill"
-              src={thumbnail}
+              className="aspect-square rounded-2xl w-[219px] h-[219px] object-cover"
+              src={thumbnail ? thumbnail : `${process.env.PUBLIC_URL}/images/favicon.png`}
               alt="clubThumbnail"
             />
 
-            <div className="w-[219px] text-xl font-semibold">{title}</div>
+            <div className="w-[219px] text-[1rem] font-semibold">{title.length >= 12 ? title.slice(0,17) + "..." : title}</div>
             <div className="w-[219px] text-sm">
               {content.length >= 18 ? content.slice(0, 18) + "..." : content}
             </div>
@@ -60,15 +60,15 @@ function RecommendCard({
               })}
             </div>
           </div>
-          <div className="aspect-square flex-col flex w-full h-full items-center justify-center relative overflow-hidden rounded-xl">
+          <div className=" flex-col flex items-center justify-centeroverflow-hidden rounded-xl">
             <img
-              className="rounded-2xl w-[219px] h-[219px] object-cover"
-              src={thumbnail}
+              className="rounded-2xl w-[219px] h-[219px] aspect-square object-cover "
+              src={thumbnail ? thumbnail : `${process.env.PUBLIC_URL}/images/favicon.png`}
               alt="clubThumbnail"
             />
 
-            <div className="w-[219px] text-xl font-semibold">{title}</div>
-            <div className="w-[219px] text-sm">{content}</div>
+            <div className="w-[219px] text-xl font-semibold">{title.length >= 12 ? title.slice(0,17) + "..." : title}</div>
+            <div className="w-[219px] text-sm">{content.length >= 18 ? content.slice(0, 18) + "..." : content}</div>
             <div className="w-[219px] text-neutral-400 text-sm">
               {nowMemberCount} / {maxGroupSize}
             </div>

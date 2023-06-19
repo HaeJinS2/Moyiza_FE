@@ -33,10 +33,9 @@ function ClubCard({
   let progressDirection = progressEventPage > progressPrev ? 1 : -1;
 
   const navigate = useNavigate();
-  console.log("imageArr", imageArr)
 
   useEffect(() => {
-    setImageArr([...imageList, "thumbnail1", "thumbnail2"])
+    setImageArr(imageList?.length > 0 ? [...imageList] : [`${process.env.PUBLIC_URL}/images/favicon.png`]);
   },[imageList])
 
   const likeClubBtn = (e) => {
@@ -44,13 +43,11 @@ function ClubCard({
       postAPI(`/club/${id}/like`, {}).then((res) => {
         // swal("포스트!")
         setChecked(e);
-        console.log(res)
       }).catch((err) => console.log(err))
     } else {
       deleteAPI(`/club/${id}/like`, {}).then((res) => {
         // swal("딜리트!")
         setChecked(e);
-        console.log(res)
       }).catch((err) => console.log(err))
     }
   }
@@ -60,13 +57,11 @@ function ClubCard({
       postAPI(`/oneday/${id}/like`, {}).then((res) => {
         // swal("포스트!")
         setChecked(e);
-        console.log(res)
       }).catch((err) => console.log(err))
     } else {
       deleteAPI(`/oneday/${id}/like`, {}).then((res) => {
         // swal("딜리트!")
         setChecked(e);
-        console.log(res)
       }).catch((err) => console.log(err))
     }
   }
@@ -180,9 +175,9 @@ function ClubCard({
               <div className="flex h-full justify-between flex-col pr-6">
                 <div>
                   <div className="w-full text-2xl font-semibold">
-                    {title}
+                    {title.length > 12 ? title.slice(0,12) + "..." : title}
                   </div>
-                  <div className="text-sm">{content}</div>
+                  <div className="text-sm">{content.length > 150? content.slice(0,150) + "...": content }</div>
                 </div>
                 <div className="flex justify-between">
                   <div></div>
@@ -326,9 +321,9 @@ function ClubCard({
               <div className="flex h-full justify-between flex-col pr-6">
                 <div>
                   <div className="w-full text-2xl font-semibold">
-                    {title}
+                  {title.length > 12 ? title.slice(0,12) + "..." : title}
                   </div>
-                  <div className="text-sm">{content}</div>
+                  <div className="text-sm">{content.length > 150? content.slice(0,150) + "...": content }</div>
                 </div>
                 <div className="flex justify-between">
                   <div></div>

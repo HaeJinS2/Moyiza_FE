@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { getAPI, postAPI, deleteAPI } from "../axios";
@@ -16,8 +16,10 @@ function OnedayDetail() {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  // eslint-disable-next-line
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
   const isLoggedIn = useRecoilValue(isLoggedInState);
+  // eslint-disable-next-line
   const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
 
   const [onEdit, setOnEdit] = useState(false);
@@ -49,24 +51,32 @@ function OnedayDetail() {
   let similarOnedayPrev = similarOnedayTuple[0];
   let similarOnedayDirection = similarOnedayPage > similarOnedayPrev ? 1 : -1;
 
+    const [onedayDetail, setOnedayDetail] = useState({});
+
   // 원데이 상세조회
-  const {
-    isLoading,
-    isError,
-    data: onedayDetail,
-  } = useQuery("getOnedayDetail", () => getAPI(`/oneday/${id}`), {
-    refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
-  });
+  // const {
+  //   isLoading,
+  //   isError,
+  //   data: onedayDetail,
+  // } = useQuery("getOnedayDetail", () => getAPI(`/oneday/${id}`), {
+  //   refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
+  // });
 
   useEffect(() => {
     queryClient.refetchQueries("getOnedayDetail");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMember]);
 
+  useEffect (() => {
+    getAPI(`/oneday/${id}`).then((res) => {
+      setOnedayDetail(res)
+    }).catch((err) => console.log(err))
+  }, [id])
+
   // isOwner의 상태 관리
   // useEffect(() => {
   //   if (onedayDetail && onedayDetail.data) {
-  //     if (userNickname.userNickname === onedayDetail.data.ownerNickname) {
+  //     if (userNickname.userNickname === onedayDetail.data?.ownerNickname) {
   //       setIsOwner(true);
   //     } else {
   //       setIsOwner(false);
@@ -82,7 +92,7 @@ function OnedayDetail() {
 
   const getOnedayMembers = () => {
     getAPI(`/oneday/${id}`).then((res) => {
-      const onedayMember = res.data.memberResponseList;
+      const onedayMember = res.data?.memberResponseList;
       setOnedayMember(onedayMember);
       setOnedayMemberNicknameArr(
         onedayMember?.map((member) => member.userNickName)
@@ -96,24 +106,21 @@ function OnedayDetail() {
       }
     });
   };
-  console.log(onedayMember,reloadChatState);
-  console.log(isMember);
-  console.log("원데이", onedayDetail?.data);
+
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  if (isLoading) {
-    <div>로딩중 입니다</div>;
-  } else if (isError) {
-    <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
-  }
+  // if (isLoading) {
+  //   <div>로딩중 입니다</div>;
+  // } else if (isError) {
+  //   <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
+  // }
 
-  console.log(onedayMemberNicknameArr);
 
-  const oneDayStartTime = new Date(onedayDetail?.data.oneDayStartTime);
+  const oneDayStartTime = new Date(onedayDetail?.data?.oneDayStartTime);
   let month = oneDayStartTime.getMonth() + 1;
   let date = oneDayStartTime.getDate();
   let hours = oneDayStartTime.getHours();
@@ -122,7 +129,6 @@ function OnedayDetail() {
   const handleDeleteOneday = () => {
     deleteAPI(`/oneday/${id}`)
       .then((res) => {
-        console.log(res.data.message);
         swal("하루속 삭제 완료");
       })
       .catch((err) => {
@@ -133,8 +139,8 @@ function OnedayDetail() {
   const handleJoinOneday = () => {
     if (isLoggedIn) {
       if (
-        onedayDetail.data.oneDayGroupSize ===
-        onedayDetail.data.oneDayAttendantListSize
+        onedayDetail.data?.oneDayGroupSize ===
+        onedayDetail.data?.oneDayAttendantListSize
       ) {
         swal("더이상 가입할 수 없습니다!");
       } else {
@@ -161,7 +167,6 @@ function OnedayDetail() {
       .then((res) => {
         setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
-          console.log(res.data.message);
           setReloadChatState(true)
           swal("모임에서 탈퇴했습니다!");
         });
@@ -174,9 +179,9 @@ function OnedayDetail() {
   useEffect(() => {
     const fetchFilteredOnedayList = async () => {
       if (!onedayDetail) return;
-      getAPI(`/oneday/search?q=&category=${onedayDetail.data.category}`)
+      getAPI(`/oneday/search?q=&category=${onedayDetail.data?.category}`)
         .then((res) => {
-          const filteredContent = res.data.content.filter(
+          const filteredContent = res.data?.content.filter(
             (oneday) => oneday.onedayId !== parseInt(id)
           );
           setFilteredOnedayList(filteredContent);
@@ -187,7 +192,6 @@ function OnedayDetail() {
     fetchFilteredOnedayList();
   }, [onedayDetail, id]);
 
-  console.log(filteredOnedayList);
 
   return (
     <>
@@ -203,7 +207,7 @@ function OnedayDetail() {
                 />
               </button>
               <div className="font-bold text-[2rem]">
-                {onedayDetail?.data.oneDayTitle}
+                {onedayDetail?.data?.oneDayTitle}
               </div>
               {isOwner ? (
                 onEdit ? (
@@ -229,12 +233,12 @@ function OnedayDetail() {
               <div className="flex justify-center">
                 <img
                   className="rounded-xl w-[458px] h-[305px] object-contain aspect-square"
-                  src={onedayDetail?.data.imageList[0]}
+                  src={onedayDetail?.data?.imageList[0]}
                   alt="club_main"
                 />
               </div>
               <div>
-                <div className="w-[548px] h-[294px] mt-[16px]">
+                <div className="w-[548px] min-h-[294px] h-auto mt-[16px]">
                   <div className="flex justify-center mb-[20px]">
                     <div className="flex flex-col justify-center items-center w-[91px] h-[59px]">
                       <div>
@@ -288,7 +292,7 @@ function OnedayDetail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {onedayDetail?.data.genderPolicy}
+                        {onedayDetail?.data?.genderPolicy}
                       </div>
                     </div>
                     <div className="flex flex-col justify-center border-x-2 w-[91px] h-[59px]">
@@ -296,7 +300,7 @@ function OnedayDetail() {
                         Age
                       </div>
                       <div className="flex justify-center text-[1rem] w-full">
-                        {onedayDetail?.data.agePolicy}세
+                        {onedayDetail?.data?.agePolicy}세
                       </div>
                     </div>
                     <div className="flex flex-col  justify-center items-center w-[91px] h-[59px]">
@@ -308,13 +312,13 @@ function OnedayDetail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {onedayDetail?.data.oneDayAttendantListSize}/
-                        {onedayDetail?.data.oneDayGroupSize}
+                        {onedayDetail?.data?.oneDayAttendantListSize}/
+                        {onedayDetail?.data?.oneDayGroupSize}
                       </div>
                     </div>
                   </div>
                   <div className="flex justify-center mb-[20px] gap-4">
-                    {onedayDetail?.data.tagString.map((tag) => {
+                    {onedayDetail?.data?.tagString.map((tag) => {
                       return (
                         <div className="w-[97.8px] h-[32.6px] rounded-full border-2 border-[#0AB159] text-[#0AB159] text-[1.125rem] justify-center flex items-center pt-[3px]">
                           {tag}
@@ -322,8 +326,8 @@ function OnedayDetail() {
                       );
                     })}
                   </div>
-                  <div className="w-[543px] h-[162px] text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 relative">
-                    {onedayDetail?.data.oneDayContent}
+                  <div className="w-[543px] min-h-[162px] h-auto text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 pb-2 relative">
+                    {onedayDetail?.data?.oneDayContent}
                   </div>
                 </div>
               </div>
@@ -414,7 +418,7 @@ function OnedayDetail() {
                         .map((member, i) => {
                           return (
                             <div 
-                            onClick={()=> navigate(`/mypage/${member.userId}`)}
+                            onClick={()=> navigate(`user/mypage/${member.userId}`)}
                             className="cursor-pointer flex gap-5 items-center">
                               <img
                                 className="w-[80px] h-[80px] rounded-full"

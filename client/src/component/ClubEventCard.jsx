@@ -22,8 +22,7 @@ function ClubEventCard({
   };
   const month = startTime.split("T")[0].split("-")[1];
   const date = startTime.split("T")[0].split("-")[2];
-  console.log(month, date);
-  console.log(clubId, eventId);
+
   return (
     <div className="flex">
       <div

@@ -34,7 +34,6 @@ function CreateEventModal({ id, getClubEventLists }) {
   // const { id } = useParams();
 
   useEffect(() => {
-    console.log("userLat", userLat, "userLng", userLng, userAddress);
   }, [userLat, userLng, userAddress]);
 
   useEffect(() => {
@@ -109,7 +108,6 @@ function CreateEventModal({ id, getClubEventLists }) {
           .then((response) => {
             let address = response.data.documents[0].address;
             setUserAddress(address.address_name);
-            console.log(response.data.documents[0]);
           })
           .catch((error) => {
             console.log(error);
@@ -182,7 +180,6 @@ function CreateEventModal({ id, getClubEventLists }) {
       }
     )
       .then((response) => {
-        console.log(response);
         getClubEventLists();
         closeModal();
       })
@@ -195,7 +192,6 @@ function CreateEventModal({ id, getClubEventLists }) {
     setDateTime(date);
     const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm");
     setDateTimeString(formattedDate);
-    console.log(dateTimeString);
   };
 
   const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
@@ -221,7 +217,6 @@ function CreateEventModal({ id, getClubEventLists }) {
 
     try {
       const resizingFile = await imageCompression(file, options);
-      console.log("Compressed file:", resizingFile);
       setSelectedFile(resizingFile);
       let reader = new FileReader();
 
@@ -261,7 +256,7 @@ function CreateEventModal({ id, getClubEventLists }) {
   return (
     <div>
       <button
-        className="bg-orange-400 text-white flex justify-center pt-[7px] items-center w-[63.42px] h-[60px] rounded-full text-5xl "
+        className="bg-orange-400 text-white flex justify-center items-center w-[63.42px] h-[60px] rounded-full text-5xl "
         onClick={openModal}
       >
         +

@@ -92,7 +92,6 @@ function SignUp() {
 	const onChangeImage = (e) => {
 
 		if (e.target.files.length > 0) {
-			console.log(e.target.files[0]);
 			setProfileImage(e.target.files[0]);
 			let reader = new FileReader();
 			let file = imgRef.current.files[0];
@@ -112,7 +111,7 @@ function SignUp() {
 	// 패스워드 유효성 검사
 	const isPw = pw => {
 		const pwRegex =
-			/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+			/^(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
 		return pwRegex.test(pw);
 	};
 	const isPwValid = isPw(pw);
@@ -213,12 +212,12 @@ function SignUp() {
 			formData.append('imageUrl', uploadRes.data);
 
 			const originUrl = `${process.env.REACT_APP_SERVER_URL}/signup`;
+			// eslint-disable-next-line
 			const signupResponse = await axios.post(originUrl, formData, {
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			});
-      console.log(signupResponse);
 			swal('회원가입 성공!');
 			goLogin();
 
@@ -475,7 +474,7 @@ function SignUp() {
 									className="inputCheck text-xs mb-5"
 									style={{ display: pw.length > 0 ? 'block' : 'none', color: '#FF7F1E' }}
 								>
-									* 비밀번호는 대소문자, 숫자, 특수문자 포함 8자리 이상 적어주세요!
+									* 비밀번호는 영소문자, 숫자 포함 8자리 이상 적어주세요!
 								</p>
 							)}
 						</div>

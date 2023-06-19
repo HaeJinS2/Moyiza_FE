@@ -19,9 +19,11 @@ import swal from "sweetalert";
 function Detail() {
   const queryClient = useQueryClient();
   const { id } = useParams();
+  // eslint-disable-next-line
   const [clubMemberNicknameArr, setClubMemberNicknameArr] = useState([]);
   const [eventlists, setEventLists] = useState([]);
   const [onEdit, setOnEdit] = useState(false);
+  // eslint-disable-next-line
   const [latestClub, setLatestClub] = useRecoilState(latestClubState);
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const navigate = useNavigate();
@@ -30,6 +32,7 @@ function Detail() {
   const [isOwner, setIsOwner] = useState(false);
   const [eventArr, setEventArr] = useState([]);
   const [eventReview, setEventReview] = useState([]);
+  // eslint-disable-next-line
   const [reloadChatState, setReloadChatState] =
     useRecoilState(reloadChatStates);
 
@@ -93,7 +96,6 @@ function Detail() {
   } = useQuery("getDetailClub", () => getAPI(`/club/${id}`), {
     onSuccess: (res) => {
       setClubRule(res.data.clubRule);
-      return console.log("ㅁㄷㅈ럊ㄷㄹㅁㅈㄷㄹ", res);
     },
     refetchOnWindowFocus: false, // refetchOnWindowFocus 옵션을 false로 설정
   });
@@ -142,7 +144,6 @@ function Detail() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(latestClub);
 
   useEffect(() => {
     eventArr.map((item) =>
@@ -203,7 +204,6 @@ function Detail() {
   const handleDeleteClub = () => {
     deleteAPI(`/club/${id}/delete`)
       .then((res) => {
-        console.log(res.data.message);
         navigate("/club");
         swal("클럽 삭제 완료");
       })
@@ -214,11 +214,9 @@ function Detail() {
   const getClubEventLists = () => {
     getAPI(`/club/${id}/eventlist`)
       .then((res) => {
-        console.log("res", res);
         setEventLists(res.data);
 
         let arr = [...res.data];
-        console.log("res.data", arr);
         let tmp = arr?.map((item) => item.id);
         setEventArr(tmp);
       })
@@ -227,11 +225,7 @@ function Detail() {
         swal("목록을 가져오는 도중 문제가 발생했습니다.");
       });
   };
-  console.log(isMember);
-  console.log(eventlists);
-  console.log(clubDetail?.data, reloadChatState);
 
-  console.log("res.data!", eventReview);
 
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
@@ -269,17 +263,14 @@ function Detail() {
     today.setHours(0, 0, 0, 0);
     return eventEndTime <= today;
   });
-  console.log(eventlists);
 
   // 멤버 리스트
   const memberList = clubDetail?.data.memberList;
   const reviewList = eventReview;
   const handleJoinEvent = (clubId, eventId, onJoinSuccess) => {
     postAPI(`/club/${clubId}/event/join/${eventId}`, {}).then((res) => {
-      console.log(res);
       onJoinSuccess && onJoinSuccess();
       getAPI(`/club/${id}/eventlist`).then((res) => {
-        console.log(res);
         setEventLists(res.data);
         swal("이벤트 참가 신청이 완료되었습니다!");
       });
@@ -288,10 +279,8 @@ function Detail() {
 
   const handleLeaveEvent = (clubId, eventId, onLeaveSuccess) => {
     deleteAPI(`/club/${clubId}/event/join/${eventId}`).then((res) => {
-      console.log(res);
       onLeaveSuccess && onLeaveSuccess();
       getAPI(`/club/${id}/eventlist`).then((res) => {
-        console.log(res);
         setEventLists(res.data);
         swal("이벤트 참가 신청이 취소됐습니다!");
       });
@@ -306,9 +295,7 @@ function Detail() {
       })
       .catch((error) => swal("이벤트 삭제 요청이 거절됐습니다."));
   };
-  console.log(clubMemberNicknameArr);
-  console.log(clubDetail);
-  console.log("멤버리스트", memberList);
+
 
   // 사진 추가시
   const handleImageChange = async (e) => {
@@ -337,7 +324,6 @@ function Detail() {
     const newClubImageList = [...prevClubImages];
     newClubImageList.splice(index, 1);
     setPrevClubImages(newClubImageList);
-    console.log("이미지삭제", newClubImageList);
   };
 
   // 이미지 변경사항 서버에 보내기
@@ -349,7 +335,6 @@ function Detail() {
         formData.append("image", file);
       }
     });
-    console.log("이거", deletedImages);
     const blob = new Blob([JSON.stringify(deleteImg)], {
       type: "application/json",
     });
@@ -366,7 +351,6 @@ function Detail() {
     })
       .then((res) => {
         queryClient.invalidateQueries("getDetailClub");
-        console.log(res);
       })
       .catch((error) => console.log(error));
     setDeletedImages([]);
@@ -380,7 +364,6 @@ function Detail() {
   const handleSubmitClubRule = () => {
     putAPI(`/club/${id}/rule`, { clubRule: clubRule }).then((res) => {
       queryClient.invalidateQueries("getDetailClub");
-      console.log(res);
     });
   };
 
@@ -429,7 +412,7 @@ function Detail() {
                 />
               </div>
               <div>
-                <div className="w-[543px] h-[294px] mt-[16px]">
+                <div className="w-[543px] min-h-[294px] h-auto mt-[16px]">
                   <div className="flex justify-center mb-[20px]">
                     <div className="flex flex-col justify-center items-center w-[181px]">
                       <div>
@@ -472,7 +455,7 @@ function Detail() {
                       );
                     })}
                   </div>
-                  <div className="w-[543px] h-[162px] text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 relative">
+                  <div className="w-[543px] min-h-[162px] h-auto text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 pb-2 relative">
                     {clubDetail?.data.clubContent}
                   </div>
                 </div>
@@ -719,7 +702,7 @@ function Detail() {
                             return (
                               <div
                                 onClick={() =>
-                                  navigate(`/mypage/${member.userId}`)
+                                  navigate(`/user/mypage/${member.userId}`)
                                 }
                                 className="cursor-pointer w-[114px] h-[60px] flex gap-2 font-semibold items-center"
                               >

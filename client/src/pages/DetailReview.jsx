@@ -21,7 +21,6 @@ function DetailReview() {
     useEffect(() => {
         getAPI(`/review/${state.id}`).then((res) => {
             setData(res.data)
-            console.log("res.data", res.data)
         }).catch((err) => {
             console.log(err)
         })
@@ -33,10 +32,8 @@ function DetailReview() {
             postAPI(`/review/${state.id}/like`, {}).then((res) => {
                 // swal("포스트!")
                 setChecked(e);
-                console.log(res)
                 getAPI(`/review/${state.id}`).then((res) => {
                     setData(res.data)
-                    console.log("res.data", res.data)
                 }).catch((err) => {
                     console.log(err)
                 })
@@ -45,10 +42,8 @@ function DetailReview() {
             deleteAPI(`/review/${state.id}/like`, {}).then((res) => {
                 // swal("딜리트!")
                 setChecked(e);
-                console.log(res)
                 getAPI(`/review/${state.id}`).then((res) => {
                     setData(res.data)
-                    console.log("res.data", res.data)
                 }).catch((err) => {
                     console.log(err)
                 })

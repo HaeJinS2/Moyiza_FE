@@ -42,7 +42,7 @@ function Club() {
   const [filterList, setFilterList] = useState({});
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [activatedFilterCategory, setActivatedFilterCategory] = useState("");
-
+  // eslint-disable-next-line
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   const [categories, setCategories] = useState(null);
@@ -50,8 +50,6 @@ function Club() {
   const [popularClubList, setPopularClubList] = useState([]);
   const divRef = useRef(null);
   const navigate = useNavigate();
-
-  console.log(totalPages);
 
   //   const [club1, categories1] = useQueries(
   //     [
@@ -87,6 +85,28 @@ function Club() {
     }
   }, []);
 
+  const filterRef = useRef();
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (
+        filterIsOpen &&
+        filterRef.current &&
+        !filterRef.current.contains(e.target)
+      ) {
+        setFilterIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", checkIfClickedOutside);
+    setSelectedTags([]);
+    setActivatedFilterCategory("");
+    setFilteredClubList(club);
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [filterIsOpen, club]);
+
   // useEffect(() => {
   //   setPageChanged(true);
   // }, []);  // 컴포넌트가 마운트될 때만 실행
@@ -117,7 +137,6 @@ function Club() {
     // 클럽 카테고리를 가져오는 코드
     getAPI(`/enums`)
       .then((res) => {
-        console.log("카테고리태그", res);
         const categoryAndTagList = res.data.categoryAndTagList;
         const newCategorylist = ["전체", ...res.data.categoryList];
         setCategories(newCategorylist);
@@ -201,7 +220,6 @@ function Club() {
   const getPupularClub = () => {
     getAPI("/club/popular").then((res) => {
       setPopularClubList(res.data);
-      console.log("인기 클럽", res);
     });
   };
 
@@ -212,8 +230,7 @@ function Club() {
   if (isLoading) {
     return <Loading />;
   }
-  console.log(club);
-  console.log("이거뭐야", filterList);
+
   return (
     <>
       <div ref={divRef}>
@@ -247,7 +264,7 @@ function Club() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="text-[2.625rem] font-semibold gap-4 flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="text-[2.625rem] font-semibold  flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/club/club_main.png)`,
                 backgroundSize: "cover",
@@ -265,7 +282,7 @@ function Club() {
             <div className="max-w-[1140px] mx-auto">
               <div className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">일상속 인기주제</p>
-                <button className="relative">
+                <button ref={filterRef} className="relative">
                   <img
                     onClick={() => toggleFilter()}
                     src={`${process.env.PUBLIC_URL}/images/filter.svg`}
@@ -273,6 +290,22 @@ function Club() {
                   />
                   {filterIsOpen && (
                     <div className="px-2 py-4 absolute flex flex-col top-[43px] right-[2px] bg-white w-[800px] h-auto z-30 shadow-cms rounded-xl">
+                      <div className="w-full flex justify-between px-6 pb-2">
+                        <div></div>
+                        <div
+                          onClick={() => {
+                            setSelectedTags([]);
+                            setActivatedFilterCategory("");
+                            setFilteredClubList(club);
+                          }}
+                        >
+                          <img
+                            alt="reset_filter"
+                            lassName="w-[24px] h-[24px]"
+                            src={`${process.env.PUBLIC_URL}/images/filter_reset.svg`}
+                          />
+                        </div>
+                      </div>
                       <div className="flex justify-between mb-2">
                         {Object.keys(filterList).map((category) => {
                           return (

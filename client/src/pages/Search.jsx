@@ -16,7 +16,6 @@ function Search() {
   const searchList = useRecoilValue(searchState);
   const [activePageTab, setActivePageTab] = useState("");
   const navigate = useNavigate();
-  console.log("이거뭐야", searchList);
   return (
     <>
       <Container>
@@ -35,7 +34,7 @@ function Search() {
               >
                 {activePageTab === tab && (
                   <motion.div
-                    layoutId="active-pill-1"
+                    layoutId="active-pㅇㅇㅇㅇㅇㅇㅇㅇㅇill-1"
                     transition={{ type: "spring", duration: 0.5 }}
                     className="border-b-[4px] border-black absolute inset-0"
                   />
@@ -77,6 +76,7 @@ function Search() {
                               id={item.club_id}
                               maxGroupSize={item.maxGroupSize}
                               nowMemberCount={item.nowMemberCount}
+                              imageList={item.imageUrlList}
                             />
                           </Fade>
                         );
@@ -96,6 +96,7 @@ function Search() {
                               eventId={item.id}
                               maxGroupSize={item.maxGroupSize}
                               nowMemberCount={item.nowMemberCount}
+                              imageList={item.imageUrlList}
                             />
                           </Fade>
                         );

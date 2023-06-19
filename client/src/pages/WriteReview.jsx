@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import imageCompression from 'browser-image-compression';
 import { filePostAPI } from '../axios';
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import swal from 'sweetalert';
 
 function WriteReview() {
 
@@ -10,13 +11,16 @@ function WriteReview() {
     const [selectedFile1, setSelectedFile1] = useState('');
     const [selectedFile2, setSelectedFile2] = useState('');
     const [selectedFile3, setSelectedFile3] = useState('');
+    // eslint-disable-next-line
     const [selectedFileName1, setSelectedFileName1] = useState("");
+    // eslint-disable-next-line
     const [selectedFileName2, setSelectedFileName2] = useState("");
+    // eslint-disable-next-line
     const [selectedFileName3, setSelectedFileName3] = useState("");
     // eslint-disable-next-line
     const { state } = useLocation();
+    const navigate = useNavigate();
 
-    console.log(selectedFileName1, selectedFileName2, selectedFileName3)
 
     const handleFileChange1 = async (event) => {
         const file = event.target.files[0];
@@ -31,7 +35,6 @@ function WriteReview() {
 
         try {
             const resizingFile = await imageCompression(file, options);
-            console.log('Compressed file:', resizingFile);
             setSelectedFile1(resizingFile);
             let reader = new FileReader();
 
@@ -60,7 +63,6 @@ function WriteReview() {
 
         try {
             const resizingFile = await imageCompression(file, options);
-            console.log('Compressed file:', resizingFile);
             setSelectedFile2(resizingFile);
             let reader = new FileReader();
 
@@ -89,7 +91,6 @@ function WriteReview() {
 
         try {
             const resizingFile = await imageCompression(file, options);
-            console.log('Compressed file:', resizingFile);
             setSelectedFile3(resizingFile);
             let reader = new FileReader();
 
@@ -107,8 +108,8 @@ function WriteReview() {
 
     const handleSubmit = () => {
         // reviewType 및 identifier은 받은 값으로 넣어야함
-        // const data = { reviewType: state.reviewType, identifier: state.id, title, textContent: content }
-        const data = { reviewType: "EVENT", identifier: 3, title, textContent: content }
+        const data = { reviewType: state.reviewType, identifier: state.id, title, textContent: content }
+        // const data = { reviewType: "EVENT", identifier: 3, title, textContent: content }
         const imgArr = [selectedFile1, selectedFile2, selectedFile3]
         const formData = new FormData();
         // console.log("여기여기", state.reviewType,"state.reviewType",state.id,"state.id")
@@ -134,7 +135,16 @@ function WriteReview() {
                 },
             ],
         }).then((response) => {
-            console.log(response)
+            setTitle('')
+            setContent('')
+            setSelectedFile1('')
+            setSelectedFile2('')
+            setSelectedFile3('')
+            setSelectedFileName1('')
+            setSelectedFileName2('')
+            setSelectedFileName3('')
+            swal("작성이 완료되었습니다!")
+            navigate(-1)
         }).catch((error) => {
             console.error(error)
         })

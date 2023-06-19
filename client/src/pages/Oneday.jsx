@@ -515,7 +515,7 @@ function Oneday() {
                           title={item.oneDayTitle}
                           content={item.oneDayContent}
                           tag={item.oneDayTag}
-                          thumbnail={item.oneDayImage}
+                          thumbnail={item.oneDayImageUrlList[0]}
                           id={item.oneDayId}
                           maxGroupSize={item.oneDayGroupSize}
                           nowMemberCount={item.attendantsNum}

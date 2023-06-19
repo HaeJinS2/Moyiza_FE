@@ -117,7 +117,7 @@ export const Step3 = ({ nextStep, prevStep, progress, handleTitleChange, titleIn
                                 <div className="flex justify-start items-start w-full">
                                     <span className="text-[30px] text-left">3. 원하는 일상속 이름을 작성해주세요.</span>
                                 </div>
-                                <input className='shadow-cms w-[788px] h-[60px] rounded-3xl mb-4 border-2 px-2'
+                                <input className='shadow-cms w-[788px] h-[60px] rounded-3xl mb-4 border-2 px-6'
                                     placeholder="이름을 입력하세요."
                                     type="text" value={titleInput} onChange={handleTitleChange} />
                                 <div className="flex items-center justify-center gap-x-4">
@@ -169,7 +169,7 @@ export const Step4 = ({ nextStep, prevStep, progress, preview, handleFileChange,
                                     <span className="text-[20px] text-left">2) 일상속 소개 내용을 입력하세요.</span>
                                 </div>
                                 <textarea
-                                    className='shadow-cms w-[954px] h-[192px] rounded-3xl mb-4 border-2 p-2'
+                                    className='shadow-cms w-[954px] h-[192px] rounded-3xl mb-4 border-2 p-6'
                                     placeholder="우리 일상을 소개해주세요."
                                     value={contentInput}
                                     onChange={handleContentChange}

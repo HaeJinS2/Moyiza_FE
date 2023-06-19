@@ -95,7 +95,7 @@ function Navbar({ clientRef }) {
   const logoutHandler = () => {
     setIsLoggedIn(false);
     setIsLoggedIn2(false);
-
+    setRoomIdState([])
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
     navigate("/");

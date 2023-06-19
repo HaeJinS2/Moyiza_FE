@@ -52,7 +52,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="border-[1px] flex border-orange-500 w-[480px] h-[50px] items-center rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
+    <div className="border-[1px] flex border-orange-500 w-[480px] h-[40px] items-center rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
       <div className="w-full flex justify-between pr-6 pl-6 font-sans">
         <input
           onChange={handleSearchInput}
@@ -62,7 +62,7 @@ const SearchBar = () => {
           className="w-full focus:outline-none"
         />
         <div
-          className="p-2 rounded-full text-orange-500"
+          className=" rounded-full text-orange-500"
           onClick={handleSearch}
         >
           <BiSearch size={24} />

@@ -205,7 +205,7 @@ function UserProfile({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 모달 열기
+//   모달 열기
 //   const openModal = () => {
 //     setIsModalOpen(true);
 //   };
@@ -232,13 +232,13 @@ function UserProfile({
               />
             )}
             {/* 작은 원 */}
-            {/* <div className='absolute '> */}
+            <div className='absolute '>
             {/* <div
              className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute top-20 left-40"
               onClick={openModal}
-            >
-               <img src={Frame} alt=""></img>
-           </div> */}
+            > */}
+               {/* <img src={Frame} alt=""></img> */}
+           {/* </div> */}
              </div> 
              <div>
               <div className="name mt-[10px] text-[28px] flex items-center justify-center">
@@ -426,7 +426,7 @@ function UserProfile({
               </div>
             </div>
           </Modal>
-        {/* </div> */}
+        </div>
       </form>
     </>
   );

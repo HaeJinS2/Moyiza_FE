@@ -48,6 +48,13 @@ function Oneday() {
   const [filterList, setFilterList] = useState({});
   const [popularOneday, setPupularOneday] = useState([]);
   const [imminentOneday, setImminentOneday] = useState([]);
+  const myRef = useRef(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      myRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, 0);
+  }, []);
   // const [queryResults1, queryResults2] = useQueries(
   //   [
   //     {
@@ -335,7 +342,7 @@ function Oneday() {
         <div className="flex flex-col justify-center items-center">
           <section className="h-auto min-w-[1280px] shadow-cms bg-[#F9FFF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
-              <div className="flex justify-between items-center pt-16 pb-2 pr-1">
+              <div ref={myRef} className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">최신 하루속 이벤트</p>
                 <button ref={filterRef} className="relative">
                   <img
@@ -494,7 +501,7 @@ function Oneday() {
                       onClick={handleMore}
                       className="bg-[#0BB159] text-white px-7 py-2 rounded-full"
                     >
-                      더보기
+                      더 보기
                     </button>
                   </div>
                 )}
@@ -515,7 +522,7 @@ function Oneday() {
                           title={item.oneDayTitle}
                           content={item.oneDayContent}
                           tag={item.oneDayTag}
-                          thumbnail={item.oneDayImage}
+                          thumbnail={item.oneDayImageUrlList[0]}
                           id={item.oneDayId}
                           maxGroupSize={item.oneDayGroupSize}
                           nowMemberCount={item.attendantsNum}

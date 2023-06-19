@@ -49,35 +49,15 @@ function Club() {
   const [filteredClubList, setFilteredClubList] = useState([]);
   const [popularClubList, setPopularClubList] = useState([]);
   const divRef = useRef(null);
-  const navigate = useNavigate();
+  const myRef = useRef(null);
 
-  //   const [club1, categories1] = useQueries(
-  //     [
-  //       {
-  //         queryKey: "clubs",
-  //         queryFn: () => getAPI(`/club?page=${page}&size=8&sort=createdAt,DESC`),
-  //         onSuccess: (newClubData) => {
-  //           if(page === 0) {
-  //             setFilteredClubList([...filteredClubList,...newClubData.data.content])
-  //           }
-  //           setClub((prevClubData) => [...prevClubData, ...newClubData.data.content]);
-  //           setPageChanged(false)
-  //         },
-  //         enabled: pageChanged,
-  //       },
-  //       {
-  //         queryKey: "categories",
-  //         queryFn: () => getAPI(`/enums`),
-  //         onSuccess: (categories) => {
-  //           setCategories(["전체", ...categories.data.categoryList]);
-  //         },
-  //       },
-  //     ],
-  //     {
-  //       refetchOnWindowFocus: false,
-  //     }
-  //   );
-  // console.log(club1.data,categories)
+  useEffect(() => {
+    setTimeout(() => {
+      myRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, 0);
+  }, []);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (divRef.current) {
@@ -280,8 +260,8 @@ function Club() {
         <div className="flex flex-col justify-center items-center">
           <section className="h-auto min-w-[1280px] shadow-cms bg-[#FFFBF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
-              <div className="flex justify-between items-center pt-16 pb-2 pr-1">
-                <p className="text-[2rem] font-bold">일상속 인기주제</p>
+              <div ref={myRef} className="flex justify-between items-center pt-16 pb-2 pr-1">
+                <p  className="text-[2rem] font-bold">일상속 인기주제</p>
                 <button ref={filterRef} className="relative">
                   <img
                     onClick={() => toggleFilter()}
@@ -438,7 +418,7 @@ function Club() {
                     onClick={handleMore}
                     className="bg-[#FF7F1D] text-white px-7 py-2 rounded-full"
                   >
-                    더보기
+                    더 보기
                   </button>
                 </div>
                 {/* )} */}

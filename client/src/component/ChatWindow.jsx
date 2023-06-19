@@ -335,7 +335,7 @@ function ChatWindow({ roomIdState, style, clientRef, subscriptionRefAlarm, roomI
                             onKeyPress={handleOnKeyPress}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            className="px-2 rounded-3xl w-[206px] h-[28px] bg-gray-200 focus:outline-none focus:ring-0"
+                            className="px-2 rounded-3xl w-[206px] h-[28px] text-[12px] bg-gray-200 focus:outline-none focus:ring-0"
                             placeholder="내용을 입력해주세요"
                         />
                         <button

@@ -95,7 +95,7 @@ function Navbar({ clientRef }) {
   const logoutHandler = () => {
     setIsLoggedIn(false);
     setIsLoggedIn2(false);
-
+    setRoomIdState([])
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
     navigate("/");
@@ -338,16 +338,17 @@ function Navbar({ clientRef }) {
                             <div className="flex flex-col ml-[30px]">
                               {/* 닉네임 */}
 
+
                               <div 
                               onClick={goMyInfo}
                               className="flex w-[230px] items-center mb-[12px] ">
                                 <img src={user.profileUrl} 
                                 alt='user_profile'
                                 className="w-[48px] h-[48px] mr-[16px] bg-black rounded-full"/>
-                                <div>{user.nickName}</div>
+                                <div>{user.nickname}</div>
                               </div>
-                              {/* 개인정보 변경 */}
-                              <div className="flex flex-row flex-start mb-[12px]">
+                              {/* 개인정보 변경
+                              <div className="flex flex-row flex-start mb-[12px]" onClick={goMyInfo}>
                                 <img
                                   className="w-[40px] h-[40px] mr-[23px]"
                                   src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}
@@ -355,7 +356,7 @@ function Navbar({ clientRef }) {
                                 />
                                 <button onClick={goMyInfo}>개인정보 변경
                                 </button>
-                              </div>
+                              </div> */}
                               {/* 로그아웃 */}
                               <div className="flex flex-row flex-start mb-[12px]">
                                 <img

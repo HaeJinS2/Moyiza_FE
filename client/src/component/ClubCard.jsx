@@ -17,7 +17,6 @@ function ClubCard({
   isLikedByUser,
   imageList,
 }) {
-
   const [checked, setChecked] = useState(false);
   // eslint-disable-next-line
   const [imageArr, setImageArr] = useState([]);
@@ -35,41 +34,52 @@ function ClubCard({
   const navigate = useNavigate();
 
   useEffect(() => {
-    setImageArr(imageList?.length > 0 ? [...imageList] : [`${process.env.PUBLIC_URL}/images/favicon.png`]);
-  },[imageList])
+    setImageArr(
+      imageList?.length > 0
+        ? [...imageList]
+        : [`${process.env.PUBLIC_URL}/images/favicon.png`]
+    );
+  }, [imageList]);
 
   const likeClubBtn = (e) => {
     if (!checked) {
-      postAPI(`/club/${id}/like`, {}).then((res) => {
-        // swal("포스트!")
-        setChecked(e);
-      }).catch((err) => console.log(err))
+      postAPI(`/club/${id}/like`, {})
+        .then((res) => {
+          // swal("포스트!")
+          setChecked(e);
+        })
+        .catch((err) => console.log(err));
     } else {
-      deleteAPI(`/club/${id}/like`, {}).then((res) => {
-        // swal("딜리트!")
-        setChecked(e);
-      }).catch((err) => console.log(err))
+      deleteAPI(`/club/${id}/like`, {})
+        .then((res) => {
+          // swal("딜리트!")
+          setChecked(e);
+        })
+        .catch((err) => console.log(err));
     }
-  }
+  };
 
   const likedOnedayBtn = (e) => {
     if (!checked) {
-      postAPI(`/oneday/${id}/like`, {}).then((res) => {
-        // swal("포스트!")
-        setChecked(e);
-      }).catch((err) => console.log(err))
+      postAPI(`/oneday/${id}/like`, {})
+        .then((res) => {
+          // swal("포스트!")
+          setChecked(e);
+        })
+        .catch((err) => console.log(err));
     } else {
-      deleteAPI(`/oneday/${id}/like`, {}).then((res) => {
-        // swal("딜리트!")
-        setChecked(e);
-      }).catch((err) => console.log(err))
+      deleteAPI(`/oneday/${id}/like`, {})
+        .then((res) => {
+          // swal("딜리트!")
+          setChecked(e);
+        })
+        .catch((err) => console.log(err));
     }
-  }
-
+  };
 
   useEffect(() => {
-    setChecked(isLikedByUser)
-  }, [isLikedByUser])
+    setChecked(isLikedByUser);
+  }, [isLikedByUser]);
 
   return (
     <>
@@ -87,7 +97,6 @@ function ClubCard({
             className="cursor-pointer flex items-center border bg-white rounded-2xl  w-[544px] h-[263px]"
           >
             <div className="flex justify-center w-[500px] h-[277px] text-black items-center overflow-hidden relative">
-
               <AnimatePresence custom={progressDirection}>
                 <motion.div
                   key={progressEventPage}
@@ -99,17 +108,19 @@ function ClubCard({
                   transition={{ duration: 0.5 }}
                   className={`h-[200px] absolute top-0 right-0 flex z-10 justify-center items-center w-full `}
                 >
-                  {imageArr?.slice(progressEventPage * 1, progressEventPage * 1 + 1).map((item) => {
-                    return (
-                      <img
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                        className='aspect-square  object-cover  w-[197px] h-[197px] bg-[#747474] rounded-2xl relative top-9'
-                        src={item}
-                        alt="reviewImg"
-                      />
-                    )
-                  })}
+                  {imageArr
+                    ?.slice(progressEventPage * 1, progressEventPage * 1 + 1)
+                    .map((item) => {
+                      return (
+                        <img
+                          onMouseEnter={() => setIsHovered(true)}
+                          onMouseLeave={() => setIsHovered(false)}
+                          className="aspect-square  object-cover  w-[197px] h-[197px] bg-[#747474] rounded-2xl relative top-9"
+                          src={item}
+                          alt="reviewImg"
+                        />
+                      );
+                    })}
                   {/* <img
                     className="aspect-square rounded-2xl w-[197px] h-[197px] object-cover mr-6"
                     src={thumbnail}
@@ -122,14 +133,18 @@ function ClubCard({
                 style={{ opacity: isHovered ? 1 : 0 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className='w-[30px] absolute left-8 top-[120px] z-10'
+                className="w-[30px] absolute left-8 top-[120px] z-10"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setProgressEventPage(progressEventPage === 0 ? imageArr.length - 1 : progressEventPage - 1)
+                  setProgressEventPage(
+                    progressEventPage === 0
+                      ? imageArr.length - 1
+                      : progressEventPage - 1
+                  );
                 }}
               >
                 <img
-                  className='opacity-80'
+                  className="opacity-80"
                   alt="prev_button"
                   src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
                 />
@@ -139,14 +154,18 @@ function ClubCard({
                 style={{ opacity: isHovered ? 1 : 0 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className='w-[30px] absolute right-8 top-[120px] z-10'
+                className="w-[30px] absolute right-8 top-[120px] z-10"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setProgressEventPage(progressEventPage === imageArr.length - 1 ? 0 : progressEventPage + 1)
+                  setProgressEventPage(
+                    progressEventPage === imageArr.length - 1
+                      ? 0
+                      : progressEventPage + 1
+                  );
                 }}
               >
                 <img
-                  className='opacity-80'
+                  className="opacity-80"
                   alt="next_button"
                   src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
                 />
@@ -157,27 +176,43 @@ function ClubCard({
               src={thumbnail}
               alt="clubThumbnail"
             /> */}
-            <div className="flex flex-col gap-4 w-full h-[197px]">
-              <div className="flex justify-between text-xs text-orange-400">
+            <div className="flex flex-col gap-4 w-full h-[197px] overflow-hidden">
+              <div className="flex justify-between text-xs text-[#FF7F1D]">
                 <div className="flex gap-2 items-center">
                   {tag.map((tag) => {
                     return (
-                      <div className="rounded-full border-[1px] px-2 py-1 max-h-[25px] border-orange-400">
+                      <div className="rounded-full border-[1px] px-2 py-1 max-h-[25px] border-[#FF7F1D]">
                         {tag}
                       </div>
                     );
                   })}
                 </div>
-                <div>
-
-                </div>
+                <div></div>
               </div>
               <div className="flex h-full justify-between flex-col pr-6">
                 <div>
-                  <div className="w-full text-2xl font-semibold">
-                    {title.length > 12 ? title.slice(0,12) + "..." : title}
+                <div className="w-full text-2xl font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    {title}
                   </div>
-                  <div className="text-sm">{content.length > 150? content.slice(0,150) + "...": content }</div>
+                  <div className="text-sm">
+                    {content.length > 150 ? (
+                      <>
+                        {content
+                          .slice(0, 150)
+                          .split("\n")
+                          .map((line, index) => {
+                            return (
+                              <span key={index}>
+                                {line}
+                                <br />
+                              </span>
+                            );
+                          })}
+                      </>
+                    ) : (
+                      content
+                    )}
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <div></div>
@@ -203,7 +238,6 @@ function ClubCard({
             className="cursor-pointer flex items-center border bg-white rounded-2xl  w-[544px] h-[263px]"
           >
             <div className="flex justify-center w-[500px] h-[277px] text-black items-center overflow-hidden relative">
-
               <AnimatePresence custom={progressDirection}>
                 <motion.div
                   key={progressEventPage}
@@ -215,17 +249,19 @@ function ClubCard({
                   transition={{ duration: 0.5 }}
                   className={`h-[200px] absolute top-0 right-0 flex z-10 justify-center items-center w-full `}
                 >
-                  {imageArr?.slice(progressEventPage * 1, progressEventPage * 1 + 1).map((item) => {
-                    return (
-                      <img
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                        className='aspect-square  object-cover  w-[197px] h-[197px] bg-[#747474] rounded-2xl relative top-9'
-                        src={item}
-                        alt="reviewImg"
-                      />
-                    )
-                  })}
+                  {imageArr
+                    ?.slice(progressEventPage * 1, progressEventPage * 1 + 1)
+                    .map((item) => {
+                      return (
+                        <img
+                          onMouseEnter={() => setIsHovered(true)}
+                          onMouseLeave={() => setIsHovered(false)}
+                          className="aspect-square  object-cover  w-[197px] h-[197px] bg-[#747474] rounded-2xl relative top-9"
+                          src={item}
+                          alt="reviewImg"
+                        />
+                      );
+                    })}
                   {/* <img
       className="aspect-square rounded-2xl w-[197px] h-[197px] object-cover mr-6"
       src={thumbnail}
@@ -238,14 +274,18 @@ function ClubCard({
                 style={{ opacity: isHovered ? 1 : 0 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className='w-[30px] absolute left-8 top-[120px] z-10'
+                className="w-[30px] absolute left-8 top-[120px] z-10"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setProgressEventPage(progressEventPage === 0 ? imageArr.length - 1 : progressEventPage - 1)
+                  setProgressEventPage(
+                    progressEventPage === 0
+                      ? imageArr.length - 1
+                      : progressEventPage - 1
+                  );
                 }}
               >
                 <img
-                  className='opacity-80'
+                  className="opacity-80"
                   alt="prev_button"
                   src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
                 />
@@ -255,14 +295,18 @@ function ClubCard({
                 style={{ opacity: isHovered ? 1 : 0 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className='w-[30px] absolute right-8 top-[120px] z-10'
+                className="w-[30px] absolute right-8 top-[120px] z-10"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setProgressEventPage(progressEventPage === imageArr.length - 1 ? 0 : progressEventPage + 1)
+                  setProgressEventPage(
+                    progressEventPage === imageArr.length - 1
+                      ? 0
+                      : progressEventPage + 1
+                  );
                 }}
               >
                 <img
-                  className='opacity-80'
+                  className="opacity-80"
                   alt="next_button"
                   src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
                 />
@@ -303,8 +347,7 @@ function ClubCard({
           </div>
         </div> */}
 
-
-            <div className="flex flex-col gap-4 w-full h-[197px]">
+            <div className="flex flex-col gap-4 w-full h-[197px] overflow-hidden">
               <div className="flex justify-between text-xs text-[#0BB159]">
                 <div className="flex gap-2 items-center">
                   {tag.map((tag) => {
@@ -315,15 +358,32 @@ function ClubCard({
                     );
                   })}
                 </div>
-                <div>
-                </div>
+                <div></div>
               </div>
               <div className="flex h-full justify-between flex-col pr-6">
                 <div>
-                  <div className="w-full text-2xl font-semibold">
-                  {title.length > 12 ? title.slice(0,12) + "..." : title}
+                  <div className="w-full text-2xl font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    {title}
                   </div>
-                  <div className="text-sm">{content.length > 150? content.slice(0,150) + "...": content }</div>
+                  <div className="text-sm">
+                    {content.length > 150 ? (
+                      <>
+                        {content
+                          .slice(0, 150)
+                          .split("\n")
+                          .map((line, index) => {
+                            return (
+                              <span key={index}>
+                                {line}
+                                <br />
+                              </span>
+                            );
+                          })}
+                      </>
+                    ) : (
+                      content
+                    )}
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <div></div>

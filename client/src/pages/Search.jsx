@@ -108,7 +108,7 @@ function Search() {
                   {/* <button
                     className="bg-orange-400 text-white px-3 py-2 rounded-full"
                   >
-                    더보기
+                    더 보기
                   </button> */}
                 </div>
               </body>
@@ -171,7 +171,7 @@ function Search() {
                   {/* <button
                     className="bg-green-500 text-white px-3 py-2 rounded-full"
                   >
-                    더보기
+                    더 보기
                   </button> */}
                 </div>
               </body>

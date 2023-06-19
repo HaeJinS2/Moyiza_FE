@@ -438,7 +438,7 @@ function Club() {
                     onClick={handleMore}
                     className="bg-[#FF7F1D] text-white px-7 py-2 rounded-full"
                   >
-                    더보기
+                    더 보기
                   </button>
                 </div>
                 {/* )} */}

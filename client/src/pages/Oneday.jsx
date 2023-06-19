@@ -494,7 +494,7 @@ function Oneday() {
                       onClick={handleMore}
                       className="bg-[#0BB159] text-white px-7 py-2 rounded-full"
                     >
-                      더보기
+                      더 보기
                     </button>
                   </div>
                 )}

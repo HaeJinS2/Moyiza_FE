@@ -137,7 +137,7 @@ function NearbyEvents() {
                                     {/* {location.latitude} {location.longitude} */}
                                     <div className='flex flex-col justify-center items-center '>
                                         <div className='flex flex-col justify-center items-center '>
-                                            <div className='text-white font-semibold text-[30px] flex flex-col items-center '>
+                                            <div className='text-white font-semibold text-[27px] flex flex-col items-center '>
                                                 {data.length !== 0 ?
                                                     <>
                                                         <span>{nicknameState.userNickname}님 근처에</span>

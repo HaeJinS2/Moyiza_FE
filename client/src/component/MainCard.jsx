@@ -63,12 +63,12 @@ function MainCard({ image, cardNum }) {
                 <div className="font-bold text-4xl">취미생활 공유</div>
               </div>
               <img
-                onClick={() => navigate("/club")}
                 src={`${process.env.PUBLIC_URL}/images/main/club_3_sub.svg`}
                 alt="service-description"
               />
             </div>
-            <img src={image} alt="service-description" />
+            <img 
+            src={image} alt="service-description" />
           </div>
         </>
       ) : cardNum === "oneday_1" ? (

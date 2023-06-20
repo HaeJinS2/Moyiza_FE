@@ -142,7 +142,7 @@ function CreateFeed() {
         <div className="pt-60 pb-40 text-4xl font-sans font-semibold w-full h-[230px] flex justify-center items-center">
           어떤 모임을 만들까요?
         </div>
-        <div className="max-w-[1920px] self-center h-[screen] flex justify-center items-start py-40 bg-[#FFFCF2] shadow-cm rounded-t-3xl">
+        <div className="max-w-[1920px] self-center h-[screen] flex justify-center items-start py-40 bg-[#FFFCF2] shadow-cms rounded-t-3xl">
           <div className="flex flex-col gap-[60px]">
             <CreateClub />
             {/* <img

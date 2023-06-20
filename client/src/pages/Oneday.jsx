@@ -336,6 +336,17 @@ function Oneday() {
             >
               <p>당신의 특별한 하루</p>
               <p>'하루속'에서 함께하세요!</p>
+              <div className="text-green-200">
+                  {/* <CreateClub /> */}
+                  <button
+                    className="flex gap-x-2 justify-center items-center"
+                    onClick={() => navigate(`/create-feed`)}
+                  >
+                    <span className="text-[1.25rem] mt-[4px]">
+                      + 하루속 만들러가기
+                    </span>
+                  </button>
+                </div>
             </div>
           </section>
         </div>

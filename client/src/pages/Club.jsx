@@ -254,6 +254,17 @@ function Club() {
             >
               <p>당신의 일상을 함께할 취미를</p>
               <p>'일상속'에서 찾아보세요!</p>
+              <div className="text-[#fddcc3] text-xl font-sans">
+                {/* <CreateClub /> */}
+                <button
+                  className="flex gap-x-2 justify-center items-center"
+                  onClick={() => navigate(`/create-feed`)}
+                >
+                  <span className="text-[1.25rem] mt-[5px]">
+                    + 일상속 만들러가기
+                  </span>
+                </button>
+              </div>
             </div>
           </section>
         </div>

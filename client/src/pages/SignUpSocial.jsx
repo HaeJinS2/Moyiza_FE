@@ -8,7 +8,7 @@ import swal from 'sweetalert';
 
 function SignUpSocial() {
     window.addEventListener('load', () => {
-        swal('환영합니다! 회원가입을 완료해주세요.');
+        swal('환영합니다! 추가정보를 입력해주세요.');
     });
     //회원가입 성공 시, 로그인 페이지로 이동
     const navigate = useNavigate();
@@ -116,11 +116,14 @@ function SignUpSocial() {
                 class="flex justify-center"
             >
                 <div
-                    style={{ marginTop: '200px', width: '800px', height: '650px', marginBottom: '40px' }}
+                    style={{ marginTop: '200px', width: '800px', height: '730px', marginBottom: '40px' }}
                     class="p-16 shadow-md w-full h-full rounded-[30px] bg-gray-50 flex justify-center"
                 >
                     <form onSubmit={submitHandler} name="signUpBox" class="flex flex-col justify-center space-between w-full" >
                         <div style={{ display: 'flex' }}>
+                        </div>
+                        <div className='flex justify-center mb-[70px] text-[20px] font-semibold'>
+                            회원 추가 정보 입력 
                         </div>
                         {/* 이름 입력 */}
                         <div class="flex items-center flex-start mb-5" >

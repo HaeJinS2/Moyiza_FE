@@ -143,11 +143,23 @@ function Main() {
             </div>
           </div>
         </section>
-        <img
-          className="w-[1280px]"
-          src={`${process.env.PUBLIC_URL}/images/main/club_bottom.svg`}
-          alt="service-description"
-        />
+
+        {activeTab === "일상속" ? (
+          <img
+            onClick={() => navigate("/club")}
+            className="w-[1280px] cursor-pointer"
+            src={`${process.env.PUBLIC_URL}/images/main/club_bottom.svg`}
+            alt="service-description"
+          />
+        ) : (
+          <img
+            onClick={() => navigate("/oneday")}
+            className="w-[1280px] cursor-pointer"
+            src={`${process.env.PUBLIC_URL}/images/main/oneday_bottom.svg`}
+            alt="service-description"
+          />
+        )}
+
         <Footer />
       </BodyContainer>
     </>

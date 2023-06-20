@@ -55,7 +55,8 @@ function Navbar({ clientRef }) {
     userId = payload.userId
   }
 
-
+ 
+//  console.log('user',user);
 
 
   useEffect(() => {
@@ -192,6 +193,7 @@ function Navbar({ clientRef }) {
 
   //   const filteredData = getFilteredData();
   // console.log("filteredData", filteredData)
+
   return (
     <>
       <div className="fixed z-20">
@@ -337,18 +339,17 @@ function Navbar({ clientRef }) {
                             <hr className="mb-[12px]" />
                             <div className="flex flex-col ml-[30px]">
                               {/* 닉네임 */}
-
-
                               <div 
                               onClick={goMyInfo}
                               className="flex w-[230px] items-center mb-[12px] ">
                                 <img src={user.profileUrl} 
                                 alt='user_profile'
                                 className="w-[48px] h-[48px] mr-[16px] bg-black rounded-full"/>
-                                <div>{user.nickname}</div>
+                                <div>{user.nickName}</div>
+                                
                               </div>
                               {/* 개인정보 변경
-                              <div className="flex flex-row flex-start mb-[12px]" onClick={goMyInfo}>
+                              <div className="flex flex-row flex-start mb-[12px]">
                                 <img
                                   className="w-[40px] h-[40px] mr-[23px]"
                                   src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}

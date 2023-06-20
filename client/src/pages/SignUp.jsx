@@ -5,6 +5,8 @@ import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
 import { postAPI } from '../axios';
 import swal from 'sweetalert';
+
+
 // import { styled } from 'styled-components';
 
 
@@ -419,7 +421,9 @@ function SignUp() {
 							</div>
 							<input value={verificationCode}
 								onChange={handleVerificationCodeChange}
-								style={{ width: '28%', marginRight: '3%' }} placeholder="인증번호" className="h-12 rounded-lg px-3.5 py-2 shadow" type="text" />
+								style={{ width: '28%', marginRight: '3%' }} placeholder="인증번호" className="h-12 rounded-lg px-3.5 py-2 shadow" type="text" >
+								
+								</input>
 							<button type='button' onClick={handleConfirm} style={{ width: '14%', marginRight: '3%', backgroundColor: '#FF7F1E', color: '#fff' }} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 hover:shadow-lg">확인</button>
 							<button type='button' onClick={handleFind} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">재전송</button>
 						</div>

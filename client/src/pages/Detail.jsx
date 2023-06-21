@@ -597,7 +597,8 @@ function Detail() {
                     </div>
                   </div>
                 </>
-              ) : (
+              ) :
+               (
                 <>
                   <div className="flex">
                     <div className="w-[458px] h-[91px] mr-[70px]"></div>
@@ -799,6 +800,25 @@ function Detail() {
                             return (
                               <>
                                 <div className="flex flex-col gap-2 ">
+                                  <div className="flex justify-end relative">
+                                    <img src={`${process.env.PUBLIC_URL}/images/toggle_edit_button.svg`}
+                                    alt='toggle_event_edit_button'
+                                    />
+                                    <div className="absolute top-[36px] right-0 flex-col flex gap-2 z-20 bg-white justify-end border-[1px] rounded-[10px] items-center">
+                                      <button className="w-[100px] h-[30px] text-black text-[1rem] pt-[1px] border-b-[1px]">
+                                        수정하기
+                                      </button>
+                                      <button
+                                        className="w-[100px] h-[30px] text-black text-[1rem] pt-[1px]"
+                                        onClick={() =>
+                                          handleDeleteEvent(id, item.id)
+                                        }
+                                      >
+                                        삭제하기
+                                      </button>
+
+                                    </div>
+                                  </div>
                                   <ClubEventCard
                                     image={item?.image}
                                     handleLeaveEvent={handleLeaveEvent}

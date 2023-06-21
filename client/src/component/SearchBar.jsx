@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import swal from "sweetalert";
 import { getAPI } from "../axios";
 import { searchState } from "../states/searchState";
 
@@ -29,6 +30,9 @@ const SearchBar = () => {
 
   const handleSearch = (e) => {
     if (e.type === "keypress" && e.key !== "Enter") return;
+    if (search.trim().length === 0){
+      return swal('검색어를 입력해주세요!')
+    }
     Promise.all([
       getAPI(`/oneday/search?q=${search}`).then((res) => {
         setSearchList((prev) => ({
@@ -52,7 +56,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="border-[1px] flex border-orange-500 w-[480px] h-[40px] items-center rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
+    <div className="border-[1px] flex border-[#FF7F1D] w-[480px] h-[40px] items-center rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
       <div className="w-full flex justify-between pr-6 pl-6 font-sans">
         <input
           onChange={handleSearchInput}
@@ -62,7 +66,7 @@ const SearchBar = () => {
           className="w-full focus:outline-none"
         />
         <div
-          className=" rounded-full text-orange-500"
+          className=" rounded-full text-[#FF7F1D]"
           onClick={handleSearch}
         >
           <BiSearch size={24} />

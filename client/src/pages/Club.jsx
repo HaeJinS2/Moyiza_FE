@@ -18,7 +18,7 @@ let pageTabs = ["일상속", "하루속"];
 let imageArr = [
   `${process.env.PUBLIC_URL}/images/category/all.png`,
   `${process.env.PUBLIC_URL}/images/category/exercise.png`,
-  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_sports.svg`,
   `${process.env.PUBLIC_URL}/images/category/travel.png`,
   `${process.env.PUBLIC_URL}/images/category/culture.png`,
   `${process.env.PUBLIC_URL}/images/category/art.png`,
@@ -34,6 +34,8 @@ function Club() {
   const [activePageTab, setActivePageTab] = useState(pageTabs[0]);
   const [selectedTags, setSelectedTags] = useState([]);
   // const [filterToggle, setFilterToggle] = useState(false);
+  // eslint-disable-next-line
+  const [lastPage, setLastPage] = useState(false);
 
   const [searchPage, setSearchPage] = useState(0);
   const [page, setPage] = useState(0);
@@ -53,8 +55,8 @@ function Club() {
 
   useEffect(() => {
     setTimeout(() => {
-      myRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, 0);
+      myRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 0);
   }, []);
 
   const navigate = useNavigate();
@@ -105,7 +107,11 @@ function Club() {
 
     // 클럽 전체 페이지를 가져오는 코드
     getAPI("/club")
-      .then((res) => setTotalPages(res.data.totalPages))
+      .then((res) => {
+        console.log(res.data);
+        setTotalPages(res.data.size);
+        setLastPage(res.data.last);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -140,6 +146,7 @@ function Club() {
           `/club/search?q=&category=${e.currentTarget.textContent}&page=0&size=6`
         ).then((res) => {
           setFilteredClubList([...res.data.content]);
+          setLastPage(res.data.last);
         });
       } catch (err) {
         setFilteredClubList([]);
@@ -157,6 +164,7 @@ function Club() {
           `/club/search?q=&category=${activeTab}&page=${searchPage + 1}&size=6`
         );
         setFilteredClubList((prev) => [...prev, ...res.data.content]);
+        setLastPage(res.data.last);
       } catch (err) {
         console.log(err);
       }
@@ -244,7 +252,7 @@ function Club() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="text-[2.625rem] font-semibold  flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="text-[2.25rem] font-semibold  flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/club/club_main.png)`,
                 backgroundSize: "cover",
@@ -260,19 +268,27 @@ function Club() {
                   className="flex gap-x-2 justify-center items-center"
                   onClick={() => navigate(`/create-feed`)}
                 >
-                  <span className="text-[1.25rem] mt-[5px]">
-                    + 일상속 만들러가기
-                  </span>
+                  <div className="text-[1.25rem] mt-[5px] text-black">
+                    일상속 만들러가기
+                  </div>
+                  <img
+                    className="w-[18px] h-[18px]"
+                    src={`${process.env.PUBLIC_URL}/images/arrow_black.svg`}
+                    alt="to_create"
+                  />
                 </button>
               </div>
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cms bg-[#FFFBF8] rounded-t-[90px] mt-[475px] z-10">
+          <section className="h-auto min-w-[1280px] border-[1px] bg-[#FFFBF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
-              <div ref={myRef} className="flex justify-between items-center pt-16 pb-2 pr-1">
-                <p  className="text-[2rem] font-bold">일상속 인기주제</p>
+              <div
+                ref={myRef}
+                className="flex justify-between items-center pt-16 pb-2 pr-1"
+              >
+                <p className="text-[2rem] font-bold">일상속 인기주제</p>
                 <button ref={filterRef} className="relative">
                   <img
                     onClick={() => toggleFilter()}
@@ -425,12 +441,16 @@ function Club() {
                 </div>
                 {/* {filteredClubList.length > 6 && totalPages > page + 1 && ( */}
                 <div className="flex justify-center  pb-12">
-                  <button
-                    onClick={handleMore}
-                    className="bg-[#FF7F1D] text-white px-7 py-2 rounded-full"
-                  >
-                    더 보기
-                  </button>
+                  {filteredClubList.length > 5 &&
+                    ((activeTab === "전체" && page < totalPages) ||
+                      (activeTab !== "전체" && searchPage < totalPages)) && (
+                      <button
+                        onClick={handleMore}
+                        className="bg-[#FF7F1D] text-white px-7 py-2 rounded-full"
+                      >
+                        더 보기
+                      </button>
+                    )}
                 </div>
                 {/* )} */}
               </body>

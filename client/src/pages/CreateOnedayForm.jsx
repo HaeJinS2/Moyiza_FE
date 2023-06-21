@@ -324,7 +324,7 @@ function CreateOnedayForm() {
     <>
       <Container>
         <div className="flex flex-col justify-center items-center">
-          <div className="flex justify-center pt-48 pb-32 text-3xl">
+          <div className="flex justify-center pt-[116px] pb-[47px] text-3xl">
             모두와 함께할&nbsp; <span className="text-green-400">하루</span>를
             만들어보세요
           </div>
@@ -444,7 +444,7 @@ function OnedayStep1({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="grid grid-cols-3 gap-x-[36px] gap-y-[36px] w-[526px] h-[228px]">
+        <div className="grid grid-cols-3 mt-[34px] gap-x-[36px] gap-y-[36px] w-[526px] h-[228px]">
           {categoryList?.map((category, i) => {
             return (
               <button
@@ -490,7 +490,7 @@ function OnedayStep2({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="grid grid-cols-3 gap-x-[36px] gap-y-[36px] w-[526px] h-auto">
+        <div className="grid grid-cols-5 grid-rows-2 mt-[51px] gap-x-[43px] gap-y-[30px] w-auto h-auto">
           {tag?.map((tag, i) => {
             return (
               <>
@@ -526,7 +526,7 @@ function OnedayStep2({
                     savedOnedayData?.tag?.includes(tag)
                       ? "bg-[#dddddd]"
                       : "bg-white"
-                  }  w-[142px] h-[52px] rounded-full text-[1.25rem] font-semibold border-2`}
+                  }  w-[142px] h-[52px] rounded-full text-[1.25rem] font-semibold border-2 mb-[38.5px]`}
                 >
                   {tag}
                 </button>
@@ -552,7 +552,7 @@ function OnedayStep3({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className=" w-[526px] h-[228px] flex flex-col  justify-between items-center">
+        <div className=" w-[526px] h-[216px] flex flex-col mt-[46px]  justify-between items-center">
           <input
             className="flex shadow-cms rounded-full w-[600px] px-5 py-3"
             type="text"
@@ -632,9 +632,9 @@ function OnedayStep4({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="w-[868px] h-[228px] flex flex-col px-10 gap-5 mb-[20px]">
-          <div className="flex flex-col gap-1">
-            <div className="w-full text-[1.25rem]">
+        <div className="w-[868px] h-[216px] flex flex-col px-10 gap-5 mb-[46px]">
+          <div className="flex flex-col gap-1 mb-[22px]">
+            <div className="w-full text-[1.25rem] mb-[12px]">
               1) 하루속을 대표할 이미지를 등록해주세요.
             </div>
             <input onChange={handleFileOnChange} type="file" />
@@ -686,14 +686,12 @@ function OnedayStep5({
             <div className="flex flex-col gap-2 text-2xl ">
               <div>날짜와 시간을 선택해주세요.</div>
               <ReactDatePicker
-                className="flex text-base cursor-pointer font-semibold justify-center shadow-cms w-[200px] rounded-full pl-5"
                 selected={startDate}
                 onChange={(date) => {
                   setStartDate(date);
                   let newDate = new Date(date);
                   newDate.setHours(newDate.getHours() + 9);
                   let newIsoString = newDate.toISOString().split(".")[0];
-
                   setSavedOnedayData({
                     ...savedOnedayData,
                     oneDayStartTime: newIsoString,
@@ -703,7 +701,6 @@ function OnedayStep5({
                 showTimeSelect
                 dateFormat="yyyy MMMM d, h:mm aa"
                 inline
-                fixedHeight
               />
             </div>
           </div>
@@ -856,7 +853,7 @@ function OnedayStep7({
                         savedOnedayData.gender === item
                           ? "bg-[#dddddd]"
                           : "bg-white"
-                      }  w-[142px] h-[62px] text-[1rem] font-semibold rounded-full border-2`}
+                      }  w-[142px] h-[52px] text-[1rem] font-semibold rounded-full border-2`}
                     >
                       {item}
                     </button>
@@ -927,7 +924,9 @@ function OnedayStep8({
         handleOnedayStep={handleOnedayStep}
         onedayStep={onedayStep}
       >
-        <div className="h-full w-full flex flex-col gap-10 px-20">
+        <div className="h-full w-full flex flex-col gap-10 px-20 mt-[32px] mb-[32px]">
+          <div className="text-[1.5rem] pb-4">1) 인원 수</div>
+
           <Slider
             style={{ width: "97%" }}
             axis="x"
@@ -1005,13 +1004,13 @@ function CreateOnedayFormLayout({
         }  items-center h-auto max-w-[1140px]`}
       >
         <>
-          <div className="self-start min-w-[800px] text-[1.5rem] py-5 font-semibold">
+          <div className="self-start min-w-[800px] text-[1.5rem] mt-[30px] mb-[22px] font-semibold">
             {header}
           </div>
           <div className="flex flex-col items-center w-full h-auto">
             {children}
           </div>
-          <div className="flex gap-[30px] py-9">
+          <div className="flex gap-[30px] mt-[36px] mb-[33px]">
             {onedayStep > 1 && onedayStep < 9 && (
               <button
                 onClick={handleOnedayStep}

@@ -497,8 +497,8 @@ function CreateClubForm() {
         />
       )}
 
-      <div className="fixed inset-x-0 bottom-0 z-10 flex justify-center items-center">
-        <div className="w-[1200px] h-[20px]">
+      <div className="fixed inset-x-0 bottom-[300px] z-10 flex justify-center items-center">
+        <div className="w-[1140px] h-[20px]">
           <LinearProgress variant="determinate" value={(step / 8) * 100} />
         </div>
       </div>

@@ -20,7 +20,7 @@ let pageTabs = ["일상속", "하루속"];
 let imageArr = [
   `${process.env.PUBLIC_URL}/images/category/all.png`,
   `${process.env.PUBLIC_URL}/images/category/exercise.png`,
-  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_sports.svg`,
   `${process.env.PUBLIC_URL}/images/category/travel.png`,
   `${process.env.PUBLIC_URL}/images/category/culture.png`,
   `${process.env.PUBLIC_URL}/images/category/art.png`,
@@ -48,6 +48,13 @@ function Oneday() {
   const [filterList, setFilterList] = useState({});
   const [popularOneday, setPupularOneday] = useState([]);
   const [imminentOneday, setImminentOneday] = useState([]);
+  const myRef = useRef(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      myRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, 0);
+  }, []);
   // const [queryResults1, queryResults2] = useQueries(
   //   [
   //     {
@@ -88,13 +95,15 @@ function Oneday() {
   const divRef = useRef(null);
   const navigate = useNavigate();
 
-
-  const filterRef = useRef(); 
+  const filterRef = useRef();
 
   useEffect(() => {
-    const checkIfClickedOutside = e => {
-
-      if (filterIsOpen && filterRef.current && !filterRef.current.contains(e.target)) {
+    const checkIfClickedOutside = (e) => {
+      if (
+        filterIsOpen &&
+        filterRef.current &&
+        !filterRef.current.contains(e.target)
+      ) {
         setFilterIsOpen(false);
       }
     };
@@ -106,11 +115,7 @@ function Oneday() {
     return () => {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
-
   }, [filterIsOpen, onedayData]);
-
-
-
 
   useEffect(() => {
     if (divRef.current) {
@@ -134,7 +139,7 @@ function Oneday() {
     });
 
     getAPI(`/oneday`).then((res) => {
-      setTotalPages(res.data.totalPages);
+      setTotalPages(res.data.size);
     });
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -319,7 +324,7 @@ function Oneday() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="bg-neutral-200 text-[2.625rem] font-sans font-semibold flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="bg-neutral-200 text-[2.25rem] font-sans font-semibold flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.svg)`,
                 backgroundSize: "cover",
@@ -329,13 +334,29 @@ function Oneday() {
             >
               <p>당신의 특별한 하루</p>
               <p>'하루속'에서 함께하세요!</p>
+              <div className="text-green-200">
+                  {/* <CreateClub /> */}
+                  <button
+                  className="flex gap-x-2 justify-center items-center"
+                  onClick={() => navigate(`/create-feed`)}
+                >
+                  <div className="text-[1.25rem] mt-[5px] text-black">
+                    하루속 만들러가기
+                  </div>
+                  <img
+                    className="w-[18px] h-[18px]"
+                    src={`${process.env.PUBLIC_URL}/images/arrow_black.svg`}
+                    alt="to_create"
+                  />
+                </button>
+                </div>
             </div>
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cms bg-[#F9FFF8] rounded-t-[90px] mt-[475px] z-10">
+          <section className="h-auto min-w-[1280px] border-[1px] bg-[#F9FFF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
-              <div className="flex justify-between items-center pt-16 pb-2 pr-1">
+              <div ref={myRef} className="flex justify-between items-center pt-16 pb-2 pr-1">
                 <p className="text-[2rem] font-bold">최신 하루속 이벤트</p>
                 <button ref={filterRef} className="relative">
                   <img
@@ -355,7 +376,7 @@ function Oneday() {
                           }}
                         >
                           <img
-                          alt='reset_filter'
+                            alt="reset_filter"
                             className="w-[24px] h-[24px]"
                             src={`${process.env.PUBLIC_URL}/images/filter_reset.svg`}
                           />
@@ -488,16 +509,18 @@ function Oneday() {
                     )}
                   </div>
                 </div>
-                {filteredOnedayList.length >= 6 && totalPages > page + 1 && (
                   <div className="flex justify-center mt-10">
-                    <button
-                      onClick={handleMore}
-                      className="bg-[#0BB159] text-white px-7 py-2 rounded-full"
-                    >
-                      더보기
-                    </button>
+                    {filteredOnedayList.length > 5 &&
+                      ((activeTab === "전체" && page < totalPages) ||
+                        (activeTab !== "전체" && searchPage < totalPages)) && (
+                        <button
+                          onClick={handleMore}
+                          className="bg-[#0BB159] text-white px-7 py-2 rounded-full"
+                        >
+                          더 보기
+                        </button>
+                      )}
                   </div>
-                )}
               </body>
             </div>
 
@@ -515,7 +538,7 @@ function Oneday() {
                           title={item.oneDayTitle}
                           content={item.oneDayContent}
                           tag={item.oneDayTag}
-                          thumbnail={item.oneDayImage}
+                          thumbnail={item.oneDayImageUrlList[0]}
                           id={item.oneDayId}
                           maxGroupSize={item.oneDayGroupSize}
                           nowMemberCount={item.attendantsNum}
@@ -559,7 +582,7 @@ function Oneday() {
                 <p className=" text-[1.75rem] font-sans font-semibold">
                   내가 찾는 하루속 이벤트가 없다면?
                 </p>
-                <div className="text-green-400">
+                <div className="text-[#0BB159]">
                   {/* <CreateClub /> */}
                   <button
                     className="flex gap-x-2 justify-center items-center"

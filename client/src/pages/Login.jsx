@@ -20,7 +20,7 @@ function Login() {
     const KAKAO_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/kakao?redirect_uri=https://mo2za.com/oauth/redirect`;
     const NAVER_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/naver?redirect_uri=https://mo2za.com/oauth/redirect`;
     const GOOGLE_AUTH_URL = `https://hohomii.shop:8443/oauth2/authorization/google?redirect_uri=https://mo2za.com/oauth/redirect`;
-  // eslint-disable-next-line
+    // eslint-disable-next-line
     const [isLoggedIn2, setIsLoggedIn2] = useRecoilState(isLoggedInState);
     const kakaologin = () => {
         window.location.href = KAKAO_AUTH_URL;
@@ -81,9 +81,9 @@ function Login() {
     const goMain = () => {
         navigate('/');
     };
-    
+
     const handleFind = () => {
-        swal('준비 중입니다'); 
+        swal('준비 중입니다');
     };
 
     const [userloginInput, setUserloginInput] = useState({
@@ -115,7 +115,7 @@ function Login() {
             const response = await axios.post(url, data);
 
             const accessToken = response.headers.access_token;
-        
+
             // const refreshToken = response.headers.refresh_token;
 
             const jwt1 = accessToken.replace('Bearer ', '');
@@ -123,7 +123,7 @@ function Login() {
             setCookie('ACCESS_TOKEN', jwt1, 1)
             // setCookie('REFRESH_TOKEN', jwt2, 1);
             const email = parseJwt(jwt1);
-            
+
             setUser(email);
 
             // 사용자를 로컬 스토리지에 저장
@@ -131,11 +131,12 @@ function Login() {
             setIsLoggedIn2(true)
             swal('로그인 성공');
             goMain();
-            
+
         } catch (error) {
             console.log(error);
             swal('로그인 실패');
-            setUserloginInput({ email: '', password: '' });
+            // 입력한 값을 초기화하지 않고 그대로 유지
+            setUserloginInput((prev) => ({ ...prev }));
         }
     };
 
@@ -165,7 +166,7 @@ function Login() {
     const isEmailValid = isEmail(userloginInput.email);
 
     const isPw = (pw) => {
-        const pwRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+        const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
         return pwRegex.test(pw);
     };
 
@@ -213,7 +214,7 @@ function Login() {
                             <input placeholder="비밀번호" value={userloginInput.password} onChange={pwChangeHandler} type="password" className="shadow-md w-80 h-10 rounded-[50px] mb-3 px-3.5 py-2" />
 
                             {!isPwValid && userloginInput.password.length > 0 && (
-                                <p className="inputCheck text-rose-400 text-xs absolute">* 비밀번호는 대소문자, 숫자, 특수문자 포함 8자리 이상 적어주세요!</p>
+                                <p className="inputCheck text-rose-400 text-xs absolute">* 비밀번호는 영소문자, 숫자 포함 8자리 이상 적어주세요!</p>
                             )}
                         </div>
 

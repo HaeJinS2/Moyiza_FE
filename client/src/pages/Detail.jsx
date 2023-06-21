@@ -226,7 +226,6 @@ function Detail() {
       });
   };
 
-
   // 화면이 렌더링 될 때 화면의 최상단으로 보내주는 코드
   const divRef = useRef(null);
   useEffect(() => {
@@ -295,7 +294,6 @@ function Detail() {
       })
       .catch((error) => swal("이벤트 삭제 요청이 거절됐습니다."));
   };
-
 
   // 사진 추가시
   const handleImageChange = async (e) => {
@@ -441,7 +439,7 @@ function Detail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {clubDetail?.data.nowMemberCount} /
+                        {clubDetail?.data.nowMemberCount}/
                         {clubDetail?.data.maxGroupSize}
                       </div>
                     </div>
@@ -456,7 +454,18 @@ function Detail() {
                     })}
                   </div>
                   <div className="w-[543px] min-h-[162px] h-auto text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 pb-2 relative">
-                    {clubDetail?.data.clubContent}
+                    <div>
+                      {clubDetail?.data.clubContent
+                        .split("\n")
+                        .map((line, index) => {
+                          return (
+                            <span key={index}>
+                              {line}
+                              <br />
+                            </span>
+                          );
+                        })}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -579,15 +588,17 @@ function Detail() {
                       </Modal>
                     </div>
                     <div className="w-[543px] h-[91px] flex justify-center ">
-                      <button 
-                      onClick={() => swal("아직 준비중인 기능입니다.")}
-                      className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full">
+                      <button
+                        onClick={() => swal("아직 준비중인 기능입니다.")}
+                        className="w-[150px] h-[40px] bg-[#ff7f1d] text-white text-[1.25rem] font-semibold rounded-full"
+                      >
                         수정하기
                       </button>
                     </div>
                   </div>
                 </>
-              ) : (
+              ) :
+               (
                 <>
                   <div className="flex">
                     <div className="w-[458px] h-[91px] mr-[70px]"></div>
@@ -789,6 +800,25 @@ function Detail() {
                             return (
                               <>
                                 <div className="flex flex-col gap-2 ">
+                                  <div className="flex justify-end relative">
+                                    <img src={`${process.env.PUBLIC_URL}/images/toggle_edit_button.svg`}
+                                    alt='toggle_event_edit_button'
+                                    />
+                                    <div className="absolute top-[36px] right-0 flex-col flex gap-2 z-20 bg-white justify-end border-[1px] rounded-[10px] items-center">
+                                      <button className="w-[100px] h-[30px] text-black text-[1rem] pt-[1px] border-b-[1px]">
+                                        수정하기
+                                      </button>
+                                      <button
+                                        className="w-[100px] h-[30px] text-black text-[1rem] pt-[1px]"
+                                        onClick={() =>
+                                          handleDeleteEvent(id, item.id)
+                                        }
+                                      >
+                                        삭제하기
+                                      </button>
+
+                                    </div>
+                                  </div>
                                   <ClubEventCard
                                     image={item?.image}
                                     handleLeaveEvent={handleLeaveEvent}

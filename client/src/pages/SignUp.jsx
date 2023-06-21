@@ -1,22 +1,50 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import Navbar from '../component/Navbar';
 import { postAPI } from '../axios';
 import swal from 'sweetalert';
-// import { styled } from 'styled-components';
 
 
 function SignUp() {
+	const [timeRemaining, setTimeRemaining] = useState(5 * 60); // 초 단위로 5분 설정
+	const [isTimerRunning, setIsTimerRunning] = useState(false);
+	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+	const [isTimerVisible, setIsTimerVisible] = useState(false);
+
+
+	useEffect(() => {
+		let timer = null;
+
+		if (isTimerRunning && timeRemaining > 0) {
+			timer = setInterval(() => {
+				setTimeRemaining(prevTime => prevTime - 1);
+			}, 1000);
+		}
+
+		if (timeRemaining === 0) {
+			clearInterval(timer);
+			setIsButtonDisabled(false); // 타이머가 종료되면 버튼 활성화
+			setIsTimerVisible(false); // 타이머가 종료되면 숨김 상태로 변경
+			swal("인증 시간이 만료되었습니다.");
+		}
+
+		return () => clearInterval(timer);
+	}, [isTimerRunning, timeRemaining]);
+
+	const handleStartTimer = () => {
+		setIsTimerRunning(true);
+	};
+
+	const formattedMinutes = ("0" + Math.floor(timeRemaining / 60)).slice(-2);
+	const formattedSeconds = ("0" + (timeRemaining % 60)).slice(-2);
+
 	//회원가입 성공 시, 로그인 페이지로 이동
 	const navigate = useNavigate();
 	const goLogin = () => {
 		navigate('/login');
 	}
-	const handleFind = () => {
-		swal('준비 중입니다');
-	};
 
 	const [imageFile, setImageFile] = useState(null);
 	const [userInput, setUserInput] = useState({
@@ -33,10 +61,11 @@ function SignUp() {
 	});
 
 	//메일 인증
-	const [verificationCode, setVerificationCode] = useState("");
+	const [code, setCode] = useState("");
+
 
 	const handleVerificationCodeChange = (event) => {
-		setVerificationCode(event.target.value);
+		setCode(event.target.value);
 	};
 
 	const handleConfirmEmail = () => {
@@ -46,7 +75,10 @@ function SignUp() {
 			.then((response) => {
 				if (response.status === 200) {
 					swal("인증번호가 이메일로 전송되었습니다.");
-				} else if (response.status === 400){
+					setTimeRemaining(5 * 60); // 타이머를 다시 5분으로 설정
+					setIsTimerVisible(true); // 타이머 표시 상태로 변경
+					handleStartTimer(); // 타이머 시작
+				} else if (response.status === 400) {
 					swal("중복된 이메일입니다.");
 				} else {
 					swal("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
@@ -59,9 +91,9 @@ function SignUp() {
 	};
 
 	const handleConfirm = () => {
-		const requestData = { email, verificationCode };
+		const requestData = { code };
 
-		postAPI("/signup/confirmEmail", requestData)
+		postAPI("/signup/verifyCode", requestData)
 			.then((response) => {
 				if (response.status === 200) {
 					swal("이메일 인증이 성공하였습니다.");
@@ -75,7 +107,6 @@ function SignUp() {
 				swal("이메일 인증에 실패했습니다. 인증번호를 확인해주세요.");
 			});
 	};
-
 
 	const { email, pw, pwCheck, name, nickname, gender, phoneNum, year, month, day } =
 		userInput;
@@ -181,11 +212,11 @@ function SignUp() {
 	const submitHandler = async (e) => {
 
 		e.preventDefault();
-		
+
 		try {
 
 			const formData = new FormData();
-			
+
 			formData.append('name', name);
 			formData.append('email', email);
 			// formData.append('rawPassword', pw);
@@ -206,7 +237,7 @@ function SignUp() {
 					'Content-Type': 'multipart/form-data'
 				}
 			});
-			
+
 			// 상기 uploadRes api의 response 가 완료된 이후 formData append 처리.
 			// 만약 uploadRes.data 를 불러올 수 없는 경우에 대한 리스크 처리 필요 합니다.
 			formData.append('imageUrl', uploadRes.data);
@@ -242,7 +273,7 @@ function SignUp() {
 				>
 					<form
 						// onSubmit={submitHandler} 
-						name="signUpBox" 
+						name="signUpBox"
 						class="flex flex-col justify-center space-between w-full"
 					>
 						<div style={{ display: 'flex' }}></div>
@@ -353,7 +384,6 @@ function SignUp() {
 								</div>
 
 							</div>
-							{/* <span class="error_next_box"></span> */}
 						</div>
 						{/* 성별 입력 */}
 						<div className='flex items-center mb-5'>
@@ -382,7 +412,6 @@ function SignUp() {
 							</label>
 						</div>
 
-
 						{/* 이메일 입력 */}
 						<div className='flex items-center mb-5'>
 							<div style={{ width: '27%' }}>
@@ -399,7 +428,7 @@ function SignUp() {
 								autoComplete="username"
 							/>
 							{/* 이메일 인증 */}
-							<button type='button' onClick={handleConfirmEmail} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 px-4 py-1 shadow hover:shadow-lg ">인증번호 전송</button>
+							<button type='button' onClick={handleConfirmEmail} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} disabled={isButtonDisabled} className="bg-white rounded-xl border-2 h-12 px-4 py-1 shadow hover:shadow-lg ">인증번호 전송</button>
 						</div>
 						<div className='flex items-center'>
 							<div style={{ width: '27%' }}></div>
@@ -412,16 +441,26 @@ function SignUp() {
 								</p>
 							)}
 						</div>
+
 						{/* 이메일 인증 입력 */}
 						<div className='flex items-center mb-5'>
 							<div style={{ width: '27%' }}>
 								{/* <div>이메일 인증</div> */}
 							</div>
-							<input value={verificationCode}
-								onChange={handleVerificationCodeChange}
-								style={{ width: '28%', marginRight: '3%' }} placeholder="인증번호" className="h-12 rounded-lg px-3.5 py-2 shadow" type="text" />
+							<div style={{ width: '28%', marginRight: '3%' }} className="bg-white h-12 rounded-lg px-3.5 py-2 shadow flex flex-row items-center">
+
+
+								<input value={code}
+									onChange={handleVerificationCodeChange}
+									style={{ width: '70%', marginRight: '3%' }} className="h-12" placeholder="인증번호" type="text" />
+								{isTimerVisible && (
+									<div className="text-[#8b8b8b]">
+										{formattedMinutes}:{formattedSeconds}
+									</div>
+								)}
+							</div>
 							<button type='button' onClick={handleConfirm} style={{ width: '14%', marginRight: '3%', backgroundColor: '#FF7F1E', color: '#fff' }} className=" text-white rounded-xl border-2 h-12 w-28 px-4 py-1 hover:shadow-lg">확인</button>
-							<button type='button' onClick={handleFind} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">재전송</button>
+							<button type='button' onClick={handleConfirmEmail} style={{ width: '25%', color: '#FF7F1E', borderColor: '#FF7F1E' }} className="bg-white rounded-xl border-2 h-12 w-28 px-4 py-1 shadow hover:shadow-lg">재전송</button>
 						</div>
 
 						{/* 휴대폰 입력 */}
@@ -516,10 +555,10 @@ function SignUp() {
 							</label>
 						</div>
 						<hr />
-						<button 
-							type='onclick' 
-							onClick={submitHandler} 
-							style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-20`} 
+						<button
+							type='onclick'
+							onClick={submitHandler}
+							style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} className={`signupBtn ${activeBtn} ${colorBtn} mt-20`}
 						>
 							가입하기
 						</button>

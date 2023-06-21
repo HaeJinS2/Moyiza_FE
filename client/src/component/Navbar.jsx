@@ -11,8 +11,6 @@ import { isLoggedInState } from '../states/userStateTmp';
 import { reloadChatStates } from '../states/chatState';
 import swal from 'sweetalert';
 import { getCookie, parseJwt } from "../utils/jwtUtils";
-import { userState } from "../states/userState";
-// import { userState } from "../states/userState";
 
 // import { Client } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
@@ -39,11 +37,12 @@ function Navbar({ clientRef }) {
 
   const [data, setData] = useState([]);
   // const [userId, setUserId] =useState('')
-  const user = useRecoilValue(userState);
+  // const user = useRecoilValue(userState);
   const chatModalRef = useRef();
   const profileModalRef = useRef();
   //console.log("채팅방 목록 data", data)
-
+  const [nickname, setNickname] = useState(null);
+  const [profileImage ,setProfileImage] = useState(null);
   let userId = ''
   // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
   const accessToken = getCookie('ACCESS_TOKEN');
@@ -55,8 +54,26 @@ function Navbar({ clientRef }) {
     userId = payload.userId
   }
 
+useEffect(() => {
+  const fetchData = async () => {
+      try {
+          // GET 요청 수행
+          const response = await getAPI('/userInfo')
 
-
+          // 응답이 성공적인지 확인
+          if (response.status === 200) {
+              const responseData = response?.data;
+              setNickname(responseData?.nickname || "");
+              setProfileImage(responseData?.profileImage || "");
+              
+          }
+      } catch (error) {
+          console.error(error.response.message);
+          // 에러 상태 처리 또는 에러 페이지로 리디렉션 처리
+      }
+  };
+  fetchData();
+}, []);
 
   useEffect(() => {
     if (Cookies.get("ACCESS_TOKEN")) {
@@ -95,7 +112,7 @@ function Navbar({ clientRef }) {
   const logoutHandler = () => {
     setIsLoggedIn(false);
     setIsLoggedIn2(false);
-
+    setRoomIdState([])
     Cookies.remove("REFRESH_TOKEN");
     Cookies.remove("ACCESS_TOKEN");
     navigate("/");
@@ -192,6 +209,7 @@ function Navbar({ clientRef }) {
 
   //   const filteredData = getFilteredData();
   // console.log("filteredData", filteredData)
+
   return (
     <>
       <div className="fixed z-20">
@@ -337,25 +355,16 @@ function Navbar({ clientRef }) {
                             <hr className="mb-[12px]" />
                             <div className="flex flex-col ml-[30px]">
                               {/* 닉네임 */}
-
                               <div 
                               onClick={goMyInfo}
                               className="flex w-[230px] items-center mb-[12px] ">
-                                <img src={user.profileUrl} 
+                                <img src={profileImage} 
                                 alt='user_profile'
                                 className="w-[48px] h-[48px] mr-[16px] bg-black rounded-full"/>
-                                <div>{user.nickName}</div>
+                                <div>{nickname}</div>
+                                
                               </div>
-                              {/* 개인정보 변경 */}
-                              <div className="flex flex-row flex-start mb-[12px]">
-                                <img
-                                  className="w-[40px] h-[40px] mr-[23px]"
-                                  src={`${process.env.PUBLIC_URL}/images/personal_info.svg`}
-                                  alt="profile_icon"
-                                />
-                                <button onClick={goMyInfo}>개인정보 변경
-                                </button>
-                              </div>
+                             
                               {/* 로그아웃 */}
                               <div className="flex flex-row flex-start mb-[12px]">
                                 <img

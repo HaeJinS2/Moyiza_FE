@@ -8,7 +8,7 @@ import { isLoggedInState, userNicknameState } from "../states/userStateTmp";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyState from "../component/EmptyState";
 import { useQueryClient } from "react-query";
-import { reloadChatStates } from '../states/chatState';
+import { reloadChatStates } from "../states/chatState";
 
 import swal from "sweetalert";
 function OnedayDetail() {
@@ -20,7 +20,8 @@ function OnedayDetail() {
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
   const isLoggedIn = useRecoilValue(isLoggedInState);
   // eslint-disable-next-line
-  const [reloadChatState, setReloadChatState] = useRecoilState(reloadChatStates);
+  const [reloadChatState, setReloadChatState] =
+    useRecoilState(reloadChatStates);
 
   const [onEdit, setOnEdit] = useState(false);
   const userNickname = useRecoilValue(userNicknameState);
@@ -51,7 +52,7 @@ function OnedayDetail() {
   let similarOnedayPrev = similarOnedayTuple[0];
   let similarOnedayDirection = similarOnedayPage > similarOnedayPrev ? 1 : -1;
 
-    const [onedayDetail, setOnedayDetail] = useState({});
+  const [onedayDetail, setOnedayDetail] = useState({});
 
   // 원데이 상세조회
   // const {
@@ -67,11 +68,13 @@ function OnedayDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMember]);
 
-  useEffect (() => {
-    getAPI(`/oneday/${id}`).then((res) => {
-      setOnedayDetail(res)
-    }).catch((err) => console.log(err))
-  }, [id])
+  useEffect(() => {
+    getAPI(`/oneday/${id}`)
+      .then((res) => {
+        setOnedayDetail(res);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
 
   // isOwner의 상태 관리
   // useEffect(() => {
@@ -119,7 +122,6 @@ function OnedayDetail() {
   //   <div>정보를 가져오는도중 오류가 발생했습니다.</div>;
   // }
 
-
   const oneDayStartTime = new Date(onedayDetail?.data?.oneDayStartTime);
   let month = oneDayStartTime.getMonth() + 1;
   let date = oneDayStartTime.getDate();
@@ -148,8 +150,10 @@ function OnedayDetail() {
           .then((res) => {
             setIsMember(true);
             getAPI(`/oneday/${id}`).then((res) => {
-              setReloadChatState(true)
-              swal("하루속 가입이 승인됐습니다! \n 상단의 채팅방을 통해 소통해주세요!");
+              setReloadChatState(true);
+              swal(
+                "하루속 가입이 승인됐습니다! \n 상단의 채팅방을 통해 소통해주세요!"
+              );
             });
           })
           .catch((err) => {
@@ -167,7 +171,7 @@ function OnedayDetail() {
       .then((res) => {
         setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
-          setReloadChatState(true)
+          setReloadChatState(true);
           swal("모임에서 탈퇴했습니다!");
         });
       })
@@ -191,7 +195,6 @@ function OnedayDetail() {
 
     fetchFilteredOnedayList();
   }, [onedayDetail, id]);
-
 
   return (
     <>
@@ -312,8 +315,7 @@ function OnedayDetail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {onedayDetail?.data?.oneDayAttendantListSize}/
-                        {onedayDetail?.data?.oneDayGroupSize}
+                        {onedayDetail?.data?.oneDayAttendantListSize}/ {onedayDetail?.data?.oneDayGroupSize}
                       </div>
                     </div>
                   </div>
@@ -327,7 +329,18 @@ function OnedayDetail() {
                     })}
                   </div>
                   <div className="w-[543px] min-h-[162px] h-auto text-[1rem] bg-[#F5F5F5] rounded-lg px-8 pt-6 pb-2 relative">
-                    {onedayDetail?.data?.oneDayContent}
+                    <div>
+                      {onedayDetail?.data?.oneDayContent
+                        .split("\n")
+                        .map((line, index) => {
+                          return (
+                            <span key={index}>
+                              {line}
+                              <br />
+                            </span>
+                          );
+                        })}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -417,9 +430,12 @@ function OnedayDetail() {
                         ?.slice(memberPage * 6, memberPage * 6 + 6)
                         .map((member, i) => {
                           return (
-                            <div 
-                            onClick={()=> navigate(`user/mypage/${member.userId}`)}
-                            className="cursor-pointer flex gap-5 items-center">
+                            <div
+                              onClick={() =>
+                                navigate(`/user/mypage/${member.userId}`)
+                              }
+                              className="cursor-pointer flex gap-5 items-center"
+                            >
                               <img
                                 className="w-[80px] h-[80px] rounded-full"
                                 src={member.profilePictureUrl}

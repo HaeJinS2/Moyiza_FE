@@ -20,7 +20,7 @@ let pageTabs = ["일상속", "하루속"];
 let imageArr = [
   `${process.env.PUBLIC_URL}/images/category/all.png`,
   `${process.env.PUBLIC_URL}/images/category/exercise.png`,
-  `${process.env.PUBLIC_URL}/images/category/exercise.png`,
+  `${process.env.PUBLIC_URL}/images/createFeed/create_sports.svg`,
   `${process.env.PUBLIC_URL}/images/category/travel.png`,
   `${process.env.PUBLIC_URL}/images/category/culture.png`,
   `${process.env.PUBLIC_URL}/images/category/art.png`,
@@ -95,13 +95,15 @@ function Oneday() {
   const divRef = useRef(null);
   const navigate = useNavigate();
 
-
-  const filterRef = useRef(); 
+  const filterRef = useRef();
 
   useEffect(() => {
-    const checkIfClickedOutside = e => {
-
-      if (filterIsOpen && filterRef.current && !filterRef.current.contains(e.target)) {
+    const checkIfClickedOutside = (e) => {
+      if (
+        filterIsOpen &&
+        filterRef.current &&
+        !filterRef.current.contains(e.target)
+      ) {
         setFilterIsOpen(false);
       }
     };
@@ -113,11 +115,7 @@ function Oneday() {
     return () => {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
-
   }, [filterIsOpen, onedayData]);
-
-
-
 
   useEffect(() => {
     if (divRef.current) {
@@ -141,7 +139,7 @@ function Oneday() {
     });
 
     getAPI(`/oneday`).then((res) => {
-      setTotalPages(res.data.totalPages);
+      setTotalPages(res.data.size);
     });
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -326,7 +324,7 @@ function Oneday() {
         <div className="flex justify-center items-center">
           <section className="absolute top-[156px] h-auto min-w-[1280px]">
             <div
-              className="bg-neutral-200 text-[2.625rem] font-sans font-semibold flex flex-col justify-center items-center pb-16 h-[600px] text-white"
+              className="bg-neutral-200 text-[2.25rem] font-sans font-semibold flex flex-col justify-center items-center pb-16 h-[600px] text-white"
               style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL}/images/oneday/oneday_main.svg)`,
                 backgroundSize: "cover",
@@ -339,13 +337,18 @@ function Oneday() {
               <div className="text-green-200">
                   {/* <CreateClub /> */}
                   <button
-                    className="flex gap-x-2 justify-center items-center"
-                    onClick={() => navigate(`/create-feed`)}
-                  >
-                    <span className="text-[1.25rem] mt-[4px]">
-                      + 하루속 만들러가기
-                    </span>
-                  </button>
+                  className="flex gap-x-2 justify-center items-center"
+                  onClick={() => navigate(`/create-feed`)}
+                >
+                  <div className="text-[1.25rem] mt-[5px] text-black">
+                    하루속 만들러가기
+                  </div>
+                  <img
+                    className="w-[18px] h-[18px]"
+                    src={`${process.env.PUBLIC_URL}/images/arrow_black.svg`}
+                    alt="to_create"
+                  />
+                </button>
                 </div>
             </div>
           </section>
@@ -373,7 +376,7 @@ function Oneday() {
                           }}
                         >
                           <img
-                          alt='reset_filter'
+                            alt="reset_filter"
                             className="w-[24px] h-[24px]"
                             src={`${process.env.PUBLIC_URL}/images/filter_reset.svg`}
                           />
@@ -506,16 +509,18 @@ function Oneday() {
                     )}
                   </div>
                 </div>
-                {filteredOnedayList.length >= 6 && totalPages > page + 1 && (
                   <div className="flex justify-center mt-10">
-                    <button
-                      onClick={handleMore}
-                      className="bg-[#0BB159] text-white px-7 py-2 rounded-full"
-                    >
-                      더 보기
-                    </button>
+                    {filteredOnedayList.length > 5 &&
+                      ((activeTab === "전체" && page < totalPages) ||
+                        (activeTab !== "전체" && searchPage < totalPages)) && (
+                        <button
+                          onClick={handleMore}
+                          className="bg-[#0BB159] text-white px-7 py-2 rounded-full"
+                        >
+                          더 보기
+                        </button>
+                      )}
                   </div>
-                )}
               </body>
             </div>
 

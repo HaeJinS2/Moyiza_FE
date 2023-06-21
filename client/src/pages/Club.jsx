@@ -282,7 +282,7 @@ function Club() {
           </section>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <section className="h-auto min-w-[1280px] shadow-cms bg-[#FFFBF8] rounded-t-[90px] mt-[475px] z-10">
+          <section className="h-auto min-w-[1280px] border-[1px] bg-[#FFFBF8] rounded-t-[90px] mt-[475px] z-10">
             <div className="max-w-[1140px] mx-auto">
               <div
                 ref={myRef}

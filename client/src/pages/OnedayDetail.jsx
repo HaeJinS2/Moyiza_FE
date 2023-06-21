@@ -315,8 +315,7 @@ function OnedayDetail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {onedayDetail?.data?.oneDayAttendantListSize}/
-                        {onedayDetail?.data?.oneDayGroupSize}
+                        {onedayDetail?.data?.oneDayAttendantListSize}/ {onedayDetail?.data?.oneDayGroupSize}
                       </div>
                     </div>
                   </div>
@@ -433,7 +432,7 @@ function OnedayDetail() {
                           return (
                             <div
                               onClick={() =>
-                                navigate(`user/mypage/${member.userId}`)
+                                navigate(`/user/mypage/${member.userId}`)
                               }
                               className="cursor-pointer flex gap-5 items-center"
                             >

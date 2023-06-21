@@ -439,7 +439,7 @@ function Detail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {clubDetail?.data.nowMemberCount} /
+                        {clubDetail?.data.nowMemberCount}/
                         {clubDetail?.data.maxGroupSize}
                       </div>
                     </div>

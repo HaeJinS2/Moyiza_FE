@@ -1,5 +1,5 @@
 import React from "react";
-import Container from "../Container";
+// import Container from "../Container";
 import Slider from "react-input-slider";
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";

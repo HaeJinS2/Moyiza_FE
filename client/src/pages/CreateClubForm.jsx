@@ -15,9 +15,10 @@ import {
   Step7,
   Step8,
 } from "../component/createclubform/Steps.jsx";
-import Navbar from "../component/Navbar";
+// import Navbar from "../component/Navbar";
 import swal from "sweetalert";
 import { reloadChatStates } from "../states/chatState";
+import Container from "../component/Container";
 function CreateClubForm() {
   const [club, setClub] = useRecoilState(clubState);
   // const [tempId, setTempId] = useRecoilState(tempIdState);
@@ -400,108 +401,126 @@ function CreateClubForm() {
 
   return (
     <>
-      <Navbar />
-      {step === 1 && (
-        <Step1
-          nextStep={nextStep}
-          progress={progress}
-          option={option}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          handleCategoryChange={handleCategoryChange}
-        />
-      )}
-      {step === 2 && (
-        <Step2
-          nextStep={nextStep}
-          prevStep={prevStep}
-          progress={progress}
-          handleTagClick={handleTagClick}
-          option={option}
-          selectedTags={selectedTags}
-          setSelectedTags={setSelectedTags}
-          selectedTag={selectedTag}
-          setSelectedTag={setSelectedTag}
-          tagInput1={tagInput1}
-          tagInput2={tagInput2}
-          tagInput3={tagInput3}
-          handleTagChange={handleTagChange}
-          handleTagChange1={handleTagChange1}
-          handleTagChange2={handleTagChange2}
-          handleTagChange3={handleTagChange3}
-        />
-      )}
-      {step === 3 && (
-        <Step3
-          nextStep={nextStep}
-          prevStep={prevStep}
-          progress={progress}
-          titleInput={titleInput}
-          handleTitleChange={handleTitleChange}
-        />
-      )}
-      {step === 4 && (
-        <Step4
-          nextStep={nextStep}
-          prevStep={prevStep}
-          progress={progress}
-          preview={preview}
-          selectedFile={selectedFile}
-          selectedFileName={selectedFileName}
-          handleFileChange={handleFileChange}
-          contentInput={contentInput}
-          handleContentChange={handleContentChange}
-        />
-      )}
-      {step === 5 && (
-        <Step5
-          nextStep={nextStep}
-          prevStep={prevStep}
-          progress={progress}
-          selectedGenderPolicy={selectedGenderPolicy}
-          setSelectedGenderPolicy={setSelectedGenderPolicy}
-          option={option}
-          agePolicy={agePolicy}
-          handleAgePolicyChange={handleAgePolicyChange}
-          restrictionInput={restrictionInput}
-          restrictionInput2={restrictionInput2}
-          handleRestrictionChange={handleRestrictionChange}
-          handleRestrictionChange2={handleRestrictionChange2}
-        />
-      )}
-      {step === 6 && (
-        <Step6
-          nextStep={nextStep}
-          prevStep={prevStep}
-          progress={progress}
-          maxGroupSize={maxGroupSize}
-          handleMaxGroupSizeChange={handleMaxGroupSizeChange}
-          handleMaxGroupSize={handleMaxGroupSize}
-        />
-      )}
-      {step === 7 && (
-        <Step7
-          prevStep={prevStep}
-          progress={progress}
-          titleInput={titleInput}
-          handleSubmit={handleSubmit}
-        />
-      )}
-      {step === 8 && (
-        <Step8
-          titleInput={titleInput}
-          navigate={navigate}
-          prevStep={prevStep}
-          progress={progress}
-          handleSubmit={handleSubmit}
-        />
-      )}
+      {/* <Navbar /> */}
+      <Container>
+        <section className=" h-[calc(100vh-0px)] flex flex-col items-center overflow-auto ">
+          <div className="flex flex-col">
+            <div className="flex w-full pt-[116px] pb-[47px] font-semibold items-center justify-center ">
+              <span className="text-[20px]">
+                모두와 함께할 <span className="text-[#FF7F1E]">일상</span>을
+                만들어보세요!
+              </span>
+            </div>
+            <div className="flex flex-col items-center min-w-[1280px] h-[calc(100vh-200px)] justify-center border-[1px] bg-[#FFFCF2] rounded-t-[100px] ">
+              {step === 1 && (
+                <Step1
+                  nextStep={nextStep}
+                  progress={progress}
+                  option={option}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                  handleCategoryChange={handleCategoryChange}
+                />
+              )}
+              {step === 2 && (
+                <Step2
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                  progress={progress}
+                  handleTagClick={handleTagClick}
+                  option={option}
+                  selectedTags={selectedTags}
+                  setSelectedTags={setSelectedTags}
+                  selectedTag={selectedTag}
+                  setSelectedTag={setSelectedTag}
+                  tagInput1={tagInput1}
+                  tagInput2={tagInput2}
+                  tagInput3={tagInput3}
+                  handleTagChange={handleTagChange}
+                  handleTagChange1={handleTagChange1}
+                  handleTagChange2={handleTagChange2}
+                  handleTagChange3={handleTagChange3}
+                />
+              )}
+              {step === 3 && (
+                <Step3
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                  progress={progress}
+                  titleInput={titleInput}
+                  handleTitleChange={handleTitleChange}
+                />
+              )}
+              {step === 4 && (
+                <Step4
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                  progress={progress}
+                  preview={preview}
+                  selectedFile={selectedFile}
+                  selectedFileName={selectedFileName}
+                  handleFileChange={handleFileChange}
+                  contentInput={contentInput}
+                  handleContentChange={handleContentChange}
+                />
+              )}
+              {step === 5 && (
+                <Step5
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                  progress={progress}
+                  selectedGenderPolicy={selectedGenderPolicy}
+                  setSelectedGenderPolicy={setSelectedGenderPolicy}
+                  option={option}
+                  agePolicy={agePolicy}
+                  handleAgePolicyChange={handleAgePolicyChange}
+                  restrictionInput={restrictionInput}
+                  restrictionInput2={restrictionInput2}
+                  handleRestrictionChange={handleRestrictionChange}
+                  handleRestrictionChange2={handleRestrictionChange2}
+                />
+              )}
+              {step === 6 && (
+                <Step6
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                  progress={progress}
+                  maxGroupSize={maxGroupSize}
+                  handleMaxGroupSizeChange={handleMaxGroupSizeChange}
+                  handleMaxGroupSize={handleMaxGroupSize}
+                />
+              )}
+              {step === 7 && (
+                <Step7
+                  prevStep={prevStep}
+                  progress={progress}
+                  titleInput={titleInput}
+                  handleSubmit={handleSubmit}
+                />
+              )}
+              {step === 8 && (
+                <Step8
+                  titleInput={titleInput}
+                  navigate={navigate}
+                  prevStep={prevStep}
+                  progress={progress}
+                  handleSubmit={handleSubmit}
+                />
+              )}
+              <div className="w-[1140px] h-[20px] mt-[56px]">
+                <LinearProgress
+                  variant="determinate"
+                  value={(step / 8) * 100}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </Container>
 
-      <div className="fixed inset-x-0 bottom-[300px] z-10 flex justify-center items-center">
-        <div className="w-[1140px] h-[20px]">
-          <LinearProgress variant="determinate" value={(step / 8) * 100} />
-        </div>
-      </div>
+      {/* <div className="fixed inset-x-0 bottom-[300px] z-10 flex justify-center items-center"> */}
+
+      {/* </div> */}
     </>
   );
 }

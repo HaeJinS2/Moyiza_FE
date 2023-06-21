@@ -24,6 +24,7 @@ function MyInfoClub() {
     const [clubsInParticipatingInfo, setClubsInParticipatingInfo] = useState([]);
     const [oneDaysInOperationInfo, setOneDaysInOperationInfo] = useState([]);
     const [oneDaysInParticipatingInfo, setOneDaysInParticipatingInfo] = useState([]);
+
     
     const goClub = () => {
         navigate('/club');

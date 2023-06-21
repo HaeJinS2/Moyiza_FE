@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import swal from "sweetalert";
 import { getAPI } from "../axios";
 import { searchState } from "../states/searchState";
 
@@ -29,6 +30,9 @@ const SearchBar = () => {
 
   const handleSearch = (e) => {
     if (e.type === "keypress" && e.key !== "Enter") return;
+    if (search.trim().length === 0){
+      return swal('검색어를 입력해주세요!')
+    }
     Promise.all([
       getAPI(`/oneday/search?q=${search}`).then((res) => {
         setSearchList((prev) => ({

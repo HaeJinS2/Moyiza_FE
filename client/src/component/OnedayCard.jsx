@@ -25,11 +25,11 @@ function OnedayCard({
           alt="clubThumbnail"
         />
         <div className="flex flex-col gap-4 w-full h-full">
-          <div className="flex justify-between text-xs text-green-500">
+          <div className="flex justify-between text-xs text-[#0BB159]">
             <div className="flex gap-2">
               {tag.map((tag) => {
                 return (
-                  <div className="rounded-full border-[1px] px-2 py-1 border-green-500">
+                  <div className="rounded-full border-[1px] px-2 py-1 border-[#0BB159]">
                     {tag}
                   </div>
                 );

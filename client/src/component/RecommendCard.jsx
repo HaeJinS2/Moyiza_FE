@@ -23,7 +23,7 @@ function RecommendCard({
             <div className="flex gap-2 ">
               {tag.map((tag) => {
                 return (
-                  <div className="rounded-full bg-orange-400 px-2 py-1 ">
+                  <div className="rounded-full bg-[#FF7F1D] px-2 py-1 ">
                     {tag}
                   </div>
                 );

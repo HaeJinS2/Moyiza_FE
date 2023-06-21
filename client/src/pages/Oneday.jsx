@@ -582,7 +582,7 @@ function Oneday() {
                 <p className=" text-[1.75rem] font-sans font-semibold">
                   내가 찾는 하루속 이벤트가 없다면?
                 </p>
-                <div className="text-green-400">
+                <div className="text-[#0BB159]">
                   {/* <CreateClub /> */}
                   <button
                     className="flex gap-x-2 justify-center items-center"

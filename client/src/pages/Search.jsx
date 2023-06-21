@@ -185,7 +185,7 @@ function Search() {
               </p>
               <div 
               onClick={() => navigate('/create-feed')}
-              className="cursor-pointer text-orange-400 text-xl flex gap-1 items-center">
+              className="cursor-pointer text-[#FF7F1D] text-xl flex gap-1 items-center">
                 <p> 모임 만들러가기 </p>
                 <img
                   className="w-[20px] h-[20px]"

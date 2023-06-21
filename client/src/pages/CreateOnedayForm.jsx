@@ -325,7 +325,7 @@ function CreateOnedayForm() {
       <Container>
         <div className="flex flex-col justify-center items-center">
           <div className="flex justify-center pt-[116px] pb-[47px] text-3xl">
-            모두와 함께할&nbsp; <span className="text-green-400">하루</span>를
+            모두와 함께할&nbsp; <span className="text-[#0BB159]">하루</span>를
             만들어보세요
           </div>
           <div className="h-auto min-w-[1280px] flex flex-col items-center shadow-cm bg-[#FFFCF2] rounded-t-3xl pb-10">

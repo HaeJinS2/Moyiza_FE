@@ -256,7 +256,7 @@ function CreateEventModal({ id, getClubEventLists }) {
   return (
     <div>
       <button
-        className="bg-orange-400 text-white flex justify-center items-center w-[63.42px] h-[60px] rounded-full text-5xl "
+        className="bg-[#FF7F1D] text-white flex justify-center items-center w-[63.42px] h-[60px] rounded-full text-5xl "
         onClick={openModal}
       >
         +

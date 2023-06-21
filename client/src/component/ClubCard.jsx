@@ -191,7 +191,7 @@ function ClubCard({
               </div>
               <div className="flex h-full justify-between flex-col pr-6">
                 <div>
-                <div className="w-full text-2xl font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis">
+                  <div className="w-full text-2xl font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis">
                     {title}
                   </div>
                   <div className="text-sm">
@@ -216,8 +216,15 @@ function ClubCard({
                 </div>
                 <div className="flex justify-between">
                   <div></div>
-                  <div className=" text-neutral-400 text-sm ">
-                    {nowMemberCount}/{maxGroupSize}
+                  <div className=" text-neutral-400 text-sm flex gap-1 items-center">
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/club_card_people.svg`}
+                      className="w-[14px] h-[14px]"
+                      alt="club_card_people"
+                    />
+                    <p>
+                      {nowMemberCount}/{maxGroupSize}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -387,8 +394,15 @@ function ClubCard({
                 </div>
                 <div className="flex justify-between">
                   <div></div>
-                  <div className=" text-neutral-400 text-sm ">
-                    {nowMemberCount}/{maxGroupSize}
+                  <div className=" text-neutral-400 text-sm flex gap-1 items-center">
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/club_card_people.svg`}
+                      className="w-[14px] h-[14px]"
+                      alt="club_card_people"
+                    />
+                    <p>
+                      {nowMemberCount}/{maxGroupSize}
+                    </p>
                   </div>
                 </div>
               </div>

@@ -169,7 +169,7 @@ function WriteReview() {
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             placeholder='내용'
-                            className='border-[1px] rounded-[20px] w-[812px] h-[192px] p-4' />
+                            className='border-[1px] rounded-[20px] resize-none w-[812px] h-[192px] p-4' />
                     </div>
                     <div className='flex gap-x-3'>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import SearchBar from "./SearchBar";
 import { getAPI } from "../axios";
@@ -20,6 +20,7 @@ import { getCookie, parseJwt } from "../utils/jwtUtils";
 function Navbar({ clientRef }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태 여부를 관리할 상태값 추가
   const navigate = useNavigate();
+  const location = useLocation();
   // const [roomId, setRoomId] = useState([]);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -62,9 +63,9 @@ useEffect(() => {
 
           // 응답이 성공적인지 확인
           if (response.status === 200) {
-              const responseData = response?.data;
-              setNickname(responseData?.nickname || "");
-              setProfileImage(responseData?.profileImage || "");
+              const responseData = response.data;
+              setNickname(responseData.nickname || "");
+              setProfileImage(responseData.profileImage || "");
               
           }
       } catch (error) {
@@ -128,8 +129,10 @@ useEffect(() => {
 
 
   const goMyInfo = () => {
-    // navigate("/mypage/");
-    navigate(`user/mypage/${userId}`);
+    const currentPath = `/user/mypage/${userId}`;
+    if (location.pathname !== currentPath) {
+      navigate(currentPath);
+    }
   };
 
   // useEffect(() => {

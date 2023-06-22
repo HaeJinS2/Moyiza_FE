@@ -315,7 +315,7 @@ function OnedayDetail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {onedayDetail?.data?.oneDayAttendantListSize}/ {onedayDetail?.data?.oneDayGroupSize}
+                        {onedayDetail?.data?.oneDayAttendantListSize}/{onedayDetail?.data?.oneDayGroupSize}
                       </div>
                     </div>
                   </div>
@@ -538,7 +538,7 @@ function OnedayDetail() {
         </div>
 
         <div className="flex justify-center pb-20">
-          {onEdit && (
+          {isOwner && (
             <button
               onClick={handleDeleteOneday}
               className=" text-white text-2xl bg-[#646464] w-[224px] h-[60px] px-2 py-1 rounded-full"

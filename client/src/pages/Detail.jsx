@@ -43,6 +43,8 @@ function Detail() {
   const [imageArr, setImageArr] = useState([]);
   const [onEditClubRule, setOnEditClubRule] = useState("");
   const [clubRule, setClubRule] = useState("");
+  const [onEditEvent, setOnEditEvent] = useState(false);
+  const [clickedEvent, setClickedEvent] = useState(0);
 
   function openModal() {
     setModalIsOpen(true);
@@ -383,14 +385,23 @@ function Detail() {
               </div>
               {isOwner ? (
                 onEdit ? (
-                  <button onClick={() => setOnEdit(false)}>
+                  <button
+                    onClick={() => {
+                      setOnEdit(false);
+                    }}
+                  >
                     <img
                       src={`${process.env.PUBLIC_URL}/images/onEdit.svg`}
                       alt="cancel_edit_button"
                     />
                   </button>
                 ) : (
-                  <button onClick={() => setOnEdit(true)}>
+                  <button
+                    onClick={() => {
+                      swal('업데이트 중인 기능입니다. 서비스 이용에 불편을 드려 죄송합니다.')
+                      // setOnEdit(true);
+                    }}
+                  >
                     <img
                       src={`${process.env.PUBLIC_URL}/images/setting.svg`}
                       alt="edit_button"
@@ -597,8 +608,7 @@ function Detail() {
                     </div>
                   </div>
                 </>
-              ) :
-               (
+              ) : (
                 <>
                   <div className="flex">
                     <div className="w-[458px] h-[91px] mr-[70px]"></div>
@@ -649,7 +659,7 @@ function Detail() {
             </div>
             {onEditClubRule ? (
               <textarea
-                className="text-[1.25rem] h-[215px] w-full bg-[#F5F5F5] rounded-xl mt-10 p-4"
+                className="text-[1.25rem] h-[215px] w-full bg-[#F5F5F5] resize-none rounded-xl mt-10 p-4"
                 value={clubRule}
                 onChange={handleClubRuleInput}
               />
@@ -800,24 +810,42 @@ function Detail() {
                             return (
                               <>
                                 <div className="flex flex-col gap-2 ">
-                                  <div className="flex justify-end relative">
-                                    <img src={`${process.env.PUBLIC_URL}/images/toggle_edit_button.svg`}
-                                    alt='toggle_event_edit_button'
-                                    />
-                                    <div className="absolute top-[36px] right-0 flex-col flex gap-2 z-20 bg-white justify-end border-[1px] rounded-[10px] items-center">
-                                      <button className="w-[100px] h-[30px] text-black text-[1rem] pt-[1px] border-b-[1px]">
-                                        수정하기
-                                      </button>
-                                      <button
-                                        className="w-[100px] h-[30px] text-black text-[1rem] pt-[1px]"
-                                        onClick={() =>
-                                          handleDeleteEvent(id, item.id)
-                                        }
-                                      >
-                                        삭제하기
-                                      </button>
+                                  <div className="flex justify-end relative cursor-pointer">
+                                    {isOwner && (
+                                      <img
+                                        onClick={() => {
+                                          setClickedEvent(item.id);
+                                          onEditEvent
+                                            ? setOnEditEvent(false)
+                                            : setOnEditEvent(true);
+                                        }}
+                                        src={`${process.env.PUBLIC_URL}/images/toggle_edit_button.svg`}
+                                        alt="toggle_event_edit_button"
+                                      />
+                                    )}
 
-                                    </div>
+                                    {onEditEvent &&
+                                      clickedEvent === item.id && (
+                                        <div className="absolute top-[36px] right-0 flex-col flex z-20 bg-white justify-end border-[1px] rounded-[10px] items-center">
+                                          <button
+                                            onClick={() => {
+                                              swal("아직 준비중인 기능입니다!");
+                                              setOnEditEvent(false);
+                                            }}
+                                            className="w-[100px] text-black text-[1rem] py-[2px] border-b-[1px]"
+                                          >
+                                            수정하기
+                                          </button>
+                                          <button
+                                            className="w-[100px] text-black py-[2px] text-[1rem]"
+                                            onClick={() =>
+                                              handleDeleteEvent(id, item.id)
+                                            }
+                                          >
+                                            삭제하기
+                                          </button>
+                                        </div>
+                                      )}
                                   </div>
                                   <ClubEventCard
                                     image={item?.image}
@@ -834,23 +862,6 @@ function Detail() {
                                     location={item?.eventLocation}
                                     isLikedByUser={item?.isLikedByUser}
                                   />
-                                  {onEdit ? (
-                                    <div className="w-full justify-between flex gap-2">
-                                      <button className="w-[126px] h-[30px] rounded-full bg-[#ff7f1d] text-white text-[1.25rem] pt-[1px]">
-                                        수정하기
-                                      </button>
-                                      <button
-                                        className="w-[126px] h-[30px] rounded-full border-2 border-[#ff7f1d] bg-white text-[#ff7f1d] text-[1.25rem] pt-[1px]"
-                                        onClick={() =>
-                                          handleDeleteEvent(id, item.id)
-                                        }
-                                      >
-                                        삭제하기
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
                                 </div>
                               </>
                             );

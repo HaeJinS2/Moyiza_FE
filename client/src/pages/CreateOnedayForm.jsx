@@ -645,7 +645,7 @@ function OnedayStep4({
                 2) 하루속 이벤트를 소개할 내용을 적어주세요.
               </div>
               <textarea
-                className="shadow-cms rounded-3xl w-full h-[130px] p-4"
+                className="shadow-cms resize-none rounded-3xl w-full h-[130px] p-4"
                 placeholder="우리 일상을 소개해주세요."
                 type="text"
                 value={savedOnedayData.oneDayContent}

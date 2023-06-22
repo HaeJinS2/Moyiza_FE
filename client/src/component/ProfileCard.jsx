@@ -23,7 +23,7 @@ function ProfileCard({
                 <div className="flex items-center rounded-xl ">
                     <img
                         className="rounded-[15px] w-[130px] h-[130px] border-[1px] ml-5"
-                        src={imageUrlList[0]}
+                        src={thumbnailUrl}
                         alt="clubThumbnail"
                     />
                 </div>
@@ -31,7 +31,7 @@ function ProfileCard({
                 <div className="w-[172px] h-[130px] ml-[20px] flex justify-start flex-col">
                     <div className="flex justify-between">
                         <div className="text-[12px] text-orange-400 mb-[12px] w-[240px] flex ">
-                            {clubTag?.map((tag) => {
+                            {clubTag.map((tag) => {
                                 return (
                                     <div
                                         key={tag}

@@ -15,7 +15,7 @@ const PAGE_TABS = ['일상속', '하루속'];
 function MyInfoClub() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const divRef = useRef(null);   
+    const divRef = useRef(null);
     const [activePageTab, setActivePageTab] = useState(PAGE_TABS[0]);
     const [nickname, setNickname] = useState(null);
     const [email, setEmail] = useState(null);
@@ -25,7 +25,12 @@ function MyInfoClub() {
     const [oneDaysInOperationInfo, setOneDaysInOperationInfo] = useState([]);
     const [oneDaysInParticipatingInfo, setOneDaysInParticipatingInfo] = useState([]);
 
-    
+    // const [lastPage, setLastPage] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
+    // const [activeTab, setActiveTab] = useState("전체");
+    const [page, setPage] = useState(0);
+
+
     const goClub = () => {
         navigate('/club');
     };
@@ -49,6 +54,8 @@ function MyInfoClub() {
                 // 응답이 성공적인지 확인
                 if (response.status === 200) {
                     const responseData = response?.data;
+                    // setTotalPages(response?.data.size);
+                    // setLastPage(response?.data.last);
                     setNickname(responseData?.nickname || "");
                     setEmail(responseData?.email || "");
                     // setBirth(birth);
@@ -57,6 +64,7 @@ function MyInfoClub() {
                     setClubsInParticipatingInfo(responseData?.clubsInParticipatingInfo || []);
                     setOneDaysInOperationInfo(responseData?.oneDaysInOperationInfo || []);
                     setOneDaysInParticipatingInfo(responseData?.oneDaysInParticipatingInfo || []);
+                    setTotalPages(responseData?.clubsInOperationInfo?.totalPages || 1); // 총 페이지 수 업데이트
                 }
             } catch (error) {
                 console.error(error.response.message);
@@ -66,10 +74,34 @@ function MyInfoClub() {
         fetchData();
     }, [id]);
 
+    // "더 보기" 버튼 클릭 시 추가 정보를 가져오는 함수
+  const loadMoreClubs = async () => {
+    try {
+      const nextPage = page + 1; // 다음 페이지 번호 계산
+      const response = await getAPI(`/mypage/${id}?page=${nextPage}`); // 다음 페이지의 정보를 가져오는 API 호출
+
+      // 응답이 성공적인지 확인
+      if (response.status === 200) {
+        const responseData = response?.data;
+
+        setClubsInOperationInfo([...clubsInOperationInfo, ...responseData?.clubsInOperationInfo?.content || []]);
+        setPage(nextPage); // 페이지 번호 업데이트
+      }
+    } catch (error) {
+      console.error(error.response.message);
+      // 에러 처리
+    }
+  };
+console.log('clubsInOperationInfo',clubsInOperationInfo)
+console.log('clubsInParticipatingInfo',clubsInParticipatingInfo)
+
+console.log('oneDaysInOperationInfo',oneDaysInOperationInfo)
+console.log('oneDaysInParticipatingInfo',oneDaysInParticipatingInfo)
+
     return (
         <>
             <div className="flex flex-row" ref={divRef}>
-                <Navbar className='z-9999'/>
+                <Navbar className='z-9999' />
                 <Container >
                     {/* <section className="h-[calc(100vh-0px)] flex flex-col items-center "> */}
                     <div className='flex'>
@@ -97,7 +129,7 @@ function MyInfoClub() {
                                             >
                                                 {activePageTab === tab && (
                                                     <motion.div
-                                                    
+
                                                         layoutId="active-pill-1"
                                                         transition={{ type: 'spring', duration: 0.5 }}
                                                         className="border-b-[4px] border-black absolute inset-0 z-8877'"
@@ -151,7 +183,7 @@ function MyInfoClub() {
                                                                 )} */}
                                                             </div>
                                                             <div className='w-[748px] flex flex-wrap justify-between'>
-                                                                {clubsInOperationInfo.map((club, i) => (
+                                                                {clubsInOperationInfo.content.map((club, i) => (
                                                                     <ProfileCard
                                                                         className="mr-[28px]"
                                                                         key={club.club_id}
@@ -165,12 +197,21 @@ function MyInfoClub() {
                                                                     />
                                                                 ))}
                                                             </div>
+                                                            
+                                                            <div className="flex justify-center  pb-12">
+                                                            {clubsInOperationInfo.length > 4 && page < totalPages && (
+          <button className="bg-[#FF7F1D] text-white px-7 py-2 rounded-full" onClick={loadMoreClubs}>
+            더 보기
+          </button>
+        )}
+                                                            </div>
+                                                           
                                                             <div className='mt-[39px] flex flex-col justify-be8px] mb-[25px]'>
                                                                 <div className="text-[24px]">{nickname ? `${nickname}님의 참여중인 일상속` : null}</div>
                                                                 {/* <div className='text-[20px] '> 총 {clubsInParticipatingInfo.length}개</div> */}
                                                             </div>
                                                             <div className='w-[748px] flex flex-wrap justify-between'>
-                                                                {clubsInParticipatingInfo.map((club, i) => (
+                                                                {clubsInParticipatingInfo.content.map((club, i) => (
                                                                     <ProfileCard
                                                                         className="mr-[28px]"
                                                                         key={club.club_id}
@@ -234,18 +275,19 @@ function MyInfoClub() {
                                                                 )} */}
                                                             </div>
                                                             <div className='w-[748px] flex flex-wrap justify-between'>
-                                                                {oneDaysInOperationInfo.map((club, i) => {
+                                                                {oneDaysInOperationInfo.content.map((club, i) => {
                                                                     return (
                                                                         <ProfileCardOneday
                                                                             className="mr-[28px]"
-                                                                            key={club.oneDayId}
-                                                                            oneDayTitle={club.oneDayTitle}
-                                                                            oneDayImage={club.oneDayImage}
-                                                                            oneDayId={club.oneDayId}
-                                                                            oneDayGroupSize={club.oneDayGroupSize}
-                                                                            oneDayAttendantListSize={club.oneDayAttendantListSize}
-                                                                            oneDayContent={club.oneDayContent}
-                                                                            tagString={club.tagString}
+                                                                            key={club.onedayId}
+                                                                            onedayTitle={club.onedayTitle}
+                                                                            thumbnailUrl={club.thumbnailUrl}
+                                                                            onedayId={club.onedayId}
+                                                                            onedayGroupSize={club.onedayGroupSize}
+                                                                            onedayAttendantsNum={club.onedayAttendantsNum}
+                                                                            onedayContent={club.onedayContent}
+                                                                            onedayTag={club.onedayTag}
+                                                                            onedayLocation={club.onedayLocation.split(' ').slice(0, 2).join(' ')}
                                                                         />
                                                                     );
                                                                 })}
@@ -255,18 +297,19 @@ function MyInfoClub() {
                                                                 {/* <div className='text-[20px] '> 총 {oneDaysInParticipatingInfo.length}개</div> */}
                                                             </div>
                                                             <div className='w-[748px] flex flex-wrap justify-between'>
-                                                                {oneDaysInParticipatingInfo.map((club, i) => {
+                                                                {oneDaysInParticipatingInfo.content.map((club, i) => {
                                                                     return (
                                                                         <ProfileCardOneday
                                                                             className="mr-[28px]"
-                                                                            key={club.oneDayId}
-                                                                            oneDayTitle={club.oneDayTitle}
-                                                                            oneDayImage={club.oneDayImage}
-                                                                            oneDayId={club.oneDayId}
-                                                                            oneDayGroupSize={club.oneDayGroupSize}
-                                                                            oneDayAttendantListSize={club.oneDayAttendantListSize}
-                                                                            oneDayContent={club.oneDayContent}
-                                                                            tagString={club.tagString}
+                                                                            key={club.onedayId}
+                                                                            onedayTitle={club.onedayTitle}
+                                                                            thumbnailUrl={club.thumbnailUrl}
+                                                                            onedayId={club.onedayId}
+                                                                            onedayGroupSize={club.onedayGroupSize}
+                                                                            onedayAttendantsNum={club.onedayAttendantsNum}
+                                                                            onedayContent={club.onedayContent}
+                                                                            onedayTag={club.onedayTag}
+                                                                            onedayLocation={club.onedayLocation.split(' ').slice(0, 2).join(' ')}
                                                                         />
                                                                     );
                                                                 })}

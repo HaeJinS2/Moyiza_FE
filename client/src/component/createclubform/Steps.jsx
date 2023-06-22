@@ -212,7 +212,7 @@ export const Step4 = ({
             </span>
           </div>
           <textarea
-            className="w-[868px] h-[101px] rounded-3xl border-[1px] p-4"
+            className="w-[868px] h-[101px] resize-none rounded-3xl border-[1px] p-4"
             placeholder="우리 일상을 소개해주세요."
             value={contentInput}
             onChange={handleContentChange}

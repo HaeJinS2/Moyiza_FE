@@ -10,9 +10,10 @@ function EditClubDetail() {
   const [categoryAndTagList, setCategoryAndTagList] = useState({});
   const [activatedFilterCategory, setActivatedFilterCategory] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
-
   const {
+    // eslint-disable-next-line
     isLoading,
+    // eslint-disable-next-line
     isError,
     data: clubDetail,
   } = useQuery("getDetailClub", () => getAPI(`/club/${id}`), {

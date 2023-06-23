@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 function ProfileCard({
     clubTitle,
-    thumbnailUrl,
     club_id,
     maxGroupSize,
     nowMemberCount,
@@ -22,8 +21,8 @@ function ProfileCard({
             >
                 <div className="flex items-center rounded-xl ">
                     <img
-                        className="rounded-[15px] w-[130px] h-[130px] border-[1px] ml-5"
-                        src={thumbnailUrl}
+                        className="rounded-[15px] w-[130px] h-[130px] border-[1px] ml-5 aspect-square  object-cover"
+                        src={imageUrlList.length > 0 ? imageUrlList[0] : `${process.env.PUBLIC_URL}/images/favicon.png`}
                         alt="clubThumbnail"
                     />
                 </div>

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Modal from "react-modal";
-// import Frame from "../component/img/Frame.png";
+import Frame from "../component/img/Frame.png";
 import axios from "axios";
 import { useMutation } from "react-query";
 import swal from "sweetalert";
@@ -206,9 +206,9 @@ function UserProfile({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 //   모달 열기
-//   const openModal = () => {
-//     setIsModalOpen(true);
-//   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
   // 모달 닫기
   const closeModal = () => {
@@ -233,12 +233,12 @@ function UserProfile({
             )}
             {/* 작은 원 */}
             <div className='absolute '>
-            {/* <div
-             className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute top-20 left-40"
+            <div
+             className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute bottom-7 left-8"
               onClick={openModal}
-            > */}
-               {/* <img src={Frame} alt=""></img> */}
-           {/* </div> */}
+            > 
+               <img src={Frame} alt=""></img>
+           </div>
              </div> 
              <div>
               <div className="name mt-[10px] text-[28px] flex items-center justify-center">

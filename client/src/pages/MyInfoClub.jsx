@@ -188,7 +188,7 @@ console.log('oneDaysInParticipatingInfo',oneDaysInParticipatingInfo)
                                                                         className="mr-[28px]"
                                                                         key={club.club_id}
                                                                         clubTitle={club.clubTitle}
-                                                                        thumbnailUrl={club.thumbnailUrl}
+                                                                        imageUrlList={club.imageUrlList}
                                                                         club_id={club.club_id}
                                                                         maxGroupSize={club.maxGroupSize}
                                                                         nowMemberCount={club.nowMemberCount}
@@ -216,7 +216,7 @@ console.log('oneDaysInParticipatingInfo',oneDaysInParticipatingInfo)
                                                                         className="mr-[28px]"
                                                                         key={club.club_id}
                                                                         clubTitle={club.clubTitle}
-                                                                        thumbnailUrl={club.thumbnailUrl}
+                                                                        imageUrlList={club.imageUrlList}
                                                                         club_id={club.club_id}
                                                                         maxGroupSize={club.maxGroupSize}
                                                                         nowMemberCount={club.nowMemberCount}
@@ -281,7 +281,7 @@ console.log('oneDaysInParticipatingInfo',oneDaysInParticipatingInfo)
                                                                             className="mr-[28px]"
                                                                             key={club.onedayId}
                                                                             onedayTitle={club.onedayTitle}
-                                                                            thumbnailUrl={club.thumbnailUrl}
+                                                                            imageUrlList={club.imageUrlList}
                                                                             onedayId={club.onedayId}
                                                                             onedayGroupSize={club.onedayGroupSize}
                                                                             onedayAttendantsNum={club.onedayAttendantsNum}
@@ -303,7 +303,7 @@ console.log('oneDaysInParticipatingInfo',oneDaysInParticipatingInfo)
                                                                             className="mr-[28px]"
                                                                             key={club.onedayId}
                                                                             onedayTitle={club.onedayTitle}
-                                                                            thumbnailUrl={club.thumbnailUrl}
+                                                                            imageUrlList={club.imageUrlList}
                                                                             onedayId={club.onedayId}
                                                                             onedayGroupSize={club.onedayGroupSize}
                                                                             onedayAttendantsNum={club.onedayAttendantsNum}

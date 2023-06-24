@@ -19,6 +19,8 @@ function MyInfoClub() {
     const [activePageTab, setActivePageTab] = useState(PAGE_TABS[0]);
     const [nickname, setNickname] = useState(null);
     const [email, setEmail] = useState(null);
+    const [tags, setTags] = useState(null);
+    const [content, setContent] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
     const [clubsInOperationInfo, setClubsInOperationInfo] = useState([]);
     const [clubsInParticipatingInfo, setClubsInParticipatingInfo] = useState([]);
@@ -58,6 +60,8 @@ function MyInfoClub() {
                     // setLastPage(response?.data.last);
                     setNickname(responseData?.nickname || "");
                     setEmail(responseData?.email || "");
+                    setTags(responseData?.tags || null);
+                    setContent(responseData?.content || "");
                     // setBirth(birth);
                     setProfileImage(responseData?.profileImage || "");
                     setClubsInOperationInfo(responseData?.clubsInOperationInfo || []);
@@ -112,6 +116,8 @@ console.log('oneDaysInParticipatingInfo',oneDaysInParticipatingInfo)
                                 nickname={nickname}
                                 profileImage={profileImage}
                                 email={email}
+                                tags={tags}
+                                content={content}
                             // birth={birth}
                             />
                         </div>

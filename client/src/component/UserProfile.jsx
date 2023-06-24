@@ -36,36 +36,37 @@ function UserProfile({
         }
     };
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        try {
-            const formData = new FormData();
-
-            formData.append("nickname", userInput.initialNickname);
-            formData.append("content", userInput.content);
-            formData.append("tags", userInput.tags);
-
-            // ImageFormData
-            const ImageFormData = new FormData();
-            ImageFormData.append("imageFile", profileImage);
-
-            // 이미지를 먼저 업로드 한 뒤, 3S 저장 URL을 response 받는다.
-            const IMAGE_UPLOAD_URL = `${process.env.REACT_APP_SERVER_URL}/uploadImg`;
-            const uploadRes = await axios.post(IMAGE_UPLOAD_URL, ImageFormData, {
+    // const submitHandler = async (e) => {
+        const submitHandler = async (e) => {
+            e.preventDefault();
+            try {
+              const requestData = {
+                nickname: userInput.initialNickname || "",
+                content: userInput.content || "",
+                tags: selectedCategories.length > 0 ? selectedCategories : null,
+              };
+          
+              // ImageFormData
+              const imageFormData = new FormData();
+              imageFormData.append("imageFile", profileImage);
+          
+              // 이미지를 먼저 업로드 한 뒤, 3S 저장 URL을 response 받는다.
+              const IMAGE_UPLOAD_URL = `${process.env.REACT_APP_SERVER_URL}/uploadImg`;
+              const uploadRes = await axios.post(IMAGE_UPLOAD_URL, imageFormData, {
                 headers: {
-                    "Content-Type": "multipart/form-data",
+                  "Content-Type": "multipart/form-data",
                 },
-            });
-
-            formData.append("imageUrl", uploadRes.data);
-
-            const originUrl = `${process.env.REACT_APP_SERVER_URL}/profile`;
-            // eslint-disable-next-line
-            const submitResponse = await axios.put(originUrl, formData, {
+              });
+          
+              requestData.imageUrl = uploadRes.data;
+          
+              const originUrl = `${process.env.REACT_APP_SERVER_URL}/profile`;
+              // eslint-disable-next-line
+              const submitResponse = await axios.put(originUrl, requestData, {
                 headers: {
-                    "Content-Type": "application/json",
+                  "Content-Type": "application/json",
                 },
-            });
+              });
             swal("회원정보 수정 성공");
         } catch (error) {
             console.error(error);
@@ -97,6 +98,10 @@ function UserProfile({
     });
 
     const nicknameValidationHandler = () => {
+    //     if (!nickname) {
+    //     // 닉네임이 비어있는 경우, 중복 검사를 수행하지 않고 함수 종료
+    //     return;
+    // }
         validationMutation.mutate({
             nickname,
         });
@@ -145,6 +150,7 @@ function UserProfile({
 
     const [categoryDetails, setCategoryDetails] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     const categories = [
         "예술",
@@ -159,7 +165,7 @@ function UserProfile({
     ];
 
     const handleCategoryClick = (category) => {
-        // setSelectedCategory(category);
+        setSelectedCategory(category);
         getCategoryDetails(category);
     };
 
@@ -194,8 +200,8 @@ function UserProfile({
             // display: 'flex',
             // justifyContent: 'center',
             // alignItems: 'center',
-            width: "550px",
-            height: "800px",
+            width: "600px",
+            height: "850px",
             margin: "auto",
             top: "50%",
             left: "50%",
@@ -203,9 +209,9 @@ function UserProfile({
             transform: "translate(20%, 20%)",
             border: "1px solid #ccc",
             borderRadius: "50px",
-            padding: "30px",
+            padding: "40px",
             backgroundColor: "white",
-            overflow: "auto"
+            // overflow: "auto"
         },
     };
 
@@ -272,9 +278,10 @@ function UserProfile({
                         </div>
 
                         <div className="mt-[34px] text-[16px] text-[#A6A6A6] w-[269px] h-[19px] flex justify-center truncate hover:text-clip">
-                            {initialContent
-                                ? { initialContent }
-                                : "간단한 소개글을 입력하세요"}
+                            {initialContent || "간단한 소개글을 입력하세요"
+                                // ? { initialContent }
+                                // : "간단한 소개글을 입력하세요"
+                                }
                         </div>
                     </div>
 
@@ -287,10 +294,10 @@ function UserProfile({
                         className="z-8888 "
                     >
                         <div className="flex flex-col items-center">
-                            <h2 className="mb-10 text-[20px] font-medium">프로필 수정</h2>
+                            <h2 className="mb-10 text-[30px] font-medium">프로필 수정</h2>
                             <div className="flex items-center mb-5 w-full">
                                 <div className="w-[30%]">
-                                    <p className="font-medium">닉네임</p>
+                                    <p className="font-medium text-[20px]">닉네임</p>
                                 </div>
                                 <input
                                     placeholder={initialNickname || ""}
@@ -305,7 +312,7 @@ function UserProfile({
                                         color: "#FF7F1E",
                                         borderColor: "#FF7F1E",
                                     }}
-                                    className="bg-white rounded-xl border-2 w-30 h-[45px] px-4 py-1 shadow hover:shadow-lg"
+                                    className="bg-white text-[18px] rounded-xl border-2 w-30 h-[45px] px-4 py-1 shadow hover:shadow-lg"
                                     onClick={nicknameValidationHandler}
                                 >
                                     중복확인
@@ -313,7 +320,7 @@ function UserProfile({
                             </div>
                             <div className="flex items-center mb-5 w-full">
                                 <div className="w-[30%]">
-                                    <p className="font-medium">프로필 사진</p>
+                                    <p className="font-medium text-[20px]">프로필 사진</p>
                                 </div>
                                 <input
                                     ref={imgRef}
@@ -330,7 +337,7 @@ function UserProfile({
                             </div>
                             <div className="flex items-center mb-5 w-full">
                                 <div className="w-[30%]">
-                                    <p className="font-medium">자기소개글</p>
+                                    <p className="font-medium text-[20px]">자기소개글</p>
                                 </div>
                                 <input
                                     class="int h-10 rounded-lg px-3.5 py-2 w-[70%] shadow"
@@ -346,7 +353,7 @@ function UserProfile({
                             <div className="mb-[220px] w-full">
                                 <div className="flex flex-row items-center">
                                     <div className="w-[30%]">
-                                        <div className="font-medium">관심사</div>
+                                        <div className="font-medium text-[20px]">관심사</div>
                                     </div>
                                     <div className="flex w-[70%] items-center">
                                         <button
@@ -375,34 +382,29 @@ function UserProfile({
                                     </div>
                                 </div>
                                 {!expanded && (
-                                    <div className=" mt-[20px] w-[500px] h-[360px] bg-[#FFFCF2] rounded-[20px] flex flex-col justify-start items-center">
+                                    <div className=" mt-[30px] w-[520px] h-[360px] bg-[#FFFCF2] rounded-[20px] flex flex-col justify-start items-center">
                                         <div className="mt-[20px] ">
                                             최대 3개까지 선택할 수 있습니다
                                         </div>
                                         <div className="mt-[20px] text-[14px] flex-row flex px-4 py-1 ">
-                                            {categories.map((tag) => {
-                                                const isSelected = selectedCategories.includes(tag);
-                                                return (
-                                                    <button
-                                                        key={tag}
-                                                        className={`rounded-[50px] mr-1 b-1 border-1 px-2  bg-white text-orange-400 flex justify-start align-center ${isSelected
-                                                            ? "bg-orange-400 text-white"
-                                                            : "bg-white text-orange-400"
-                                                            }`}
-                                                        onClick={() => handleCategoryClick(tag)}
-                                                    >
-                                                        {tag}
-                                                    </button>
-                                                );
-                                            })}
+                                            {categories.map((category) => (
+                                                <button
+                                                    key={category}
+                                                    className={`rounded-[50px] mr-1 b-1 border-1 px-2 ${selectedCategory === category ? "bg-orange-400 text-white" : ""
+                                                        }`}
+                                                    onClick={() => handleCategoryClick(category)}
+                                                >
+                                                    {category}
+                                                </button>
+                                            ))}
                                         </div>
                                         {/* 세부 카테고리 표시 */}
                                         <div className="mt-[20px] text-[15px] flex-wrap justify-between flex px-4 py-1">
                                             {categoryDetails.map((detail) => (
                                                 <button
                                                     key={detail}
-                                                    className={`w-[30%] h-[30px] mb-2 rounded-[50px] mr-1 b-1 border-1 px-2 bg-white ${selectedCategories.includes(detail)
-                                                        ? "text-orange-400 shadow"
+                                                    className={`w-[30%] h-[30px] mb-2 rounded-[50px] mr-1 px-2 bg-white ${selectedCategories.includes(detail)
+                                                        ? "text-orange-400 border border-orange-400"
                                                         : ""
                                                         }`}
                                                     onClick={() => handleClick(detail)}
@@ -415,8 +417,8 @@ function UserProfile({
                                 )}
                             </div>
 
-                            <div className="flex justify-center">
-                                <div className="fixed bottom-5 gap-2">
+                            <div className="flex justify-center ">
+                                <div className="fixed bottom-5 gap-2 ">
                                     <button
                                         type="onclick"
                                         onClick={submitHandler}

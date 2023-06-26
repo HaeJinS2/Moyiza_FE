@@ -1,9 +1,12 @@
 import React, { useRef, useState } from "react";
 import Modal from "react-modal";
 import Frame from "../component/img/Frame.png";
+import BlackList from "../component/img/BlackList.png";
 import axios from "axios";
 import { useMutation } from "react-query";
 import swal from "sweetalert";
+import { useParams } from "react-router-dom";
+import { getCookie, parseJwt } from "../utils/jwtUtils";
 // import { getAPI } from '../axios';
 
 function UserProfile({
@@ -11,15 +14,23 @@ function UserProfile({
     email: initialEmail,
     profileImage: initialProfileImage,
     content: initialContent,
+    tags: initialTags,
 }) {
     // eslint-disable-next-line
     const [imageFile, setImageFile] = useState(null);
     const [userInput, setUserInput] = useState({
         nickname: initialNickname,
         content: initialContent,
-        tags: [],
+        tags: initialTags,
     });
 
+    const [tags, setTags] = useState([]);
+
+    const handleRemoveTag = (tag) => {
+        // 태그 삭제 로직 구현
+        const updatedTags = tags.filter((t) => t !== tag);
+        setTags(updatedTags);
+    };
     // 프로필 사진 입력
     const imgRef = useRef();
     const [profileImage, setProfileImage] = useState(null);
@@ -36,37 +47,49 @@ function UserProfile({
         }
     };
 
+    const { id } = useParams();
+    let userId = ''
+    // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
+    const accessToken = getCookie('ACCESS_TOKEN');
+
+    if (accessToken) {
+        // ACCESS_TOKEN 값을 파싱하여 JSON 페이로드를 추출합니다.
+        const payload = parseJwt(accessToken)
+        // user_id 값을 추출합니다.
+        userId = payload.userId
+    }
+
     // const submitHandler = async (e) => {
-        const submitHandler = async (e) => {
-            e.preventDefault();
-            try {
-              const requestData = {
-                nickname: userInput.initialNickname || "",
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        try {
+            const requestData = {
+                nickname: userInput.nickname || "",
                 content: userInput.content || "",
                 tags: selectedCategories.length > 0 ? selectedCategories : null,
-              };
-          
-              // ImageFormData
-              const imageFormData = new FormData();
-              imageFormData.append("imageFile", profileImage);
-          
-              // 이미지를 먼저 업로드 한 뒤, 3S 저장 URL을 response 받는다.
-              const IMAGE_UPLOAD_URL = `${process.env.REACT_APP_SERVER_URL}/uploadImg`;
-              const uploadRes = await axios.post(IMAGE_UPLOAD_URL, imageFormData, {
+            };
+
+            // ImageFormData
+            const imageFormData = new FormData();
+            imageFormData.append("imageFile", profileImage);
+
+            // 이미지를 먼저 업로드 한 뒤, 3S 저장 URL을 response 받는다.
+            const IMAGE_UPLOAD_URL = `${process.env.REACT_APP_SERVER_URL}/uploadImg`;
+            const uploadRes = await axios.post(IMAGE_UPLOAD_URL, imageFormData, {
                 headers: {
-                  "Content-Type": "multipart/form-data",
+                    "Content-Type": "multipart/form-data",
                 },
-              });
-          
-              requestData.imageUrl = uploadRes.data;
-          
-              const originUrl = `${process.env.REACT_APP_SERVER_URL}/profile`;
-              // eslint-disable-next-line
-              const submitResponse = await axios.put(originUrl, requestData, {
+            });
+
+            requestData.imageUrl = uploadRes.data;
+
+            const originUrl = `${process.env.REACT_APP_SERVER_URL}/profile`;
+            // eslint-disable-next-line
+            const submitResponse = await axios.put(originUrl, requestData, {
                 headers: {
-                  "Content-Type": "application/json",
+                    "Content-Type": "application/json",
                 },
-              });
+            });
             swal("회원정보 수정 성공");
         } catch (error) {
             console.error(error);
@@ -98,10 +121,10 @@ function UserProfile({
     });
 
     const nicknameValidationHandler = () => {
-    //     if (!nickname) {
-    //     // 닉네임이 비어있는 경우, 중복 검사를 수행하지 않고 함수 종료
-    //     return;
-    // }
+        //     if (!nickname) {
+        //     // 닉네임이 비어있는 경우, 중복 검사를 수행하지 않고 함수 종료
+        //     return;
+        // }
         validationMutation.mutate({
             nickname,
         });
@@ -127,11 +150,12 @@ function UserProfile({
         }
     };
 
-    const { nickname, content } =
+    const { nickname, } =
         // tags,
         userInput;
     const handleInput = (e) => {
         const { name, value } = e.target;
+        console.log(name, value);
         setUserInput((prevState) => ({
             ...prevState,
             [name]: value,
@@ -214,25 +238,76 @@ function UserProfile({
             // overflow: "auto"
         },
     };
-
+    const blackListModal = {
+        content: {
+            width: "200px",
+            height: "120px",
+            margin: "auto",
+            transform: "translate(-60%, 107%)",
+            border: "1px solid #ccc",
+            borderRadius: "20px",
+            backgroundColor: "white",
+        }
+    }
     // 프로필 페이지 컴포넌트
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [blackListOpen, setBlackListOpen] = useState(false);
 
     //   모달 열기
     const openModal = () => {
         setIsModalOpen(true);
     };
+    const blackListOpenModal = () => {
+        setBlackListOpen(true);
+    }
 
     // 모달 닫기
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    const blackListCloseModal = () => {
+        setBlackListOpen(false);
+    };
+
+    const handleBlockClick = () => {
+        // 차단하기 동작 처리
+
+        blackListCloseModal();
+    };
+
 
     return (
         <>
             <form onSubmit={submitHandler}>
                 <div className="w-[334px] h-[530px] bg-[#FFFCF2] rounded-[20px] flex justify-center border border-[#E8E8E8] ">
+                    {id !== null && id !== undefined && String(id) !== String(userId) &&(
+                        <div className='absolute '>
+                            <div
+                                className="edit-icon w-[56px] h-[56px] absolute top-10 left-[100px]"
+                                onClick={blackListOpenModal}
+
+                            >
+                                <img src={BlackList} alt=""></img>
+                            </div>
+                            <Modal
+                                isOpen={blackListOpen}
+                                onRequestClose={blackListCloseModal}
+                                style={blackListModal}
+                                contentLabel="BlackList Modal"
+                                className="z-8888 "
+                            >
+                                {/* <p>차단하기를 통해</p> */}
+                                <div className="flex flex-col">
+                                    <button className="font-medium text-[20px] text-orange-400 mt-[15px] mb-[15px]" onClick={handleBlockClick}>차단하기</button>
+                                    <hr />
+                                    <button className="text-[20px] mt-[15px] mb-[15px]" onClick={blackListCloseModal}>취소</button>
+                                </div>
+                            </Modal>
+                        </div>
+                    )}
+
+
                     {/* 프로필 사진 */}
                     <div
                         style={{ alignItems: "center" }}
@@ -240,20 +315,23 @@ function UserProfile({
                     >
                         {initialProfileImage && (
                             <img
-                                className="w-[135px] h-[135px] rounded-full shadow"
+                                className="w-[135px] h-[135px] rounded-full shadow aspect-square object-cover"
                                 src={initialProfileImage}
                                 alt="Profile"
                             />
                         )}
                         {/* 작은 원 */}
-                        <div className='absolute '>
-                            <div
-                                className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute bottom-7 left-8"
-                                onClick={openModal}
-                            >
-                                <img src={Frame} alt=""></img>
+                        {id !== null && id !== undefined && String(id) === String(userId) && (
+                            <div className='absolute '>
+                                <div
+                                    className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute bottom-7 left-8"
+                                    onClick={openModal}
+                                >
+                                    <img src={Frame} alt=""></img>
+                                </div>
                             </div>
-                        </div>
+                        )}
+
                         <div>
                             <div className="name mt-[10px] text-[28px] flex items-center justify-center">
                                 {initialNickname || ""}
@@ -264,15 +342,13 @@ function UserProfile({
                             </div>
                         </div>
                         <div className="text-[16px] mt-[19px] gap-2 flex justify-between ">
-                            {selectedCategories.map((category) => (
+                            {initialTags && initialTags.map((tags) => (
                                 <div
-                                    key={category}
+                                    key={tags}
                                     className="rounded-full bg-[#FFE14F] flex flex-col items-center justify-center b-1 px-4 py-1 text-[white]"
                                 >
-                                    {category}
-                                    <button
-                                        onClick={() => handleRemoveCategory(category)}
-                                    ></button>
+                                    {tags}
+                                    <button onClick={() => handleRemoveTag(tags)}></button>
                                 </div>
                             ))}
                         </div>
@@ -281,7 +357,7 @@ function UserProfile({
                             {initialContent || "간단한 소개글을 입력하세요"
                                 // ? { initialContent }
                                 // : "간단한 소개글을 입력하세요"
-                                }
+                            }
                         </div>
                     </div>
 
@@ -302,7 +378,8 @@ function UserProfile({
                                 <input
                                     placeholder={initialNickname || ""}
                                     class="int w-[47%] mr-[3%] h-10 rounded-lg px-3.5 py-2 shadow"
-                                    value={userInput.initialNickname}
+                                    name="nickname"
+                                    value={userInput.nickname}
                                     onChange={handleInput}
                                 ></input>
                                 <button
@@ -345,7 +422,7 @@ function UserProfile({
                                     value={userInput.content}
                                     onChange={handleInput}
                                     placeholder={
-                                        content ? { content } : "간단한 소개글을 입력하세요"
+                                        initialContent || "간단한 소개글을 입력하세요"
                                     }
                                 ></input>
                             </div>

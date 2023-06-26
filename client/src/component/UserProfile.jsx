@@ -19,6 +19,7 @@ function UserProfile({
     // eslint-disable-next-line
     
     const [imageFile, setImageFile] = useState(null);
+    console.log(imageFile);
     const [userInput, setUserInput] = useState({
         nickname: initialNickname,
         content: initialContent,

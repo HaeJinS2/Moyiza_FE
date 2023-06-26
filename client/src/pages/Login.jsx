@@ -130,8 +130,11 @@ function Login() {
             localStorage.setItem('user', email);
             setIsLoggedIn2(true)
             swal('로그인 성공');
+            setTimeout(() => {
+                swal.close();
+              },3500);
             goMain();
-
+            window.location.reload();
         } catch (error) {
             console.log(error);
             swal('로그인 실패');

@@ -117,7 +117,8 @@ function MyInfoClub() {
             }
         };
         fetchData();
-    },[id,likeClubList,likeOneDayList]);
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[id]);
 
     // "더 보기" 버튼 클릭 시 추가 정보를 가져오는 함수
     const loadMoreClubs = async () => {

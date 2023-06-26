@@ -37,7 +37,7 @@ function MyInfoClub() {
     // const [activeTab, setActiveTab] = useState("전체");
     const [page, setPage] = useState(0);
 
-    const [nickName, setNickName] = useState(null);
+    // const [nickName, setNickName] = useState(null);
     const [blackList, setBlackList] = useState([]);
 
     let userId = ''
@@ -117,7 +117,7 @@ function MyInfoClub() {
             }
         };
         fetchData();
-    },[id]);
+    },[id,likeClubList,likeOneDayList]);
 
     // "더 보기" 버튼 클릭 시 추가 정보를 가져오는 함수
     const loadMoreClubs = async () => {
@@ -149,7 +149,7 @@ function MyInfoClub() {
                 if (response.status === 200) {
                     const responseData = response?.data;
                     setBlackList(responseData);
-                    setNickName(responseData?.nickName || "");
+                    // setNickName(responseData?.nickName || "");
                     // setProfileImage(responseData?.profileImage || "");
                 }
             } catch (error) {
@@ -475,7 +475,7 @@ function MyInfoClub() {
                                     {activePageTab === PAGE_TABS[3] && (
     <div className="flex flex-col items-start w-full">
         <div className="text-[36px] flex flex-col justify-between align-center w-full">
-            {id == userId ? (
+            {id !== null && id !== undefined && String(id) === String(userId) ? (
                 // id와 userId가 같은 경우
                 blackList.length === 0 ? (
                     <motion.div

@@ -281,7 +281,7 @@ function UserProfile({
         <>
             <form onSubmit={submitHandler}>
                 <div className="w-[334px] h-[530px] bg-[#FFFCF2] rounded-[20px] flex justify-center border border-[#E8E8E8] ">
-                    {id != userId &&(
+                    {id !== null && id !== undefined && String(id) !== String(userId) &&(
                         <div className='absolute '>
                             <div
                                 className="edit-icon w-[56px] h-[56px] absolute top-10 left-[100px]"
@@ -321,7 +321,7 @@ function UserProfile({
                             />
                         )}
                         {/* 작은 원 */}
-                        {id == userId && (
+                        {id !== null && id !== undefined && String(id) === String(userId) && (
                             <div className='absolute '>
                                 <div
                                     className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute bottom-7 left-8"

@@ -17,7 +17,9 @@ function UserProfile({
     tags: initialTags,
 }) {
     // eslint-disable-next-line
+    
     const [imageFile, setImageFile] = useState(null);
+    console.log(imageFile);
     const [userInput, setUserInput] = useState({
         nickname: initialNickname,
         content: initialContent,
@@ -90,7 +92,19 @@ function UserProfile({
                     "Content-Type": "application/json",
                 },
             });
-            swal("회원정보 수정 성공");
+
+            swal('회원정보 수정 성공').then(function() {
+                setTimeout(function() {
+                  window.location.reload();
+                },);
+              });
+
+            // swal("회원정보 수정 성공");
+            // setTimeout(() => {
+            //     swal.close();
+            //   },3500);
+            // closeModal();
+            // window.location.reload();
         } catch (error) {
             console.error(error);
             // swal(error.request.response);
@@ -270,9 +284,20 @@ function UserProfile({
         setBlackListOpen(false);
     };
 
-    const handleBlockClick = () => {
+    const handleBlockClick = async() => {
         // 차단하기 동작 처리
-
+        try {
+          // POST 요청을 보냅니다.
+          const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/blackList/`+ id);
+          
+          // 요청이 성공한 경우
+          swal('블랙리스트에 추가되었습니다.');
+          console.log(response.data); // 서버에서 반환한 데이터를 출력하거나 처리할 수 있습니다.
+        } catch (error) {
+          // 요청이 실패한 경우
+          swal('차단 요청을 보내는 중 오류가 발생했습니다.');
+          console.error(error); // 오류 내용을 출력하거나 처리할 수 있습니다.
+        }
         blackListCloseModal();
     };
 
@@ -281,7 +306,7 @@ function UserProfile({
         <>
             <form onSubmit={submitHandler}>
                 <div className="w-[334px] h-[530px] bg-[#FFFCF2] rounded-[20px] flex justify-center border border-[#E8E8E8] ">
-                    {id !== null && id !== undefined && String(id) !== String(userId) &&(
+                    {id !== null && id !== undefined && String(id) !== String(userId) && (
                         <div className='absolute '>
                             <div
                                 className="edit-icon w-[56px] h-[56px] absolute top-10 left-[100px]"

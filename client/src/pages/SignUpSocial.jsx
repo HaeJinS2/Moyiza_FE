@@ -102,6 +102,7 @@ function SignUpSocial() {
 
             goMain();
             swal('회원가입 성공');
+            window.location.reload();
         } catch (error) {
             swal('회원가입 실패!')
         }

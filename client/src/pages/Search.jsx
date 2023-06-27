@@ -71,7 +71,7 @@ function Search() {
                               title={item.clubTitle}
                               content={item.clubContent}
                               tag={item.clubTag}
-                              thumbnail={item.thumbnailUrl}
+                              thumbnail={item.imageUrlList[0]}
                               id={item.club_id}
                               maxGroupSize={item.maxGroupSize}
                               nowMemberCount={item.nowMemberCount}
@@ -90,7 +90,7 @@ function Search() {
                               title={item.clubTitle}
                               content={item.clubContent}
                               tag={item.clubTag}
-                              thumbnail={item.thumbnailUrl}
+                              thumbnail={item.imageUrlList[0]}
                               id={item.club_id}
                               eventId={item.id}
                               maxGroupSize={item.maxGroupSize}

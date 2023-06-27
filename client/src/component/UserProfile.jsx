@@ -92,12 +92,19 @@ function UserProfile({
                     "Content-Type": "application/json",
                 },
             });
-            swal("회원정보 수정 성공");
-            setTimeout(() => {
-                swal.close();
-              },3500);
-            closeModal();
-            window.location.reload();
+
+            swal('회원정보 수정 성공').then(function() {
+                setTimeout(function() {
+                  window.location.reload();
+                },);
+              });
+
+            // swal("회원정보 수정 성공");
+            // setTimeout(() => {
+            //     swal.close();
+            //   },3500);
+            // closeModal();
+            // window.location.reload();
         } catch (error) {
             console.error(error);
             // swal(error.request.response);
@@ -281,7 +288,7 @@ function UserProfile({
         // 차단하기 동작 처리
         try {
           // POST 요청을 보냅니다.
-          const response = await axios.post(`/blackList/`+ id);
+          const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/blackList/`+ id);
           
           // 요청이 성공한 경우
           swal('블랙리스트에 추가되었습니다.');

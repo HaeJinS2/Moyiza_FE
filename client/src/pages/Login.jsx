@@ -129,12 +129,14 @@ function Login() {
             // 사용자를 로컬 스토리지에 저장
             localStorage.setItem('user', email);
             setIsLoggedIn2(true)
-            swal('로그인 성공');
-            setTimeout(() => {
-                swal.close();
-              },3500);
-            goMain();
-            window.location.reload();
+
+            swal('로그인 성공').then(function() {
+                setTimeout(function() {
+                  goMain();
+                  window.location.reload();
+                //   goMain();
+                },);
+              });
         } catch (error) {
             console.log(error);
             swal('로그인 실패');

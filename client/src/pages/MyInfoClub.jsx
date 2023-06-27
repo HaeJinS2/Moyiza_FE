@@ -582,7 +582,7 @@ function MyInfoClub() {
                                                                 <div className='flex justify-between align-center mb-[25px]'>
                                                                     <div className="text-[24px]">{nickname ? `${nickname}님이 차단한 친구` : ''}</div>
                                                                 </div>
-                                                                <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                <div className='w-[748px] flex flex-wrap justify-start'>
                                                                     {blackList.map((friend, i) => (
                                                                         <BlackListCard
                                                                             className="mr-[28px]"

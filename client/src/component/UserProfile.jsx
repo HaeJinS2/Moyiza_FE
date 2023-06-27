@@ -17,7 +17,7 @@ function UserProfile({
     tags: initialTags,
 }) {
     // eslint-disable-next-line
-    
+
     const [imageFile, setImageFile] = useState(null);
     console.log(imageFile);
     const [userInput, setUserInput] = useState({
@@ -93,18 +93,11 @@ function UserProfile({
                 },
             });
 
-            swal('회원정보 수정 성공').then(function() {
-                setTimeout(function() {
-                  window.location.reload();
+            swal('회원정보 수정 성공').then(function () {
+                setTimeout(function () {
+                    window.location.reload();
                 },);
-              });
-
-            // swal("회원정보 수정 성공");
-            // setTimeout(() => {
-            //     swal.close();
-            //   },3500);
-            // closeModal();
-            // window.location.reload();
+            });
         } catch (error) {
             console.error(error);
             // swal(error.request.response);
@@ -284,20 +277,25 @@ function UserProfile({
         setBlackListOpen(false);
     };
 
-    const handleBlockClick = async() => {
+    const handleBlockClick = async () => {
         // 차단하기 동작 처리
         try {
-          // POST 요청을 보냅니다.
-          const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/blackList/`+ id);
-          
-          // 요청이 성공한 경우
-          swal('블랙리스트에 추가되었습니다.');
-          console.log(response.data); // 서버에서 반환한 데이터를 출력하거나 처리할 수 있습니다.
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/blackList/` + id);
+
+            // 요청이 성공한 경우
+            swal('블랙리스트에 추가되었습니다.').then(function () {
+                setTimeout(function () {
+                    console.log(response.data);
+                    window.location.reload();
+                },);
+            });
+
         } catch (error) {
-          // 요청이 실패한 경우
-          swal('차단 요청을 보내는 중 오류가 발생했습니다.');
-          console.error(error); // 오류 내용을 출력하거나 처리할 수 있습니다.
+            // 요청이 실패한 경우
+            swal('차단 요청을 보내는 중 오류가 발생했습니다.');
+            console.error(error); // 오류 내용을 출력하거나 처리할 수 있습니다.
         }
+
         blackListCloseModal();
     };
 

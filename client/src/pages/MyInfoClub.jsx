@@ -9,6 +9,8 @@ import { getAPI } from '../axios';
 import ProfileCardOneday from '../component/ProfileCardOneday';
 import BlackListCard from '../component/BlackListCard';
 import { getCookie, parseJwt } from '../utils/jwtUtils';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 
 
@@ -102,7 +104,15 @@ function MyInfoClub() {
                     // } else {
                     //   console.log('원하는 값이 아님');
                     // }
-                }
+                } 
+                try {
+                    const getDataResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL}/blackList`);
+                    // 업데이트된 데이터 사용하기
+                    console.log(getDataResponse.data);
+                    // 여기에서 업데이트된 데이터를 필요한 처리로 사용할 수 있습니다.
+                  } catch (getDataError) {
+                    console.error(getDataError);
+                  }
             } catch (error) {
                 console.error(error.response.message);
                 // 에러 상태 처리 또는 에러 페이지로 리디렉션 처리
@@ -174,6 +184,21 @@ function MyInfoClub() {
         };
         fetchData();
     }, []);
+
+    const handleUnblockClick = async (blackListId) => {
+        try {
+          const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/blackList/${blackListId}`);
+          if (response.status === 200) {
+            const updatedBlackList = blackList.filter((friend) => friend.blackListId !== blackListId);
+            setBlackList(updatedBlackList);
+            swal('차단 해제했습니다.'); // 차단 해제 성공 메시지 표시
+      console.log('차단 해제되었습니다.');
+          }
+        } catch (error) {
+            console.error('해제 요청을 보내는 중 오류가 발생했습니다.', error);
+            swal('해제 요청을 보내는 중 오류가 발생했습니다.'); // 차단 해제 실패 메시지 표시
+        }
+      };
     // console.log('blackList',blackList)
 
     // console.log('clubsInOperationInfo',clubsInOperationInfo)
@@ -587,8 +612,10 @@ function MyInfoClub() {
                                                                         <BlackListCard
                                                                             className="mr-[28px]"
                                                                             key={friend.blackListId}
+                                                                            blackListId={friend.blackListId}
                                                                             nickName={friend.nickName}
                                                                             profileImage={friend.profileImage}
+                                                                            onUnblockClick={handleUnblockClick}
                                                                         />
                                                                     ))}
                                                                 </div>

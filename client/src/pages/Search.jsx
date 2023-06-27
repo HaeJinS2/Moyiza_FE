@@ -138,10 +138,12 @@ function Search() {
                               title={item.onedayTitle}
                               content={item.onedayContent}
                               tag={item.onedayTag}
-                              thumbnail={item.thumbnailUrl}
+                              thumbnail={item.imageUrlList[0]}
                               id={item.onedayId}
                               maxGroupSize={item.onedayGroupSize}
                               nowMemberCount={item.onedayAttendantsNum}
+                              imageList={item.imageUrlList}
+
                             />
                           </Fade>
                         );
@@ -155,10 +157,12 @@ function Search() {
                               title={item.onedayTitle}
                               content={item.onedayContent}
                               tag={item.onedayTag}
-                              thumbnail={item.thumbnailUrl}
+                              thumbnail={item.imageUrlList[0]}
                               id={item.onedayId}
                               maxGroupSize={item.onedayGroupSize}
                               nowMemberCount={item.onedayAttendantsNum}
+                              imageList={item.imageUrlList}
+
                             />
                           </Fade>
                         );

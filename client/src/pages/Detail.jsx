@@ -415,7 +415,7 @@ function Detail() {
             <div className="flex gap-x-[70px] w-auto items-center">
               <div className="flex justify-center">
                 <img
-                  className="rounded-xl w-[458px] h-[305px] object-contain aspect-square"
+                  className="rounded-xl w-[458px] h-[305px] aspect-square  object-cover"
                   src={clubDetail?.data.clubImageUrlList[0]}
                   alt="club_main"
                 />

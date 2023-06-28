@@ -141,7 +141,12 @@ function CreateOnedayForm() {
       setOnedayStep(7);
       return;
     }
-
+    if (savedOnedayData?.type) {
+      setOnedayStep(9);
+    } else {
+      setOnedayStep(8);
+      return;
+    }
     // if (savedOnedayData?.oneDayGroupSize) {
     //   setOnedayStep(9);
     // } else {
@@ -299,9 +304,25 @@ function CreateOnedayForm() {
               size: savedOnedayData.oneDayGroupSize,
             })
               .then((res) => {
+                setOnedayStep(9);
+              })
+              .catch((error) => console.log(error));
+          }
+          break;
+        case 9:
+          if (
+            savedOnedayData.oneDayType === null ||
+            savedOnedayData.oneDayType === undefined
+          ) {
+            swal("참여 방식을 선택해주세요!");
+          } else {
+            putAPI(`/oneday/create/${tmpOnedayId}/type`, {
+              oneDayType: savedOnedayData.oneDayType,
+            })
+              .then((res) => {
                 postAPI(`/oneday/create/${tmpOnedayId}/confirm`, {})
                   .then((res) => {
-                    setOnedayStep(9);
+                    setOnedayStep(10);
                     setReloadChatState(true);
                     swal("하루속 이벤트 개설 완료!");
                     navigate("/oneday");
@@ -312,6 +333,7 @@ function CreateOnedayForm() {
               .catch((error) => console.log(error));
           }
           break;
+
         default:
           break;
       }
@@ -399,6 +421,14 @@ function CreateOnedayForm() {
             )}
             {onedayStep === 9 && (
               <OnedayStep9
+                savedOnedayData={savedOnedayData}
+                setSavedOnedayData={setSavedOnedayData}
+                handleOnedayStep={handleOnedayStep}
+                onedayStep={onedayStep}
+              />
+            )}
+            {onedayStep === 10 && (
+              <OnedayStep10
                 savedOnedayData={savedOnedayData}
                 setSavedOnedayData={setSavedOnedayData}
                 tmpOnedayId={tmpOnedayId}
@@ -968,6 +998,53 @@ function OnedayStep8({
 function OnedayStep9({
   onedayStep,
   handleOnedayStep,
+  setSavedOnedayData,
+  savedOnedayData,
+}) {
+  const type = ["선착순형", "승인형"];
+  useEffect(() => {
+    setSavedOnedayData({ ...savedOnedayData });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <>
+      <CreateOnedayFormLayout
+        header="9. 멤버 가입 방식을 선택해주세요."
+        handleOnedayStep={handleOnedayStep}
+        onedayStep={onedayStep}
+      >
+        <div className="mt-[51px] gap-x-[43px] gap-y-[30px] w-auto h-auto">
+          {type?.map((type, i) => {
+            return (
+              <>
+                <button
+                  key={i}
+                  onClick={() => {
+                    setSavedOnedayData({
+                      ...savedOnedayData,
+                      oneDayType: type,
+                    });
+                  }}
+                  className={`${
+                    savedOnedayData?.oneDayType === type
+                      ? "bg-[#dddddd]"
+                      : "bg-white"
+                  }  w-[142px] h-[52px] rounded-full text-[1.25rem] font-semibold border-2 mb-[38.5px]`}
+                >
+                  {type}
+                </button>
+              </>
+            );
+          })}
+        </div>
+      </CreateOnedayFormLayout>
+    </>
+  );
+}
+
+function OnedayStep10({
+  onedayStep,
+  handleOnedayStep,
   tmpOnedayId,
   setSavedOnedayData,
   savedOnedayData,
@@ -1000,7 +1077,7 @@ function CreateOnedayFormLayout({
     <>
       <div
         className={`flex flex-col ${
-          onedayStep < 9 ? "" : "justify-center"
+          onedayStep < 10 ? "" : "justify-center"
         }  items-center h-auto max-w-[1140px]`}
       >
         <>
@@ -1011,7 +1088,7 @@ function CreateOnedayFormLayout({
             {children}
           </div>
           <div className="flex gap-[30px] mt-[36px] mb-[33px]">
-            {onedayStep > 1 && onedayStep < 9 && (
+            {onedayStep > 1 && onedayStep < 10 && (
               <button
                 onClick={handleOnedayStep}
                 className="w-[200px] h-[60px] bg-[#747474] text-[1.5rem] font-semibold text-white rounded-full"
@@ -1020,7 +1097,7 @@ function CreateOnedayFormLayout({
                 이전
               </button>
             )}
-            {onedayStep >= 1 && onedayStep < 9 && (
+            {onedayStep >= 1 && onedayStep < 10 && (
               <button
                 onClick={handleOnedayStep}
                 className="w-[200px] h-[60px] bg-[#08B159] text-[1.5rem] font-semibold text-white rounded-full"

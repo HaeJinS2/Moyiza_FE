@@ -18,6 +18,10 @@ function OnedayDetail() {
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [onedayMemberNicknameArr, setOnedayMemberNicknameArr] = useState([]);
+  // eslint-disable-next-line
+  const [onedayWaitingMemberNicknameArr, setOnedayWaitingMemberNicknameArr] =
+    useState([]);
+
   const isLoggedIn = useRecoilValue(isLoggedInState);
   // eslint-disable-next-line
   const [reloadChatState, setReloadChatState] =
@@ -30,6 +34,22 @@ function OnedayDetail() {
   // eslint-disable-next-line
   const [isOwner, setIsOwner] = useState(false);
   const [filteredOnedayList, setFilteredOnedayList] = useState([]);
+
+  const [onedayWaitingMember, setOnedayWaitingMember] = useState([]);
+  const [isWaitingMember, setIsWaitingMember] = useState(false);
+  const [onAccept, setOnAccept] = useState(false);
+
+  // 승인 대기 멤버 페이지 관리
+  const [waitingMemberPage, setWaitingMemberPage] = useState(0);
+  const [waitingMemberTuple, setWaitingMemberTuple] = useState([
+    null,
+    waitingMemberPage,
+  ]);
+  if (waitingMemberTuple[1] !== waitingMemberPage) {
+    setWaitingMemberTuple([waitingMemberTuple[1], waitingMemberPage]);
+  }
+  let waitingMemberPrev = waitingMemberTuple[0];
+  let waitingMemberDirection = waitingMemberPage > waitingMemberPrev ? 1 : -1;
 
   // 멤버 페이지 관리
   const [memberPage, setMemberPage] = useState(0);
@@ -77,21 +97,44 @@ function OnedayDetail() {
   }, [id]);
 
   // isOwner의 상태 관리
-  // useEffect(() => {
-  //   if (onedayDetail && onedayDetail.data) {
-  //     if (userNickname.userNickname === onedayDetail.data?.ownerNickname) {
-  //       setIsOwner(true);
-  //     } else {
-  //       setIsOwner(false);
-  //     }
-  //   }
-  // }, [onedayDetail, userNickname]);
+  useEffect(() => {
+    if (onedayDetail && onedayDetail.data) {
+      if (userNickname.userNickname === onedayDetail.data?.ownerNickname) {
+        setIsOwner(true);
+      } else {
+        setIsOwner(false);
+      }
+    }
+  }, [onedayDetail, userNickname]);
+
+  // 승인 대기 멤버 가져오는 코드
+  useEffect(() => {
+    getWaitingOnedayMembers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMember, isWaitingMember]);
+
+  const getWaitingOnedayMembers = () => {
+    getAPI(`/oneday/${id}/joinlist`).then((res) => {
+      const onedayWaitingMember = res.data;
+      setOnedayWaitingMember(onedayWaitingMember);
+      setOnedayWaitingMemberNicknameArr(
+        onedayWaitingMember?.map((member) => member.userNickName)
+      );
+      if (
+        onedayWaitingMember
+          ?.map((member) => member.userNickname)
+          .includes(userNickname.userNickname)
+      ) {
+        setIsWaitingMember(true);
+      }
+    });
+  };
 
   // 원데이 멤버 가져오는 코드
   useEffect(() => {
     getOnedayMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userNickname, isMember]);
+  }, [userNickname, isMember, isWaitingMember]);
 
   const getOnedayMembers = () => {
     getAPI(`/oneday/${id}`).then((res) => {
@@ -145,7 +188,7 @@ function OnedayDetail() {
         onedayDetail.data?.oneDayAttendantListSize
       ) {
         swal("더이상 가입할 수 없습니다!");
-      } else {
+      } else if (onedayDetail.data.type === "선착순형") {
         postAPI(`/oneday/${id}/join`, {})
           .then((res) => {
             setIsMember(true);
@@ -153,6 +196,20 @@ function OnedayDetail() {
               setReloadChatState(true);
               swal(
                 "하루속 가입이 승인됐습니다! \n 상단의 채팅방을 통해 소통해주세요!"
+              );
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else if (onedayDetail.data.type === "승인형") {
+        postAPI(`/oneday/${id}/join`, {})
+          .then((res) => {
+            setIsMember(true);
+            getAPI(`/oneday/${id}`).then((res) => {
+              setReloadChatState(true);
+              swal(
+                "관리자에게 가입신청이 전송되었습니다! \n 가입이 승인되기까지 기다려주세요!"
               );
             });
           })
@@ -167,7 +224,7 @@ function OnedayDetail() {
   };
 
   const handleQuitOneday = () => {
-    deleteAPI(`/oneday/${id}/join`, {})
+    deleteAPI(`/oneday/${id}/join`)
       .then((res) => {
         setIsMember(false);
         getAPI(`/oneday/${id}`).then((res) => {
@@ -195,6 +252,23 @@ function OnedayDetail() {
 
     fetchFilteredOnedayList();
   }, [onedayDetail, id]);
+
+  const handleAcceptOneday = (userId) => {
+    postAPI(`/oneday/${id}/joinlist/${userId}`, {})
+      .then((res) => {
+        getWaitingOnedayMembers();
+        getOnedayMembers();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleRejectOneday = (userId) => {
+    deleteAPI(`/oneday/${id}/joinlist/${userId}`)
+      .then((res) => {
+        getWaitingOnedayMembers();
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -315,7 +389,8 @@ function OnedayDetail() {
                         />
                       </div>
                       <div className="flex justify-center text-[1rem]">
-                        {onedayDetail?.data?.oneDayAttendantListSize}/{onedayDetail?.data?.oneDayGroupSize}
+                        {onedayDetail?.data?.oneDayAttendantListSize}/
+                        {onedayDetail?.data?.oneDayGroupSize}
                       </div>
                     </div>
                   </div>
@@ -366,7 +441,7 @@ function OnedayDetail() {
                   <div className="flex">
                     <div className="w-[458px] h-[91px] mr-[70px]"></div>
                     <div className="w-[543px] h-[91px] flex justify-center ">
-                      {!isMember && (
+                      {!isMember && !isWaitingMember && (
                         <button
                           onClick={handleJoinOneday}
                           className="w-[200px] h-[60px] bg-[#0AB159] text-white text-[1.25rem] font-semibold rounded-full"
@@ -381,6 +456,111 @@ function OnedayDetail() {
             </div>
           </div>
         </header>
+
+        {/* 승인 대기 멤버 */}
+        {onedayDetail?.data?.type === "승인형" && (
+          <section className="flex flex-col w-[1140px] h-auto justify-between">
+            <div className="flex justify-between">
+              <div className="text-[2rem] font-semibold">승인 대기 멤버</div>
+              <div>
+                {waitingMemberPage > 0 && (
+                  <button
+                    onClick={() => setWaitingMemberPage(waitingMemberPage - 1)}
+                  >
+                    <img
+                      alt="prev_button"
+                      src={`${process.env.PUBLIC_URL}/images/prev_button.svg`}
+                    />
+                  </button>
+                )}
+                {waitingMemberPage <
+                  Math.ceil(onedayWaitingMember?.length / 6) - 1 && (
+                  <button
+                    onClick={() => setWaitingMemberPage(waitingMemberPage + 1)}
+                  >
+                    <img
+                      alt="next_button"
+                      src={`${process.env.PUBLIC_URL}/images/next_button.svg`}
+                    />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="flex w-full h-full justify-center items-center">
+              <div className="flex justify-center w-[1140px] h-[186px] text-black items-center overflow-hidden relative ">
+                <AnimatePresence custom={waitingMemberDirection}>
+                  <motion.div
+                    key={waitingMemberPage}
+                    variants={varients}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    custom={waitingMemberDirection}
+                    transition={{ duration: 0.5 }}
+                    className={`h-[80px] absolute flex justify-center items-center w-full `}
+                  >
+                    <div
+                      className={`${
+                        onedayWaitingMember?.length === 0
+                          ? ""
+                          : "grid grid-cols-6"
+                      } w-full gap-4 `}
+                    >
+                      {onedayWaitingMember.length === 0 ? (
+                        <EmptyState page="onedayDetail" />
+                      ) : (
+                        onedayWaitingMember
+                          ?.slice(
+                            waitingMemberPage * 6,
+                            waitingMemberPage * 6 + 6
+                          )
+                          .map((member, i) => {
+                            return (
+                              <div
+                                onClick={() => {
+                                  isOwner
+                                    ? setOnAccept(true)
+                                    : navigate(`/user/mypage/${member.userId}`);
+                                }}
+                                className="cursor-pointer flex gap-5 items-center relative overflow-hidden"
+                              >
+                                <img
+                                  className="w-[80px] h-[80px] rounded-full"
+                                  src={member.profilePictureUrl}
+                                  alt="oneday_member"
+                                />
+                                <p>{member.userNickname}</p>
+                                {isOwner && onAccept && (
+                                  <div className="absolute z-10 bg-[#828282] w-full h-full opacity-80 flex justify-center items-center text-white">
+                                    <div
+                                      className="border-r-2 border-white pr-2"
+                                      onClick={() => {
+                                        handleAcceptOneday(member.userId);
+                                      }}
+                                    >
+                                      승인
+                                    </div>
+                                    <div
+                                      className="ml-2"
+                                      onClick={() => {
+                                        handleRejectOneday(member.userId);
+                                      }}
+                                    >
+                                      거절
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })
+                      )}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* 참여멤버 */}
         <section className="flex flex-col w-[1140px] h-auto justify-between">

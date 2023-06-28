@@ -235,7 +235,7 @@ function OnedayDetail() {
             <div className="flex gap-x-[70px] w-auto items-center">
               <div className="flex justify-center">
                 <img
-                  className="rounded-xl w-[458px] h-[305px] object-contain aspect-square"
+                  className="rounded-xl w-[458px] h-[305px] object-cover aspect-square"
                   src={onedayDetail?.data?.imageList[0]}
                   alt="club_main"
                 />

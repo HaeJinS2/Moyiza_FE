@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from "react-modal";
 import Frame from "../component/img/Frame.png";
 import BlackList from "../component/img/BlackList.png";
@@ -7,6 +7,7 @@ import { useMutation } from "react-query";
 import swal from "sweetalert";
 import { useParams } from "react-router-dom";
 import { getCookie, parseJwt } from "../utils/jwtUtils";
+import { getAPI } from "../axios";
 // import { getAPI } from '../axios';
 
 function UserProfile({
@@ -170,9 +171,6 @@ function UserProfile({
     };
 
     // const { nickname, profileImage, email } = UserInfoOnMyPage || '';
-    // console.log(nickname);
-    // console.log(profileImage);
-    // console.log(email);
     // const [imageFile, setImageFile] = useState(null);
     const [expanded, setExpanded] = useState(true);
     const toggleExpanded = () => {
@@ -225,12 +223,7 @@ function UserProfile({
 
     // 모달 스타일 설정
     const modalStyles = {
-        // content: `w-[600px] h-[500px] mx-auto border-2 border-gray-300 rounded-lg p-6'`
         content: {
-            // marginTop: '550px',
-            // display: 'flex',
-            // justifyContent: 'center',
-            // alignItems: 'center',
             width: "600px",
             height: "850px",
             margin: "auto",
@@ -260,6 +253,8 @@ function UserProfile({
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [blackListOpen, setBlackListOpen] = useState(false);
+    const [blackListId,setBlackListId] = useState('차단하기')
+
 
     //   모달 열기
     const openModal = () => {
@@ -282,22 +277,65 @@ function UserProfile({
         try {
             const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/blackList/` + id);
 
-            // 요청이 성공한 경우
-            swal('블랙리스트에 추가되었습니다.').then(function () {
-                setTimeout(function () {
+            if (blackListId === '차단하기') {
+                // 차단하기 동작 처리
+                swal('블랙리스트에 추가되었습니다.').then(function () {
+                  setTimeout(function () {
+                    // console.log(response.data);
+                    window.location.reload();
+                  }, 1000);
+                });
+              } else if (blackListId === '해제하기') {
+                // 차단 해제 동작 처리
+                swal('차단이 해제되었습니다.').then(function () {
+                  setTimeout(function () {
                     console.log(response.data);
                     window.location.reload();
-                },);
-            });
+                  }, 1000);
+                });
+              }
 
         } catch (error) {
             // 요청이 실패한 경우
             swal('차단 요청을 보내는 중 오류가 발생했습니다.');
-            console.error(error); // 오류 내용을 출력하거나 처리할 수 있습니다.
         }
-
         blackListCloseModal();
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // GET 요청 수행
+                const response = await getAPI('/blackList');
+
+                // 응답이 성공적인지 확인
+                if (response.status === 200) {
+                    const data = response?.data;
+
+                    // 데이터에서 blackListId 값을 추출하는 함수
+                    function extractBlackListIds(data) {
+                        const blackListIds = data.map(item => item.blackListId);
+                        return blackListIds;
+                    }
+
+                    // blackListIds 값을 추출
+                    const blackListIds = extractBlackListIds(data);
+                    console.log('blackListIds', blackListIds);
+                    // 현재 URL에서 blackListId 추출
+                    const currentURL = window.location.pathname;
+                    const blackListIdFromURL = currentURL.split('/').pop();
+
+                    if (blackListIds.includes(parseInt(blackListIdFromURL))) {
+                        setBlackListId('해제하기')
+                    }
+                }
+            } catch (error) {
+                console.error(error.response.message);
+            }
+        };
+        fetchData();
+    }, []);
+
 
 
     return (
@@ -305,11 +343,10 @@ function UserProfile({
             <form onSubmit={submitHandler}>
                 <div className="w-[334px] h-[530px] bg-[#FFFCF2] rounded-[20px] flex justify-center border border-[#E8E8E8] ">
                     {id !== null && id !== undefined && String(id) !== String(userId) && (
-                        <div className='absolute '>
+                        <div className='absolute'>
                             <div
-                                className="edit-icon w-[56px] h-[56px] absolute top-10 left-[100px]"
+                                className="edit-icon w-[56px] h-[20px] absolute top-10 left-[100px] "
                                 onClick={blackListOpenModal}
-
                             >
                                 <img src={BlackList} alt=""></img>
                             </div>
@@ -322,7 +359,7 @@ function UserProfile({
                             >
                                 {/* <p>차단하기를 통해</p> */}
                                 <div className="flex flex-col">
-                                    <button className="font-medium text-[20px] text-orange-400 mt-[15px] mb-[15px]" onClick={handleBlockClick}>차단하기</button>
+                                    <button className="font-medium text-[20px] text-orange-400 mt-[15px] mb-[15px] " onClick={handleBlockClick}>{blackListId}</button>
                                     <hr />
                                     <button className="text-[20px] mt-[15px] mb-[15px]" onClick={blackListCloseModal}>취소</button>
                                 </div>
@@ -347,7 +384,7 @@ function UserProfile({
                         {id !== null && id !== undefined && String(id) === String(userId) && (
                             <div className='absolute '>
                                 <div
-                                    className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute bottom-7 left-8"
+                                    className="edit-icon w-[56px] h-[56px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center absolute bottom-8 left-8"
                                     onClick={openModal}
                                 >
                                     <img src={Frame} alt=""></img>
@@ -364,22 +401,24 @@ function UserProfile({
                                 {initialEmail || ""}
                             </div>
                         </div>
-                        <div className="text-[16px] mt-[19px] gap-2 flex justify-between ">
+                        <div className="text-[14px] mt-[19px] gap-2 flex justify-between ">
                             {initialTags && initialTags.map((tags) => (
                                 <div
                                     key={tags}
-                                    className="rounded-full bg-[#FFE14F] flex flex-col items-center justify-center b-1 px-4 py-1 text-[white]"
+                                    className="rounded-full bg-orange-400 flex flex-col items-center justify-center b-1 px-3 py-1 text-[white]"
                                 >
                                     {tags}
                                     <button onClick={() => handleRemoveTag(tags)}></button>
                                 </div>
                             ))}
+                            {initialTags === null && (
+                                <div className="rounded-full border border-orange-400 flex flex-col items-center justify-center px-4 py-1 text-orange-300 ">
+                                    관심사가 없습니다
+                                </div>
+                            )}
                         </div>
-
-                        <div className="mt-[34px] text-[16px] text-[#A6A6A6] w-[269px] h-[19px] flex justify-center truncate hover:text-clip">
+                        <div className="mt-[55px] text-[16px] text-[#A6A6A6] w-[269px] h-[19px] flex justify-center truncate hover:text-clip">
                             {initialContent || "간단한 소개글을 입력하세요"
-                                // ? { initialContent }
-                                // : "간단한 소개글을 입력하세요"
                             }
                         </div>
                     </div>

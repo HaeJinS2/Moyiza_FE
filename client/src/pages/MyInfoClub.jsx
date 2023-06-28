@@ -91,30 +91,9 @@ function MyInfoClub() {
                     setOneDaysInParticipatingInfo(responseData?.oneDaysInParticipatingInfo || []);
                     // setTotalPages(responseData?.clubsInOperationInfo?.totalPages || 1); // 총 페이지 수 업데이트
 
-                    // setClubsInOperationCount(responseData?.clubsInOperationCount || '');
-                    // setClubsInParticipatingCount(responseData?.clubsInParticipatingCount || "");
-                    // setOneDaysInOperationCount(responseData?.oneDaysInOperationCount || '');
-                    // setOneDaysInParticipatingCount(responseData?.oneDaysInParticipatingCount || "");
-                    // console.log(typeof clubsInParticipatingCount);
-                    //                     console.log(typeof clubsInParticipatingCount); // "string"으로 출력됨
-                    //                     console.log('---------------')
-
-                    // if (clubsInParticipatingCount == 0) {
-                    //   console.log('원하는 값');
-                    // } else {
-                    //   console.log('원하는 값이 아님');
-                    // }
                 } 
-                try {
-                    const getDataResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL}/blackList`);
-                    // 업데이트된 데이터 사용하기
-                    console.log(getDataResponse.data);
-                    // 여기에서 업데이트된 데이터를 필요한 처리로 사용할 수 있습니다.
-                  } catch (getDataError) {
-                    console.error(getDataError);
-                  }
             } catch (error) {
-                console.error(error.response.message);
+                // console.error(error.response.message);
                 // 에러 상태 처리 또는 에러 페이지로 리디렉션 처리
             }
         };
@@ -133,8 +112,8 @@ function MyInfoClub() {
                     // console.log('responseData',responseData)
                     setLikeClubList(responseData?.likeClubList.content || []);
                     setLikeOneDayList(responseData?.likeOneDayList.content || []);
-                    console.log('likeClubList', likeClubList);
-                    console.log('likeOneDayList', likeOneDayList);
+                    // console.log('likeClubList', likeClubList);
+                    // console.log('likeOneDayList', likeOneDayList);
                 }
             } catch (error) {
                 // console.error(error.response.message);
@@ -144,25 +123,6 @@ function MyInfoClub() {
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    // "더 보기" 버튼 클릭 시 추가 정보를 가져오는 함수
-    // const loadMoreClubs = async () => {
-    //     try {
-    //         const nextPage = page + 1; // 다음 페이지 번호 계산
-    //         const response = await getAPI(`/mypage/${id}?page=${nextPage}`); // 다음 페이지의 정보를 가져오는 API 호출
-
-    //         // 응답이 성공적인지 확인
-    //         if (response.status === 200) {
-    //             const responseData = response?.data;
-
-    //             setClubsInOperationInfo([...clubsInOperationInfo, ...responseData?.clubsInOperationInfo?.content || []]);
-    //             setPage(nextPage); // 페이지 번호 업데이트
-    //         }
-    //     } catch (error) {
-    //         console.error(error.response.message);
-    //         // 에러 처리
-    //     }
-    // };
 
     // 차단 목록
     useEffect(() => {
@@ -179,7 +139,7 @@ function MyInfoClub() {
                     // setProfileImage(responseData?.profileImage || "");
                 }
             } catch (error) {
-                console.error(error.response.message);
+                // console.error(error.response.message);
             }
         };
         fetchData();
@@ -191,21 +151,13 @@ function MyInfoClub() {
           if (response.status === 200) {
             const updatedBlackList = blackList.filter((friend) => friend.blackListId !== blackListId);
             setBlackList(updatedBlackList);
-            swal('차단 해제했습니다.'); // 차단 해제 성공 메시지 표시
-      console.log('차단 해제되었습니다.');
+            swal('차단이 해제되었습니다.'); // 차단 해제 성공 
           }
         } catch (error) {
             console.error('해제 요청을 보내는 중 오류가 발생했습니다.', error);
-            swal('해제 요청을 보내는 중 오류가 발생했습니다.'); // 차단 해제 실패 메시지 표시
+            swal('해제 요청을 보내는 중 오류가 발생했습니다.'); // 차단 해제 실패 
         }
       };
-    // console.log('blackList',blackList)
-
-    // console.log('clubsInOperationInfo',clubsInOperationInfo)
-    // console.log('clubsInParticipatingInfo',clubsInParticipatingInfo)
-
-    // console.log('oneDaysInOperationInfo',oneDaysInOperationInfo)
-    // console.log('oneDaysInParticipatingInfo',oneDaysInParticipatingInfo)
 
 
 

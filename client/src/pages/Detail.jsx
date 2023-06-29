@@ -669,7 +669,7 @@ function Detail() {
               <div className="text-[1.25rem] h-[215px] bg-[#F5F5F5] rounded-xl mt-10 p-4">
                 {clubDetail?.data.clubRule.length === 0
                   ? "수정 버튼을 눌러 규칙을 작성해주세요!"
-                  : clubDetail?.data.clubContent
+                  : clubDetail?.data.clubRule
                       .split("\n")
                       .map((line, index) => {
                         return (

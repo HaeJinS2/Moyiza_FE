@@ -398,7 +398,9 @@ function Detail() {
                 ) : (
                   <button
                     onClick={() => {
-                      swal('업데이트 중인 기능입니다. 서비스 이용에 불편을 드려 죄송합니다.')
+                      swal(
+                        "업데이트 중인 기능입니다. 서비스 이용에 불편을 드려 죄송합니다."
+                      );
                       // setOnEdit(true);
                     }}
                   >
@@ -667,7 +669,16 @@ function Detail() {
               <div className="text-[1.25rem] h-[215px] bg-[#F5F5F5] rounded-xl mt-10 p-4">
                 {clubDetail?.data.clubRule.length === 0
                   ? "수정 버튼을 눌러 규칙을 작성해주세요!"
-                  : clubDetail?.data.clubRule}
+                  : clubDetail?.data.clubContent
+                      .split("\n")
+                      .map((line, index) => {
+                        return (
+                          <span key={index}>
+                            {line}
+                            <br />
+                          </span>
+                        );
+                      })}
               </div>
             )}
           </div>

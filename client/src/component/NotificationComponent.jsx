@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { getAPI, postAPI } from "../axios";
@@ -6,49 +6,49 @@ import { sseAlarmState } from "../states/sseAlarmState";
 
 const NotificationComponent = () => {
   const navigate = useNavigate();
-  const [eventSource, setEventSource] = useState(null);
+  // const [eventSource, setEventSource] = useState(null);
   const [sseAlarm, setSseAlarm] = useRecoilState(sseAlarmState);
-  useEffect(() => {
-    // SSE 구독을 위한 요청을 서버에 보내고 EventSource를 생성합니다.
-    const subscribeToNotifications = () => {
-      getAPI("/alert/alerts")
-        .then((res) => {
-          console.log("알람목록", res);
-          const alarmLists = res.data.filter((item) => item.checking === false);
-          const newEventSource = new EventSource(res.data.url);
-          setEventSource(newEventSource);
-          setSseAlarm(alarmLists);
-        })
-        .catch((error) =>
-          console.error("Error subscribing to notifications:", error)
-        );
-    };
+  // useEffect(() => {
+  //   // SSE 구독을 위한 요청을 서버에 보내고 EventSource를 생성합니다.
+  //   const subscribeToNotifications = () => {
+  //     getAPI("/alert/alerts")
+  //       .then((res) => {
+  //         console.log("알람목록", res);
+  //         const alarmLists = res.data.filter((item) => item.checking === false);
+  //         const newEventSource = new EventSource(res.data.url);
+  //         setEventSource(newEventSource);
+  //         setSseAlarm(alarmLists);
+  //       })
+  //       .catch((error) =>
+  //         console.error("Error subscribing to notifications:", error)
+  //       );
+  //   };
 
-    subscribeToNotifications();
+  //   subscribeToNotifications();
 
-    return () => {
-      // 컴포넌트 언마운트 시 SSE 연결을 종료합니다.
-      if (eventSource) {
-        eventSource.close();
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   return () => {
+  //     // 컴포넌트 언마운트 시 SSE 연결을 종료합니다.
+  //     if (eventSource) {
+  //       eventSource.close();
+  //     }
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useEffect(() => {
-    if (!eventSource) return;
+  // useEffect(() => {
+  //   if (!eventSource) return;
 
-    // SSE 이벤트 핸들러 등록
-    eventSource.onmessage = (event) => {
-      const eventData = JSON.parse(event.data);
-      // 알림을 받았을 때 원하는 동작을 수행합니다.
-      console.log("Received notification:", eventData);
-    };
+  //   // SSE 이벤트 핸들러 등록
+  //   eventSource.onmessage = (event) => {
+  //     const eventData = JSON.parse(event.data);
+  //     // 알림을 받았을 때 원하는 동작을 수행합니다.
+  //     console.log("Received notification:", eventData);
+  //   };
 
-    eventSource.onerror = () => {
-      console.error("Error occurred with SSE connection.");
-    };
-  }, [eventSource]);
+  //   eventSource.onerror = () => {
+  //     console.error("Error occurred with SSE connection.");
+  //   };
+  // }, [eventSource]);
 
   return (
     <>
@@ -59,12 +59,12 @@ const NotificationComponent = () => {
           <div>알림</div>
           <div>X</div>
         </div>
-        {sseAlarm.length === 0 ? (
+        {sseAlarm?.length === 0 ? (
           <div className="flex justify-center items-center w-full h-full">
             <div className="text-[24px]">등록된 알림이 없습니다.</div>
           </div>
         ) : (
-          sseAlarm.map((alarm) => {
+          sseAlarm?.map((alarm) => {
             return (
               <div
                 className="h-[72px] w-full flex gap-2 items-center justify-between p-2"
@@ -73,7 +73,6 @@ const NotificationComponent = () => {
                   postAPI(`/alert/${alarm.id}`, {}).then((res) => {
                     getAPI("/alert/alerts")
                       .then((res) => {
-                        console.log("알람목록", res);
                         const alarmLists = res.data.filter(
                           (item) => item.checking === false
                         );

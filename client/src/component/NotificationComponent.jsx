@@ -64,7 +64,7 @@ const NotificationComponent = () => {
             <div className="text-[24px]">등록된 알림이 없습니다.</div>
           </div>
         ) : (
-          sseAlarm.map((alarm) => {
+          sseAlarm?.map((alarm) => {
             return (
               <div
                 className="h-[72px] w-full flex gap-2 items-center justify-between p-2"

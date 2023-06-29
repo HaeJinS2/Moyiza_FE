@@ -16,7 +16,6 @@ import { isLoggedInState } from "../states/userStateTmp";
 import { reloadChatStates } from "../states/chatState";
 import swal from "sweetalert";
 import { getCookie, parseJwt } from "../utils/jwtUtils";
-import { userState } from "../states/userState";
 import NotificationComponent from "./NotificationComponent";
 import { sseAlarmState } from "../states/sseAlarmState";
 // import { userState } from "../states/userState";
@@ -49,7 +48,7 @@ function Navbar({ clientRef }) {
   const [sseAlarm, setSseAlarm] = useRecoilState(sseAlarmState);
 
   const [data, setData] = useState([]);
-  const user = useRecoilValue(userState);
+  // const user = useRecoilValue(userState);
   const alarmModalRef = useRef();
   const chatModalRef = useRef();
   const profileModalRef = useRef();
@@ -481,11 +480,11 @@ function Navbar({ clientRef }) {
                                 className="flex w-[230px] items-center mb-[12px] "
                               >
                                 <img
-                                  src={user.profileUrl}
+                                  src={profileImage}
                                   alt="user_profile"
                                   className="w-[48px] h-[48px] mr-[16px] bg-black rounded-full"
                                 />
-                                <div>{user.nickName}</div>
+                                <div>{nickname}</div>
                               </div>
 
                               {/* 로그아웃 */}

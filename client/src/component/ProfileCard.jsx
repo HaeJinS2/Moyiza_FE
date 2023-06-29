@@ -27,14 +27,14 @@ function ProfileCard({
                     />
                 </div>
 
-                <div className="w-[172px] h-[130px] ml-[20px] flex justify-start flex-col">
-                    <div className="flex justify-between">
-                        <div className="text-[12px] text-orange-400 mb-[12px] w-[240px] flex ">
+                <div className="w-[172px] h-[130px] ml-[20px] flex justify-start flex-col truncate">
+                    <div className="flex justify-between ">
+                        <div className="text-[10px] text-orange-400 mb-[12px] w-[240px] flex ">
                             {clubTag.map((tag) => {
                                 return (
                                     <div
                                         key={tag}
-                                        className="rounded-[50px] mb-[15px] mr-1 b-1 border-1 px-2 bg-orange-400 text-white flex justify-start align-center">
+                                        className="rounded-[50px] mb-[15px] mr-1 b-1 border-1 px-2 py-0.5 bg-orange-400 text-white flex justify-start align-center">
                                         {tag}
                                     </div>
                                 );

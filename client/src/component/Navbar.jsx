@@ -232,9 +232,8 @@ function Navbar({ clientRef }) {
     const subscribeToNotifications = () => {
       getAPI("/alert/alerts")
         .then((res) => {
-          console.log("알람목록", res);
           const alarmLists = res.data.filter((item) => item.checking === false);
-          const newEventSource = new EventSource(res.data.url);
+          const newEventSource = new EventSource('/alert/subscribe');
           setEventSource(newEventSource);
           setSseAlarm(alarmLists);
         })
@@ -253,7 +252,6 @@ function Navbar({ clientRef }) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   useEffect(() => {
     if (!eventSource) return;
 
@@ -270,10 +268,6 @@ function Navbar({ clientRef }) {
     };
     // eslint-disable-next-line
   }, [eventSource]);
-
-  useEffect(() => {
-    console.log("알림", sseAlarm);
-  }, [sseAlarm]);
 
   return (
     <>

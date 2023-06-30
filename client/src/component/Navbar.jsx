@@ -58,6 +58,13 @@ function Navbar({ clientRef }) {
   const [profileImage, setProfileImage] = useState(null);
   const [eventSource, setEventSource] = useState(null);
 
+  let totalUnreadCount = data.reduce((accumulator, currentObject) => {
+    return accumulator + currentObject.unreadMessage;
+  }, 0);
+
+  const [unreadCount, setUnreadCount] = useState(0);
+  // console.log("unreadCount", unreadCount)
+  // console.log("totalUnreadCount", totalUnreadCount)
   let userId = "";
   // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
   const accessToken = getCookie("ACCESS_TOKEN");
@@ -68,6 +75,11 @@ function Navbar({ clientRef }) {
     // user_id 값을 추출합니다.
     userId = payload.userId;
   }
+
+  useEffect(() => {
+    setUnreadCount(roomMsgState.length + totalUnreadCount)
+    // eslint-disable-next-line 
+  }, [totalUnreadCount])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -282,9 +294,8 @@ function Navbar({ clientRef }) {
       ${isScrolled ? " border-b-[1px] border-gray-300" : ""}`}
         >
           <div
-            className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${
-              isScrolled ? "h-[70px]" : "h-[80px]"
-            }`}
+            className={`flex w-[1200px] justify-between items-center transition-all duration-200 ease-in-out  ${isScrolled ? "h-[70px]" : "h-[80px]"
+              }`}
           >
             <div className="w-full flex justify-between items-center ">
               <div className="flex justify-between items-center text-lg gap-x-2 ml-[-10px]">
@@ -308,6 +319,9 @@ function Navbar({ clientRef }) {
                         chatModalOpen
                           ? setChatModalOpen(false)
                           : setChatModalOpen(true);
+                        if (!chatModalOpen) {
+                          setUnreadCount(0);
+                        }
                       }}
                       className="cursor-pointer relative "
                     >
@@ -321,7 +335,7 @@ function Navbar({ clientRef }) {
                       rounded-[10px]
                       "
                       >
-                        {roomMsgState.length}
+                        {unreadCount}
                       </div>
                       {chatModalOpen && (
                         <>
@@ -341,21 +355,19 @@ function Navbar({ clientRef }) {
                             <div className="w-[370px] h-[360px]  overflow-auto">
                               <div className="flex py-4 px-8  gap-y-2 gap-x-1  bg-white">
                                 <button
-                                  className={`${
-                                    currentChatType === "CLUB"
-                                      ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl"
-                                      : "text-[#747474]  w-[75px] h-[27px]"
-                                  }`}
+                                  className={`${currentChatType === "CLUB"
+                                    ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl"
+                                    : "text-[#747474]  w-[75px] h-[27px]"
+                                    }`}
                                   onClick={(e) => handleButtonClick(e, "CLUB")}
                                 >
                                   일상속
                                 </button>
                                 <button
-                                  className={`${
-                                    currentChatType === "ONEDAY"
-                                      ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl"
-                                      : "text-[#747474]  w-[75px] h-[27px]"
-                                  }`}
+                                  className={`${currentChatType === "ONEDAY"
+                                    ? "text-[#FF7F1D] bg-[#FFE8DC] w-[75px] h-[27px] rounded-2xl"
+                                    : "text-[#747474]  w-[75px] h-[27px]"
+                                    }`}
                                   onClick={(e) =>
                                     handleButtonClick(e, "ONEDAY")
                                   }
@@ -380,11 +392,11 @@ function Navbar({ clientRef }) {
                                         className={`w-[355px]  px-4 gap-x-4 flex items-center justify-start py-2
 
                                       ${
-                                        // id === currentRoom
-                                        // ? "bg-slate-400"
-                                        // :
-                                        "bg-white"
-                                      }`}
+                                          // id === currentRoom
+                                          // ? "bg-slate-400"
+                                          // :
+                                          "bg-white"
+                                          }`}
                                         key={filteredRoomId[i]}
                                         onClick={
                                           () => {

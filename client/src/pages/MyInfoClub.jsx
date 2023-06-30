@@ -375,7 +375,7 @@ console.log(setPage)
                                                             <>
                                                                 <div className="mt-[39px] flex flex-col justify-between align-center w-full">
                                                                     <div className='flex justify-between align-center mb-[25px]'>
-                                                                        <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 하루속` : ''}</div>
+                                                                        <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 일상속` : ''}</div>
                                                                     </div>
                                                                     <div className='w-[748px] flex flex-wrap justify-between'>
                                                                         {clubsInOperationInfo?.content?.map((club, i) => {

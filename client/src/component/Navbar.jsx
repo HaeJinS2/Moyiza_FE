@@ -60,16 +60,10 @@ function Navbar({ clientRef }) {
   const [profileImage, setProfileImage] = useState(null);
   const [eventSource, setEventSource] = useState(null);
 
-  let totalUnreadCount = data.reduce((accumulator, currentObject) => {
-    return accumulator + currentObject.unreadMessage;
-  }, 0);
-
+  // eslint-disable-next-line
   const [totalUnreadCount2, setTotalUnreadCount2] = useState(0)
 
   const [unreadCount, setUnreadCount] = useState(0);
-  console.log("unreadCount", unreadCount)
-  console.log("totalUnreadCount", totalUnreadCount)
-  console.log("totalUnreadCount2", totalUnreadCount2)
   let userId = "";
   // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
   const accessToken = getCookie("ACCESS_TOKEN");
@@ -85,7 +79,7 @@ function Navbar({ clientRef }) {
     const newTotalUnreadCount2 = data.reduce((accumulator, currentObject) => {
       return accumulator + currentObject.unreadMessage;
     }, 0);
-  
+
     setTotalUnreadCount2(newTotalUnreadCount2);
     setUnreadCount(roomMsgState.length + newTotalUnreadCount2);
     // eslint-disable-next-line 
@@ -416,14 +410,13 @@ function Navbar({ clientRef }) {
                                             setChatModalOpen(false);
                                             setUnreadCount(unreadCount - Number(item?.unreadMessage));
                                             setFilteredData(
-                                              filteredData.map(currentItem => 
+                                              filteredData.map(currentItem =>
                                                 currentItem === item // currentItem이 현재 클릭된 item인지 확인
-                                                  ? {...currentItem, unreadMessage: 0} // 현재 item이면, unreadMessage를 0으로 설정한 새로운 객체 반환
+                                                  ? { ...currentItem, unreadMessage: 0 } // 현재 item이면, unreadMessage를 0으로 설정한 새로운 객체 반환
                                                   : currentItem // 그렇지 않으면, currentItem을 그대로 반환
                                               )
                                             );
-                                            
-                                          console.log(unreadCount, item?.unreadMessage)                                          }
+                                          }
                                           // connectToRoom(id)
                                         }
                                       >
@@ -438,17 +431,17 @@ function Navbar({ clientRef }) {
                                             </div>
                                           </div>
                                           <div className="flex justify-between items-center gap-[56px]">
-                                          <div className="flex flex-col items-start">
-                                            <div>{item?.roomName}</div>
-                                            <div className="font-normal">
-                                              {contentToDisplay?.content}
+                                            <div className="flex flex-col items-start">
+                                              <div>{item?.roomName}</div>
+                                              <div className="font-normal">
+                                                {contentToDisplay?.content}
+                                              </div>
                                             </div>
-                                            </div>
-                                            {item?.unreadMessage !== 0 ? 
-                                            <div className="w-[18px] h-[18px] bg-red-500 rounded-full text-white text-[10px] flex justify-center items-center">
-                                              {item?.unreadMessage}
-                                            </div> : <></>}
-                                            </div>
+                                            {item?.unreadMessage !== 0 ?
+                                              <div className="w-[18px] h-[18px] bg-red-500 rounded-full text-white text-[10px] flex justify-center items-center">
+                                                {item?.unreadMessage}
+                                              </div> : <></>}
+                                          </div>
                                         </div>
                                       </button>
                                     </>

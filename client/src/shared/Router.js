@@ -26,6 +26,7 @@ import WriteReview from "../pages/WriteReview";
 import DetailReview from "../pages/DetailReview";
 import NotFound from "../pages/NotFound";
 import { Navigate } from 'react-router-dom';
+import EditClubDetail from "../pages/EditClubDetail";
 
 const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
 
@@ -66,6 +67,7 @@ const Router = ({ clientRef, testClient, subscriptionRefAlarm }) => {
           <Route path="/detailreview" element={<DetailReview />} />
           <Route path="/test" element={<TestPage />} />
           <Route path="/404" element={<NotFound />} />
+          <Route path="/edit-club/:id" element={<EditClubDetail />} />
           <Route path="*" element={<Navigate to="/404" />} />
         </Routes>
         {

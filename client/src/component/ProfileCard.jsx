@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 function ProfileCard({
     clubTitle,
-    thumbnailUrl,
     club_id,
     maxGroupSize,
     nowMemberCount,
@@ -22,20 +21,20 @@ function ProfileCard({
             >
                 <div className="flex items-center rounded-xl ">
                     <img
-                        className="rounded-[15px] w-[130px] h-[130px] border-[1px] ml-5"
-                        src={imageUrlList[0]}
+                        className="rounded-[15px] w-[130px] h-[130px] border-[1px] ml-5 aspect-square  object-cover"
+                        src={imageUrlList.length > 0 ? imageUrlList[0] : `${process.env.PUBLIC_URL}/images/favicon.png`}
                         alt="clubThumbnail"
                     />
                 </div>
 
-                <div className="w-[172px] h-[130px] ml-[20px] flex justify-start flex-col">
-                    <div className="flex justify-between">
-                        <div className="text-[12px] text-orange-400 mb-[12px] w-[240px] flex ">
-                            {clubTag?.map((tag) => {
+                <div className="w-[172px] h-[130px] ml-[20px] flex justify-start flex-col truncate">
+                    <div className="flex justify-between ">
+                        <div className="text-[10px] text-orange-400 mb-[12px] w-[240px] flex ">
+                            {clubTag.map((tag) => {
                                 return (
                                     <div
                                         key={tag}
-                                        className="rounded-[50px] mb-[15px] mr-1 b-1 border-1 px-2 bg-orange-400 text-white flex justify-start align-center">
+                                        className="rounded-[50px] mb-[15px] mr-1 b-1 border-1 px-2 py-0.5 bg-orange-400 text-white flex justify-start align-center">
                                         {tag}
                                     </div>
                                 );

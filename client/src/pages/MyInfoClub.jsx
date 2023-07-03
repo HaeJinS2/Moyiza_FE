@@ -7,25 +7,58 @@ import ProfileCard from '../component/ProfileCard';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getAPI } from '../axios';
 import ProfileCardOneday from '../component/ProfileCardOneday';
+import BlackListCard from '../component/BlackListCard';
+import { getCookie, parseJwt } from '../utils/jwtUtils';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 
 
-const PAGE_TABS = ['일상속', '하루속'];
+const PAGE_TABS = ['일상속', '하루속', '찜목록', '친구관리'];
 
 function MyInfoClub() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const divRef = useRef(null);   
+    const divRef = useRef(null);
     const [activePageTab, setActivePageTab] = useState(PAGE_TABS[0]);
     const [nickname, setNickname] = useState(null);
     const [email, setEmail] = useState(null);
+    const [tags, setTags] = useState(null);
+    const [content, setContent] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
     const [clubsInOperationInfo, setClubsInOperationInfo] = useState([]);
     const [clubsInParticipatingInfo, setClubsInParticipatingInfo] = useState([]);
     const [oneDaysInOperationInfo, setOneDaysInOperationInfo] = useState([]);
     const [oneDaysInParticipatingInfo, setOneDaysInParticipatingInfo] = useState([]);
 
-    
+    const [currentPage, setCurrentPage] = useState(0);
+    // const [hasNextPage, setHasNextPage] = useState(false);
+    const pageSize = 6;
+
+    const [likeClubList, setLikeClubList] = useState([]);
+    const [likeOneDayList, setLikeOneDayList] = useState([]);
+
+    // const [lastPage, setLastPage] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
+    // const [activeTab, setActiveTab] = useState("전체");
+    const [page, setPage] = useState(0);
+    // const [searchPage, setSearchPage] = useState(0);
+console.log(setTotalPages)
+console.log(setPage)
+    // const [nickName, setNickName] = useState(null);
+    const [blackList, setBlackList] = useState([]);
+
+    let userId = ''
+    // 쿠키에서 ACCESS_TOKEN 값을 가져옵니다.
+    const accessToken = getCookie('ACCESS_TOKEN');
+
+    if (accessToken) {
+        // ACCESS_TOKEN 값을 파싱하여 JSON 페이로드를 추출합니다.
+        const payload = parseJwt(accessToken)
+        // user_id 값을 추출합니다.
+        userId = payload.userId
+    }
+
     const goClub = () => {
         navigate('/club');
     };
@@ -44,32 +77,182 @@ function MyInfoClub() {
         const fetchData = async () => {
             try {
                 // GET 요청 수행
-                const response = await getAPI('/mypage/' + id); // 404 not found
+                const response = await getAPI(`/mypage/${id}?page=${currentPage}&size=${pageSize}`);
 
                 // 응답이 성공적인지 확인
                 if (response.status === 200) {
                     const responseData = response?.data;
+                    // setTotalPages(response?.data.size);
+                    // setLastPage(response?.data.last);
                     setNickname(responseData?.nickname || "");
                     setEmail(responseData?.email || "");
+                    setTags(responseData?.tags || null);
+                    setContent(responseData?.content || "");
                     // setBirth(birth);
                     setProfileImage(responseData?.profileImage || "");
                     setClubsInOperationInfo(responseData?.clubsInOperationInfo || []);
                     setClubsInParticipatingInfo(responseData?.clubsInParticipatingInfo || []);
                     setOneDaysInOperationInfo(responseData?.oneDaysInOperationInfo || []);
                     setOneDaysInParticipatingInfo(responseData?.oneDaysInParticipatingInfo || []);
+
+                    // setTotalPages(responseData?.clubsInOperationInfo?.totalPages || 1); // 총 페이지 수 업데이트
+
                 }
             } catch (error) {
-                console.error(error.response.message);
+                // console.error(error.response.message);
                 // 에러 상태 처리 또는 에러 페이지로 리디렉션 처리
             }
         };
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
+
+    const handleMoreClubOpe = async () => {
+        try {
+            const nextPage = currentPage + 1;
+            const response = await getAPI(`/mypage/${id}?page=${nextPage}&size=${pageSize}`);
+
+            if (response.status === 200) {
+                const responseData = response?.data;
+                setClubsInOperationInfo((prevInfo) => {
+                    if (Array.isArray(prevInfo?.content)) {
+                        return { ...prevInfo, content: [...prevInfo.content, ...responseData?.clubsInOperationInfo.content] };
+                    } else {
+                        return responseData?.clubsInOperationInfo || [];
+                    }
+                });
+                setCurrentPage(nextPage);
+            }
+        } catch (error) {
+            // 에러 처리
+        }
+    };
+    const handleMoreClubParti = async () => {
+        try {
+            const nextPage = currentPage + 1;
+            const response = await getAPI(`/mypage/${id}?page=${nextPage}&size=${pageSize}`);
+
+            if (response.status === 200) {
+                const responseData = response?.data;
+                setClubsInParticipatingInfo((prevInfo) => {
+                    if (Array.isArray(prevInfo?.content)) {
+                        return { ...prevInfo, content: [...prevInfo.content, ...responseData?.clubsInParticipatingInfo.content] };
+                    } else {
+                        return responseData?.clubsInParticipatingInfo || [];
+                    }
+                });
+                setCurrentPage(nextPage);
+            }
+        } catch (error) {
+            // 에러 처리
+        }
+    };
+    const handleMoreOnedayOpe = async () => {
+        try {
+            const nextPage = currentPage + 1;
+            const response = await getAPI(`/mypage/${id}?page=${nextPage}&size=${pageSize}`);
+
+            if (response.status === 200) {
+                const responseData = response?.data;
+                setOneDaysInOperationInfo((prevInfo) => {
+                    if (Array.isArray(prevInfo?.content)) {
+                        return { ...prevInfo, content: [...prevInfo.content, ...responseData?.oneDaysInOperationInfo.content] };
+                    } else {
+                        return responseData?.oneDaysInOperationInfo || [];
+                    }
+                });
+                setCurrentPage(nextPage);
+            }
+        } catch (error) {
+            // 에러 처리
+        }
+    };
+    const handleMoreOnedayParti = async () => {
+        try {
+            const nextPage = currentPage + 1;
+            const response = await getAPI(`/mypage/${id}?page=${nextPage}&size=${pageSize}`);
+
+            if (response.status === 200) {
+                const responseData = response?.data;
+                setOneDaysInParticipatingInfo((prevInfo) => {
+                    if (Array.isArray(prevInfo?.content)) {
+                        return { ...prevInfo, content: [...prevInfo.content, ...responseData?.oneDaysInParticipatingInfo.content] };
+                    } else {
+                        return responseData?.oneDaysInParticipatingInfo || [];
+                    }
+                });
+            }
+        } catch (error) {
+            // 에러 처리
+        }
+    };
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // GET 요청 수행
+                const response = await getAPI('/mypage/' + id + '/like');
+
+                // 응답이 성공적인지 확인
+                if (response.status === 200) {
+                    const responseData = response?.data;
+                    // console.log('responseData',responseData)
+                    setLikeClubList(responseData?.likeClubList.content || []);
+                    setLikeOneDayList(responseData?.likeOneDayList.content || []);
+                    // console.log('likeClubList', likeClubList);
+                    // console.log('likeOneDayList', likeOneDayList);
+                }
+            } catch (error) {
+                // console.error(error.response.message);
+                // 에러 상태 처리 또는 에러 페이지로 리디렉션 처리
+            }
+        };
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
+
+    // 차단 목록
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // GET 요청 수행
+                const response = await getAPI('/blackList');
+
+                // 응답이 성공적인지 확인
+                if (response.status === 200) {
+                    const responseData = response?.data;
+                    setBlackList(responseData);
+                    // setNickName(responseData?.nickName || "");
+                    // setProfileImage(responseData?.profileImage || "");
+                }
+            } catch (error) {
+                // console.error(error.response.message);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleUnblockClick = async (blackListId) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/blackList/${blackListId}`);
+            if (response.status === 200) {
+                const updatedBlackList = blackList.filter((friend) => friend.blackListId !== blackListId);
+                setBlackList(updatedBlackList);
+                swal('차단이 해제되었습니다.'); // 차단 해제 성공 
+            }
+        } catch (error) {
+            console.error('해제 요청을 보내는 중 오류가 발생했습니다.', error);
+            swal('해제 요청을 보내는 중 오류가 발생했습니다.'); // 차단 해제 실패 
+        }
+    };
+
+
 
     return (
         <>
             <div className="flex flex-row" ref={divRef}>
-                <Navbar className='z-9999'/>
+                <Navbar className='z-9999' />
                 <Container >
                     {/* <section className="h-[calc(100vh-0px)] flex flex-col items-center "> */}
                     <div className='flex'>
@@ -80,6 +263,8 @@ function MyInfoClub() {
                                 nickname={nickname}
                                 profileImage={profileImage}
                                 email={email}
+                                tags={tags}
+                                content={content}
                             // birth={birth}
                             />
                         </div>
@@ -97,7 +282,7 @@ function MyInfoClub() {
                                             >
                                                 {activePageTab === tab && (
                                                     <motion.div
-                                                    
+
                                                         layoutId="active-pill-1"
                                                         transition={{ type: 'spring', duration: 0.5 }}
                                                         className="border-b-[4px] border-black absolute inset-0 z-8877'"
@@ -110,16 +295,16 @@ function MyInfoClub() {
                                     {activePageTab === PAGE_TABS[0] && (
                                         <div className="flex flex-col items-start w-full">
                                             <div className="text-[36px] flex flex-col justify-between align-center w-full">
-                                                {clubsInParticipatingInfo.length === 0 ? (
+                                                {clubsInParticipatingInfo.empty ? (
                                                     <motion.div
                                                         layoutId="active-pill-2"
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
-                                                    // className="border-black inset-0"
+
                                                     >
                                                         <div className="mt-[39px] flex flex-col justify-between align-center w-full">
                                                             <div className='flex justify-between align-center mb-[25px]'>
                                                                 <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 일상속` : null}</div>
-                                                                {/* <div className='text-[20px]'>총 0개</div> */}
+
                                                             </div>
                                                         </div>
                                                         <div className='flex flex-col items-center justify-center w-[748px]'>
@@ -127,12 +312,12 @@ function MyInfoClub() {
                                                         </div>
                                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
                                                             <div className="text-[24px]">{nickname ? `${nickname}님의 참여중인 일상속` : null}</div>
-                                                            {/* <div className='text-[20px]'> 총 {clubsInParticipatingInfo.length}개</div> */}
+
                                                         </div>
                                                         <div className='flex flex-col items-center justify-center w-[748px]'>
                                                             <p className='text-[20px] mt-[109px]'>참여중인 일상이 없어요.</p>
                                                             <p className='text-[20px] mt-[5px] mb-[18px]'>일상을 즐기러 가볼까요?</p>
-                                                            <button onClick={goClub} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#fff] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
+                                                            <button onClick={goClub} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
                                                                 +
                                                             </button>
                                                         </div>
@@ -141,50 +326,119 @@ function MyInfoClub() {
                                                     <motion.div
                                                         layoutId="active-pill-2"
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
-                                                    // className="border-black inset-0"
                                                     >
-                                                        <div className="mt-[39px] flex flex-col justify-between align-center w-full">
-                                                            <div className='flex justify-between align-center mb-[25px]'>
-                                                                <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 일상속` : ''}</div>
-                                                                {/* {clubsInOperationInfo.length > 0 && (
-                                                                    <div className='text-[20px] '>총 {clubsInOperationInfo.length}개</div>
-                                                                )} */}
-                                                            </div>
-                                                            <div className='w-[748px] flex flex-wrap justify-between'>
-                                                                {clubsInOperationInfo.map((club, i) => (
-                                                                    <ProfileCard
-                                                                        className="mr-[28px]"
-                                                                        key={club.club_id}
-                                                                        clubTitle={club.clubTitle}
-                                                                        thumbnailUrl={club.thumbnailUrl}
-                                                                        club_id={club.club_id}
-                                                                        maxGroupSize={club.maxGroupSize}
-                                                                        nowMemberCount={club.nowMemberCount}
-                                                                        clubContent={club.clubContent}
-                                                                        clubTag={club.clubTag}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                            <div className='mt-[39px] flex flex-col justify-be8px] mb-[25px]'>
-                                                                <div className="text-[24px]">{nickname ? `${nickname}님의 참여중인 일상속` : null}</div>
-                                                                {/* <div className='text-[20px] '> 총 {clubsInParticipatingInfo.length}개</div> */}
-                                                            </div>
-                                                            <div className='w-[748px] flex flex-wrap justify-between'>
-                                                                {clubsInParticipatingInfo.map((club, i) => (
-                                                                    <ProfileCard
-                                                                        className="mr-[28px]"
-                                                                        key={club.club_id}
-                                                                        clubTitle={club.clubTitle}
-                                                                        thumbnailUrl={club.thumbnailUrl}
-                                                                        club_id={club.club_id}
-                                                                        maxGroupSize={club.maxGroupSize}
-                                                                        nowMemberCount={club.nowMemberCount}
-                                                                        clubContent={club.clubContent}
-                                                                        clubTag={club.clubTag}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                        </div>
+                                                        {clubsInOperationInfo.empty && (
+                                                            <>
+                                                                <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                    <div className='flex justify-between align-center mb-[25px]'>
+                                                                        <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 일상속` : null}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className='flex flex-col items-center justify-center w-[748px]'>
+                                                                    <p className='text-[20px] mt-[109px] mb-[109px]'>운영중인 일상이 없어요.</p>
+                                                                </div>
+                                                                <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                    <div className='flex justify-between align-center mb-[25px]'>
+                                                                        <div className="text-[24px]">{nickname ? `${nickname}님이 참여중인 일상속` : null}</div>
+                                                                    </div>
+                                                                    <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                        {clubsInParticipatingInfo?.content?.map((club, i) => {
+                                                                            return (
+                                                                                <ProfileCard
+                                                                                    className="mr-[28px]"
+                                                                                    key={club.club_id}
+                                                                                    clubTitle={club.clubTitle}
+                                                                                    imageUrlList={club.imageUrlList}
+                                                                                    club_id={club.club_id}
+                                                                                    maxGroupSize={club.maxGroupSize}
+                                                                                    nowMemberCount={club.nowMemberCount}
+                                                                                    clubContent={club.clubContent}
+                                                                                    clubTag={club.clubTag}
+                                                                                />
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    <div className='w-[748px] flex justify-center'>
+                                                                        {(page < totalPages) && (
+                                                                            <button
+                                                                                onClick={handleMoreClubParti}
+                                                                                className="bg-[#FF7F1D] text-[17px] text-white px-5 py-2 rounded-full mt-[20px]"
+                                                                            >
+                                                                                더 보기
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                        {clubsInOperationInfo.empty !== true && (
+                                                            <>
+                                                                <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                    <div className='flex justify-between align-center mb-[25px]'>
+                                                                        <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 일상속` : ''}</div>
+                                                                    </div>
+                                                                    <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                        {clubsInOperationInfo?.content?.map((club, i) => {
+                                                                            return (
+                                                                                <ProfileCard
+                                                                                    className="mr-[28px]"
+                                                                                    key={club.club_id}
+                                                                                    clubTitle={club.clubTitle}
+                                                                                    imageUrlList={club.imageUrlList}
+                                                                                    club_id={club.club_id}
+                                                                                    maxGroupSize={club.maxGroupSize}
+                                                                                    nowMemberCount={club.nowMemberCount}
+                                                                                    clubContent={club.clubContent}
+                                                                                    clubTag={club.clubTag}
+                                                                                />
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    
+                                                                    <div className='w-[748px] flex justify-center'>
+                                                                        {(page < totalPages) && (
+                                                                            <button
+                                                                                onClick={handleMoreClubOpe}
+                                                                                className="bg-[#FF7F1D] text-[17px] text-white px-5 py-2 rounded-full mt-[20px]"
+                                                                            >
+                                                                                더 보기
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className='mt-[39px] flex flex-col justify-be8px] mb-[25px]'>
+                                                                        <div className="text-[24px] ">{nickname ? `${nickname}님의 참여중인 일상속` : null}</div>
+                                                                        {/* <div className='text-[20px] '> 총 {oneDaysInParticipatingInfo.length}개</div> */}
+                                                                    </div>
+                                                                    <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                        {clubsInParticipatingInfo?.content?.map((club, i) => {
+                                                                            return (
+                                                                                <ProfileCard
+                                                                                    className="mr-[28px]"
+                                                                                    key={club.club_id}
+                                                                                    clubTitle={club.clubTitle}
+                                                                                    imageUrlList={club.imageUrlList}
+                                                                                    club_id={club.club_id}
+                                                                                    maxGroupSize={club.maxGroupSize}
+                                                                                    nowMemberCount={club.nowMemberCount}
+                                                                                    clubContent={club.clubContent}
+                                                                                    clubTag={club.clubTag}
+                                                                                />
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    <div className='w-[748px] flex justify-center'>
+                                                                        {(page < totalPages) && (
+                                                                            <button
+                                                                                onClick={handleMoreClubParti}
+                                                                                className="bg-[#FF7F1D] text-[17px] text-white px-5 py-2 rounded-full mt-[20px]"
+                                                                            >
+                                                                                더 보기
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        )}
                                                     </motion.div>
                                                 )}
                                             </div>
@@ -193,16 +447,16 @@ function MyInfoClub() {
                                     {activePageTab === PAGE_TABS[1] && (
                                         <div className="flex flex-col items-start w-full">
                                             <div className="text-[36px] flex flex-col justify-between align-center w-full">
-                                                {oneDaysInParticipatingInfo.length === 0 ? (
+                                                {oneDaysInParticipatingInfo.empty ? (
                                                     <motion.div
                                                         layoutId="active-pill-2"
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
-                                                    // className="border-black inset-0"
+
                                                     >
                                                         <div className="mt-[39px] flex flex-col justify-between align-center w-full">
                                                             <div className='flex justify-between align-center mb-[25px]'>
                                                                 <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 하루속` : null}</div>
-                                                                {/* <div className='text-[20px]'>총 0개</div> */}
+
                                                             </div>
                                                         </div>
                                                         <div className='flex flex-col items-center justify-center w-[748px]'>
@@ -210,67 +464,279 @@ function MyInfoClub() {
                                                         </div>
                                                         <div className='flex justify-between align-center mt-[90px] text-[28px]'>
                                                             <div className="text-[24px]">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
-                                                            {/* <div className='text-[20px]'> 총 {oneDaysInParticipatingInfo.length}개</div> */}
+
                                                         </div>
                                                         <div className='flex flex-col items-center justify-center w-[748px]'>
                                                             <p className='text-[20px] mt-[109px]'>참여중인 하루가 없어요.</p>
                                                             <p className='text-[20px] mt-[5px] mb-[18px]'>하루를 즐기러 가볼까요?</p>
-                                                            <button onClick={goOneday} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#fff] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
+                                                            <button onClick={goOneday} className="edit-icon w-[60px] h-[60px] mb-[109px] bg-[#FFFCF2] shadow hover:shadow-lg rounded-full flex items-center justify-center" >
                                                                 +
                                                             </button>
                                                         </div>
                                                     </motion.div>
                                                 ) : (
                                                     <motion.div
-                                                        layoutId="active-pill-1"
+                                                        layoutId="active-pill-2"
+                                                        transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
+                                                    >
+                                                        {oneDaysInOperationInfo.empty && (
+                                                            <>
+                                                                <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                    <div className='flex justify-between align-center mb-[25px]'>
+                                                                        <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 하루속` : null}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className='flex flex-col items-center justify-center w-[748px]'>
+                                                                    <p className='text-[20px] mt-[109px] mb-[109px]'>운영중인 하루가 없어요.</p>
+                                                                </div>
+                                                                <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                    <div className='flex justify-between align-center mb-[25px]'>
+                                                                        <div className="text-[24px]">{nickname ? `${nickname}님이 참여중인 하루속` : null}</div>
+                                                                    </div>
+                                                                    <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                        {oneDaysInParticipatingInfo?.content?.map((club, i) => {
+                                                                            return (
+                                                                                <ProfileCardOneday
+                                                                                    className="mr-[28px]"
+                                                                                    key={club.onedayId}
+                                                                                    onedayTitle={club.onedayTitle}
+                                                                                    imageUrlList={club.imageUrlList}
+                                                                                    onedayId={club.onedayId}
+                                                                                    onedayGroupSize={club.onedayGroupSize}
+                                                                                    onedayAttendantsNum={club.onedayAttendantsNum}
+                                                                                    onedayContent={club.onedayContent}
+                                                                                    onedayTag={club.onedayTag}
+                                                                                    onedayLocation={club.onedayLocation.split(' ').slice(0, 2).join(' ')}
+                                                                                />
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    <div className='w-[748px] flex justify-center'>
+                                                                        {(page < totalPages) && (
+                                                                            <button
+                                                                                onClick={handleMoreOnedayParti}
+                                                                                className="bg-[#FF7F1D] text-[17px] text-white px-5 py-2 rounded-full mt-[20px]"
+                                                                            >
+                                                                                더 보기
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                        {oneDaysInOperationInfo.empty !== true && (
+                                                            <>
+                                                                <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                    <div className='flex justify-between align-center mb-[25px]'>
+                                                                        <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 하루속` : ''}</div>
+                                                                    </div>
+                                                                    <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                        {oneDaysInOperationInfo?.content?.map((club, i) => {
+                                                                            return (
+                                                                                <ProfileCardOneday
+                                                                                    className="mr-[28px]"
+                                                                                    key={club.onedayId}
+                                                                                    onedayTitle={club.onedayTitle}
+                                                                                    imageUrlList={club.imageUrlList}
+                                                                                    onedayId={club.onedayId}
+                                                                                    onedayGroupSize={club.onedayGroupSize}
+                                                                                    onedayAttendantsNum={club.onedayAttendantsNum}
+                                                                                    onedayContent={club.onedayContent}
+                                                                                    onedayTag={club.onedayTag}
+                                                                                    onedayLocation={club.onedayLocation.split(' ').slice(0, 2).join(' ')}
+                                                                                />
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    <div className='w-[748px] flex justify-center'>
+                                                                        {(page < totalPages) && (
+                                                                            <button
+                                                                                onClick={handleMoreOnedayOpe}
+                                                                                className="bg-[#FF7F1D] text-[17px] text-white px-5 py-2 rounded-full mt-[20px]"
+                                                                            >
+                                                                                더 보기
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className='mt-[39px] flex flex-col justify-be8px] mb-[25px]'>
+                                                                        <div className="text-[24px] ">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
+                                                                        {/* <div className='text-[20px] '> 총 {oneDaysInParticipatingInfo.length}개</div> */}
+                                                                    </div>
+                                                                    <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                        {oneDaysInParticipatingInfo?.content?.map((club, i) => {
+                                                                            return (
+                                                                                <ProfileCardOneday
+                                                                                    className="mr-[28px]"
+                                                                                    key={club.onedayId}
+                                                                                    onedayTitle={club.onedayTitle}
+                                                                                    imageUrlList={club.imageUrlList}
+                                                                                    onedayId={club.onedayId}
+                                                                                    onedayGroupSize={club.onedayGroupSize}
+                                                                                    onedayAttendantsNum={club.onedayAttendantsNum}
+                                                                                    onedayContent={club.onedayContent}
+                                                                                    onedayTag={club.onedayTag}
+                                                                                    onedayLocation={club.onedayLocation.split(' ').slice(0, 2).join(' ')}
+                                                                                />
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    <div className='w-[748px] flex justify-center'>
+                                                                        {(page < totalPages) && (
+                                                                            <button
+                                                                                onClick={handleMoreOnedayParti}
+                                                                                className="bg-[#FF7F1D] text-[17px] text-white px-5 py-2 rounded-full mt-[20px]"
+                                                                            >
+                                                                                더 보기
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                    </motion.div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {activePageTab === PAGE_TABS[2] && (
+                                        <div className="flex flex-col items-start w-full">
+                                            <div className="text-[36px] flex flex-col justify-between align-center w-full">
+                                                {likeClubList.length === 0 && likeOneDayList.length === 0 ? (
+                                                    <motion.div
+                                                        layoutId="active-pill-2"
                                                         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
                                                     // className="border-black inset-0"
                                                     >
                                                         <div className="mt-[39px] flex flex-col justify-between align-center w-full">
                                                             <div className='flex justify-between align-center mb-[25px]'>
-                                                                <div className="text-[24px]">{nickname ? `${nickname}님의 운영중인 하루속` : ''}</div>
-                                                                {/* {oneDaysInOperationInfo.length > 0 && (
-                                                                    <div className='text-[20px] '>총 {oneDaysInOperationInfo.length}개</div>
-                                                                )} */}
+                                                                <div className="text-[24px]">{nickname ? `${nickname}님이 좋아하는 일상속` : null}</div>
+                                                                {/* <div className='text-[20px]'>총 0개</div> */}
                                                             </div>
-                                                            <div className='w-[748px] flex flex-wrap justify-between'>
-                                                                {oneDaysInOperationInfo.map((club, i) => {
-                                                                    return (
-                                                                        <ProfileCardOneday
+                                                        </div>
+                                                        <div className='flex flex-col items-center justify-center w-[748px]'>
+                                                            <p className='text-[20px] mt-[109px] mb-[109px]'>좋아하는 일상속이 없어요.</p>
+                                                        </div>
+                                                        <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                            <div className='flex justify-between align-center mb-[25px]'>
+                                                                <div className="text-[24px]">{nickname ? `${nickname}님이 좋아하는 하루속` : null}</div>
+                                                                {/* <div className='text-[20px]'>총 0개</div> */}
+                                                            </div>
+                                                        </div>
+                                                        <div className='flex flex-col items-center justify-center w-[748px]'>
+                                                            <p className='text-[20px] mt-[109px] mb-[109px]'>좋아하는 하루속이 없어요.</p>
+                                                        </div>
+                                                    </motion.div>
+                                                ) : (
+                                                    <>
+                                                        {likeClubList.length > 0 && (
+                                                            <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                <div className='flex justify-between align-center mb-[25px]'>
+                                                                    <div className="text-[24px]">{nickname ? `${nickname}님이 좋아하는 일상속` : null}</div>
+                                                                </div>
+                                                                <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                    {likeClubList.map((club, i) => (
+                                                                        <ProfileCard
                                                                             className="mr-[28px]"
-                                                                            key={club.oneDayId}
-                                                                            oneDayTitle={club.oneDayTitle}
-                                                                            oneDayImage={club.oneDayImage}
-                                                                            oneDayId={club.oneDayId}
-                                                                            oneDayGroupSize={club.oneDayGroupSize}
-                                                                            oneDayAttendantListSize={club.oneDayAttendantListSize}
-                                                                            oneDayContent={club.oneDayContent}
-                                                                            tagString={club.tagString}
+                                                                            key={club.club_id}
+                                                                            clubTitle={club.clubTitle}
+                                                                            imageUrlList={club.imageUrlList}
+                                                                            club_id={club.club_id}
+                                                                            maxGroupSize={club.maxGroupSize}
+                                                                            nowMemberCount={club.nowMemberCount}
+                                                                            clubContent={club.clubContent}
+                                                                            clubTag={club.clubTag}
                                                                         />
-                                                                    );
-                                                                })}
+                                                                    ))}
+                                                                </div>
                                                             </div>
-                                                            <div className='mt-[39px] flex flex-col justify-be8px] mb-[25px]'>
-                                                                <div className="text-[24px] ">{nickname ? `${nickname}님의 참여중인 하루속` : null}</div>
-                                                                {/* <div className='text-[20px] '> 총 {oneDaysInParticipatingInfo.length}개</div> */}
-                                                            </div>
-                                                            <div className='w-[748px] flex flex-wrap justify-between'>
-                                                                {oneDaysInParticipatingInfo.map((club, i) => {
-                                                                    return (
+                                                        )}
+                                                        {likeOneDayList.length > 0 && (
+                                                            <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                <div className='flex justify-between align-center mb-[25px]'>
+                                                                    <div className="text-[24px]">{nickname ? `${nickname}님이 좋아하는 하루속` : null}</div>
+                                                                </div>
+                                                                <div className='w-[748px] flex flex-wrap justify-between'>
+                                                                    {likeOneDayList.map((club, i) => (
                                                                         <ProfileCardOneday
+                                                                            key={i}
                                                                             className="mr-[28px]"
-                                                                            key={club.oneDayId}
-                                                                            oneDayTitle={club.oneDayTitle}
-                                                                            oneDayImage={club.oneDayImage}
-                                                                            oneDayId={club.oneDayId}
-                                                                            oneDayGroupSize={club.oneDayGroupSize}
-                                                                            oneDayAttendantListSize={club.oneDayAttendantListSize}
-                                                                            oneDayContent={club.oneDayContent}
-                                                                            tagString={club.tagString}
+                                                                            onedayTitle={club.onedayTitle}
+                                                                            imageUrlList={club.imageUrlList}
+                                                                            onedayId={club.onedayId}
+                                                                            onedayGroupSize={club.onedayGroupSize}
+                                                                            onedayAttendantsNum={club.onedayAttendantsNum}
+                                                                            onedayContent={club.onedayContent}
+                                                                            onedayTag={club.onedayTag}
+                                                                            onedayLocation={club.onedayLocation.split(' ').slice(0, 2).join(' ')}
                                                                         />
-                                                                    );
-                                                                })}
+                                                                    ))}
+                                                                </div>
                                                             </div>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {activePageTab === PAGE_TABS[3] && (
+                                        <div className="flex flex-col items-start w-full">
+                                            <div className="text-[36px] flex flex-col justify-between align-center w-full">
+                                                {id !== null && id !== undefined && String(id) === String(userId) ? (
+                                                    // id와 userId가 같은 경우
+                                                    blackList.length === 0 ? (
+                                                        <motion.div
+                                                            layoutId="active-pill-2"
+                                                            transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
+                                                        >
+                                                            <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                <div className='flex justify-between align-center mb-[25px]'>
+                                                                    <div className="text-[24px]">{nickname ? `${nickname}님이 차단한 친구` : null}</div>
+                                                                    {/* <div className='text-[20px]'>총 0개</div> */}
+                                                                </div>
+                                                            </div>
+                                                            <div className='flex flex-col items-center justify-center w-[748px]'>
+                                                                <p className='text-[20px] mt-[109px] mb-[109px]'>차단한 친구가 없습니다.</p>
+                                                            </div>
+                                                        </motion.div>
+                                                    ) : (
+                                                        <motion.div
+                                                            layoutId="active-pill-2"
+                                                            transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
+                                                        // className="border-black inset-0"
+                                                        >
+                                                            <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                                <div className='flex justify-between align-center mb-[25px]'>
+                                                                    <div className="text-[24px]">{nickname ? `${nickname}님이 차단한 친구` : ''}</div>
+                                                                </div>
+                                                                <div className='w-[748px] flex flex-wrap justify-start'>
+                                                                    {blackList.map((friend, i) => (
+                                                                        <BlackListCard
+                                                                            className="mr-[28px]"
+                                                                            key={friend.blackListId}
+                                                                            blackListId={friend.blackListId}
+                                                                            nickName={friend.nickName}
+                                                                            profileImage={friend.profileImage}
+                                                                            onUnblockClick={handleUnblockClick}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </motion.div>
+                                                    )
+                                                ) : (
+                                                    // id와 userId가 다른 경우
+                                                    <motion.div
+                                                        layoutId="active-pill-2"
+                                                        transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
+                                                    >
+                                                        <div className="mt-[39px] flex flex-col justify-between align-center w-full">
+                                                            <div className='flex justify-between align-center mb-[25px]'>
+                                                                <div className="text-[24px]">{nickname ? `${nickname}님이 차단한 친구` : null}</div>
+                                                                {/* <div className='text-[20px]'>총 0개</div> */}
+                                                            </div>
+                                                        </div>
+                                                        <div className='flex flex-col items-center justify-center w-[748px]'>
+                                                            <p className='text-[20px] mt-[109px] mb-[109px]'>다른 이용자의 차단한 친구 목록은 볼 수 없습니다.</p>
                                                         </div>
                                                     </motion.div>
                                                 )}

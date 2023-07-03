@@ -176,7 +176,7 @@ function Club() {
   };
 
   // 태그 선택 처리 함수
-  const handleTagClick = (tag) => {
+const handleTagClick = (tag) => {
     let updatedTags;
 
     // 이미 선택된 태그를 다시 클릭했을 경우 배열에서 해당 태그 제거
@@ -189,7 +189,7 @@ function Club() {
       if (updatedTags.length > 3) {
         updatedTags.shift();
       }
-    }
+    }  
 
     setSelectedTags(updatedTags);
 
